@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Github Issue recommender</title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap/css/bootstrap.css">
+
+    <style>
+        .oneline_ignore {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .twoline_ignore {
+            display: -webkit-box;
+            overflow: hidden;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .content {
+            height: calc(100vh - 100px);
+            overflow-y: scroll;
+        }
+
+    </style>
+
+
+</head>
+<body>
+
+<script>
+    function myFunction(idnum) {
+        console.log(idnum)
+        var tex = document.getElementById("body"+idnum).innerText;
+        var title_text =document.getElementById("title"+idnum).innerText;
+        document.getElementById("body_text").innerHTML = tex;
+        document.getElementById("title_area").innerHTML = title_text;
+    }
+</script>
+
+
+<div class="col-xs-1">
+    <img src="/static/HIT.png" alt="HIT" style="height: 100px; margin-left: 10px; margin-top: 10px">
+</div>
+<div class="col-xs-11">
+
+    <div class="page-header">
+        <h1><a href="/mainpage" style="text-decoration: none; color: #0f0f0f">GitHub Issue Recommender </a><small>by
+            eric</small></h1>
+    </div>
+</div>
+
+<div class="container-fluid clearfix">
+    <div class="col-xs-4" style="background-color: lightgrey; height: 800px">
+        <div class="page-header">
+            <h3>Search StackOverflow Posts </h3>
+        </div>
+
+        <form method="post" action="/mainpage">
+            <span style="display: inline-block; margin-right: 10px; font-size: 20px">select a API:</span>
+            <select name="selected_api" id="" style="font-size: 19px" >
+                <option value='{{api}}' style="font-size: 19px" selected>{{api}}</option>
+                <option value="allennlp" style="font-size: 19px">allennlp</option>
+                <option value="gensim" style="font-size: 19px">gensim</option>
+                <option value="nltk" style="font-size: 19px">nltk</option>
+                <option value="spaCy" style="font-size: 19px">spaCy</option>
+                <option value="stanford-nlp" style="font-size: 19px">stanford-nlp</option>
+                <option value="TextBlob" style="font-size: 19px">TextBlob</option>
+                <option value="Transformers" style="font-size: 19px">Transformers</option>
+
+            </select>
+
+
+            <div>
+                <div class="form-group">
+                    <label>
+                        <input type="text" name="so_query" class="form-control" style="width: 262px" placeholder="Search" value='{{query}}'>
+                    </label>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+
+
+        <div class="content" style="height: 600px">
+
+
+            {% for i in u %}
+
+            <div class="col-xs-10">
+                <div class="panel panel-default" style="width: 100%; display: inline-block">
+                    <div class="panel-heading">
+                        <div class="oneline_ignore"><h3 class="panel-title" id="title{{i[0]}}" >{{i[1]}}</h3></div>
+
+                    </div>
+                    <div class="panel-body">
+                        <div class="media">
+                            <div class="media-body" id="body{{i[0]}}">
+                                <div class="twoline_ignore">{{i[2]}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-2">
+                <div style="height: 50px">
+                    <button type="button" class="btn btn-primary" style="width: 55px" onclick="myFunction('{{i[0]}}')">
+                        more
+                    </button>
+                </div>
+                <div style="height: 50px">
+                    <a href={{i[0]}} target="_blank">
+                        <button type="button" class="btn btn-primary" style="width: 55px">goto</button>
+                    </a>
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+    </div>
+
+    <div class="col-xs-8">
+        <div style="display: block">
+            <div class="col-xs-10">
+                <div class="page-header" style="height: 60px">
+                    <h3 class="oneline_ignore" id="title_area">Please select the post in the left list, then press recommend</h3>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div style="height: 120px">
+                    <button type="button" class="btn btn-primary" style="margin-top: 35px">Recommend</button>
+                </div>
+            </div>
+        </div>
+        <div style="width: 1200px;">
+            <p id="body_text"></p>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+</body>
+</html>
