@@ -34,7 +34,7 @@ class SOSearcher(object):
             if match_score >= 1:
                 link = 'https://stackoverflow.com/questions/'+str(row['Id'])
                 # 构造其中一条数据
-                information = [link, row['Title'], row['Body'], match_score]
+                information = [link, row['Title'], row['Body'], str(row['Id']), match_score]
                 result_so.append(information)
 
         return_so = sorted(result_so, reverse=True, key=lambda post: post[3])
