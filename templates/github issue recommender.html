@@ -8,12 +8,19 @@
 </head>
 <body>
 
+<script>
+    function showBlog(){
+        document.getElementById("right_area").innerHTML =
+            '<iframe src="http://erichu.top/" frameBorder="0" height="800px" width="1200px"></iframe>'
+    }
+</script>
+
 <div class="col-xs-1">
     <img src="/static/HIT.png" alt="HIT" style="height: 100px; margin-left: 10px; margin-top: 10px">
 </div>
 <div class="col-xs-11">
     <div class="page-header">
-        <h1>GitHub Issue Recommender <small>by eric</small></h1>
+        <h1>GitHub Issue Recommender <small >by eric</small> <small class="clearfix" style="float: right;padding-top: 15px" onclick="showBlog()">about me</small></h1>
     </div>
 </div>
 
@@ -50,8 +57,8 @@
 
     </div>
 
-    <div class="col-xs-8">
-        <iframe src="http://erichu.top/" frameborder="0" height="800px" width="1200px"></iframe>
+    <div class="col-xs-8" id="right_area">
+<!--        <iframe src="http://erichu.top/" frameborder="0" height="800px" width="1200px"></iframe>-->
 
     </div>
 

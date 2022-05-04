@@ -52,6 +52,13 @@
     }
 </script>
 
+<script>
+    function showBlog() {
+        document.getElementById("body_text").innerHTML =
+            '<iframe src="http://erichu.top/" frameBorder="0" height="800px" width="1200px"></iframe>'
+    }
+</script>
+
 
 <div class="col-xs-1">
     <img src="/static/HIT.png" alt="HIT" style="height: 100px; margin-left: 10px; margin-top: 10px">
@@ -60,7 +67,8 @@
 
     <div class="page-header">
         <h1><a href="/mainpage" style="text-decoration: none; color: #0f0f0f">GitHub Issue Recommender </a><small>by
-            eric</small></h1>
+            eric</small><small class="clearfix" style="float: right;padding-top: 15px" onclick="showBlog()">about
+            me</small></h1>
     </div>
 </div>
 
