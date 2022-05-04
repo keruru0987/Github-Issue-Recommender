@@ -30,17 +30,17 @@
 
 </head>
 <body>
-
-<script>var current_id = ''</script>
+<script  src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
 
 <script>
     function showMore(id) {
-        current_id = id
-        console.log(id)
-        var tex = document.getElementById("body" + id).innerText;
         var title_text = document.getElementById("title" + id).innerText;
-        document.getElementById("body_text").innerHTML = tex;
         document.getElementById("title_area").innerHTML = title_text;
+
+        var converter = new showdown.Converter()
+        var tex = document.getElementById("body" + id).innerText;
+        html = converter.makeHtml(tex);
+        document.getElementById('body_text').innerHTML = html;
     }
 </script>
 
