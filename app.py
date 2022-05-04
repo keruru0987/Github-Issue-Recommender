@@ -2,7 +2,8 @@
 # @Author : Eric
 
 from flask import Flask, render_template, request
-from stackoverflow_search import SOSearcher
+from stackoverflow_search import SOSearcher, SOFinder
+from githubissue_search import GIRecommend
 
 app = Flask(__name__)
 
@@ -25,9 +26,23 @@ def mainpage():
 
 @app.route('/recommend')
 def recommend():
-    print(request.args.get("id")) # str形式的
+    """
+    根据从前端传入的StackOverflow Id号和api，为其推荐相关的Github Issue
+    :return:
+    """
+    api = request.args.get("api")
+    id = request.args.get("id")  # str形式的
+    print(api)
+    print(id)
+    SO_Finder = SOFinder(api, id)
+    matched_so = SO_Finder.find() # title,body,tags
 
-    return "hello"
+    GI_Recommender = GIRecommend(api,matched_so[0],matched_so[1],matched_so[2])
+    result = GI_Recommender.recommend()
+    for inf in result:
+        print(inf)
+
+    return render_template('gi_results.html', u=result)
 
 
 if __name__ == '__main__':

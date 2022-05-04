@@ -42,9 +42,32 @@ class SOSearcher(object):
         return return_so
 
 
+class SOFinder(object):
+    def __init__(self, selected_api, id_str):
+        self.api = selected_api
+        self.id_str = id_str
+
+    def find(self):
+        fpath = settings.stackoverflow_filepath[self.api]
+        sodata_df = pd.read_csv(fpath)
+        matched_so = []
+        match_flag = 0
+        for index, row in sodata_df.iterrows():
+            if str(row['Id']) == self.id_str:
+                matched_so = [row['Title'], row['Body'], row['Tags']]
+                match_flag = 1
+                break
+        if match_flag == 0:
+            raise Exception('没有匹配的ID')
+        return matched_so
+
+
 if __name__ == '__main__':
     searcher = SOSearcher('TextBlob', 'install dataframe')
     so = searcher.search()
     for ele in so:
         print(ele)
+
+    finder = SOFinder('allennlp', '68862752')
+    print(finder.find())
 

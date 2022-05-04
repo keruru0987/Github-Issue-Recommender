@@ -46,3 +46,4 @@ class Word2Vec(object):
             else:
                 scores.append(0)
         return scores
+

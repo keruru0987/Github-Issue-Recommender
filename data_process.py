@@ -9,10 +9,6 @@ import re
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 
-nlp_choose = settings.nlp_choose  # 选择要研究的NLP库
-nlp_api = settings.nlp_api[nlp_choose]
-print('当前api为：' + nlp_api)
-
 
 def clean(doc):
     stop = set(stopwords.words('english'))
@@ -25,7 +21,12 @@ def clean(doc):
     return normalized
 
 
-def get_data():
+def get_data(api=''):
+    nlp_choose = settings.nlp_choose  # 选择要研究的NLP库
+    nlp_api = settings.nlp_api[nlp_choose]
+    if api != '':
+        nlp_api = api
+    print('当前api为：' + nlp_api)
     # 数据的获取以及处理
     fpath = settings.github_filepath[nlp_api]
 
@@ -53,6 +54,9 @@ def get_data():
 
 
 def get_query():
+    nlp_choose = settings.nlp_choose  # 选择要研究的NLP库
+    nlp_api = settings.nlp_api[nlp_choose]
+    print('当前api为：' + nlp_api)
     stack_text = settings.stackoverflow_text[nlp_api]
     query = []
     for word in clean(stack_text).split(' '):
@@ -69,3 +73,4 @@ def get_query():
 
 if __name__ == '__main__':
     print(get_data())
+    print(get_data('allennlp'))
