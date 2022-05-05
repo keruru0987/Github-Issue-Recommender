@@ -38,7 +38,7 @@ class Sentence2Vec(object):
                 scores.append(self.score_cos(v_query, v_doc))
             else:
                 scores.append(0)
-            print('1')
+            # print('1')
         return scores
 
 

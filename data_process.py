@@ -22,6 +22,7 @@ def clean(doc):
 
 
 def get_data(api=''):
+    # 如果指定了api，则按照指定的api来，否则选择setting中默认的api
     nlp_choose = settings.nlp_choose  # 选择要研究的NLP库
     nlp_api = settings.nlp_api[nlp_choose]
     if api != '':
@@ -30,8 +31,14 @@ def get_data(api=''):
     # 数据的获取以及处理
     fpath = settings.github_filepath[nlp_api]
 
-    df = pd.read_csv(fpath)
-    texts = df['body'].fillna('')  # 保留数据中的body项
+    df = pd.read_json(fpath)
+    df = df.fillna('')
+    texts = []
+
+    # 去掉其中的pull,保留issue
+    for index, row in df.iterrows():
+        if row['pull_request'] == '':
+            texts.append(row['body'])
 
     docs = []
     r = '[’!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~\n。！，]+'
@@ -72,5 +79,6 @@ def get_query():
 
 
 if __name__ == '__main__':
-    print(get_data())
-    print(get_data('allennlp'))
+    # print(get_data())
+    a = get_data('allennlp')
+    print(a)

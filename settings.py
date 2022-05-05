@@ -9,10 +9,10 @@ api_prelink = {'allennlp':'https://github.com/allenai/allennlp/issues/', 'gensim
                'stanford-nlp':'https://github.com/stanfordnlp/CoreNLP/issues/', 'TextBlob':'https://github.com/sloria/TextBlob/issues/',
                'Transformers':'https://github.com/huggingface/transformers/issues/'}
 
-github_filepath = {'gensim':'D:/data/issues/issue csv/gensim.csv', 'allennlp':'D:/data/issues/issue csv/allennlp.csv',
-                   'nltk':'D:/data/issues/issue csv/nltk.csv', 'spaCy':'D:/data/issues/issue csv/spaCy.csv',
-                   'stanford-nlp':'D:/data/issues/issue csv/stanford-nlp.csv', 'TextBlob':'D:/data/issues/issue csv/TextBlob.csv',
-                   'Transformers':'D:/data/issues/issue csv/Transformers.csv'}
+github_filepath = {'gensim': 'data/issue/gensim.json', 'allennlp': 'data/issue/allennlp.json',
+                   'nltk': 'data/issue/nltk.json', 'spaCy': 'data/issue/spaCy.json',
+                   'stanford-nlp': 'data/issue/CoreNLP.json', 'TextBlob': 'data/issue/TextBlob.json',
+                   'Transformers': 'data/issue/transformers.json'}
 
 stackoverflow_filepath = {'gensim':'D:/data/stack/gensim.csv', 'allennlp':'D:/data/stack/allennlp.csv',
                           'nltk':'D:/data/stack/nltk.csv', 'spaCy':'D:/data/stack/spacy.csv',
@@ -21,7 +21,7 @@ stackoverflow_filepath = {'gensim':'D:/data/stack/gensim.csv', 'allennlp':'D:/da
 
 word2vec_modelpath = 'D:/model/GoogleNews-vectors-negative300.bin'
 
-select_num = 20  # 选取的分数最高的问题数目
+select_num = 20  # 选取的分数最高的issue数目
 
 allen_text = '''
 <p>I am new to the AllenNLP library. I am using the Pretrained Bidaf-elmo model for a reading comprehension task. My code looks like -</p>

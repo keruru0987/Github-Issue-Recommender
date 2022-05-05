@@ -26,12 +26,20 @@ class GIRecommend(object):
         sort_re = list(map(scores.index, heapq.nlargest(select_num, scores)))
         # print(sort_re)
         fpath = settings.github_filepath[self.api]
-        gi_df = pd.read_csv(fpath)
+        gi_df = pd.read_json(fpath)
+        gi_df = gi_df.fillna('')
+
+        # issue所在的索引
+        change_list = []
+        for index, row in gi_df.iterrows():
+            if row['pull_request'] == '':
+                change_list.append(index)
+
         result_gi = []
-        # a = gi_df.loc[1]['number']
+
         for index in sort_re:
-            link = settings.api_prelink[self.api] + str(gi_df.loc[index]['number'])
-            information = [link, gi_df.loc[index]['title'], gi_df.loc[index]['body'], gi_df.loc[index]['number']]
+            link = settings.api_prelink[self.api] + str(gi_df.loc[change_list[index]]['number'])
+            information = [link, gi_df.loc[change_list[index]]['title'], gi_df.loc[change_list[index]]['body'], gi_df.loc[change_list[index]]['number']]
             result_gi.append(information)
 
         return result_gi
