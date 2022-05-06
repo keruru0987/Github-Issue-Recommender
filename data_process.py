@@ -8,6 +8,8 @@ import pandas as pd
 import re
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
+from bs4 import BeautifulSoup
+from markdown import markdown
 
 
 def clean(doc):
@@ -28,21 +30,35 @@ def get_data(api=''):
     if api != '':
         nlp_api = api
     print('当前api为：' + nlp_api)
-    # 数据的获取以及处理
-    fpath = settings.github_filepath[nlp_api]
 
-    df = pd.read_json(fpath)
+    # 数据的获取以及处理
+    fpath = settings.new_github_filepath[nlp_api]
+
+    df = pd.read_csv(fpath)
     df = df.fillna('')
     texts = []
 
     # 去掉其中的pull,保留issue
     for index, row in df.iterrows():
-        if row['pull_request'] == '':
-            texts.append(row['body'])
+        texts.append(row['body'])
+
+    non_code_texts = []
+    for i in range(0, len(texts)):
+        # 消除代码块
+        pattern = r'```(.*\n)*```'
+        text = re.sub(pattern, '', texts[i])
+        # 消除命令行指令
+        pattern2 = r'> > > .*'
+        text = re.sub(pattern2, '', text)
+        # 消除报错 一般两行
+        pattern3 = r'File .*\n.*'
+        text = re.sub(pattern3, '', text)
+        html = markdown(text)
+        non_code_texts.append(BeautifulSoup(html, 'html.parser').get_text())
 
     docs = []
     r = '[’!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~\n。！，]+'
-    for sentence in texts:
+    for sentence in non_code_texts:
         non_sentence = sentence.replace('\r\n', ' ')
         nonn_sentence = non_sentence.replace('\n', ' ')
         sentence_words = clean(nonn_sentence).split(' ')  # 进行数据清洗
@@ -58,6 +74,43 @@ def get_data(api=''):
                 tokens.append(wordd)
         docs.append(tokens)
     return docs
+
+
+def get_raw_data(api=''):
+    # 直接将没有清洗的字符串数组返回，s2v用
+    # 如果指定了api，则按照指定的api来，否则选择setting中默认的api
+    nlp_choose = settings.nlp_choose  # 选择要研究的NLP库
+    nlp_api = settings.nlp_api[nlp_choose]
+    if api != '':
+        nlp_api = api
+    print('当前api为：' + nlp_api)
+
+    # 数据的获取以及处理
+    fpath = settings.new_github_filepath[nlp_api]
+
+    df = pd.read_csv(fpath)
+    df = df.fillna('')
+    texts = []
+
+    # 去掉其中的pull,保留issue
+    for index, row in df.iterrows():
+        texts.append(row['body'])
+
+    non_code_texts = []
+    for i in range(0, len(texts)):
+        # 消除代码块
+        pattern = r'```(.*\n)*```'
+        text = re.sub(pattern, '', texts[i])
+        # 消除命令行指令
+        pattern2 = r'> > > .*'
+        text = re.sub(pattern2, '', text)
+        # 消除报错 一般两行
+        pattern3 = r'File .*\n.*'
+        text = re.sub(pattern3, '', text)
+        html = markdown(text)
+        non_code_texts.append(BeautifulSoup(html, 'html.parser').get_text())
+
+    return non_code_texts
 
 
 def get_query():

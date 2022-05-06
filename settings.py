@@ -2,7 +2,7 @@
 # @Author : Eric
 
 nlp_api = ['allennlp', 'gensim', 'nltk', 'spaCy', 'stanford-nlp', 'TextBlob', 'Transformers']
-nlp_choose = 1  # 指定当前研究的API
+nlp_choose = 5  # 指定当前研究的API
 
 api_prelink = {'allennlp':'https://github.com/allenai/allennlp/issues/', 'gensim':'https://github.com/RaRe-Technologies/gensim/issues/',
                'nltk':'https://github.com/nltk/nltk/issues/', 'spaCy': 'https://github.com/explosion/spaCy/issues/',
@@ -13,6 +13,11 @@ github_filepath = {'gensim': 'data/issue/gensim.json', 'allennlp': 'data/issue/a
                    'nltk': 'data/issue/nltk.json', 'spaCy': 'data/issue/spaCy.json',
                    'stanford-nlp': 'data/issue/CoreNLP.json', 'TextBlob': 'data/issue/TextBlob.json',
                    'Transformers': 'data/issue/transformers.json'}
+
+new_github_filepath = {'gensim': 'data/new_issue/gensim.csv', 'allennlp': 'data/new_issue/allennlp.csv',
+                       'nltk': 'data/new_issue/nltk.csv', 'spaCy': 'data/new_issue/spaCy.csv',
+                       'stanford-nlp': 'data/new_issue/CoreNLP.csv', 'TextBlob': 'data/new_issue/TextBlob.csv',
+                       'Transformers': 'data/new_issue/transformers.csv'}
 
 stackoverflow_filepath = {'gensim':'D:/data/stack/gensim.csv', 'allennlp':'D:/data/stack/allennlp.csv',
                           'nltk':'D:/data/stack/nltk.csv', 'spaCy':'D:/data/stack/spacy.csv',
