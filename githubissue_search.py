@@ -20,7 +20,7 @@ class GIRecommend(object):
     def recommend(self):
         docs = data_process.get_raw_data(self.api)
         s2v = Sentence2Vec(docs)
-        scores = s2v.score_all(self.so_body)
+        scores = s2v.score_all(data_process.process_query(self.so_body))
         # print(scores)
 
         select_num = settings.select_num

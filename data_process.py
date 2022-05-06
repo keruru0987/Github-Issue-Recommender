@@ -131,7 +131,39 @@ def get_query():
     return query
 
 
+def process_query(query):
+    pattern = r'<code>(.*\n)*</code>'
+    text = re.sub(pattern, '', query)
+    re_query = BeautifulSoup(text, 'html.parser').get_text()
+    return re_query
+
+
 if __name__ == '__main__':
+    t = '''<p>I am trying to analyze open-ended questions with Polarity and subjectivity. So what I want to achieve is to upload the CSV file, then add new columns one for polarity, subjectively, negative or positive column and here what I did:</p>
+<pre><code>from textblob import TextBlob
+import pandas as pd 
+import numpy as np
+
+# Load the data
+from google.colab import files
+uploaded = files.upload()
+
+
+text = open(uploaded) // *this did not work so I just replaced uploaded with the name of the file and the path... this is not what I want. I hoped to get the file name here once uploaded in the first step and refer it to the file name in this line.* //
+text = text.read()
+blob = TextBlob(text)
+
+with open('text.csv', 'r') as read_obj:
+    # pass the file object to reader() to get the reader object
+    csv_reader = reader(read_obj)
+    # Iterate over each row in the csv using reader object
+    for row in csv_reader:
+        # row variable is a list that represents a row in csv
+        data = data.append(row[row], blob.polarity,blob.subjectivity)
+        print(data) 
+</code></pre>
+<p>And I want to print the data in an external file. but could not figure that out. how can I do it, and thank you in advance.</p>'''
+    b = process_query(t)
     # print(get_data())
     a = get_data('TextBlob')
     print(a)
