@@ -15,7 +15,7 @@ def draw_length(docs):
     plt.ylabel('问题包含单词数目')
     plt.rcParams['font.sans-serif'] = ['SimHei']
     matplotlib.rcParams['axes.unicode_minus'] = False
-    plt.title('Transformers问题长度图')
+    plt.title('问题长度图')
     plt.show()
 
 
@@ -33,7 +33,7 @@ def draw_num_of_length(docs):
     plt.ylabel('对应问题数目')
     plt.rcParams['font.sans-serif'] = ['SimHei']
     matplotlib.rcParams['axes.unicode_minus'] = False
-    plt.title('allennlp问题长度分布图')
+    plt.title('问题长度分布图')
     plt.show()
 
 

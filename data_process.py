@@ -80,5 +80,5 @@ def get_query():
 
 if __name__ == '__main__':
     # print(get_data())
-    a = get_data('allennlp')
+    a = get_data('TextBlob')
     print(a)

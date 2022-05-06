@@ -30,7 +30,7 @@ def remove_pull_and_create(select):
             temp_dict['pull_request'] = row['pull_request']
             new_df = new_df.append(temp_dict, ignore_index=True)
 
-    new_df.to_csv('data/new_issue/' + nlp_api + '.csv')
+    new_df.to_csv('data/new_issue/' + nlp_api + '.csv', index=True)
     print(nlp_api + ' finish')
 
 

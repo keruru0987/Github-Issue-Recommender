@@ -35,12 +35,12 @@ def recommend():
     print(api)
     print(id)
     SO_Finder = SOFinder(api, id)
-    matched_so = SO_Finder.find() # title,body,tags
+    matched_so = SO_Finder.find()  # title,body,tags
 
-    GI_Recommender = GIRecommend(api,matched_so[0],matched_so[1],matched_so[2])
+    GI_Recommender = GIRecommend(api, matched_so[0], matched_so[1], matched_so[2])
     result = GI_Recommender.recommend()
-    for inf in result:
-        print(inf)
+    # for inf in result:
+    #     print(inf)
 
     return render_template('gi_results.html', u=result)
 
