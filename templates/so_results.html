@@ -42,7 +42,10 @@
         var answer_link;
         if (accepted_answerid !== '') {
             answer_link = 'https://stackoverflow.com/questions/' + accepted_answerid;
-            title_text = "<a style='margin-right: 10px' target='_blank' href=" + answer_link + "><span class='label label-default'>Answered</span></a>" + title_text;
+            title_text = "<a style='margin-right: 10px' target='_blank' href=" + answer_link + "><span class='label label-success'>Answered</span></a>" + title_text;
+        }
+        else{
+            title_text = "<span style='margin-right: 10px' class='label label-default'>No Acc Answer</span>" + title_text;
         }
         document.getElementById("title_area").innerHTML = title_text;
     }
@@ -169,7 +172,7 @@
                     <a id="recommend_href">
                         <!--通过js修改链接中的参数-->
                         <button type="button" class="btn btn-primary" style="margin-top: 35px" onclick="goRecommend('{{api}}')">
-                            Recommend
+                            Recommend GitHub Issue
                         </button>
                     </a>
                 </div>
