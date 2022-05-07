@@ -39,8 +39,9 @@ class SOSearcher(object):
                 acc_id = ''
                 if row['AcceptedAnswerId'] != '':
                     acc_id = int(row['AcceptedAnswerId'])
-                processed_body_text = data_process.process_query(row['Body'])
-                information = [link, row['Title'], row['Body'], str(row['Id']), str(acc_id), processed_body_text, match_score]
+                processed_body_text = data_process.process_query(row['Body'])  # 去掉code，图片的
+                imgsize_fixed_body = data_process.alter_pic_size(row['Body'])  # 调整图片大小后的
+                information = [link, row['Title'], imgsize_fixed_body, str(row['Id']), str(acc_id), processed_body_text, match_score]
                 result_so.append(information)
 
         return_so = sorted(result_so, reverse=True, key=lambda post: post[6])

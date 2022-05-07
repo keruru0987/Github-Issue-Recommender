@@ -132,10 +132,21 @@ def get_query():
 
 
 def process_query(query):
+    # 删代码
     pattern = r'<code>(.*\n)*</code>'
     text = re.sub(pattern, '', query)
+    # 删图片
+    pattern2 = r'<img.*>'
+    text = re.sub(pattern2, '', text)
     re_query = BeautifulSoup(text, 'html.parser').get_text()
     return re_query
+
+
+def alter_pic_size(query):
+    # 修改显示图片长度为1000px
+    pattern = r'<img'
+    text = re.sub(pattern, "<img style='width: 1000px'", query)
+    return text
 
 
 if __name__ == '__main__':
