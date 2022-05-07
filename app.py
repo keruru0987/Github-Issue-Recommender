@@ -17,7 +17,7 @@ def mainpage():
         so_query = request.form.get("so_query")
         print(selected_api, so_query)
 
-        # 需要构造一个列表，其中的每一项内容需要包括:链接（由ID号进行构造）,标题，内容, Id, AcceptedAnswerId
+        # 需要构造一个列表，其中的每一项内容需要包括:链接（由ID号进行构造）,标题，内容, Id, AcceptedAnswerId, processed_body_text
         SO_Seacher = SOSearcher(selected_api, so_query)
         result = SO_Seacher.search()
 

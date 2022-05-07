@@ -35,13 +35,14 @@
 
 <script>
     function showMore(id, accepted_answerid) {
-        current_id = id
-        var tex = document.getElementById("body" + id).innerText;
-        document.getElementById("body_text").innerHTML = tex;
+        current_id = id;
+        var body_text = document.getElementById("body" + id).innerText;
+        document.getElementById("body_text").innerHTML = body_text;
         var title_text = document.getElementById("title" + id).innerText;
-        if (accepted_answerid!==''){
-            answer_link = 'https://stackoverflow.com/questions/' + accepted_answerid
-            title_text = "<a style='margin-right: 10px' target='_blank' href=" + answer_link +"><span class='label label-default'>Answered</span></a>" + title_text
+        var answer_link;
+        if (accepted_answerid !== '') {
+            answer_link = 'https://stackoverflow.com/questions/' + accepted_answerid;
+            title_text = "<a style='margin-right: 10px' target='_blank' href=" + answer_link + "><span class='label label-default'>Answered</span></a>" + title_text;
         }
         document.getElementById("title_area").innerHTML = title_text;
     }
@@ -122,8 +123,11 @@
                     </div>
                     <div class="panel-body">
                         <div class="media">
-                            <div class="media-body" id="body{{i[3]}}">
+                            <div class="media-body" id="body{{i[3]}}" style="display: none">
                                 <div class="twoline_ignore">{{i[2]}}</div>
+                            </div>
+                            <div class="media-body">
+                                <div class="twoline_ignore">{{i[5]}}</div>
                             </div>
                         </div>
                     </div>

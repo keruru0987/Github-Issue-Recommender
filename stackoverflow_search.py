@@ -2,6 +2,7 @@
 # @Author : Eric
 import settings
 import pandas as pd
+import data_process
 
 
 class SOSearcher(object):
@@ -38,10 +39,11 @@ class SOSearcher(object):
                 acc_id = ''
                 if row['AcceptedAnswerId'] != '':
                     acc_id = int(row['AcceptedAnswerId'])
-                information = [link, row['Title'], row['Body'], str(row['Id']), str(acc_id), match_score]
+                processed_body_text = data_process.process_query(row['Body'])
+                information = [link, row['Title'], row['Body'], str(row['Id']), str(acc_id), processed_body_text, match_score]
                 result_so.append(information)
 
-        return_so = sorted(result_so, reverse=True, key=lambda post: post[5])
+        return_so = sorted(result_so, reverse=True, key=lambda post: post[6])
 
         return return_so
 
@@ -67,7 +69,7 @@ class SOFinder(object):
 
 
 if __name__ == '__main__':
-    searcher = SOSearcher('TextBlob', 'install dataframe')
+    searcher = SOSearcher('TextBlob', 'install error')
     so = searcher.search()
     for ele in so:
         print(ele)
