@@ -34,12 +34,15 @@
 <script>var current_id = ''</script>
 
 <script>
-    function showMore(id) {
+    function showMore(id, accepted_answerid) {
         current_id = id
-        console.log(id)
         var tex = document.getElementById("body" + id).innerText;
-        var title_text = document.getElementById("title" + id).innerText;
         document.getElementById("body_text").innerHTML = tex;
+        var title_text = document.getElementById("title" + id).innerText;
+        if (accepted_answerid!==''){
+            answer_link = 'https://stackoverflow.com/questions/' + accepted_answerid
+            title_text = "<a style='margin-right: 10px' target='_blank' href=" + answer_link +"><span class='label label-default'>Answered</span></a>" + title_text
+        }
         document.getElementById("title_area").innerHTML = title_text;
     }
 </script>
@@ -130,7 +133,7 @@
             <div class="col-xs-2">
                 <div style="height: 50px">
                     <button type="button" class="btn btn-primary" style="width: 55px"
-                            onclick="showMore('{{i[3]}}')">
+                            onclick="showMore('{{i[3]}}', '{{i[4]}}')">
                         more
                     </button>
                 </div>

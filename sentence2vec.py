@@ -5,16 +5,18 @@ import numpy as np
 import data_process
 from scipy.linalg import norm
 from sentence_transformers import SentenceTransformer, util
-# model = SentenceTransformer('all-MiniLM-L6-v2')
+model = SentenceTransformer('all-MiniLM-L6-v2')
 import settings
 
-model = SentenceTransformer('all-mpnet-base-v2')
+# model = SentenceTransformer('all-mpnet-base-v2')
 # model = SentenceTransformer('bert-base-nli-mean-tokens')
 # model = SentenceTransformer('all-distilroberta-v1')
 # model = SentenceTransformer('all-MiniLM-L12-v2')
 # model = SentenceTransformer('multi-qa-distilbert-cos-v1')
 # model = SentenceTransformer('paraphrase-albert-small-v2')
 # model = SentenceTransformer('distiluse-base-multilingual-cased-v1')
+
+# 找十个推荐的，顺序，看顺序是否一样
 
 
 class Sentence2Vec(object):

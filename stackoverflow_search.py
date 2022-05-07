@@ -17,6 +17,7 @@ class SOSearcher(object):
         """
         fpath = settings.stackoverflow_filepath[self.api]
         sodata_df = pd.read_csv(fpath)
+        sodata_df = sodata_df.fillna('')
 
         # selected_df = pd.DataFrame(columns=['ID', 'Title', 'Body'])
         result_so = []
@@ -34,10 +35,13 @@ class SOSearcher(object):
             if match_score >= 1:
                 link = 'https://stackoverflow.com/questions/'+str(row['Id'])
                 # 构造其中一条数据
-                information = [link, row['Title'], row['Body'], str(row['Id']), match_score]
+                acc_id = ''
+                if row['AcceptedAnswerId'] != '':
+                    acc_id = int(row['AcceptedAnswerId'])
+                information = [link, row['Title'], row['Body'], str(row['Id']), str(acc_id), match_score]
                 result_so.append(information)
 
-        return_so = sorted(result_so, reverse=True, key=lambda post: post[3])
+        return_so = sorted(result_so, reverse=True, key=lambda post: post[5])
 
         return return_so
 
