@@ -5,7 +5,16 @@ import numpy as np
 import data_process
 from scipy.linalg import norm
 from sentence_transformers import SentenceTransformer, util
-model = SentenceTransformer('all-MiniLM-L6-v2')
+# model = SentenceTransformer('all-MiniLM-L6-v2')
+import settings
+
+model = SentenceTransformer('all-mpnet-base-v2')
+# model = SentenceTransformer('bert-base-nli-mean-tokens')
+# model = SentenceTransformer('all-distilroberta-v1')
+# model = SentenceTransformer('all-MiniLM-L12-v2')
+# model = SentenceTransformer('multi-qa-distilbert-cos-v1')
+# model = SentenceTransformer('paraphrase-albert-small-v2')
+# model = SentenceTransformer('distiluse-base-multilingual-cased-v1')
 
 
 class Sentence2Vec(object):
@@ -45,7 +54,7 @@ class Sentence2Vec(object):
 
 if __name__ == '__main__':
     docs = data_process.get_raw_data('TextBlob')
-    query = data_process.get_query()
+    query = data_process.process_query(settings.stackoverflow_text['TextBlob'])
     sentence2vec = Sentence2Vec(docs)
     scores = sentence2vec.score_all(query)
     print(scores)
