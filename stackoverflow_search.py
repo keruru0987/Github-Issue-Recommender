@@ -57,11 +57,15 @@ class SOFinder(object):
     def find(self):
         fpath = settings.stackoverflow_filepath[self.api]
         sodata_df = pd.read_csv(fpath)
+        sodata_df = sodata_df.fillna('')
         matched_so = []
         match_flag = 0
         for index, row in sodata_df.iterrows():
             if str(row['Id']) == self.id_str:
-                matched_so = [row['Title'], row['Body'], row['Tags']]
+                acc_id = ''
+                if row['AcceptedAnswerId'] != '':
+                    acc_id = int(row['AcceptedAnswerId'])
+                matched_so = [row['Title'], row['Body'], row['Tags'], str(acc_id)]
                 match_flag = 1
                 break
         if match_flag == 0:
