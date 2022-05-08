@@ -43,7 +43,7 @@ def recommend():
     acc_id = matched_so[3]
 
     GI_Recommender = GIRecommend(api, matched_so[0], matched_so[1], matched_so[2])
-    result = GI_Recommender.recommend()
+    result = GI_Recommender.recommend()  # link,title,body,number,state,clean_body
     # for inf in result:
     #     print(inf)
 

@@ -33,13 +33,21 @@
 <script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
 
 <script>
-    function showMore(id) {
+    function showMore(id, state) {
         var title_text = document.getElementById("title" + id).innerText;
+        if (state !== ''){
+            title_text = "<span style='margin-right: 10px; background-color: #2da44e' class='label label-default'>open</span>" + title_text
+        }
+        else{
+            title_text = "<span style='margin-right: 10px; background-color: #8250df' class='label label-default'>closed</span>" + title_text
+        }
         document.getElementById("title_area").innerHTML = title_text;
 
         var converter = new showdown.Converter()
-        var tex = document.getElementById("body" + id).innerText;
-        html = converter.makeHtml(tex);
+        var body_text = document.getElementById("body" + id).innerText;
+        console.log(body_text)
+        var html = converter.makeHtml(body_text);
+        console.log(html)
         document.getElementById('body_text').innerHTML = html;
     }
 </script>
@@ -59,10 +67,8 @@
 <div class="col-xs-11">
 
     <div class="page-header">
-        <h1><a href="/mainpage" style="text-decoration: none; color: #0f0f0f">GitHub Issue Recommender </a><small>by
-            eric</small>
-            <small class="clearfix" style="float: right;padding-top: 15px;cursor: pointer" onclick="showBlog()">about
-                me</small>
+        <h1><a href="/mainpage" style="text-decoration: none; color: #0f0f0f">GitHub Issue Recommender </a><small>by eric</small>
+            <a href="http://erichu.top/" target="_blank"><small class="clearfix" style="float: right;padding-top: 15px;">about me</small></a>
         </h1>
     </div>
 </div>
@@ -80,7 +86,7 @@
             {% for i in u %}
 
             <div class="col-xs-10">
-                <div class="panel panel-default" style="width: 100%; display: inline-block">
+                <div class="panel panel-info" style="width: 100%; display: inline-block">
                     <div class="panel-heading">
                         <div class="oneline_ignore"><h3 class="panel-title" id="title{{i[3]}}">{{i[1]}}</h3></div>
 
@@ -97,14 +103,16 @@
 
             <div class="col-xs-2">
                 <div style="height: 50px">
-                    <button type="button" class="btn btn-primary" style="width: 55px"
-                            onclick="showMore('{{i[3]}}')">
-                        more
+                    <button type="button" class="btn btn-primary" style="width: 65px"
+                            onclick="showMore('{{i[3]}}', '{{i[4]}}')">
+                        more<span class="glyphicon glyphicon-chevron-right" aria-hidden="true" style="margin-left: 3px"></span>
                     </button>
                 </div>
                 <div style="height: 50px">
                     <a href={{i[0]}} target="_blank">
-                        <button type="button" class="btn btn-primary" style="width: 55px">goto</button>
+                        <button type="button" class="btn btn-primary" style="width: 65px">
+                            goto<span class="glyphicon glyphicon-link" aria-hidden="true" style="margin-left: 3px"></span>
+                        </button>
                     </a>
                 </div>
             </div>
@@ -155,7 +163,7 @@
                 <h3 class="oneline_ignore" id="title_area">Please select the Issue in the left list</h3>
             </div>
         </div>
-        <div style="width: 1200px; height: 220px; overflow: auto;">
+        <div style="width: 1200px; height: 260px; overflow: auto;">
             <p id="body_text" style="background-color: #f7ecb5 "></p>
         </div>
 
