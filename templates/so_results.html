@@ -35,6 +35,21 @@
 
 <script>
     function showMore(id, accepted_answerid) {
+        // 若之前已经选中过，原来面板颜色变回去
+        if (current_id!==''){
+            var pre_panel = document.getElementById("panel" + current_id);
+            pre_panel.style.backgroundColor = '#d9edf7';
+            pre_panel.style.borderColor = '#bce8f1';
+            var pre_outerpanel = document.getElementById("outerpanel" + current_id);
+            pre_outerpanel.style.borderColor = '#bce8f1';
+        }
+        // 选中面板变色
+        var cur_panel = document.getElementById("panel" + id);
+        cur_panel.style.backgroundColor = '#f7ecb5';
+        cur_panel.style.borderColor = '#f7ecb5';
+        var cur_outerpanel = document.getElementById("outerpanel" + id);
+        cur_outerpanel.style.borderColor = '#f7ecb5';
+        //更新id号
         current_id = id;
         var body_text = document.getElementById("body" + id).innerText;
         document.getElementById("body_text").innerHTML = body_text;
@@ -48,6 +63,7 @@
             title_text = "<span style='margin-right: 10px' class='label label-default'>No Acc Answer</span>" + title_text;
         }
         document.getElementById("title_area").innerHTML = title_text;
+
     }
 </script>
 
@@ -119,8 +135,8 @@
             {% for i in u %}
 
             <div class="col-xs-10">
-                <div class="panel panel-info" style="width: 100%; display: inline-block; cursor: pointer" onclick="showMore('{{i[3]}}', '{{i[4]}}')" >
-                    <div class="panel-heading">
+                <div class="panel panel-info" style="width: 100%; display: inline-block; cursor: pointer" id="outerpanel{{i[3]}}" onclick="showMore('{{i[3]}}', '{{i[4]}}')" >
+                    <div class="panel-heading" id="panel{{i[3]}}">
                         <div class="oneline_ignore">
                             <h3 class="panel-title" id="title{{i[3]}}">{{i[1]}}</h3>
                         </div>
