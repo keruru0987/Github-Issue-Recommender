@@ -76,6 +76,27 @@ def get_data(api=''):
     return docs
 
 
+def get_title(api=''):
+    # 获取标题数据
+    nlp_choose = settings.nlp_choose  # 选择要研究的NLP库
+    nlp_api = settings.nlp_api[nlp_choose]
+    if api != '':
+        nlp_api = api
+    print('当前api为：' + nlp_api)
+
+    # 数据的获取以及处理
+    fpath = settings.new_github_filepath[nlp_api]
+
+    df = pd.read_csv(fpath)
+    df = df.fillna('')
+    title_texts = []
+
+    # 去掉其中的pull,保留issue
+    for index, row in df.iterrows():
+        title_texts.append(row['title'])
+    return title_texts
+
+
 def get_raw_data(api=''):
     # 直接将没有清洗的字符串数组返回，s2v用
     # 如果指定了api，则按照指定的api来，否则选择setting中默认的api
@@ -111,6 +132,30 @@ def get_raw_data(api=''):
         non_code_texts.append(BeautifulSoup(html, 'html.parser').get_text())
 
     return non_code_texts
+
+
+def get_labels(api=''):
+    # 获取label数据,返回的是一个二维数组
+    nlp_choose = settings.nlp_choose  # 选择要研究的NLP库
+    nlp_api = settings.nlp_api[nlp_choose]
+    if api != '':
+        nlp_api = api
+    print('当前api为：' + nlp_api)
+
+    # 数据的获取以及处理
+    fpath = settings.new_github_filepath[nlp_api]
+
+    df = pd.read_csv(fpath)
+    df = df.fillna('')
+    labels = []
+
+    for index, row in df.iterrows():
+        cur_labels = []
+        label_list = eval(row['labels'])
+        for label_dict in label_list:
+            cur_labels.append(label_dict['name'])
+        labels.append(cur_labels)
+    return labels
 
 
 def get_query():
@@ -150,6 +195,7 @@ def alter_pic_size(query):
 
 
 if __name__ == '__main__':
+    m = get_labels('TextBlob')
     t = '''<p>I am trying to analyze open-ended questions with Polarity and subjectivity. So what I want to achieve is to upload the CSV file, then add new columns one for polarity, subjectively, negative or positive column and here what I did:</p>
 <pre><code>from textblob import TextBlob
 import pandas as pd 

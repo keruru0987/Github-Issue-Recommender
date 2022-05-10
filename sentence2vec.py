@@ -21,8 +21,10 @@ import settings
 
 class Sentence2Vec(object):
     # 传入未清洗的数据
-    def __init__(self, docs):
+    def __init__(self, docs, titles, tags_list):
         self.docs = docs
+        self.titles = titles
+        self.tags_list = tags_list
         self.doc_num = len(docs)
         self.vocab = set([word for doc in self.docs for word in doc])
 
@@ -38,25 +40,59 @@ class Sentence2Vec(object):
             str_res += word
         return str_res
 
-    def score_all(self, sequence):
-        scores = []
+    def score_all(self, so_body_text, so_title_text, so_tags):
+        scores1 = []
         # query = self.word2sentence(sequence)
-        v_query = model.encode(sequence)
+        v_query_body = model.encode(so_body_text)
         for doc in self.docs:
             # 如果doc为空，直接记为0分
             if len(doc) > 0:
                 # doc_sentence = self.word2sentence(doc)
                 v_doc = model.encode(doc)
-                scores.append(self.score_cos(v_query, v_doc))
+                scores1.append(self.score_cos(v_query_body, v_doc))
             else:
-                scores.append(0)
+                scores1.append(0)
             # print('1')
-        return scores
+
+        scores2 = []
+        v_query_title = model.encode(so_title_text)
+        for title in self.titles:
+            if len(title) > 0:
+                v_gi_title = model.encode(title)
+                scores2.append(self.score_cos(v_query_title, v_gi_title))
+            else:
+                scores2.append(0)
+
+        tag_counts = []
+        for tags in self.tags_list:
+            count = 0
+            for tag in tags:
+                if tag.lower() in so_tags.lower():
+                    count += 1
+            tag_counts.append(count)
+        max_tag_count = max(tag_counts)
+        # 防止全为0的情况
+        if max_tag_count == 0:
+            max_tag_count = 1
+
+        scores_final = []
+        if len(scores1) != len(scores2):
+            raise Exception('title body num not match')
+        # 计算最终得分
+        for i in range(len(scores1)):
+            k = 1.5  # 标题系数
+            t = 1    # tag系数
+            score = (1 + t*tag_counts[i]/max_tag_count)/(1+t) * (scores2[i]*k + scores1[i])/k
+            scores_final.append(score)
+
+        return scores_final
 
 
 if __name__ == '__main__':
     docs = data_process.get_raw_data('TextBlob')
+    titles = data_process.get_title('TextBlob')
+    tags_list = data_process.get_labels('TextBlob')
     query = data_process.process_query(settings.stackoverflow_text['TextBlob'])
-    sentence2vec = Sentence2Vec(docs)
-    scores = sentence2vec.score_all(query)
+    sentence2vec = Sentence2Vec(docs, titles, tags_list)
+    scores = sentence2vec.score_all(query, 'Polarity and subjectively from text', '<python><dataframe><enhancement><textblob>')
     print(scores)

@@ -30,7 +30,7 @@ class SOSearcher(object):
                 if word in row['Title'].lower():
                     match_score += 1
                 if word in row['Tags'].lower():
-                    match_score += 3
+                    match_score += 1
                 # 这里还可以考虑body的影响
 
             if match_score >= 1:
@@ -41,10 +41,13 @@ class SOSearcher(object):
                     acc_id = int(row['AcceptedAnswerId'])
                 processed_body_text = data_process.process_query(row['Body'])  # 去掉code，图片的
                 imgsize_fixed_body = data_process.alter_pic_size(row['Body'])  # 调整图片大小后的
-                information = [link, row['Title'], imgsize_fixed_body, str(row['Id']), str(acc_id), processed_body_text, match_score]
+                information = [link, row['Title'], imgsize_fixed_body, str(row['Id']), str(acc_id), processed_body_text, match_score, row['ViewCount']]
                 result_so.append(information)
 
-        return_so = sorted(result_so, reverse=True, key=lambda post: post[6])
+        # 先根据热度进行排序
+        so_hot_sorted = sorted(result_so, reverse=True, key=lambda post: post[7])
+        # 再按照query相关度进行排序
+        return_so = sorted(so_hot_sorted, reverse=True, key=lambda post: post[6])
 
         return return_so
 

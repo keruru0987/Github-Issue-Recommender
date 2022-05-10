@@ -34,8 +34,8 @@ def recommend():
     """
     api = request.args.get("api")
     id = request.args.get("id")  # str形式的
-    print(api)
-    print(id)
+    print("当前要进行推荐的api: " + api)
+    print("当前要进行推荐的so_id: " + id)
     SO_Finder = SOFinder(api, id)
     matched_so = SO_Finder.find()  # title,body,tags,AcceptedAnswerId
     img_processed_body = data_process.alter_pic_size(matched_so[1])

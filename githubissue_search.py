@@ -21,8 +21,10 @@ class GIRecommend(object):
 
     def recommend(self):
         docs = data_process.get_raw_data(self.api)
-        s2v = Sentence2Vec(docs)
-        scores = s2v.score_all(data_process.process_query(self.so_body))
+        titles = data_process.get_title(self.api)
+        tag_list = data_process.get_labels(self.api)
+        s2v = Sentence2Vec(docs, titles, tag_list)
+        scores = s2v.score_all(data_process.process_query(self.so_body), self.so_title, self.so_tags)
         # print(scores)
 
         select_num = settings.select_num
@@ -58,7 +60,7 @@ class GIRecommend(object):
 
 
 if __name__ == '__main__':
-    gi_recommend = GIRecommend('TextBlob', 'hello', 'hello world!', '<allennlp>')
+    gi_recommend = GIRecommend('TextBlob', 'hello', 'hello world!', '<textblob>')
     gi = gi_recommend.recommend()
     for inf in gi:
         print(inf)
