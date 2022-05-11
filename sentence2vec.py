@@ -82,7 +82,7 @@ class Sentence2Vec(object):
         for i in range(len(scores1)):
             k = 1.5  # 标题系数
             t = 1    # tag系数
-            score = (1 + t*tag_counts[i]/max_tag_count)/(1+t) * (scores2[i]*k + scores1[i])/k
+            score = (1 + t*tag_counts[i]/max_tag_count)/(1+t) * (scores2[i]*k + scores1[i])/(k+1)
             scores_final.append(score)
 
         return scores_final

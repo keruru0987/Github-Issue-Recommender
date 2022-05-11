@@ -1,5 +1,7 @@
 # coding=utf-8
 # @Author : Eric
+import re
+
 import settings
 import pandas as pd
 import data_process
@@ -41,13 +43,24 @@ class SOSearcher(object):
                     acc_id = int(row['AcceptedAnswerId'])
                 processed_body_text = data_process.process_query(row['Body'])  # 去掉code，图片的
                 imgsize_fixed_body = data_process.alter_pic_size(row['Body'])  # 调整图片大小后的
-                information = [link, row['Title'], imgsize_fixed_body, str(row['Id']), str(acc_id), processed_body_text, match_score, row['ViewCount']]
+                tag_str = row['Tags']
+                tag_pattern = r'<.*?>'
+                tags = re.findall(tag_pattern, tag_str)
+                re_tag = ''
+                for tag in tags:
+                    tag1 = tag.replace('<', '')
+                    tag2 = tag1.replace('>', '')
+                    re_tag = re_tag + tag2 + ' '
+
+                information = [link, row['Title'], imgsize_fixed_body, str(row['Id']), str(acc_id), processed_body_text,
+                               str(row['Score']), str(row['ViewCount']), re_tag, str(row['AnswerCount']),
+                               str(row['CommentCount']), match_score, row['ViewCount']]
                 result_so.append(information)
 
         # 先根据热度进行排序
-        so_hot_sorted = sorted(result_so, reverse=True, key=lambda post: post[7])
+        so_hot_sorted = sorted(result_so, reverse=True, key=lambda post: post[12])
         # 再按照query相关度进行排序
-        return_so = sorted(so_hot_sorted, reverse=True, key=lambda post: post[6])
+        return_so = sorted(so_hot_sorted, reverse=True, key=lambda post: post[11])
 
         return return_so
 

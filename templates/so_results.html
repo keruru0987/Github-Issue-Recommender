@@ -34,7 +34,7 @@
 <script>var current_id = ''</script>
 
 <script>
-    function showMore(id, accepted_answerid) {
+    function showMore(id, accepted_answerid, score, viewcount, answer_count, comment_count) {
         // 若之前已经选中过，原来面板颜色变回去
         if (current_id!==''){
             var pre_panel = document.getElementById("panel" + current_id);
@@ -52,15 +52,31 @@
         //更新id号
         current_id = id;
         var body_text = document.getElementById("body" + id).innerText;
-        document.getElementById("body_text").innerHTML = body_text;
+        document.getElementById("body_text").innerHTML =  body_text;
+
+        var tags = document.getElementById('tags' + id).innerText
+        var tags_spilt = tags.split(' ')
+        var tags_inner = ''
+        for(var i=0; i<tags_spilt.length; i++){
+            tags_inner = tags_inner + "<a style='text-decoration: none' href='https://stackoverflow.com/questions/tagged/"+ tags_spilt[i] +"' target='_blank'>" +
+                "<span style='margin-right: 10px' class='label label-info'>" + tags_spilt[i] + "</span></a>"
+        }
+        document.getElementById("tag_area").innerHTML = tags_inner
+
+        document.getElementById("info_area").innerHTML = "<span style='margin-right: 10px' class='label label-warning'>Score: " + score + "</span>" +
+            "<span style='margin-right: 10px' class='label label-warning'>ViewCount: " + viewcount + "</span>" +
+            "<span style='margin-right: 10px' class='label label-warning'>AnswerCount: " + answer_count + "</span>" +
+            "<span style='margin-right: 10px' class='label label-warning'>CommentCount: " + comment_count + "</span>"
+
         var title_text = document.getElementById("title" + id).innerText;
+        var so_link = "<a href='https://stackoverflow.com/questions/" + id +"' target='_blank' style='text-decoration: none; color: black'><span>"+ title_text +"</span></a>"
         var answer_link;
         if (accepted_answerid !== '') {
             answer_link = 'https://stackoverflow.com/questions/' + accepted_answerid;
-            title_text = "<a style='margin-right: 10px' target='_blank' href=" + answer_link + "><span class='label label-success'>Answered</span></a>" + title_text;
+            title_text = "<a style='margin-right: 10px; text-decoration: none' target='_blank' href=" + answer_link + "><span class='label label-success'>Answered</span></a>" + so_link;
         }
         else{
-            title_text = "<span style='margin-right: 10px' class='label label-default'>No Acc Answer</span>" + title_text;
+            title_text = "<span style='margin-right: 10px' class='label label-default'>No Acc Answer</span>" + so_link;
         }
         document.getElementById("title_area").innerHTML = title_text;
 
@@ -131,11 +147,11 @@
 
         <div class="content" style="height: 600px">
 
-
             {% for i in u %}
+            <div style="display: none" id="tags{{i[3]}}"> {{i[8]}} </div>
 
             <div class="col-xs-10">
-                <div class="panel panel-info" style="width: 100%; display: inline-block; cursor: pointer" id="outerpanel{{i[3]}}" onclick="showMore('{{i[3]}}', '{{i[4]}}')" >
+                <div class="panel panel-info" style="width: 100%; display: inline-block; cursor: pointer" id="outerpanel{{i[3]}}" onclick="showMore('{{i[3]}}', '{{i[4]}}', '{{i[6]}}', '{{i[7]}}', '{{i[9]}}', '{{i[10]}}')" >
                     <div class="panel-heading" id="panel{{i[3]}}">
                         <div class="oneline_ignore">
                             <h3 class="panel-title" id="title{{i[3]}}">{{i[1]}}</h3>
@@ -158,7 +174,7 @@
             <div class="col-xs-2">
                 <div style="height: 50px">
                     <button type="button" class="btn btn-primary" style="width: 65px"
-                            onclick="showMore('{{i[3]}}', '{{i[4]}}')">
+                            onclick="showMore('{{i[3]}}', '{{i[4]}}', '{{i[6]}}', '{{i[7]}}', '{{i[9]}}','{{i[10]}}' )">
                         more<span class="glyphicon glyphicon-chevron-right" aria-hidden="true" style="margin-left: 3px"></span>
                     </button>
                 </div>
@@ -182,13 +198,13 @@
     <div class="col-xs-8">
         <div style="display: block">
             <div class="col-xs-10">
-                <div class="page-header" style="height: 60px">
+                <div class="page-header" style="margin-bottom: 10px" >
                     <h3 class="oneline_ignore" id="title_area">Please select the post in the left list, then press
                         recommend</h3>
                 </div>
             </div>
             <div class="col-xs-2">
-                <div style="height: 120px">
+                <div style="height: 80px">
                     <a id="recommend_href">
                         <!--通过js修改链接中的参数-->
                         <button type="button" class="btn btn-primary" style="margin-top: 35px" onclick="goRecommend('{{api}}')">
@@ -199,6 +215,10 @@
             </div>
         </div>
         <div style="width: 1200px; height: 680px; overflow: auto">
+            <div style='margin-bottom: 10px'>
+                <span id="info_area" style="margin-right: 50px; font-size: 18px"></span>
+                <span id="tag_area" style="font-size: 18px"></span>
+            </div>
             <p id="body_text"></p>
         </div>
 
