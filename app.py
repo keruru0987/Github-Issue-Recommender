@@ -38,17 +38,25 @@ def recommend():
     print("当前要进行推荐的api: " + api)
     print("当前要进行推荐的so_id: " + id)
     SO_Finder = SOFinder(api, id)
-    matched_so = SO_Finder.find()  # title,body,tags,AcceptedAnswerId
+    matched_so = SO_Finder.find()
+    # title,body,tags,AcceptedAnswerId, score, view_count, answer_count, comment_count, tag_list
     img_processed_body = data_process.alter_pic_size(matched_so[1])
     title = matched_so[0]
     acc_id = matched_so[3]
+    score = matched_so[4]
+    view_count = matched_so[5]
+    answer_count = matched_so[6]
+    comment_count = matched_so[7]
+    tag_list = matched_so[8]
 
     GI_Recommender = GIRecommend(api, matched_so[0], matched_so[1], matched_so[2])
     result = GI_Recommender.recommend()  # link,title,body,number,state,clean_body
     # for inf in result:
     #     print(inf)
 
-    return render_template('gi_results.html', u=result, img_processed_body=img_processed_body, title=title, acc_id=acc_id)
+    return render_template('gi_results.html', u=result, img_processed_body=img_processed_body, title=title,
+                           acc_id=acc_id, so_id=id, score=score, view_count=view_count, answer_count=answer_count,
+                           comment_count=comment_count, tag_list=tag_list)
 
 
 if __name__ == '__main__':

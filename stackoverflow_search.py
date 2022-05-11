@@ -81,7 +81,16 @@ class SOFinder(object):
                 acc_id = ''
                 if row['AcceptedAnswerId'] != '':
                     acc_id = int(row['AcceptedAnswerId'])
-                matched_so = [row['Title'], row['Body'], row['Tags'], str(acc_id)]
+                tag_str = row['Tags']
+                tag_pattern = r'<.*?>'
+                tags = re.findall(tag_pattern, tag_str)
+                tag_list = []
+                for tag in tags:
+                    tag1 = tag.replace('<', '')
+                    tag2 = tag1.replace('>', '')
+                    tag_list.append(tag2)
+                matched_so = [row['Title'], row['Body'], row['Tags'], str(acc_id), str(row['Score']),
+                              str(row['ViewCount']), str(row['AnswerCount']), str(row['CommentCount']), tag_list]
                 match_flag = 1
                 break
         if match_flag == 0:
