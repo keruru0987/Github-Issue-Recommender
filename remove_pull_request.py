@@ -15,7 +15,7 @@ def remove_pull_and_create(select):
 
     temp_dict = {}
     new_df = pd.DataFrame(
-        columns=['html_url', 'number', 'labels', 'state', 'created_at', 'pull_request', 'title', 'body'])
+        columns=['html_url', 'number', 'labels', 'state', 'created_at', 'pull_request', 'comments', 'title', 'body'])
 
     # 去掉其中的pull,保留issue
     for index, row in old_df.iterrows():
@@ -28,6 +28,7 @@ def remove_pull_and_create(select):
             temp_dict['created_at'] = row['created_at']
             temp_dict['body'] = row['body']
             temp_dict['pull_request'] = row['pull_request']
+            temp_dict['comments'] = row['comments']
             new_df = new_df.append(temp_dict, ignore_index=True)
 
     new_df.to_csv('data/new_issue/' + nlp_api + '.csv', index=True)

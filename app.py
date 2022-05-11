@@ -50,7 +50,7 @@ def recommend():
     tag_list = matched_so[8]
 
     GI_Recommender = GIRecommend(api, matched_so[0], matched_so[1], matched_so[2])
-    result = GI_Recommender.recommend()  # link,title,body,number,state,clean_body
+    result = GI_Recommender.recommend()  # link,title,body,number,state,clean_body,comments
     # for inf in result:
     #     print(inf)
 

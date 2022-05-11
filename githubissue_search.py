@@ -53,7 +53,8 @@ class GIRecommend(object):
             html = markdown(clean_body)
             clean_body = BeautifulSoup(html, 'html.parser').get_text()
 
-            information = [link, gi_df.loc[index]['title'], gi_df.loc[index]['body'], gi_df.loc[index]['number'], state, clean_body]
+            information = [link, gi_df.loc[index]['title'], gi_df.loc[index]['body'], gi_df.loc[index]['number'],
+                           state, clean_body, str(gi_df.loc[index]['comments'])]
             result_gi.append(information)
 
         return result_gi
