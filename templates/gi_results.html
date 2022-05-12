@@ -51,6 +51,7 @@
         cur_outerpanel.style.borderColor = '#f7ecb5';
 
         current_id = id;
+        //更新标题区域
         var title_text = document.getElementById("title" + id).innerText;
         var gi_link = document.getElementById("gi_link" + id).innerText;
         var link_title = "<a href='" + gi_link + "' target='_blank' style='color: black;text-decoration: none'>" + title_text + "</a>"
@@ -60,14 +61,31 @@
             title_text = "<span style='margin-right: 10px; background-color: #8250df' class='label label-default'>closed</span>" + link_title
         }
         document.getElementById("title_area").innerHTML = title_text;
-
+        //更新info
         document.getElementById("gi_info_area").innerHTML = "<span style='margin-right: 10px' class='label label-warning'>Comments: " + comments + "</span>"
-
+        //显示标签
+        var tags = document.getElementById('tags' + id).innerText
+        var tag_pre_link = document.getElementById('tag_pre_link').innerText
+        var tags_spilt = tags.split(' ')
+        console.log(tags_spilt)
+        var tags_inner = ''
+        for(var i=0; i<tags_spilt.length; i++){
+            console.log(tag_pre_link)
+            console.log(tags_spilt[i])
+            var tag_link = tag_pre_link.concat(tags_spilt[i])
+            //去掉其中的空格
+            tag_link = tag_link.replace(/\s/ig,'')
+            console.log(tag_link)
+            tags_inner = tags_inner + "<a style='text-decoration: none' href='"+ tag_link +"' target='_blank'>" +
+                "<span style='margin-right: 10px' class='label label-info'>" + tags_spilt[i] + "</span></a>"
+        }
+        document.getElementById("gi_tag_area").innerHTML = tags_inner
+        //更新body
         var converter = new showdown.Converter()
         var body_text = document.getElementById("body" + id).innerText;
-        console.log(body_text)
+        //console.log(body_text)
         var html = converter.makeHtml(body_text);
-        console.log(html)
+        //console.log(html)
         document.getElementById('body_text').innerHTML = html;
     }
 </script>
@@ -107,6 +125,8 @@
 
             {% for i in u %}
             <span style="display: none" id="gi_link{{i[3]}}">{{i[0]}}</span>
+            <div style="display: none" id="tags{{i[3]}}"> {{i[7]}} </div>
+            <div style="display: none" id="tag_pre_link"> {{tag_pre_link}} </div>
 
             <div class="col-xs-10">
                 <div class="panel panel-info" style="width: 100%; display: inline-block; cursor: pointer"
@@ -190,7 +210,7 @@
             </span>
         </div>
 
-        <div style="width: 1200px; height: 300px; overflow: auto">
+        <div style="width: 1200px; height: 270px; overflow: auto">
             <p id="so_body_text" style="display: none">
                 {{img_processed_body}}
             </p>

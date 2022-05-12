@@ -4,6 +4,11 @@
 nlp_api = ['allennlp', 'gensim', 'nltk', 'spaCy', 'stanford-nlp', 'TextBlob', 'Transformers']
 nlp_choose = 5  # 指定当前研究的API
 
+api_label_prelink = {'allennlp':'https://github.com/allenai/allennlp/labels/', 'gensim':'https://github.com/RaRe-Technologies/gensim/labels/',
+               'nltk':'https://github.com/nltk/nltk/labels/', 'spaCy': 'https://github.com/explosion/spaCy/labels/',
+               'stanford-nlp':'https://github.com/stanfordnlp/CoreNLP/labels/', 'TextBlob':'https://github.com/sloria/TextBlob/labels/',
+               'Transformers':'https://github.com/huggingface/transformers/labels/'}
+
 api_prelink = {'allennlp':'https://github.com/allenai/allennlp/issues/', 'gensim':'https://github.com/RaRe-Technologies/gensim/issues/',
                'nltk':'https://github.com/nltk/nltk/issues/', 'spaCy': 'https://github.com/explosion/spaCy/issues/',
                'stanford-nlp':'https://github.com/stanfordnlp/CoreNLP/issues/', 'TextBlob':'https://github.com/sloria/TextBlob/issues/',

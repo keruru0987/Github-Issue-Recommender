@@ -51,9 +51,10 @@
         cur_outerpanel.style.borderColor = '#f7ecb5';
         //更新id号
         current_id = id;
+        //body部分
         var body_text = document.getElementById("body" + id).innerText;
         document.getElementById("body_text").innerHTML =  body_text;
-
+        //显示标签
         var tags = document.getElementById('tags' + id).innerText
         var tags_spilt = tags.split(' ')
         var tags_inner = ''
@@ -62,12 +63,12 @@
                 "<span style='margin-right: 10px' class='label label-info'>" + tags_spilt[i] + "</span></a>"
         }
         document.getElementById("tag_area").innerHTML = tags_inner
-
+        //显示info
         document.getElementById("info_area").innerHTML = "<span style='margin-right: 10px' class='label label-warning'>Score: " + score + "</span>" +
             "<span style='margin-right: 10px' class='label label-warning'>ViewCount: " + viewcount + "</span>" +
             "<span style='margin-right: 10px' class='label label-warning'>AnswerCount: " + answer_count + "</span>" +
             "<span style='margin-right: 10px' class='label label-warning'>CommentCount: " + comment_count + "</span>"
-
+        //title部分
         var title_text = document.getElementById("title" + id).innerText;
         var so_link = "<a href='https://stackoverflow.com/questions/" + id +"' target='_blank' style='text-decoration: none; color: black'><span>"+ title_text +"</span></a>"
         var answer_link;

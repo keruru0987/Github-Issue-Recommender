@@ -34,6 +34,8 @@ class GIRecommend(object):
         gi_df = pd.read_csv(fpath)
         gi_df = gi_df.fillna('')
 
+        tags = data_process.get_labels(self.api)
+
         result_gi = []
         for index in sort_re:
             link = settings.api_prelink[self.api] + str(gi_df.loc[index]['number'])
@@ -53,15 +55,19 @@ class GIRecommend(object):
             html = markdown(clean_body)
             clean_body = BeautifulSoup(html, 'html.parser').get_text()
 
+            tag_str = ''
+            for tag in tags[index]:
+                tag_str = tag_str + tag + ' '
+
             information = [link, gi_df.loc[index]['title'], gi_df.loc[index]['body'], gi_df.loc[index]['number'],
-                           state, clean_body, str(gi_df.loc[index]['comments'])]
+                           state, clean_body, str(gi_df.loc[index]['comments']), tag_str]
             result_gi.append(information)
 
         return result_gi
 
 
 if __name__ == '__main__':
-    gi_recommend = GIRecommend('TextBlob', 'hello', 'hello world!', '<textblob>')
+    gi_recommend = GIRecommend('nltk', 'hello', 'hello world!', '<textblob>')
     gi = gi_recommend.recommend()
     for inf in gi:
         print(inf)

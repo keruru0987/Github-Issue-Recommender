@@ -4,6 +4,7 @@
 from flask import Flask, render_template, request
 
 import data_process
+import settings
 from stackoverflow_search import SOSearcher, SOFinder
 from githubissue_search import GIRecommend
 
@@ -50,13 +51,15 @@ def recommend():
     tag_list = matched_so[8]
 
     GI_Recommender = GIRecommend(api, matched_so[0], matched_so[1], matched_so[2])
-    result = GI_Recommender.recommend()  # link,title,body,number,state,clean_body,comments
+    result = GI_Recommender.recommend()  # link,title,body,number,state,clean_body,comments,tags
     # for inf in result:
     #     print(inf)
 
+    label_pre_link = settings.api_label_prelink[api]
+
     return render_template('gi_results.html', u=result, img_processed_body=img_processed_body, title=title,
                            acc_id=acc_id, so_id=id, score=score, view_count=view_count, answer_count=answer_count,
-                           comment_count=comment_count, tag_list=tag_list)
+                           comment_count=comment_count, tag_list=tag_list, tag_pre_link=label_pre_link)
 
 
 if __name__ == '__main__':
