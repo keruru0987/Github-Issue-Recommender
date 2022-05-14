@@ -5,9 +5,8 @@ import numpy as np
 import data_process
 from scipy.linalg import norm
 from sentence_transformers import SentenceTransformer, util
-model = SentenceTransformer('all-MiniLM-L6-v2')
 import settings
-
+model = SentenceTransformer('all-MiniLM-L6-v2')
 # model = SentenceTransformer('all-mpnet-base-v2')
 # model = SentenceTransformer('bert-base-nli-mean-tokens')
 # model = SentenceTransformer('all-distilroberta-v1')

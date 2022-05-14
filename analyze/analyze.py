@@ -43,6 +43,7 @@ def get_rel_list(model_name, api, so_body, so_title, so_tags):
 
 
 def calculate_Pk(rel_list, k):
+    # 前k个推荐中的正确率
     rel_num = 0
     for i in range(0, k):
         if rel_list[i] > 0:
@@ -52,8 +53,9 @@ def calculate_Pk(rel_list, k):
 
 
 def calculate_AP(rel_list, api):
-    N = settings.select_num
-    m = 0
+    # 计算Average Precision
+    N = settings.select_num  # 推荐的个数
+    m = 0  # 总的相关个数
     fpath = settings.tagged_github_filepath[api]
     gi_df = pd.read_csv(fpath)
     gi_df = gi_df.fillna('')
@@ -80,10 +82,15 @@ if __name__ == '__main__':
                      'so_title': "Sentiment analysis of non-English texts",
                      'so_tags': "<python><machine-learning><nlp><sentiment-analysis><textblob>"}
 
+    cur_api = TextBlob_data['api']
+    cur_so_body = TextBlob_data['so_body']
+    cur_so_title = TextBlob_data['so_title']
+    cur_so_tags = TextBlob_data['so_tags']
+
     model_list = ['bm25', 'vsm', 'word2vec', 'sentence2vec']
     for model in model_list:
-        rel_list = get_rel_list(model, TextBlob_data['api'], TextBlob_data['so_body'], TextBlob_data['so_title'], TextBlob_data['so_tags'])
-        score = calculate_AP(rel_list, TextBlob_data['api'])
+        rel_list = get_rel_list(model, cur_api, cur_so_body, cur_so_title, cur_so_tags)
+        score = calculate_AP(rel_list, cur_api)
         print(model + ": " + str(score))
 
 
