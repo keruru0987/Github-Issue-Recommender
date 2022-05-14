@@ -40,7 +40,7 @@ Thanks in advance
 ",1
 15,https://github.com/sloria/TextBlob/issues/113,113,"[{'id': 45792776, 'node_id': 'MDU6TGFiZWw0NTc5Mjc3Ng==', 'url': 'https://api.github.com/repos/sloria/TextBlob/labels/enhancement', 'name': 'enhancement', 'color': '84b6eb', 'default': True, 'description': None}]",open,2,Translation 1 or 2 character Chinese words,"Thank you for making this amazing tool!! 
 
-I have an easy issue. I use textblob to translate Chinese. In Translate.py in def detect with comment """"""Detect the source text's language."""""" requires a minimum length of 3 otherwise it will through an exception. This is not so handy for Chinese characters. For example: ºÃ means ""it is good"".
+I have an easy issue. I use textblob to translate Chinese. In Translate.py in def detect with comment """"""Detect the source text's language."""""" requires a minimum length of 3 otherwise it will through an exception. This is not so handy for Chinese characters. For example: ï¿½ï¿½ means ""it is good"".
 
 Maybe there is away to change this without losing the effectiveness of detecting the correct language. If you can detect if they are Chinese characters you could drop the minimum length requirement.
 
@@ -693,7 +693,7 @@ text = text.translate(from_lang='en', to='de')
 print(text)
 
 Result:
-TextBlob(""Explanation Why the edits made under my username Hardcore Metallica Fan were reverted? Erkl?rung Warum wurden die unter meinem Benutzernamen Hardcore Metallica Fan vorgenommenen ?nderungen r¨¹ckg?ngig gemacht? They weren't vandalisms, just closure on some GAs after I voted at New York Dolls FAC. Es waren keine Vandalismen, sondern nur die Schlie?ung einiger GAs, nachdem ich bei New York Dolls FAC abgestimmt hatte. And please don't remove the template from the talk page since I'm retired now.89.205.38.27 Und bitte entfernen Sie die Vorlage nicht von der Diskussionsseite, da ich jetzt im Ruhestand bin.89.205.38.27"")
+TextBlob(""Explanation Why the edits made under my username Hardcore Metallica Fan were reverted? Erkl?rung Warum wurden die unter meinem Benutzernamen Hardcore Metallica Fan vorgenommenen ?nderungen rï¿½ï¿½ckg?ngig gemacht? They weren't vandalisms, just closure on some GAs after I voted at New York Dolls FAC. Es waren keine Vandalismen, sondern nur die Schlie?ung einiger GAs, nachdem ich bei New York Dolls FAC abgestimmt hatte. And please don't remove the template from the talk page since I'm retired now.89.205.38.27 Und bitte entfernen Sie die Vorlage nicht von der Diskussionsseite, da ich jetzt im Ruhestand bin.89.205.38.27"")
 
 It is giving me the original as well as the translated version. Also, it's giving me results in some XML format like "",&# "" etc.",1
 156,https://github.com/sloria/TextBlob/issues/401,401,[],open,0,HTTPError: HTTP Error 400: Bad Request on translate call in 0.17.1,"Translation still failing in 0.17.1:
@@ -814,7 +814,7 @@ Traceback (most recent call last):
   File ""/home/david/.virtualenvs/euler/lib/python3.2/site-packages/textblob/en/__init__.py"", line 8, in <module>
     from textblob._text import (Parser as _Parser, Sentiment as _Sentiment, Lexicon,
   File ""/home/david/.virtualenvs/euler/lib/python3.2/site-packages/textblob/_text.py"", line 313
-    and tokens[j] in (""'"", ""\"""", u""¡±"", u""¡¯"", ""..."", ""."", ""!"", ""?"", "")"", EOS):
+    and tokens[j] in (""'"", ""\"""", u""ï¿½ï¿½"", u""ï¿½ï¿½"", ""..."", ""."", ""!"", ""?"", "")"", EOS):
                                       ^
 SyntaxError: invalid syntax
 ```
@@ -954,7 +954,7 @@ I am wondering if there is a solution to a tokenization issue I'm seeing.  Here'
 
 ```
 In [1]: from textblob import TextBlob
-In [2]: text = TextBlob('¡°We should start back,¡± Gared urged as the woods began to grow dark around them. ¡°The wildlings are dead.¡± ¡°Do the dead frighten you?¡± Ser Waymar Royce asked with just the hint of a smile. Gared did not rise to the bait. He was an old man, past fifty, and he had seen the lordlings come and go. ¡°Dead is dead,¡± he said. ¡°We have no business with the dead.¡± ¡°Are they dead?¡± Royce asked softly.')
+In [2]: text = TextBlob('ï¿½ï¿½We should start back,ï¿½ï¿½ Gared urged as the woods began to grow dark around them. ï¿½ï¿½The wildlings are dead.ï¿½ï¿½ ï¿½ï¿½Do the dead frighten you?ï¿½ï¿½ Ser Waymar Royce asked with just the hint of a smile. Gared did not rise to the bait. He was an old man, past fifty, and he had seen the lordlings come and go. ï¿½ï¿½Dead is dead,ï¿½ï¿½ he said. ï¿½ï¿½We have no business with the dead.ï¿½ï¿½ ï¿½ï¿½Are they dead?ï¿½ï¿½ Royce asked softly.')
 In [3]: text.sentences
 ```
 
@@ -962,34 +962,34 @@ And here's the ouput when I call the sentences attribute:
 
 ```
 Out[3]: 
-[Sentence(""¡°We should start back,¡± Gared urged as the woods began to grow dark around them.""),
- Sentence(""¡°The wildlings are dead.¡± ¡°Do the dead frighten you?¡± Ser Waymar Royce asked with just the hint of a smile.""),
+[Sentence(""ï¿½ï¿½We should start back,ï¿½ï¿½ Gared urged as the woods began to grow dark around them.""),
+ Sentence(""ï¿½ï¿½The wildlings are dead.ï¿½ï¿½ ï¿½ï¿½Do the dead frighten you?ï¿½ï¿½ Ser Waymar Royce asked with just the hint of a smile.""),
  Sentence(""Gared did not rise to the bait.""),
  Sentence(""He was an old man, past fifty, and he had seen the lordlings come and go.""),
- Sentence(""¡°Dead is dead,¡± he said.""),
- Sentence(""¡°We have no business with the dead.¡± ¡°Are they dead?¡± Royce asked softly."")]
+ Sentence(""ï¿½ï¿½Dead is dead,ï¿½ï¿½ he said.""),
+ Sentence(""ï¿½ï¿½We have no business with the dead.ï¿½ï¿½ ï¿½ï¿½Are they dead?ï¿½ï¿½ Royce asked softly."")]
 ```
 
 The issue here is that TextBlob is tokenizing sentences that run together with quotations as a single sentence. The second ""sentence"" above demonstrates this:
 
 ```
-Sentence(""¡°The wildlings are dead.¡± ¡°Do the dead frighten you?¡± Ser Waymar Royce asked with just the hint of a smile."")
+Sentence(""ï¿½ï¿½The wildlings are dead.ï¿½ï¿½ ï¿½ï¿½Do the dead frighten you?ï¿½ï¿½ Ser Waymar Royce asked with just the hint of a smile."")
 ```
 
 should instead be:
 
 ```
-Sentence(""¡°The wildlings are dead.¡±) 
-Sentence(¡°Do the dead frighten you?¡± Ser Waymar Royce asked with just the hint of a smile."")
+Sentence(""ï¿½ï¿½The wildlings are dead.ï¿½ï¿½) 
+Sentence(ï¿½ï¿½Do the dead frighten you?ï¿½ï¿½ Ser Waymar Royce asked with just the hint of a smile."")
 ```
 
 The same is the case for the last example sentence I've shown:
 
 ```
-Sentence(""¡°We have no business with the dead.¡± ¡°Are they dead?¡± Royce asked softly."")
+Sentence(""ï¿½ï¿½We have no business with the dead.ï¿½ï¿½ ï¿½ï¿½Are they dead?ï¿½ï¿½ Royce asked softly."")
 ```
 
-It seems that TextBlob does not Tokenize a sentence if it appears in quotes.  In other words, `¡°We have no business with the dead.¡±` is its own sentence, but TextBlob tokenizes the sentence such that it also includes the phrases that follow: `¡°Are they dead?¡± Royce asked softly.""`
+It seems that TextBlob does not Tokenize a sentence if it appears in quotes.  In other words, `ï¿½ï¿½We have no business with the dead.ï¿½ï¿½` is its own sentence, but TextBlob tokenizes the sentence such that it also includes the phrases that follow: `ï¿½ï¿½Are they dead?ï¿½ï¿½ Royce asked softly.""`
 
 Is there a way to avoid this, that is to force TextBlob to treat an occurrence of `.""` as the end of a sentence?
 ",0
@@ -1780,7 +1780,7 @@ However I thought (it is definitly the case in the English case) the range of th
 Where could this come from?
 
 Example:
-text=""Il vrai qu'avec seulement trois grandes valeurs il n'a pas de quoi occuper des analystes ¨¤ temps plein.""
+text=""Il vrai qu'avec seulement trois grandes valeurs il n'a pas de quoi occuper des analystes ï¿½ï¿½ temps plein.""
 blob=TextBlob(text, pos_tagger=PatternTagger(), analyzer=PatternAnalyzer())
 print(blob.sentiment[1])
 
@@ -1811,10 +1811,10 @@ Also, not sure why pip got installed as pip3 ????
 $ pip3 install -U textblob
 Collecting textblob
   Downloading textblob-0.15.1-py2.py3-none-any.whl (631kB)
-    100% |¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€| 634kB 1.5MB/s 
+    100% |ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½| 634kB 1.5MB/s 
 Collecting nltk>=3.1 (from textblob)
   Downloading nltk-3.2.5.tar.gz (1.2MB)
-    100% |¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€| 1.2MB 1.1MB/s 
+    100% |ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½| 1.2MB 1.1MB/s 
 Collecting six (from nltk>=3.1->textblob)
   Downloading six-1.11.0-py2.py3-none-any.whl
 Installing collected packages: six, nltk, textblob
@@ -2176,7 +2176,7 @@ Output:
 ",0
 108,https://github.com/sloria/TextBlob/issues/279,279,[],open,0,TextBlob word counting parses curly single quote as a word,"I am doing an example for a live training seminar in which I use the plain text version of the play Romeo and Juliet from Project Gutenberg to display the top 20 words in the text.
 
-There are many curly apostrophes (`¡¯`)--867 of them to be exact. TextBlob splits words containing them, such as `Romeo¡¯s` and counts the apostrophes (`¡¯`) as a word.
+There are many curly apostrophes (`ï¿½ï¿½`)--867 of them to be exact. TextBlob splits words containing them, such as `Romeoï¿½ï¿½s` and counts the apostrophes (`ï¿½ï¿½`) as a word.
 
 I am assuming this is a bug, but just wondering if I am doing something wrong. TextBlob does not do this for straight single-quote characters",0
 109,https://github.com/sloria/TextBlob/issues/281,281,[],open,0,Sigularize and Lemmatize could use some error handling,"I have a some text `text = 'This is some of my long text that goes on ....'`. I want to get all the words `lemmatized` and in their singular form.
@@ -2480,7 +2480,7 @@ Given how long this package has been around I wonder if this is a deliberate des
 144,https://github.com/sloria/TextBlob/issues/371,371,[],open,5,AttributeError: 'list' object has no attribute 'strip',"from textblob import TextBlob
 
 
-words  = str(""§¬§Ñ§â§Õ§Ú§Ô§Ñ§ß§í §Ú§Ù §ß§à§â§Ü§Ñ"")
+words  = str(""ï¿½ï¿½ï¿½Ñ§ï¿½Õ§Ú§Ô§Ñ§ß§ï¿½ ï¿½Ú§ï¿½ ï¿½ß§ï¿½ï¿½Ü§ï¿½"")
 blob = TextBlob(words)
 perevod = blob.translate(from_lang =""ru"", to='uk')
 print(perevod)

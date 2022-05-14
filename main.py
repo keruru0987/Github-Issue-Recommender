@@ -3,7 +3,7 @@ from bm25 import BM25
 from vsm import VSM
 from word2vec import Word2Vec
 from sentence2vec import Sentence2Vec
-from analyze import Analyzer
+from lda_analyze import Analyzer
 
 
 def baseline_analyze():
