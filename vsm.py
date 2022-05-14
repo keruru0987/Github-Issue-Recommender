@@ -6,7 +6,7 @@ import pandas as pd
 
 
 class VSM(object):
-    def __init__(self, docs):
+    def __init__(self, docs, titles, tags_list):
         self.docs = docs
         self.doc_num = len(docs)
         self.vocab = set([word for doc in self.docs for word in doc])
@@ -34,7 +34,7 @@ class VSM(object):
             tfidf[word] = tfval * idfs[word]
         return tfidf
 
-    def score_all(self, sequence):
+    def score_all(self, sequence, so_title_text, so_tags):
         tf_list = []
         for doc in self.docs:
             tf = self.computeTF(self.vocab, doc)

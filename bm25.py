@@ -6,7 +6,7 @@ from collections import Counter
 
 
 class BM25(object):
-    def __init__(self, docs):
+    def __init__(self, docs, titles, tags_list):
         self.docs = docs   # 传入的docs要求是已经分好词的list
         self.doc_num = len(docs)  # 文档数
         self.vocab = set([word for doc in self.docs for word in doc])  # 文档中所包含的所有词语
@@ -43,13 +43,13 @@ class BM25(object):
             score_list.append(self.idf(word) * r_score)
         return score_list
 
-    def score_all(self, sequence):
+    def score_all(self, sequence, so_title_text, so_tags):
         # 将各个单词的得分相加
         score = []
         count = 0
         for word in sequence:
             score.append(self.score(word))
-            print('the round', count, '/', len(sequence), 'complete')
+            # print('the round', count, '/', len(sequence), 'complete')
             count += 1
         sum_score = np.sum(score, axis=0)  # 纵轴求和
         # 得分除去query的长度

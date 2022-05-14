@@ -16,7 +16,7 @@ def get_tagged_title(api=''):
     nlp_api = settings.nlp_api[nlp_choose]
     if api != '':
         nlp_api = api
-    print('当前api为：' + nlp_api)
+    # print('当前api为：' + nlp_api)
 
     # 数据的获取以及处理
     fpath = settings.tagged_github_filepath[nlp_api]
@@ -38,7 +38,7 @@ def get_tagged_raw_data(api=''):
     nlp_api = settings.nlp_api[nlp_choose]
     if api != '':
         nlp_api = api
-    print('获取tagged数据，当前api为：' + nlp_api)
+    # print('获取tagged数据，当前api为：' + nlp_api)
 
     # 数据的获取以及处理
     fpath = settings.tagged_github_filepath[nlp_api]
@@ -73,7 +73,7 @@ def get_tagged_labels(api=''):
     nlp_api = settings.nlp_api[nlp_choose]
     if api != '':
         nlp_api = api
-    print('当前api为：' + nlp_api)
+    # print('当前api为：' + nlp_api)
 
     # 数据的获取以及处理
     fpath = settings.tagged_github_filepath[nlp_api]

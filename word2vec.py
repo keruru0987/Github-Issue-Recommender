@@ -11,7 +11,7 @@ model = gensim.models.KeyedVectors.load_word2vec_format(model_file, binary=True)
 
 
 class Word2Vec(object):
-    def __init__(self, docs):
+    def __init__(self, docs, titles, tags_list):
         self.docs = docs
         self.doc_num = len(docs)
         self.vocab = set([word for doc in self.docs for word in doc])
@@ -35,7 +35,7 @@ class Word2Vec(object):
         else:
             return 0
 
-    def score_all(self, sequence):
+    def score_all(self, sequence, so_title_text, so_tags):
         scores = []
         v_query = self.sentence_vector(sequence)
         for doc in self.docs:
