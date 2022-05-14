@@ -1,6 +1,8 @@
 # coding=utf-8
 # @Author : Eric
 
+import sys
+import time
 import math
 import pandas as pd
 
@@ -35,15 +37,33 @@ class VSM(object):
         return tfidf
 
     def score_all(self, sequence, so_title_text, so_tags):
+        all_progress = len(self.docs)*3  # 进度条
+        count_progress = 0
         tf_list = []
         for doc in self.docs:
             tf = self.computeTF(self.vocab, doc)
             tf_list.append(tf)
+            count_progress += 1
+            progress = count_progress / all_progress * 100
+            progress = round(progress, 1)
+            print("\r", end="")
+            print('进度：{}%'.format(progress), "▋" * (int(round(progress)) // 2), end="")
+            sys.stdout.flush()
+            time.sleep(0.00001)
+
         idfs = self.computeIDF(tf_list)
         tf_idf_list = []
         for tf in tf_list:
             tf_idf = self.computeTFIDF(tf, idfs)
             tf_idf_list.append(tf_idf)
+            count_progress += 1
+            progress = count_progress / all_progress * 100
+            progress = round(progress, 1)
+            print("\r", end="")
+            print('进度：{}%'.format(progress), "▋" * (int(round(progress)) // 2), end="")
+            sys.stdout.flush()
+            time.sleep(0.00001)
+
         Dvector = pd.DataFrame([tfidf for tfidf in tf_idf_list])  # 文档的向量
 
         query = []
@@ -62,4 +82,12 @@ class VSM(object):
                 if k in vector:
                     score += Q_tf_idf[k]*vector[k]
             scores.append(score)
+            count_progress += 1
+            progress = count_progress / all_progress * 100
+            progress = round(progress, 1)
+            print("\r", end="")
+            print('进度：{}%'.format(progress), "▋" * (int(round(progress)) // 2), end="")
+            sys.stdout.flush()
+            time.sleep(0.00001)
+        print('')
         return scores

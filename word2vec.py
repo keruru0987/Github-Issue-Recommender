@@ -1,6 +1,7 @@
 # coding=utf-8
 # @Author : Eric
-
+import sys
+import time
 import numpy as np
 from scipy.linalg import norm
 import settings
@@ -36,6 +37,8 @@ class Word2Vec(object):
             return 0
 
     def score_all(self, sequence, so_title_text, so_tags):
+        all_progress = len(self.docs)  # 进度条
+        count_progress = 0
         scores = []
         v_query = self.sentence_vector(sequence)
         for doc in self.docs:
@@ -45,5 +48,13 @@ class Word2Vec(object):
                 scores.append(self.score_cos(v_query,v_doc))
             else:
                 scores.append(0)
+            count_progress += 1
+            progress = count_progress / all_progress * 100
+            progress = round(progress, 1)
+            print("\r", end="")
+            print('进度：{}%'.format(progress), "▋" * (int(round(progress)) // 2), end="")
+            sys.stdout.flush()
+            time.sleep(0.00001)
+        print('')
         return scores
 

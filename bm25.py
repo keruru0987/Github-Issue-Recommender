@@ -1,6 +1,7 @@
 # coding=utf-8
 # @Author : Eric
-
+import sys
+import time
 import numpy as np
 from collections import Counter
 
@@ -44,16 +45,24 @@ class BM25(object):
         return score_list
 
     def score_all(self, sequence, so_title_text, so_tags):
+        all_progress = len(sequence)  # 进度条
+        count_progress = 0
         # 将各个单词的得分相加
         score = []
-        count = 0
         for word in sequence:
             score.append(self.score(word))
             # print('the round', count, '/', len(sequence), 'complete')
-            count += 1
+            count_progress += 1
+            progress = count_progress / all_progress * 100
+            progress = round(progress, 1)
+            print("\r", end="")
+            print('进度：{}%'.format(progress), "▋" * (int(round(progress)) // 2), end="")
+            sys.stdout.flush()
+            time.sleep(0.00001)
         sum_score = np.sum(score, axis=0)  # 纵轴求和
         # 得分除去query的长度
         if len(sequence) != 0:
             sum_score /= len(sequence)
         # 转换为列表形式返回
+        print('')
         return sum_score.tolist()

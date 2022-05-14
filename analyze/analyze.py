@@ -89,9 +89,10 @@ if __name__ == '__main__':
 
     model_list = ['bm25', 'vsm', 'word2vec', 'sentence2vec']
     for model in model_list:
+        print('当前model： ' + model)
         rel_list = get_rel_list(model, cur_api, cur_so_body, cur_so_title, cur_so_tags)
         score = calculate_AP(rel_list, cur_api)
-        print(model + ": " + str(score))
+        print(model + "分数: " + str(score))
 
 
 
