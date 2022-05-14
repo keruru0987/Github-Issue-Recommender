@@ -11,18 +11,17 @@ from gensim.models.coherencemodel import CoherenceModel
 from gensim.models.ldamodel import LdaModel
 
 
-def compute_coherence(num_topics, docs2, doc_term_matrix, dictionary):
-    ldamodel = LdaModel(doc_term_matrix, num_topics=num_topics, id2word=dictionary, passes=30, random_state=1)
-    print(ldamodel.print_topics(num_topics=num_topics, num_words=10))
-    ldacm = CoherenceModel(model=ldamodel, texts=docs2, dictionary=dictionary, coherence='u_mass')
-    print(ldacm.get_coherence())
-    return ldacm.get_coherence()
-
-
 class Analyzer(object):
     def __init__(self, docs, scores=None):
         self.docs = docs
         self.scores = scores
+
+    def compute_coherence(self, num_topics, docs2, doc_term_matrix, dictionary):
+        ldamodel = LdaModel(doc_term_matrix, num_topics=num_topics, id2word=dictionary, passes=30, random_state=1)
+        print(ldamodel.print_topics(num_topics=num_topics, num_words=10))
+        ldacm = CoherenceModel(model=ldamodel, texts=docs2, dictionary=dictionary, coherence='u_mass')
+        print(ldacm.get_coherence())
+        return ldacm.get_coherence()
 
     def analyze_lda(self):
         select_num = settings.select_num
@@ -37,7 +36,7 @@ class Analyzer(object):
         doc_term_matrix = [dictionary.doc2bow(doc) for doc in docs2]
 
         x = range(1, 10)
-        y = [compute_coherence(i, docs2, doc_term_matrix, dictionary) for i in x]
+        y = [self.compute_coherence(i, docs2, doc_term_matrix, dictionary) for i in x]
         plt.plot(x, y)
         plt.xlabel('主题数目')
         plt.ylabel('coherence大小')
@@ -59,7 +58,7 @@ class Analyzer(object):
         doc_term_matrix = [dictionary.doc2bow(doc) for doc in docs2]
 
         x = range(1, 10)
-        y = [compute_coherence(i, docs2, doc_term_matrix, dictionary) for i in x]
+        y = [self.compute_coherence(i, docs2, doc_term_matrix, dictionary) for i in x]
         plt.plot(x, y)
         plt.xlabel('主题数目')
         plt.ylabel('coherence大小')

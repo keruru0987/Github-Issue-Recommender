@@ -230,54 +230,54 @@ def alter_pic_size(query):
 
 if __name__ == '__main__':
 
-    jyt = '''I love TextBlob, thank you so much for making this awesome Python tool :+1: 
-
-I am wondering if there is a solution to a tokenization issue I'm seeing.  Here's some example code with an excerpt from Game of Thrones to demonstrate the issue:
-
-```
-In [1]: from textblob import TextBlob
-In [2]: text = TextBlob('“We should start back,” Gared urged as the woods began to grow dark around them. “The wildlings are dead.” “Do the dead frighten you?” Ser Waymar Royce asked with just the hint of a smile. Gared did not rise to the bait. He was an old man, past fifty, and he had seen the lordlings come and go. “Dead is dead,” he said. “We have no business with the dead.” “Are they dead?” Royce asked softly.')
-In [3]: text.sentences
-```
-
-And here's the ouput when I call the sentences attribute:
-
-```
-Out[3]: 
-[Sentence("“We should start back,” Gared urged as the woods began to grow dark around them."),
- Sentence("“The wildlings are dead.” “Do the dead frighten you?” Ser Waymar Royce asked with just the hint of a smile."),
- Sentence("Gared did not rise to the bait."),
- Sentence("He was an old man, past fifty, and he had seen the lordlings come and go."),
- Sentence("“Dead is dead,” he said."),
- Sentence("“We have no business with the dead.” “Are they dead?” Royce asked softly.")]
-```
-
-The issue here is that TextBlob is tokenizing sentences that run together with quotations as a single sentence. The second "sentence" above demonstrates this:
-
-```
-Sentence("“The wildlings are dead.” “Do the dead frighten you?” Ser Waymar Royce asked with just the hint of a smile.")
-```
-
-should instead be:
-
-```
-Sentence("“The wildlings are dead.”) 
-Sentence(“Do the dead frighten you?” Ser Waymar Royce asked with just the hint of a smile.")
-```
-
-The same is the case for the last example sentence I've shown:
-
-```
-Sentence("“We have no business with the dead.” “Are they dead?” Royce asked softly.")
-```
-
-It seems that TextBlob does not Tokenize a sentence if it appears in quotes.  In other words, `“We have no business with the dead.”` is its own sentence, but TextBlob tokenizes the sentence such that it also includes the phrases that follow: `“Are they dead?” Royce asked softly."`
-
-Is there a way to avoid this, that is to force TextBlob to treat an occurrence of `."` as the end of a sentence?
-'''
-    pattern = r'```(.*\n)*?```'
-    hh = re.sub(pattern, 'aaa', jyt)
-    codes = re.findall(pattern, jyt)
+#     jyt = '''I love TextBlob, thank you so much for making this awesome Python tool :+1:
+#
+# I am wondering if there is a solution to a tokenization issue I'm seeing.  Here's some example code with an excerpt from Game of Thrones to demonstrate the issue:
+#
+# ```
+# In [1]: from textblob import TextBlob
+# In [2]: text = TextBlob('“We should start back,” Gared urged as the woods began to grow dark around them. “The wildlings are dead.” “Do the dead frighten you?” Ser Waymar Royce asked with just the hint of a smile. Gared did not rise to the bait. He was an old man, past fifty, and he had seen the lordlings come and go. “Dead is dead,” he said. “We have no business with the dead.” “Are they dead?” Royce asked softly.')
+# In [3]: text.sentences
+# ```
+#
+# And here's the ouput when I call the sentences attribute:
+#
+# ```
+# Out[3]:
+# [Sentence("“We should start back,” Gared urged as the woods began to grow dark around them."),
+#  Sentence("“The wildlings are dead.” “Do the dead frighten you?” Ser Waymar Royce asked with just the hint of a smile."),
+#  Sentence("Gared did not rise to the bait."),
+#  Sentence("He was an old man, past fifty, and he had seen the lordlings come and go."),
+#  Sentence("“Dead is dead,” he said."),
+#  Sentence("“We have no business with the dead.” “Are they dead?” Royce asked softly.")]
+# ```
+#
+# The issue here is that TextBlob is tokenizing sentences that run together with quotations as a single sentence. The second "sentence" above demonstrates this:
+#
+# ```
+# Sentence("“The wildlings are dead.” “Do the dead frighten you?” Ser Waymar Royce asked with just the hint of a smile.")
+# ```
+#
+# should instead be:
+#
+# ```
+# Sentence("“The wildlings are dead.”)
+# Sentence(“Do the dead frighten you?” Ser Waymar Royce asked with just the hint of a smile.")
+# ```
+#
+# The same is the case for the last example sentence I've shown:
+#
+# ```
+# Sentence("“We have no business with the dead.” “Are they dead?” Royce asked softly.")
+# ```
+#
+# It seems that TextBlob does not Tokenize a sentence if it appears in quotes.  In other words, `“We have no business with the dead.”` is its own sentence, but TextBlob tokenizes the sentence such that it also includes the phrases that follow: `“Are they dead?” Royce asked softly."`
+#
+# Is there a way to avoid this, that is to force TextBlob to treat an occurrence of `."` as the end of a sentence?
+# '''
+#     pattern = r'```(.*\n)*?```'
+#     hh = re.sub(pattern, 'aaa', jyt)
+#     codes = re.findall(pattern, jyt)
 
     tt = get_raw_data('TextBlob')
     mm = get_gi_code('TextBlob')
