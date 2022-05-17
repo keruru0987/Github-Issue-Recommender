@@ -46,6 +46,7 @@ TextBlob 数据个数：328
 Transformers 数据个数：1114
 '''
 
+# 数据accept/close比例
 
 if __name__ == '__main__':
     gi_num()

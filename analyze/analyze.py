@@ -16,18 +16,27 @@ def get_rel_list(model_name, api, so_body, so_title, so_tags):
     titles = tagged_data_process.get_tagged_title(api)
     tag_list = tagged_data_process.get_tagged_labels(api)
 
+    scores = [0 for i in range(0, settings.select_num)]
+
     if model_name == 'bm25':
+        docs = tagged_data_process.get_tagged_data(api)
         select_model = BM25(docs, titles, tag_list)
+        scores = select_model.score_all(tagged_data_process.process_query_2(so_body), so_title, so_tags)
     elif model_name == 'vsm':
+        docs = tagged_data_process.get_tagged_data(api)
         select_model = VSM(docs, titles, tag_list)
+        scores = select_model.score_all(tagged_data_process.process_query_2(so_body), so_title, so_tags)
     elif model_name == 'word2vec':
+        docs = tagged_data_process.get_tagged_data(api)
         select_model = Word2Vec(docs, titles, tag_list)
+        scores = select_model.score_all(tagged_data_process.process_query_2(so_body), so_title, so_tags)
     elif model_name == 'sentence2vec':
         select_model = Sentence2Vec(docs, titles, tag_list)
+        scores = select_model.score_all(tagged_data_process.process_query(so_body), so_title, so_tags)
     else:
         raise Exception('no such model found')
-    scores = select_model.score_all(tagged_data_process.process_query(so_body), so_title, so_tags)
-
+    # scores = select_model.score_all(tagged_data_process.process_query(so_body), so_title, so_tags)
+    # 当有重复的数的时候不准
     select_num = settings.select_num  # N
     sort_re = list(map(scores.index, heapq.nlargest(select_num, scores)))
     # print(sort_re)
@@ -52,6 +61,7 @@ def calculate_Pk(rel_list, k):
     return Pk
 
 
+# 需要修改
 def calculate_AP(rel_list, api):
     # 计算Average Precision
     N = settings.select_num  # 推荐的个数
@@ -75,6 +85,7 @@ def calculate_AP(rel_list, api):
 
 
 if __name__ == '__main__':
+    test_list = [0 for i in range(0, settings.select_num)]
     TextBlob_data = {'api': "TextBlob",
                      'so_body': "<p>I want to analyze sentiment of texts that are written in German. "
                                 "I found a lot of tutorials on how to do this with English, "

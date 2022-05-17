@@ -82,7 +82,7 @@ def get_title(api=''):
     nlp_api = settings.nlp_api[nlp_choose]
     if api != '':
         nlp_api = api
-    print('当前api为：' + nlp_api)
+    print('正在获取' + nlp_api + '的title')
 
     # 数据的获取以及处理
     fpath = settings.new_github_filepath[nlp_api]
@@ -104,7 +104,7 @@ def get_raw_data(api=''):
     nlp_api = settings.nlp_api[nlp_choose]
     if api != '':
         nlp_api = api
-    print('当前api为：' + nlp_api)
+    print('正在获取' + nlp_api + '的body')
 
     # 数据的获取以及处理
     fpath = settings.new_github_filepath[nlp_api]
@@ -168,7 +168,7 @@ def get_labels(api=''):
     nlp_api = settings.nlp_api[nlp_choose]
     if api != '':
         nlp_api = api
-    print('当前api为：' + nlp_api)
+    print('正在获取' + nlp_api + '的label')
 
     # 数据的获取以及处理
     fpath = settings.new_github_filepath[nlp_api]
