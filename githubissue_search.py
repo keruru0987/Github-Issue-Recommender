@@ -28,7 +28,9 @@ class GIRecommend(object):
         # print(scores)
 
         select_num = settings.select_num
-        sort_re = list(map(scores.index, heapq.nlargest(select_num, scores)))
+        # sort_re = list(map(scores.index, heapq.nlargest(select_num, scores)))
+        sort_re_all = sorted(range(len(scores)), key=lambda k: scores[k], reverse=True)
+        sort_re = sort_re_all[0:select_num]
         # print(sort_re)
         fpath = settings.new_github_filepath[self.api]
         gi_df = pd.read_csv(fpath)

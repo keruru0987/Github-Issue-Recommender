@@ -36,9 +36,10 @@ def get_rel_list(model_name, api, so_body, so_title, so_tags):
     else:
         raise Exception('no such model found')
     # scores = select_model.score_all(tagged_data_process.process_query(so_body), so_title, so_tags)
-    # 当有重复的数的时候不准
     select_num = settings.select_num  # N
-    sort_re = list(map(scores.index, heapq.nlargest(select_num, scores)))
+    # sort_re = list(map(scores.index, heapq.nlargest(select_num, scores)))  # 当有重复的数的时候不准
+    sort_re_all = sorted(range(len(scores)), key=lambda k: scores[k], reverse=True)
+    sort_re = sort_re_all[0:select_num]
     # print(sort_re)
 
     fpath = settings.tagged_github_filepath[api]
@@ -66,12 +67,15 @@ def calculate_AP(rel_list, api):
     # 计算Average Precision
     N = settings.select_num  # 推荐的个数
     m = 0  # 总的相关个数
+    num_of2 = 0
     fpath = settings.tagged_github_filepath[api]
     gi_df = pd.read_csv(fpath)
     gi_df = gi_df.fillna('')
     for index, row in gi_df.iterrows():
         if row['rel'] > 0:
             m += 1
+            if row['rel'] > 1:
+                num_of2 += 1
     # print(m)
     score = 0
     for k in range(1, N+1):
@@ -80,7 +84,7 @@ def calculate_AP(rel_list, api):
         min_mn = m
     else:
         min_mn = N
-    score = score/min_mn
+    score = score/(min_mn + num_of2)
     return score
 
 
@@ -104,6 +108,7 @@ if __name__ == '__main__':
         rel_list = get_rel_list(model, cur_api, cur_so_body, cur_so_title, cur_so_tags)
         score = calculate_AP(rel_list, cur_api)
         print(model + "分数: " + str(score))
+        print('-------------------------------------------------------------------')
 
 
 

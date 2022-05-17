@@ -37,6 +37,14 @@ def calculate_AP(rel_list, api):
     score = score/min_mn
     return score
 
+# 按列表a中元素的值进行排序，并返回元素对应索引序列
+a = [1, 3, 5, 5, 2, 7, 9]
+print('a:', a)
+sorted_id = sorted(range(len(a)), key=lambda k: a[k], reverse=True)
+print('元素索引序列：', sorted_id)
+
+
+
 test_list = [3, 2, 4, 4, 1]
 a = heapq.nlargest(5, test_list)
 b = map(test_list.index, a)
