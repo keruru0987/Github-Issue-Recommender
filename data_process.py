@@ -279,8 +279,8 @@ if __name__ == '__main__':
 #     hh = re.sub(pattern, 'aaa', jyt)
 #     codes = re.findall(pattern, jyt)
 
-    tt = get_raw_data('TextBlob')
-    mm = get_gi_code('TextBlob')
+    # tt = get_raw_data('TextBlob')
+    # mm = get_gi_code('TextBlob')
     # m = get_labels('TextBlob')
     t = '''<p>I am experiencing some problems using the TextBlob library. I'm trying to run a very simple piece of code like this:</p>
 <pre><code>from textblob import TextBlob
@@ -300,8 +300,9 @@ HTTPError: HTTP Error 404: Not Found
 </code></pre>
 <p>What is the problem? I have tried it on several devices and it gives me the same error everytime.</p>
 <p>Thanks!</p>'''
-    c = get_query_code(t)
+    # c = get_query_code(t)
     b = process_query(t)
+    d = clean(b)
     # print(get_data())
     a = get_data('TextBlob')
     print(a)

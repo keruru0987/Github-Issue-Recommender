@@ -32,7 +32,8 @@ def get_rel_list(model_name, api, so_body, so_title, so_tags):
         scores = select_model.score_all(tagged_data_process.process_query_2(so_body), so_title, so_tags)
     elif model_name == 'sentence2vec':
         select_model = Sentence2Vec(docs, titles, tag_list)
-        scores = select_model.score_all(tagged_data_process.process_query(so_body), so_title, so_tags)
+        scores = select_model.score_all(tagged_data_process.process_query(so_body), so_title, so_tags)  # 不做数据清洗
+        # scores = select_model.score_all(tagged_data_process.clean(tagged_data_process.process_query(so_body)), so_title, so_tags)  # 做数据清洗
     else:
         raise Exception('no such model found')
     # scores = select_model.score_all(tagged_data_process.process_query(so_body), so_title, so_tags)
