@@ -48,5 +48,52 @@ Transformers 数据个数：1114
 
 # 数据accept/close比例
 
+
+def so_accept():
+    for i in range(0, 7):
+        count = 0
+        nlp_api = settings.nlp_api[i]
+        filepath = settings.stackoverflow_filepath[nlp_api]
+        df = pandas.read_csv(filepath)
+        df = df.fillna(0)
+        for index, row in df.iterrows():
+            if row['AcceptedAnswerId'] != 0:
+                count += 1
+        print(nlp_api + ' 解决数据个数：' + str(count))
+'''
+allennlp 解决数据个数：52
+gensim 解决数据个数：976
+nltk 解决数据个数：3075
+spaCy 解决数据个数：1246
+stanford-nlp 解决数据个数：1302
+TextBlob 解决数据个数：112
+Transformers 解决数据个数：353
+'''
+
+
+def gi_close():
+    for i in range(0, 7):
+        count = 0
+        nlp_api = settings.nlp_api[i]
+        filepath = 'data/new_issue/' + nlp_api + '.csv'
+        df = pandas.read_csv(filepath)
+
+        for index, row in df.iterrows():
+            if row['state'] == 'closed':
+                count += 1
+
+        print(nlp_api + ' 解决的数据个数：' + str(count))
+'''
+allennlp 解决的数据个数：2187
+gensim 解决的数据个数：684
+nltk 解决的数据个数：675
+spaCy 解决的数据个数：2675
+stanford-nlp 解决的数据个数：774
+TextBlob 解决的数据个数：76
+Transformers 解决的数据个数：3872
+'''
+
+
 if __name__ == '__main__':
-    gi_num()
+    # so_accept()
+    gi_close()

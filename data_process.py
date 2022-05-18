@@ -279,7 +279,9 @@ if __name__ == '__main__':
 #     hh = re.sub(pattern, 'aaa', jyt)
 #     codes = re.findall(pattern, jyt)
 
-    # tt = get_raw_data('TextBlob')
+    tt = get_raw_data('TextBlob')
+    mm = clean(tt[2])
+    pp = clean(tt[9])
     # mm = get_gi_code('TextBlob')
     # m = get_labels('TextBlob')
     t = '''<p>I am experiencing some problems using the TextBlob library. I'm trying to run a very simple piece of code like this:</p>

@@ -21,13 +21,13 @@ github_filepath = {'gensim': 'data/issue/gensim.json', 'allennlp': 'data/issue/a
 
 new_github_filepath = {'gensim': 'data/new_issue/gensim.csv', 'allennlp': 'data/new_issue/allennlp.csv',
                        'nltk': 'data/new_issue/nltk.csv', 'spaCy': 'data/new_issue/spaCy.csv',
-                       'stanford-nlp': 'data/new_issue/CoreNLP.csv', 'TextBlob': 'data/new_issue/TextBlob.csv',
-                       'Transformers': 'data/new_issue/transformers.csv'}
+                       'stanford-nlp': 'data/new_issue/stanford-nlp.csv', 'TextBlob': 'data/new_issue/TextBlob.csv',
+                       'Transformers': 'data/new_issue/Transformers.csv'}
 
 tagged_github_filepath = {'gensim': 'data/tagged_data/gensim.csv', 'allennlp': 'data/tagged_data/allennlp.csv',
                           'nltk': 'data/tagged_data/nltk.csv', 'spaCy': 'data/tagged_data/spaCy.csv',
-                          'stanford-nlp': 'data/tagged_data/CoreNLP.csv', 'TextBlob': 'data/tagged_data/TextBlob.csv',
-                          'Transformers': 'data/tagged_data/transformers.csv'}
+                          'stanford-nlp': 'data/tagged_data/stanford-nlp.csv', 'TextBlob': 'data/tagged_data/TextBlob.csv',
+                          'Transformers': 'data/tagged_data/Transformers.csv'}
 
 stackoverflow_filepath = {'gensim':'D:/data/stack/gensim.csv', 'allennlp':'D:/data/stack/allennlp.csv',
                           'nltk':'D:/data/stack/nltk.csv', 'spaCy':'D:/data/stack/spacy.csv',
