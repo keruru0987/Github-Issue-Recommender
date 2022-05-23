@@ -91,6 +91,66 @@ def calculate_AP(rel_list, api):
 
 if __name__ == '__main__':
     test_list = [0 for i in range(0, settings.select_num)]
+
+
+    '''
+    gensim_data = {'api': '',
+                   'so_body': '',
+                   'so_title': '',
+                   'so_tags': ''}'''
+
+    allennlp_data = {'api': 'allennlp',
+                     'so_body': '''<p>I was trying to install a library (<code>allennlp</code>) via <code>pip3</code>. But it complained about the PyTorch version. While <code>allennlp</code> requires <code>torch=0.4.0</code> I have <code>torch=0.4.1</code>:</p>
+
+<pre><code>...
+Collecting torch==0.4.0 (from allennlp)
+  Could not find a version that satisfies the requirement torch==0.4.0 (from allennlp) (from versions: 0.1.2, 0.1.2.post1, 0.4.1)
+No matching distribution found for torch==0.4.0 (from allennlp)
+</code></pre>
+
+<p><em>Also manually install:</em></p>
+
+<pre><code>pip3 install torch==0.4.0
+</code></pre>
+
+<p><em>Doesn't work either:</em></p>
+
+<pre><code>  Could not find a version that satisfies the requirement torch==0.4.0 (from versions: 0.1.2, 0.1.2.post1, 0.4.1)
+No matching distribution found for torch==0.4.0
+</code></pre>
+
+<p>Same for other versions.</p>
+
+<p>Python is version <code>Python 3.7.0</code> installed via <code>brew</code> on Mac OS.</p>
+
+<p>I remember that some time ago I was able to switch between version <code>0.4.0</code> and <code>0.3.1</code> by using <code>pip3 install torch==0.X.X</code>.</p>
+
+<p>How do I solve this?</p>
+                     ''',
+                     'so_title': "pip - Installing specific package version does not work",
+                     'so_tags': '<python-3.x><pip><homebrew><pytorch><allennlp>'}
+
+    gensim_data = {'api': 'gensim',
+                   'so_body': '''<p>According to the <a href="http://radimrehurek.com/gensim/models/word2vec.html" rel="noreferrer">Gensim Word2Vec</a>, I can use the word2vec model in gensim package to calculate the similarity between 2 words.</p>
+
+    <p>e.g.</p>
+
+    <pre><code>trained_model.similarity('woman', 'man') 
+    0.73723527
+    </code></pre>
+
+    <p>However, the word2vec model fails to predict the sentence similarity. I find out the LSI model with sentence similarity in gensim, but, which doesn't seem that can be combined with word2vec model. The length of corpus of each sentence I have is not very long (shorter than 10 words).  So, are there any simple ways to achieve the goal?</p>''',
+                   'so_title': 'How to calculate the sentence similarity using word2vec model of gensim with python',
+                   'so_tags': '<python><gensim><word2vec>'}
+
+    nltk_data = {'api': 'nltk',
+                 'so_body': "<p>I'm just starting to use NLTK and I don't quite understand how to get a list of words from text."
+                            " If I use <code>nltk.word_tokenize()</code>, I get a list of words and punctuation. "
+                            "I need only the words instead. How can I get rid of punctuation? "
+                            "Also <code>word_tokenize</code> doesn't work with multiple sentences: dots are added to the last word.</p>",
+                 'so_title': 'How to get rid of punctuation using NLTK tokenizer?',
+                 'so_tags': '<python><nlp><tokenize><nltk>'}
+
     TextBlob_data = {'api': "TextBlob",
                      'so_body': "<p>I want to analyze sentiment of texts that are written in German. "
                                 "I found a lot of tutorials on how to do this with English, "
@@ -98,14 +158,15 @@ if __name__ == '__main__':
                      'so_title': "Sentiment analysis of non-English texts",
                      'so_tags': "<python><machine-learning><nlp><sentiment-analysis><textblob>"}
 
-    cur_api = TextBlob_data['api']
-    cur_so_body = TextBlob_data['so_body']
-    cur_so_title = TextBlob_data['so_title']
-    cur_so_tags = TextBlob_data['so_tags']
+    cur_api = nltk_data['api']
+    cur_so_body = nltk_data['so_body']
+    cur_so_title = nltk_data['so_title']
+    cur_so_tags = nltk_data['so_tags']
 
     model_list = ['bm25', 'vsm', 'word2vec', 'sentence2vec']
     for model in model_list:
         print('当前model： ' + model)
+        print('当前api： ' + cur_api)
         rel_list = get_rel_list(model, cur_api, cur_so_body, cur_so_title, cur_so_tags)
         score = calculate_AP(rel_list, cur_api)
         print(model + "分数: " + str(score))

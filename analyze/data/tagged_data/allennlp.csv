@@ -1,0 +1,1836 @@
+﻿,html_url,number,labels,state,created_at,comments,title,body,rel
+16,https://github.com/allenai/allennlp/issues/550,550,[],closed,2017-11-29 18:21:37+00:00,20,Import errors for Token class after installing AllenNLP via pip.,"Hello,
+I've installed Allennlp using pip, and I'm trying to run some demos and follow tutorials.
+Tried to import Token class in several different ways, seems something is broken.
+Thanks for your support!
+
+**ERROR**: ModuleNotFoundError: No module named 'allennlp.data. ...
+from allennlp.data.tokenizers.token import Token
+from allennlp.data.tokenizers import Token
+",1
+97,https://github.com/allenai/allennlp/issues/856,856,[],closed,2018-02-15 19:46:31+00:00,3,create an easy way for people to test that their pip install is working correctly and that they've got all the right dependencies and downloads,"possibly something as simple as adding a
+
+```
+python -m allennlp.run test-install
+```
+
+command or something",1
+129,https://github.com/allenai/allennlp/issues/946,946,[],closed,2018-03-02 19:23:01+00:00,0,pip should install an `allennlp` script,"lots of python packages do that, so that people can then
+
+```bash
+allennlp train ...
+```
+
+instead of 
+
+```
+python -m allennlp.run train ...
+```
+
+should be relatively easy:
+
+http://python-packaging.readthedocs.io/en/latest/command-line-scripts.html
+
+",0
+226,https://github.com/allenai/allennlp/issues/1178,1178,[],closed,2018-05-06 14:05:43+00:00,2,Unable to install allennlp via pip in Windows,"When I tried installing allennlp in my machine with following configuration,
+```
+Windows 10 x64
+Python 3.6.5
+```
+
+I am getting the following error,
+
+```
+Collecting allennlp
+  Using cached https://files.pythonhosted.org/packages/c5/60/fa613bdea022bd6c26176f5786efcc0b5a6d8acf97131e324179a99fcbaf/allennlp-0.4.2-py3-none-any.whl
+Collecting psycopg2 (from allennlp)
+  Using cached https://files.pythonhosted.org/packages/00/95/4c5d19affca312e1c06d4f88241ebc564bf5269addd191ec4962f0c93553/psycopg2-2.7.4-cp36-cp36m-win32.whl
+Collecting flask==0.12.1 (from allennlp)
+  Using cached https://files.pythonhosted.org/packages/f4/43/fb2d5fb1d10e1d0402dd57836cf9a78b7f69c8b5f76a04b6e6113d0d7c5a/Flask-0.12.1-py2.py3-none-any.whl
+Collecting scipy (from allennlp)
+  Using cached https://files.pythonhosted.org/packages/30/2a/8bd20295c774e3f19b5f8b71d75ef7e802673852ca3ae2e1d231d0f1c7a2/scipy-1.1.0-cp36-none-win32.whl
+Requirement already satisfied: typing in c:\users\user\appdata\local\programs\python\python36-32\lib\site-packages (from allennlp) (3.5.3.0)
+Collecting pyhocon==0.3.35 (from allennlp)
+  Downloading https://files.pythonhosted.org/packages/95/b9/72883593ce531e95ac8190e251ae6f5377eada69504248bf1aebfce4c5b4/pyhocon-0.3.35.tar.gz (94kB)
+    100% |████████████████████████████████| 102kB 238kB/s
+Requirement already satisfied: numpy in c:\users\user\appdata\local\programs\python\python36-32\lib\site-packages (from allennlp) (1.12.1)
+Collecting torch==0.3.1 (from allennlp)
+  Could not find a version that satisfies the requirement torch==0.3.1 (from allennlp) (from versions: 0.1.2, 0.1.2.post1)
+No matching distribution found for torch==0.3.1 (from allennlp)
+```
+
+How can I fix this ?",1
+245,https://github.com/allenai/allennlp/issues/1228,1228,[],closed,2018-05-16 22:53:36+00:00,2,running allennlp test-install after installing with pip leads to many errors,"After installing AllenNLP with: `pip install git+git://github.com/allenai/allennlp.git` and running `allennlp test-install`, a bunch of errors come up. Raising an issue just to enumerate them all. A full gist of the test traceback is here: https://gist.github.com/nelson-liu/78d08ad0090ad8f95c34675942f5bb4d
+
+- The biggest issue is that we lose the directory structure in the repo. For example, `allennlp` with pip would get installed in `/home/nfliu/miniconda3/envs/test/lib/python3.6/site-packages/allennlp`. this contains _only_ the module (so it's [this folder](https://github.com/allenai/allennlp/tree/master/allennlp)).  The `tutorials`, `scripts`, `READMEs`, etc. aren't actually installed anywhere, so all of the paths in the tests break (e.g., script tests that shell out to run `perl ./scripts/some_eval_script.pl`).
+
+- On a separate related note it looks like the precompiled custom extensions in the module aren't copied over either, maybe because they're not `.py` files and they get ignored automatically? This makes the `test_custom_extensions` / `alternating_lstm` tests break, even though they should work. This also means that custom extensions in general aren't working in the `pip install`ed version of allennlp.
+
+## Things that are actually broken in the pip-installed version
+
+- the custom highway lstm (since the extensions aren't included). fixed by #1229 
+- `evalb_bracketing_scorer`, since `scripts/EVALB` does not exist. fixed by #1233 
+- any tests that rely on files in `./tutorials` and `./scripts`. wip solution in #1232 
+
+The other test errors are just errors with the tests themselves, not with the allennlp package. Which is unfortunate, but it doesn't affect _core_ library functionality.",1
+283,https://github.com/allenai/allennlp/issues/1324,1324,[],closed,2018-05-31 22:16:11+00:00,1,Create a Dockerfile that includes a basic pip installation of AllenNLP,"To make using AllenNLP easy for downstream users, we should create a simple Dockerfile that has a pip installation of AllenNLP.  This would make it easy for users to use AllenNLP as a library or a command in a Docker environment, and would provide a base image from which people could run AllenNLP jobs on Beaker.
+
+```
+FROM python:3.6.3-jessie
+
+...
+
+RUN pip install allennlp
+
+ENTRYPOINT [""allennlp""]
+```",0
+288,https://github.com/allenai/allennlp/issues/1332,1332,[],closed,2018-06-03 12:30:35+00:00,5,Unable to install allennlp via pip,"When I tried to install allennlp via pip3, I ran into this issue:
+```
+sanic-plugins-framework 0.5.2.dev20180201 has requirement sanic>=0.7.0, but you'll have sanic 0.6.0 which is incompatible.
+sanic-cors 0.9.4 has requirement sanic>=0.7.0, but you'll have sanic 0.6.0 which is incompatible.
+```
+I suspect that it's because in the setup.py, the required installs are:
+```
+sanic==0.6.0
+sanic-cors
+```
+And the latest version of sanic-cors is incompatible with sanic==0.6.0.
+
+Does anybody know how to deal with this problem? Thanks  alot!",1
+348,https://github.com/allenai/allennlp/issues/1471,1471,[],closed,2018-07-10 06:12:57+00:00,4,pip install and no 'elmo.py' in modules,"I downloaded allennlp via pip to use Elmo, however, the pip-version does not support elmo yet",1
+429,https://github.com/allenai/allennlp/issues/1662,1662,[],closed,2018-08-24 17:43:03+00:00,9,When running pip-installed AllenNLP in AllenNLP source directory uses source files.,"**Describe the bug**
+
+If i run the pip-installed AllenNLP in the allennlp source directory (e.g., if i want to train with the pip-version on one of the training configs in the source directory).
+
+
+**To Reproduce**
+Steps to reproduce the behavior
+```
+cd ~
+conda create -n allennlp_pip python=3.6
+source activate allennlp_pip
+pip install allennlp
+
+cd /allennlp/source/directory
+allennlp train --help
+```
+
+**Expected behavior**
+
+No crash, since it uses the pip version.
+
+**Actual behavior**
+
+I get an import error because it tries to import the files in the source directory, which have different requirements than the current pip installed version:
+
+```
+$ allennlp train --help
+Traceback (most recent call last):
+  File ""/Users/nfliu/miniconda3/envs/allennlp_pip/lib/python3.6/runpy.py"", line 193, in _run_module_as_main
+    ""__main__"", mod_spec)
+  File ""/Users/nfliu/miniconda3/envs/allennlp_pip/lib/python3.6/runpy.py"", line 85, in _run_code
+    exec(code, run_globals)
+  File ""/Users/nfliu/Documents/Github/allennlp/allennlp/run.py"", line 15, in <module>
+    from allennlp.commands import main  # pylint: disable=wrong-import-position
+  File ""/Users/nfliu/Documents/Github/allennlp/allennlp/commands/__init__.py"", line 6, in <module>
+    from allennlp.commands.configure import Configure
+  File ""/Users/nfliu/Documents/Github/allennlp/allennlp/commands/configure.py"", line 22, in <module>
+    from allennlp.common.configuration import configure, Config, render_config
+  File ""/Users/nfliu/Documents/Github/allennlp/allennlp/common/__init__.py"", line 1, in <module>
+    from allennlp.common.params import Params
+  File ""/Users/nfliu/Documents/Github/allennlp/allennlp/common/params.py"", line 30, in <module>
+    from allennlp.common.file_utils import cached_path
+  File ""/Users/nfliu/Documents/Github/allennlp/allennlp/common/file_utils.py"", line 16, in <module>
+    import boto3
+ModuleNotFoundError: No module named 'boto3'
+```
+
+**System (please complete the following information):**
+ - OS: OS X
+ - Python version: 3.6.6
+ - AllenNLP version: 0.6
+ - PyTorch version: 0.4.1
+
+cc: @schmmd / @joelgrus , any clue of what's going on here? Maybe something odd with PYTHONPATH?",1
+478,https://github.com/allenai/allennlp/issues/1788,1788,[],closed,2018-09-19 02:56:40+00:00,1,Is it possible to pip install allennlp on python 3.5.1 ?,"The latest allennlp requires python version to be 3.6. 
+Is it possible to pip install allennlp on python 3.5.1 ? Because updating python is not an option right now for me.
+",1
+572,https://github.com/allenai/allennlp/issues/1969,1969,[],closed,2018-10-25 19:35:19+00:00,11,Pip3 install failing on jsonnet,"**Describe the bug**
+
+I am getting the following stacktrace error when attempting to install with the command `pip install allennlp`.  It is failing on jsonnet package but I don't know why.
+
+>   Failed building wheel for jsonnet
+  Running setup.py clean for jsonnet
+Failed to build jsonnet
+Installing collected packages: jsonnet, allennlp, jsondiff, aws-xray-sdk, atomicwrites, attrs, asn1crypto, alabaster
+  Running setup.py install for jsonnet ... error
+    Complete output from command /usr/local/bin/python3.6 -u -c ""import setuptools, tokenize;__file__='/private/var/folders/sp/4bfpfrfd4m3bx3nl84rvwd5w0000gn/T/pip-install-s0sa1az1/jsonnet/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))"" install --record /private/var/folders/sp/4bfpfrfd4m3bx3nl84rvwd5w0000gn/T/pip-record-akb978cv/install-record.txt --single-version-externally-managed --compile:
+    running install
+    running build
+    running build_ext
+    make: `core/desugarer.o' is up to date.
+    make: `core/formatter.o' is up to date.
+    make: `core/libjsonnet.o' is up to date.
+    make: `core/lexer.o' is up to date.
+    make: `core/parser.o' is up to date.
+    make: `core/pass.o' is up to date.
+    make: `core/static_analysis.o' is up to date.
+    make: `core/string_utils.o' is up to date.
+    make: `core/vm.o' is up to date.
+    make: `third_party/md5/md5.o' is up to date.
+    building '_jsonnet' extension
+    creating build
+    creating build/temp.macosx-10.6-intel-3.6
+    creating build/temp.macosx-10.6-intel-3.6/python
+    /usr/bin/clang -fno-strict-aliasing -Wsign-compare -fno-common -dynamic -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -arch i386 -arch x86_64 -g -Iinclude -Ithird_party/md5 -I/Library/Frameworks/Python.framework/Versions/3.6/include/python3.6m -c python/_jsonnet.c -o build/temp.macosx-10.6-intel-3.6/python/_jsonnet.o
+    python/_jsonnet.c:147:19: warning: comparison of integers of different signs: 'int' and 'const size_t' (aka 'const unsigned long') [-Wsign-compare]
+        for (i = 0; i < ctx->argc; ++i) {
+                    ~ ^ ~~~~~~~~~
+    1 warning generated.
+    python/_jsonnet.c:147:19: warning: comparison of integers of different signs: 'int' and 'const size_t' (aka 'const unsigned long') [-Wsign-compare]
+        for (i = 0; i < ctx->argc; ++i) {
+                    ~ ^ ~~~~~~~~~
+    1 warning generated.
+    creating build/lib.macosx-10.6-intel-3.6
+    /usr/bin/clang++ -bundle -undefined dynamic_lookup -arch i386 -arch x86_64 -g build/temp.macosx-10.6-intel-3.6/python/_jsonnet.o core/desugarer.o core/formatter.o core/libjsonnet.o core/lexer.o core/parser.o core/pass.o core/static_analysis.o core/string_utils.o core/vm.o third_party/md5/md5.o -o build/lib.macosx-10.6-intel-3.6/_jsonnet.cpython-36m-darwin.so
+    clang: warning: libstdc++ is deprecated; move to libc++ with a minimum deployment target of OS X 10.9 [-Wdeprecated]
+    clang: warning: libstdc++ is deprecated; move to libc++ with a minimum deployment target of OS X 10.9 [-Wdeprecated]
+    ld: library not found for -lstdc++
+    clang: error: linker command failed with exit code 1 (use -v to see invocation)
+    error: command '/usr/bin/clang++' failed with exit status 1
+    
+    ----------------------------------------
+Command ""/usr/local/bin/python3.6 -u -c ""import setuptools, tokenize;__file__='/private/var/folders/sp/4bfpfrfd4m3bx3nl84rvwd5w0000gn/T/pip-install-s0sa1az1/jsonnet/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))"" install --record /private/var/folders/sp/4bfpfrfd4m3bx3nl84rvwd5w0000gn/T/pip-record-akb978cv/install-record.txt --single-version-externally-managed --compile"" failed with error code 1 in /private/var/folders/sp/4bfpfrfd4m3bx3nl84rvwd5w0000gn/T/pip-install-s0sa1az1/jsonnet/
+
+
+**System (please complete the following information):**
+ - OS: OSX
+ - Python version: 3.6.3
+ - AllenNLP version: Latest from pip
+ - PyTorch version: 0.4.0
+
+**Additional context**
+If there are any workarounds, I am very willing to try them.  I am blocked by something until I can resolve this issue.  Thanks so much.
+",1
+590,https://github.com/allenai/allennlp/issues/2009,2009,[],closed,2018-11-04 04:16:28+00:00,8,pip install allennlp in conda error fatal error: ffi.h: No such file or directory,"**Describe the bug**
+I have a clean install of anaconda and I tried to install allennlp by
+`pip install allennlp`
+I got this output:
+Collecting allennlp
+  Using cached https://files.pythonhosted.org/packages/db/98/3b620e6472a240a4451c6daece6ce9d806fde0b0250606f910557a5353f6/allennlp-0.7.1-py3-none-any.whl
+Collecting awscli>=1.11.91 (from allennlp)
+  Using cached https://files.pythonhosted.org/packages/70/8b/16738ab3f1e0292b1d3b71f192227ab07575a216416b0562e74e6aad9c0a/awscli-1.16.47-py2.py3-none-any.whl
+Collecting moto==1.3.4 (from allennlp)
+  Using cached https://files.pythonhosted.org/packages/ee/8f/7b36e81ff067d0e7bf90f7210b351c0cfe6657f79fa4dcb0cb4787462e05/moto-1.3.4-py2.py3-none-any.whl
+Requirement already satisfied: conllu==0.11 in ./anaconda3/lib/python3.7/site-packages (from allennlp) (0.11)
+Requirement already satisfied: pytest in ./anaconda3/lib/python3.7/site-packages (from allennlp) (3.8.0)
+Requirement already satisfied: ftfy in ./anaconda3/lib/python3.7/site-packages (from allennlp) (5.5.0)
+Requirement already satisfied: unidecode in ./anaconda3/lib/python3.7/site-packages (from allennlp) (1.0.22)
+Requirement already satisfied: overrides in ./anaconda3/lib/python3.7/site-packages (from allennlp) (1.9)
+Requirement already satisfied: tensorboardX==1.2 in ./anaconda3/lib/python3.7/site-packages (from allennlp) (1.2)
+Collecting boto3 (from allennlp)
+  Using cached https://files.pythonhosted.org/packages/7a/7e/fe8faa29e771a09c528ee70e1fd9b317006021c48311ecccc78c22ebe739/boto3-1.9.37-py2.py3-none-any.whl
+Requirement already satisfied: scikit-learn in ./anaconda3/lib/python3.7/site-packages (from allennlp) (0.19.2)
+Requirement already satisfied: pytz==2017.3 in ./anaconda3/lib/python3.7/site-packages (from allennlp) (2017.3)
+Requirement already satisfied: nltk in ./anaconda3/lib/python3.7/site-packages (from allennlp) (3.3)
+Requirement already satisfied: numpy in ./anaconda3/lib/python3.7/site-packages (from allennlp) (1.15.1)
+Requirement already satisfied: sqlparse==0.2.4 in ./anaconda3/lib/python3.7/site-packages (from allennlp) (0.2.4)
+Requirement already satisfied: spacy<2.1,>=2.0 in ./anaconda3/lib/python3.7/site-packages (from allennlp) (2.0.16)
+Collecting cffi==1.11.2 (from allennlp)
+  Using cached https://files.pythonhosted.org/packages/c9/70/89b68b6600d479034276fed316e14b9107d50a62f5627da37fafe083fde3/cffi-1.11.2.tar.gz
+Requirement already satisfied: responses>=0.7 in ./anaconda3/lib/python3.7/site-packages (from allennlp) (0.10.2)
+Requirement already satisfied: tqdm>=4.19 in ./anaconda3/lib/python3.7/site-packages (from allennlp) (4.26.0)
+Requirement already satisfied: requests>=2.18 in ./anaconda3/lib/python3.7/site-packages (from allennlp) (2.19.1)
+Requirement already satisfied: scipy in ./anaconda3/lib/python3.7/site-packages (from allennlp) (1.1.0)
+Requirement already satisfied: gevent==1.3.6 in ./anaconda3/lib/python3.7/site-packages (from allennlp) (1.3.6)
+Requirement already satisfied: h5py in ./anaconda3/lib/python3.7/site-packages (from allennlp) (2.8.0)
+Requirement already satisfied: parsimonious==0.8.0 in ./anaconda3/lib/python3.7/site-packages (from allennlp) (0.8.0)
+Collecting flask-cors==3.0.3 (from allennlp)
+  Using cached https://files.pythonhosted.org/packages/83/a7/c7243ffd096a491013956c9ee71e2ed0b7d14979fafe89986ca2d30fc6f7/Flask_Cors-3.0.3-py2.py3-none-any.whl
+Requirement already satisfied: numpydoc==0.8.0 in ./anaconda3/lib/python3.7/site-packages (from allennlp) (0.8.0)
+Requirement already satisfied: jsonnet==0.10.0; sys_platform != ""win32"" in ./anaconda3/lib/python3.7/site-packages (from allennlp) (0.10.0)
+Requirement already satisfied: flask==0.12.4 in ./anaconda3/lib/python3.7/site-packages (from allennlp) (0.12.4)
+Requirement already satisfied: flaky in ./anaconda3/lib/python3.7/site-packages (from allennlp) (3.4.0)
+Requirement already satisfied: matplotlib==2.2.3 in ./anaconda3/lib/python3.7/site-packages (from allennlp) (2.2.3)
+Requirement already satisfied: torch<0.5.0,>=0.4.1 in ./anaconda3/lib/python3.7/site-packages (from allennlp) (0.4.1.post2)
+Requirement already satisfied: editdistance in ./anaconda3/lib/python3.7/site-packages (from allennlp) (0.5.2)
+Requirement already satisfied: PyYAML<=3.13,>=3.10 in ./anaconda3/lib/python3.7/site-packages (from awscli>=1.11.91->allennlp) (3.13)
+Requirement already satisfied: colorama<=0.3.9,>=0.2.5 in ./anaconda3/lib/python3.7/site-packages (from awscli>=1.11.91->allennlp) (0.3.9)
+Requirement already satisfied: docutils>=0.10 in ./anaconda3/lib/python3.7/site-packages (from awscli>=1.11.91->allennlp) (0.14)
+Collecting rsa<=3.5.0,>=3.1.2 (from awscli>=1.11.91->allennlp)
+  Using cached https://files.pythonhosted.org/packages/e1/ae/baedc9cb175552e95f3395c43055a6a5e125ae4d48a1d7a924baca83e92e/rsa-3.4.2-py2.py3-none-any.whl
+Collecting s3transfer<0.2.0,>=0.1.12 (from awscli>=1.11.91->allennlp)
+  Using cached https://files.pythonhosted.org/packages/d7/14/2a0004d487464d120c9fb85313a75cd3d71a7506955be458eebfe19a6b1d/s3transfer-0.1.13-py2.py3-none-any.whl
+Collecting botocore==1.12.37 (from awscli>=1.11.91->allennlp)
+  Using cached https://files.pythonhosted.org/packages/d0/35/1461771f778b67984a75a9853a2b3ed25e65a4345e669a81b50c67c930ab/botocore-1.12.37-py2.py3-none-any.whl
+Requirement already satisfied: werkzeug in ./anaconda3/lib/python3.7/site-packages (from moto==1.3.4->allennlp) (0.14.1)
+Requirement already satisfied: python-dateutil<3.0.0,>=2.1 in ./anaconda3/lib/python3.7/site-packages (from moto==1.3.4->allennlp) (2.7.3)
+Collecting pyaml (from moto==1.3.4->allennlp)
+  Using cached https://files.pythonhosted.org/packages/17/c1/5892f756109e54ed53c753129b0da4acf6b6add8dff5a85b18667553b16d/pyaml-17.12.1-py2.py3-none-any.whl
+Requirement already satisfied: cryptography>=2.0.0 in ./anaconda3/lib/python3.7/site-packages (from moto==1.3.4->allennlp) (2.3.1)
+Requirement already satisfied: boto>=2.36.0 in ./anaconda3/lib/python3.7/site-packages (from moto==1.3.4->allennlp) (2.49.0)
+Collecting docker>=2.5.1 (from moto==1.3.4->allennlp)
+  Using cached https://files.pythonhosted.org/packages/c2/76/b8091dc6d9db038af62ae88f228da656a84632cf5d7a84dcf54c613d3fd0/docker-3.5.1-py2.py3-none-any.whl
+Collecting mock (from moto==1.3.4->allennlp)
+  Using cached https://files.pythonhosted.org/packages/e6/35/f187bdf23be87092bd0f1200d43d23076cee4d0dec109f195173fd3ebc79/mock-2.0.0-py2.py3-none-any.whl
+Collecting cookies (from moto==1.3.4->allennlp)
+  Using cached https://files.pythonhosted.org/packages/6a/60/557f84aa2db629e5124aa05408b975b1b5d0e1cec16cde0bfa06aae097d3/cookies-2.2.1-py2.py3-none-any.whl
+Collecting aws-xray-sdk<0.96,>=0.93 (from moto==1.3.4->allennlp)
+  Using cached https://files.pythonhosted.org/packages/a4/a5/da7887285564f9e0ae5cd25a453cca36e2cd43d8ccc9effde260b4d80904/aws_xray_sdk-0.95-py2.py3-none-any.whl
+Requirement already satisfied: Jinja2>=2.7.3 in ./anaconda3/lib/python3.7/site-packages (from moto==1.3.4->allennlp) (2.10)
+Collecting xmltodict (from moto==1.3.4->allennlp)
+  Using cached https://files.pythonhosted.org/packages/42/a9/7e99652c6bc619d19d58cdd8c47560730eb5825d43a7e25db2e1d776ceb7/xmltodict-0.11.0-py2.py3-none-any.whl
+Collecting jsondiff==1.1.1 (from moto==1.3.4->allennlp)
+Requirement already satisfied: six>1.9 in ./anaconda3/lib/python3.7/site-packages (from moto==1.3.4->allennlp) (1.11.0)
+Collecting python-jose<3.0.0 (from moto==1.3.4->allennlp)
+  Using cached https://files.pythonhosted.org/packages/bf/5c/5fa238c0c5b0656994b52721dd8b1d7bf52ebd8786518dde794f44de86b6/python_jose-2.0.2-py2.py3-none-any.whl
+Requirement already satisfied: py>=1.5.0 in ./anaconda3/lib/python3.7/site-packages (from pytest->allennlp) (1.6.0)
+Requirement already satisfied: setuptools in ./anaconda3/lib/python3.7/site-packages (from pytest->allennlp) (40.2.0)
+Requirement already satisfied: attrs>=17.4.0 in ./anaconda3/lib/python3.7/site-packages (from pytest->allennlp) (18.2.0)
+Requirement already satisfied: more-itertools>=4.0.0 in ./anaconda3/lib/python3.7/site-packages (from pytest->allennlp) (4.3.0)
+Requirement already satisfied: atomicwrites>=1.0 in ./anaconda3/lib/python3.7/site-packages (from pytest->allennlp) (1.2.1)
+Requirement already satisfied: pluggy>=0.7 in ./anaconda3/lib/python3.7/site-packages (from pytest->allennlp) (0.7.1)
+Requirement already satisfied: wcwidth in ./anaconda3/lib/python3.7/site-packages (from ftfy->allennlp) (0.1.7)
+Requirement already satisfied: protobuf>=0.3.2 in ./anaconda3/lib/python3.7/site-packages (from tensorboardX==1.2->allennlp) (3.6.1)
+Collecting jmespath<1.0.0,>=0.7.1 (from boto3->allennlp)
+  Using cached https://files.pythonhosted.org/packages/b7/31/05c8d001f7f87f0f07289a5fc0fc3832e9a57f2dbd4d3b0fee70e0d51365/jmespath-0.9.3-py2.py3-none-any.whl
+Requirement already satisfied: ujson>=1.35 in ./anaconda3/lib/python3.7/site-packages (from spacy<2.1,>=2.0->allennlp) (1.35)
+Requirement already satisfied: thinc<6.13.0,>=6.12.0 in ./anaconda3/lib/python3.7/site-packages (from spacy<2.1,>=2.0->allennlp) (6.12.0)
+Requirement already satisfied: plac<1.0.0,>=0.9.6 in ./anaconda3/lib/python3.7/site-packages (from spacy<2.1,>=2.0->allennlp) (0.9.6)
+Requirement already satisfied: regex==2018.01.10 in ./anaconda3/lib/python3.7/site-packages (from spacy<2.1,>=2.0->allennlp) (2018.1.10)
+Requirement already satisfied: preshed<2.1.0,>=2.0.1 in ./anaconda3/lib/python3.7/site-packages (from spacy<2.1,>=2.0->allennlp) (2.0.1)
+Requirement already satisfied: murmurhash<1.1.0,>=0.28.0 in ./anaconda3/lib/python3.7/site-packages (from spacy<2.1,>=2.0->allennlp) (1.0.1)
+Requirement already satisfied: dill<0.3,>=0.2 in ./anaconda3/lib/python3.7/site-packages (from spacy<2.1,>=2.0->allennlp) (0.2.8.2)
+Requirement already satisfied: msgpack-numpy<0.4.4 in ./anaconda3/lib/python3.7/site-packages (from spacy<2.1,>=2.0->allennlp) (0.4.3.2)
+Requirement already satisfied: cymem<2.1.0,>=2.0.2 in ./anaconda3/lib/python3.7/site-packages (from spacy<2.1,>=2.0->allennlp) (2.0.2)
+Requirement already satisfied: pycparser in ./anaconda3/lib/python3.7/site-packages (from cffi==1.11.2->allennlp) (2.18)
+Requirement already satisfied: chardet<3.1.0,>=3.0.2 in ./anaconda3/lib/python3.7/site-packages (from requests>=2.18->allennlp) (3.0.4)
+Requirement already satisfied: idna<2.8,>=2.5 in ./anaconda3/lib/python3.7/site-packages (from requests>=2.18->allennlp) (2.7)
+Requirement already satisfied: urllib3<1.24,>=1.21.1 in ./anaconda3/lib/python3.7/site-packages (from requests>=2.18->allennlp) (1.23)
+Requirement already satisfied: certifi>=2017.4.17 in ./anaconda3/lib/python3.7/site-packages (from requests>=2.18->allennlp) (2018.8.24)
+Requirement already satisfied: greenlet>=0.4.14 in ./anaconda3/lib/python3.7/site-packages (from gevent==1.3.6->allennlp) (0.4.15)
+Requirement already satisfied: sphinx>=1.2.3 in ./anaconda3/lib/python3.7/site-packages (from numpydoc==0.8.0->allennlp) (1.7.9)
+Requirement already satisfied: click>=2.0 in ./anaconda3/lib/python3.7/site-packages (from flask==0.12.4->allennlp) (6.7)
+Requirement already satisfied: itsdangerous>=0.21 in ./anaconda3/lib/python3.7/site-packages (from flask==0.12.4->allennlp) (0.24)
+Requirement already satisfied: cycler>=0.10 in ./anaconda3/lib/python3.7/site-packages (from matplotlib==2.2.3->allennlp) (0.10.0)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in ./anaconda3/lib/python3.7/site-packages (from matplotlib==2.2.3->allennlp) (2.2.0)
+Requirement already satisfied: kiwisolver>=1.0.1 in ./anaconda3/lib/python3.7/site-packages (from matplotlib==2.2.3->allennlp) (1.0.1)
+Requirement already satisfied: pyasn1>=0.1.3 in ./anaconda3/lib/python3.7/site-packages (from rsa<=3.5.0,>=3.1.2->awscli>=1.11.91->allennlp) (0.4.4)
+Requirement already satisfied: asn1crypto>=0.21.0 in ./anaconda3/lib/python3.7/site-packages (from cryptography>=2.0.0->moto==1.3.4->allennlp) (0.24.0)
+Collecting docker-pycreds>=0.3.0 (from docker>=2.5.1->moto==1.3.4->allennlp)
+  Using cached https://files.pythonhosted.org/packages/ea/bf/7e70aeebc40407fbdb96fa9f79fc8e4722ea889a99378303e3bcc73f4ab5/docker_pycreds-0.3.0-py2.py3-none-any.whl
+Collecting websocket-client>=0.32.0 (from docker>=2.5.1->moto==1.3.4->allennlp)
+  Using cached https://files.pythonhosted.org/packages/26/2d/f749a5c82f6192d77ed061a38e02001afcba55fe8477336d26a950ab17ce/websocket_client-0.54.0-py2.py3-none-any.whl
+Collecting pbr>=0.11 (from mock->moto==1.3.4->allennlp)
+  Using cached https://files.pythonhosted.org/packages/76/0c/304d968fe010ba7c2ecc1d57e28741ddd3a305439dcf1cdb3b6f896a3c00/pbr-5.1.0-py2.py3-none-any.whl
+Requirement already satisfied: wrapt in ./anaconda3/lib/python3.7/site-packages (from aws-xray-sdk<0.96,>=0.93->moto==1.3.4->allennlp) (1.10.11)
+Collecting jsonpickle (from aws-xray-sdk<0.96,>=0.93->moto==1.3.4->allennlp)
+  Using cached https://files.pythonhosted.org/packages/ca/ce/97404d5aeb58e6155c216825c81b50f6eca8a5345c582317ae48391878f8/jsonpickle-1.0-py2.py3-none-any.whl
+Requirement already satisfied: MarkupSafe>=0.23 in ./anaconda3/lib/python3.7/site-packages (from Jinja2>=2.7.3->moto==1.3.4->allennlp) (1.0)
+Collecting ecdsa<1.0 (from python-jose<3.0.0->moto==1.3.4->allennlp)
+  Using cached https://files.pythonhosted.org/packages/63/f4/73669d51825516ce8c43b816c0a6b64cd6eb71d08b99820c00792cb42222/ecdsa-0.13-py2.py3-none-any.whl
+Collecting pycryptodome<4.0.0,>=3.3.1 (from python-jose<3.0.0->moto==1.3.4->allennlp)
+  Using cached https://files.pythonhosted.org/packages/6e/87/89e3bc9ba9c3670ea3e8ed0ae1b97bc0452cca04f548624af8a90ac92ac2/pycryptodome-3.7.0-cp37-cp37m-manylinux1_x86_64.whl
+Collecting future<1.0 (from python-jose<3.0.0->moto==1.3.4->allennlp)
+Requirement already satisfied: cytoolz<0.10,>=0.9.0 in ./anaconda3/lib/python3.7/site-packages (from thinc<6.13.0,>=6.12.0->spacy<2.1,>=2.0->allennlp) (0.9.0.1)
+Requirement already satisfied: msgpack<1.0.0,>=0.5.6 in ./anaconda3/lib/python3.7/site-packages (from thinc<6.13.0,>=6.12.0->spacy<2.1,>=2.0->allennlp) (0.5.6)
+Requirement already satisfied: Pygments>=2.0 in ./anaconda3/lib/python3.7/site-packages (from sphinx>=1.2.3->numpydoc==0.8.0->allennlp) (2.2.0)
+Requirement already satisfied: snowballstemmer>=1.1 in ./anaconda3/lib/python3.7/site-packages (from sphinx>=1.2.3->numpydoc==0.8.0->allennlp) (1.2.1)
+Requirement already satisfied: babel!=2.0,>=1.3 in ./anaconda3/lib/python3.7/site-packages (from sphinx>=1.2.3->numpydoc==0.8.0->allennlp) (2.6.0)
+Requirement already satisfied: alabaster<0.8,>=0.7 in ./anaconda3/lib/python3.7/site-packages (from sphinx>=1.2.3->numpydoc==0.8.0->allennlp) (0.7.11)
+Requirement already satisfied: imagesize in ./anaconda3/lib/python3.7/site-packages (from sphinx>=1.2.3->numpydoc==0.8.0->allennlp) (1.1.0)
+Requirement already satisfied: packaging in ./anaconda3/lib/python3.7/site-packages (from sphinx>=1.2.3->numpydoc==0.8.0->allennlp) (17.1)
+Requirement already satisfied: sphinxcontrib-websupport in ./anaconda3/lib/python3.7/site-packages (from sphinx>=1.2.3->numpydoc==0.8.0->allennlp) (1.1.0)
+Requirement already satisfied: toolz>=0.8.0 in ./anaconda3/lib/python3.7/site-packages (from cytoolz<0.10,>=0.9.0->thinc<6.13.0,>=6.12.0->spacy<2.1,>=2.0->allennlp) (0.9.0)
+Building wheels for collected packages: cffi
+  Running setup.py bdist_wheel for cffi ... error
+  Complete output from command /mnt/cephfs2/asr/users/ming.tu/anaconda3/bin/python -u -c ""import setuptools, tokenize;__file__='/tmp/pip-install-11bng7n1/cffi/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))"" bdist_wheel -d /tmp/pip-wheel-91pno_hs --python-tag cp37:
+  Package libffi was not found in the pkg-config search path.
+  Perhaps you should add the directory containing `libffi.pc'
+  to the PKG_CONFIG_PATH environment variable
+  No package 'libffi' found
+  Package libffi was not found in the pkg-config search path.
+  Perhaps you should add the directory containing `libffi.pc'
+  to the PKG_CONFIG_PATH environment variable
+  No package 'libffi' found
+  Package libffi was not found in the pkg-config search path.
+  Perhaps you should add the directory containing `libffi.pc'
+  to the PKG_CONFIG_PATH environment variable
+  No package 'libffi' found
+  Package libffi was not found in the pkg-config search path.
+  Perhaps you should add the directory containing `libffi.pc'
+  to the PKG_CONFIG_PATH environment variable
+  No package 'libffi' found
+  Package libffi was not found in the pkg-config search path.
+  Perhaps you should add the directory containing `libffi.pc'
+  to the PKG_CONFIG_PATH environment variable
+  No package 'libffi' found
+  running bdist_wheel
+  running build
+  running build_py
+  creating build
+  creating build/lib.linux-x86_64-3.7
+  creating build/lib.linux-x86_64-3.7/cffi
+  copying cffi/vengine_cpy.py -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/model.py -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/commontypes.py -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/error.py -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/backend_ctypes.py -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/cparser.py -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/ffiplatform.py -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/vengine_gen.py -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/api.py -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/lock.py -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/__init__.py -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/setuptools_ext.py -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/cffi_opcode.py -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/verifier.py -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/recompiler.py -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/_cffi_include.h -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/parse_c_type.h -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/_embedding.h -> build/lib.linux-x86_64-3.7/cffi
+  copying cffi/_cffi_errors.h -> build/lib.linux-x86_64-3.7/cffi
+  running build_ext
+  building '_cffi_backend' extension
+  creating build/temp.linux-x86_64-3.7
+  creating build/temp.linux-x86_64-3.7/c
+  gcc -pthread -B /mnt/cephfs2/asr/users/ming.tu/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -DUSE__THREAD -DHAVE_SYNC_SYNCHRONIZE -I/usr/include/ffi -I/usr/include/libffi -I/mnt/cephfs2/asr/users/ming.tu/anaconda3/include/python3.7m -c c/_cffi_backend.c -o build/temp.linux-x86_64-3.7/c/_cffi_backend.o
+  c/_cffi_backend.c:15:17: fatal error: ffi.h: No such file or directory
+   #include <ffi.h>
+                   ^
+  compilation terminated.
+  error: command 'gcc' failed with exit status 1
+
+  ----------------------------------------
+  Failed building wheel for cffi
+  Running setup.py clean for cffi
+Failed to build cffi
+twisted 18.7.0 requires PyHamcrest>=1.9.0, which is not installed.
+Installing collected packages: rsa, jmespath, botocore, s3transfer, awscli, pyaml, docker-pycreds, websocket-client, docker, pbr, mock, cookies, jsonpickle, aws-xray-sdk, xmltodict, boto3, jsondiff, ecdsa, pycryptodome, future, python-jose, moto, cffi, flask-cors, allennlp
+  Found existing installation: cffi 1.11.5
+    Uninstalling cffi-1.11.5:
+      Successfully uninstalled cffi-1.11.5
+  Running setup.py install for cffi ... error
+    Complete output from command /mnt/cephfs2/asr/users/ming.tu/anaconda3/bin/python -u -c ""import setuptools, tokenize;__file__='/tmp/pip-install-11bng7n1/cffi/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))"" install --record /tmp/pip-record-p7w_9vxs/install-record.txt --single-version-externally-managed --compile:
+    Package libffi was not found in the pkg-config search path.
+    Perhaps you should add the directory containing `libffi.pc'
+    to the PKG_CONFIG_PATH environment variable
+    No package 'libffi' found
+    Package libffi was not found in the pkg-config search path.
+    Perhaps you should add the directory containing `libffi.pc'
+    to the PKG_CONFIG_PATH environment variable
+    No package 'libffi' found
+    Package libffi was not found in the pkg-config search path.
+    Perhaps you should add the directory containing `libffi.pc'
+    to the PKG_CONFIG_PATH environment variable
+    No package 'libffi' found
+    Package libffi was not found in the pkg-config search path.
+    Perhaps you should add the directory containing `libffi.pc'
+    to the PKG_CONFIG_PATH environment variable
+    No package 'libffi' found
+    Package libffi was not found in the pkg-config search path.
+    Perhaps you should add the directory containing `libffi.pc'
+    to the PKG_CONFIG_PATH environment variable
+    No package 'libffi' found
+    running install
+    running build
+    running build_py
+    creating build
+    creating build/lib.linux-x86_64-3.7
+    creating build/lib.linux-x86_64-3.7/cffi
+    copying cffi/vengine_cpy.py -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/model.py -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/commontypes.py -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/error.py -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/backend_ctypes.py -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/cparser.py -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/ffiplatform.py -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/vengine_gen.py -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/api.py -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/lock.py -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/__init__.py -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/setuptools_ext.py -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/cffi_opcode.py -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/verifier.py -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/recompiler.py -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/_cffi_include.h -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/parse_c_type.h -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/_embedding.h -> build/lib.linux-x86_64-3.7/cffi
+    copying cffi/_cffi_errors.h -> build/lib.linux-x86_64-3.7/cffi
+    running build_ext
+    building '_cffi_backend' extension
+    creating build/temp.linux-x86_64-3.7
+    creating build/temp.linux-x86_64-3.7/c
+    gcc -pthread -B /mnt/cephfs2/asr/users/ming.tu/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -DUSE__THREAD -DHAVE_SYNC_SYNCHRONIZE -I/usr/include/ffi -I/usr/include/libffi -I/mnt/cephfs2/asr/users/ming.tu/anaconda3/include/python3.7m -c c/_cffi_backend.c -o build/temp.linux-x86_64-3.7/c/_cffi_backend.o
+    c/_cffi_backend.c:15:17: fatal error: ffi.h: No such file or directory
+     #include <ffi.h>
+                     ^
+    compilation terminated.
+    error: command 'gcc' failed with exit status 1
+
+    ----------------------------------------
+  Rolling back uninstall of cffi
+Command ""/mnt/cephfs2/asr/users/ming.tu/anaconda3/bin/python -u -c ""import setuptools, tokenize;__file__='/tmp/pip-install-11bng7n1/cffi/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))"" install --record /tmp/pip-record-p7w_9vxs/install-record.txt --single-version-externally-managed --compile"" failed with error code 1 in /tmp/pip-install-11bng7n1/cffi/
+You are using pip version 10.0.1, however version 18.1 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+**To Reproduce**
+
+**Expected behavior**
+
+**System (please complete the following information):**
+ - OS: CentOS Linux
+ - Python version: Python3.7
+ - AllenNLP version: default
+ - PyTorch version: 0.4.1
+
+**Additional context**
+It's a cluster and I don't have permission to run ""sudo apt-get xxx""
+",1
+596,https://github.com/allenai/allennlp/issues/2017,2017,[],closed,2018-11-05 23:39:16+00:00,2,EVALB errors when using pip install,"@nelson-liu recently made [a PR to build EVALB if it doesn't exist](https://github.com/allenai/allennlp/pull/1964) so he could train the SRL model via Docker.  He succeeded in doing this from the main Dockerfile, but it still doesn't work when installing AllenNLP via pip.
+
+EVALB is included at `/usr/local/lib/python3.6/site-packages/allennlp/tools/EVALB/` and it seems to be compiled, but the process errors out.
+
+```
+2018-11-05T23:12:22.831824463Z	rm -f evalb
+2018-11-05T23:12:22.833699671Z	gcc -Wall -g -o evalb evalb.c
+2018-11-05T23:12:22.972013565Z	evalb.c: In function ‘main’:
+2018-11-05T23:12:22.972099997Z	evalb.c:379:22: warning: pointer targets in passing argument 1 of ‘fgets’ differ in signedness [-Wpointer-sign]
+2018-11-05T23:12:22.97212103Z	     for(Line=1;fgets(buff,5000,fd1)!=NULL;Line++){
+2018-11-05T23:12:22.972124759Z	                      ^
+2018-11-05T23:12:22.972199025Z	In file included from evalb.c:21:0:
+2018-11-05T23:12:22.97220439Z	/usr/include/stdio.h:622:14: note: expected ‘char * __restrict__’ but argument is of type ‘unsigned char *’
+2018-11-05T23:12:22.97221632Z	 extern char *fgets (char *__restrict __s, int __n, FILE *__restrict __stream)
+2018-11-05T23:12:22.972219117Z	              ^
+2018-11-05T23:12:22.972221492Z	evalb.c:386:9: warning: pointer targets in passing argument 1 of ‘strcpy’ differ in signedness [-Wpointer-sign]
+2018-11-05T23:12:22.972224103Z	  strcpy(buff1,buff);
+2018-11-05T23:12:22.972226475Z	         ^
+2018-11-05T23:12:22.972323105Z	In file included from evalb.c:24:0:
+2018-11-05T23:12:22.972336209Z	/usr/include/string.h:129:14: note: expected ‘char * __restrict__’ but argument is of type ‘unsigned char *’
+2018-11-05T23:12:22.972340073Z	 extern char *strcpy (char *__restrict __dest, const char *__restrict __src)
+2018-11-05T23:12:22.972342889Z	              ^
+2018-11-05T23:12:22.972345497Z	evalb.c:386:15: warning: pointer targets in passing argument 2 of ‘strcpy’ differ in signedness [-Wpointer-sign]
+2018-11-05T23:12:22.972348423Z	  strcpy(buff1,buff);
+2018-11-05T23:12:22.972350922Z	               ^
+2018-11-05T23:12:22.972353329Z	In file included from evalb.c:24:0:
+2018-11-05T23:12:22.97235596Z	/usr/include/string.h:129:14: note: expected ‘const char * __restrict__’ but argument is of type ‘unsigned char *’
+2018-11-05T23:12:22.972358683Z	 extern char *strcpy (char *__restrict __dest, const char *__restrict __src)
+2018-11-05T23:12:22.97236129Z	              ^
+2018-11-05T23:12:22.97236375Z	evalb.c:389:11: warning: pointer targets in passing argument 1 of ‘fgets’ differ in signedness [-Wpointer-sign]
+2018-11-05T23:12:22.972366852Z	  if(fgets(buff,5000,fd2)==NULL){
+2018-11-05T23:12:22.972369267Z	           ^
+2018-11-05T23:12:22.972371925Z	In file included from evalb.c:21:0:
+2018-11-05T23:12:22.972374333Z	/usr/include/stdio.h:622:14: note: expected ‘char * __restrict__’ but argument is of type ‘unsigned char *’
+2018-11-05T23:12:22.972377617Z	 extern char *fgets (char *__restrict __s, int __n, FILE *__restrict __stream)
+2018-11-05T23:12:22.972380067Z	              ^
+2018-11-05T23:12:22.972423646Z	evalb.c:404:14: warning: pointer targets in passing argument 1 of ‘fgets’ differ in signedness [-Wpointer-sign]
+2018-11-05T23:12:22.972428396Z	     if(fgets(buff,5000,fd2)!=NULL){
+2018-11-05T23:12:22.972430816Z	              ^
+2018-11-05T23:12:22.972433169Z	In file included from evalb.c:21:0:
+2018-11-05T23:12:22.972435539Z	/usr/include/stdio.h:622:14: note: expected ‘char * __restrict__’ but argument is of type ‘unsigned char *’
+2018-11-05T23:12:22.97243808Z	 extern char *fgets (char *__restrict __s, int __n, FILE *__restrict __stream)
+2018-11-05T23:12:22.972440699Z	              ^
+2018-11-05T23:12:22.974330514Z	evalb.c: In function ‘read_line’:
+2018-11-05T23:12:22.97434194Z	evalb.c:659:11: warning: variable ‘n’ set but not used [-Wunused-but-set-variable]
+2018-11-05T23:12:22.97435082Z	     int   n;              /* temporary remembering the position */
+2018-11-05T23:12:22.974354915Z	           ^
+2018-11-05T23:12:22.97471461Z	evalb.c: In function ‘calc_result’:
+2018-11-05T23:12:22.974724145Z	evalb.c:879:23: warning: pointer targets in passing argument 2 of ‘strncpy’ differ in signedness [-Wpointer-sign]
+2018-11-05T23:12:22.974727252Z	        strncpy(my_buf,buf1+bracket1[i].buf_start,l);
+2018-11-05T23:12:22.974730054Z	                       ^
+2018-11-05T23:12:22.974772004Z	In file included from evalb.c:24:0:
+2018-11-05T23:12:22.974779845Z	/usr/include/string.h:132:14: note: expected ‘const char * __restrict__’ but argument is of type ‘unsigned char *’
+2018-11-05T23:12:22.974782984Z	 extern char *strncpy (char *__restrict __dest,
+2018-11-05T23:12:22.974785658Z	              ^
+2018-11-05T23:12:22.974866489Z	evalb.c:893:17: warning: pointer targets in passing argument 2 of ‘strncpy’ differ in signedness [-Wpointer-sign]
+2018-11-05T23:12:22.974873456Z	  strncpy(my_buf,buf1+bracket1[i].buf_start,l);
+2018-11-05T23:12:22.974876275Z	                 ^
+2018-11-05T23:12:22.974878899Z	In file included from evalb.c:24:0:
+2018-11-05T23:12:22.974881364Z	/usr/include/string.h:132:14: note: expected ‘const char * __restrict__’ but argument is of type ‘unsigned char *’
+2018-11-05T23:12:22.974884345Z	 extern char *strncpy (char *__restrict __dest,
+2018-11-05T23:12:22.974886886Z	              ^
+2018-11-05T23:12:22.974992069Z	evalb.c:905:17: warning: pointer targets in passing argument 2 of ‘strncpy’ differ in signedness [-Wpointer-sign]
+2018-11-05T23:12:22.974999875Z	  strncpy(my_buf,buf+bracket2[j].buf_start,l);
+2018-11-05T23:12:22.975002451Z	                 ^
+2018-11-05T23:12:22.975004865Z	In file included from evalb.c:24:0:
+2018-11-05T23:12:22.975007242Z	/usr/include/string.h:132:14: note: expected ‘const char * __restrict__’ but argument is of type ‘unsigned char *’
+2018-11-05T23:12:22.975009908Z	 extern char *strncpy (char *__restrict __dest,
+2018-11-05T23:12:22.975012444Z	              ^
+2018-11-05T23:12:22.975167579Z	evalb.c:933:22: warning: pointer targets in passing argument 2 of ‘strncpy’ differ in signedness [-Wpointer-sign]
+2018-11-05T23:12:22.975175169Z	       strncpy(my_buf,buf1+bracket1[i].buf_start,l);
+2018-11-05T23:12:22.975177902Z	                      ^
+2018-11-05T23:12:22.975180615Z	In file included from evalb.c:24:0:
+2018-11-05T23:12:22.975183218Z	/usr/include/string.h:132:14: note: expected ‘const char * __restrict__’ but argument is of type ‘unsigned char *’
+2018-11-05T23:12:22.975186157Z	 extern char *strncpy (char *__restrict __dest,
+2018-11-05T23:12:22.975188828Z	              ^
+2018-11-05T23:12:23.122217168Z	Traceback (most recent call last):
+2018-11-05T23:12:23.12223291Z	  File ""/usr/local/lib/python3.6/runpy.py"", line 193, in _run_module_as_main
+2018-11-05T23:12:23.122245764Z	    ""__main__"", mod_spec)
+2018-11-05T23:12:23.122248658Z	  File ""/usr/local/lib/python3.6/runpy.py"", line 85, in _run_code
+2018-11-05T23:12:23.122251412Z	    exec(code, run_globals)
+2018-11-05T23:12:23.12225381Z	  File ""/usr/local/lib/python3.6/site-packages/allennlp/run.py"", line 18, in <module>
+2018-11-05T23:12:23.122256982Z	    main(prog=""allennlp"")
+2018-11-05T23:12:23.122259481Z	  File ""/usr/local/lib/python3.6/site-packages/allennlp/commands/__init__.py"", line 72, in main
+2018-11-05T23:12:23.122262242Z	    args.func(args)
+2018-11-05T23:12:23.122264615Z	  File ""/usr/local/lib/python3.6/site-packages/allennlp/commands/train.py"", line 111, in train_model_from_args
+2018-11-05T23:12:23.122267368Z	    args.force)
+2018-11-05T23:12:23.122269744Z	  File ""/usr/local/lib/python3.6/site-packages/allennlp/commands/train.py"", line 142, in train_model_from_file
+2018-11-05T23:12:23.122278644Z	    return train_model(params, serialization_dir, file_friendly_logging, recover, force)
+2018-11-05T23:12:23.12228115Z	  File ""/usr/local/lib/python3.6/site-packages/allennlp/commands/train.py"", line 351, in train_model
+2018-11-05T23:12:23.122283984Z	    metrics = trainer.train()
+2018-11-05T23:12:23.12228644Z	  File ""/usr/local/lib/python3.6/site-packages/allennlp/training/trainer.py"", line 757, in train
+2018-11-05T23:12:23.122289024Z	    val_loss, num_batches = self._validation_loss()
+2018-11-05T23:12:23.122291564Z	  File ""/usr/local/lib/python3.6/site-packages/allennlp/training/trainer.py"", line 710, in _validation_loss
+2018-11-05T23:12:23.122294204Z	    loss = self.batch_loss(batch, for_training=False)
+2018-11-05T23:12:23.122296722Z	  File ""/usr/local/lib/python3.6/site-packages/allennlp/training/trainer.py"", line 430, in batch_loss
+2018-11-05T23:12:23.122299384Z	    output_dict = self.model(**batch)
+2018-11-05T23:12:23.122301854Z	  File ""/usr/local/lib/python3.6/site-packages/torch/nn/modules/module.py"", line 477, in __call__
+2018-11-05T23:12:23.122304751Z	    result = self.forward(*input, **kwargs)
+2018-11-05T23:12:23.12230725Z	  File ""/usr/local/lib/python3.6/site-packages/allennlp/models/constituency_parser.py"", line 238, in forward
+2018-11-05T23:12:23.122309954Z	    self._evalb_score(predicted_trees, batch_gold_trees)
+2018-11-05T23:12:23.122312324Z	  File ""/usr/local/lib/python3.6/site-packages/allennlp/training/metrics/evalb_bracketing_scorer.py"", line 80, in __call__
+2018-11-05T23:12:23.122314927Z	    self._evalb_program_path, compile_command))
+2018-11-05T23:12:23.122317998Z	allennlp.common.checks.ConfigurationError: ""You must compile the EVALB scorer before using it. Run 'make' in the 'scripts/EVALB/evalb' directory or run: python -c 'from allennlp.training.metrics import EvalbBracketingScorer; EvalbBracketingScorer.compile_evalb()'""
+```
+
+I'm putting together a repro.",1
+692,https://github.com/allenai/allennlp/issues/2175,2175,[],closed,2018-12-12 23:44:08+00:00,14,investigate pip-tools,"https://pypi.org/project/pip-tools/
+
+has several features, most relevant is *automatically generating requirements.txt from setup.py*
+
+not sure how to incorporate it into our workflow, but worth thinking about",0
+772,https://github.com/allenai/allennlp/issues/2338,2338,"[{'id': 887719346, 'node_id': 'MDU6TGFiZWw4ODc3MTkzNDY=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/Contributions%20welcome', 'name': 'Contributions welcome', 'color': '02b8d1', 'default': False, 'description': ''}]",closed,2019-01-11 05:27:03+00:00,11,Make AllenNLP work with pip3 / python3,"It seems like, if your system has `python` linked to python 2.x and `python3` linked to python 3.x, the `allennlp` command fails because it implicitly calls `python` (and thus tries to run allennlp with python 2.x). It should be possible to fall back to `python3` if `python` is detected to be python 2.x?",1
+839,https://github.com/allenai/allennlp/issues/2473,2473,[],closed,2019-02-01 14:57:21+00:00,32,Installing allennlp through pip using conda virtual environment fails,"**Describe the bug**
+
+I am trying to install allennlp through pip under conda virtual environment, however it fails and leave error message like this:
+
+```
+Building wheels for collected packages: overrides, jsonnet, nltk, parsimonious, numpydoc, msgpack, regex, ujson, dill, jsondiff, PyYAML, wrapt, cytoolz, future, toolz
+  Running setup.py bdist_wheel for overrides ... done
+  Stored in directory: /home/ichn/.cache/pip/wheels/f7/27/b8/b4f46c59426a11e7f2d4e472b870ec14c21b4beab2e1afa725
+  Running setup.py bdist_wheel for jsonnet ... error
+  Complete output from command /home/ichn/anaconda3/envs/torch/bin/python -u -c ""import setuptools, tokenize;__file__='/tmp/pip-install-grk1qblh/jsonnet/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))"" bdist_wheel -d /tmp/pip-wheel-t66ososi --python-tag cp37:
+  running bdist_wheel
+  running build
+  running build_ext
+  g++ -c -g -O3 -Wall -Wextra -Woverloaded-virtual -pedantic -std=c++0x -fPIC -Iinclude -Ithird_party/md5 core/desugarer.cpp -o core/desugarer.o
+  core/desugarer.cpp: In member function ‘void Desugarer::desugar(AST*&, unsigned int)’:
+  core/desugarer.cpp:612:51: warning: this statement may fall through [-Wimplicit-fallthrough=]
+                   case BOP_MANIFEST_UNEQUAL: invert = true;
+                                              ~~~~~~~^~~~~~
+  core/desugarer.cpp:613:17: note: here
+                   case BOP_MANIFEST_EQUAL: {
+                   ^~~~
+  g++ -c -g -O3 -Wall -Wextra -Woverloaded-virtual -pedantic -std=c++0x -fPIC -Iinclude -Ithird_party/md5 core/formatter.cpp -o core/formatter.o
+  g++ -c -g -O3 -Wall -Wextra -Woverloaded-virtual -pedantic -std=c++0x -fPIC -Iinclude -Ithird_party/md5 core/libjsonnet.cpp -o core/libjsonnet.o
+  g++ -c -g -O3 -Wall -Wextra -Woverloaded-virtual -pedantic -std=c++0x -fPIC -Iinclude -Ithird_party/md5 core/lexer.cpp -o core/lexer.o
+  g++ -c -g -O3 -Wall -Wextra -Woverloaded-virtual -pedantic -std=c++0x -fPIC -Iinclude -Ithird_party/md5 core/parser.cpp -o core/parser.o
+  g++ -c -g -O3 -Wall -Wextra -Woverloaded-virtual -pedantic -std=c++0x -fPIC -Iinclude -Ithird_party/md5 core/pass.cpp -o core/pass.o
+  g++ -c -g -O3 -Wall -Wextra -Woverloaded-virtual -pedantic -std=c++0x -fPIC -Iinclude -Ithird_party/md5 core/static_analysis.cpp -o core/static_analysis.o
+  g++ -c -g -O3 -Wall -Wextra -Woverloaded-virtual -pedantic -std=c++0x -fPIC -Iinclude -Ithird_party/md5 core/string_utils.cpp -o core/string_utils.o
+  g++ -c -g -O3 -Wall -Wextra -Woverloaded-virtual -pedantic -std=c++0x -fPIC -Iinclude -Ithird_party/md5 core/vm.cpp -o core/vm.o
+  g++ -c -g -O3 -Wall -Wextra -Woverloaded-virtual -pedantic -std=c++0x -fPIC -Iinclude -Ithird_party/md5 third_party/md5/md5.cpp -o third_party/md5/md5.o
+  building '_jsonnet' extension
+  creating build
+  creating build/temp.linux-x86_64-3.7
+  creating build/temp.linux-x86_64-3.7/python
+  gcc -pthread -B /home/ichn/anaconda3/envs/torch/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -Iinclude -Ithird_party/md5 -I/home/ichn/anaconda3/envs/torch/include/python3.7m -c python/_jsonnet.c -o build/temp.linux-x86_64-3.7/python/_jsonnet.o
+  python/_jsonnet.c: In function ‘cpython_native_callback’:
+  python/_jsonnet.c:147:19: warning: comparison of integer expressions of different signedness: ‘int’ and ‘size_t’ {aka ‘const long unsigned int’} [-Wsign-compare]
+       for (i = 0; i < ctx->argc; ++i) {
+                     ^
+  creating build/lib.linux-x86_64-3.7
+  g++ -pthread -shared -B /home/ichn/anaconda3/envs/torch/compiler_compat -L/home/ichn/anaconda3/envs/torch/lib -Wl,-rpath=/home/ichn/anaconda3/envs/torch/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.7/python/_jsonnet.o core/desugarer.o core/formatter.o core/libjsonnet.o core/lexer.o core/parser.o core/pass.o core/static_analysis.o core/string_utils.o core/vm.o third_party/md5/md5.o -o build/lib.linux-x86_64-3.7/_jsonnet.cpython-37m-x86_64-linux-gnu.so
+  /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/python/_jsonnet.o: unable to initialize decompress status for section .debug_info
+  /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/python/_jsonnet.o: unable to initialize decompress status for section .debug_info
+  /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/python/_jsonnet.o: unable to initialize decompress status for section .debug_info
+  /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/python/_jsonnet.o: unable to initialize decompress status for section .debug_info
+  build/temp.linux-x86_64-3.7/python/_jsonnet.o: file not recognized: file format not recognized
+  collect2: error: ld returned 1 exit status
+  error: command 'g++' failed with exit status 1
+  
+  ----------------------------------------
+  Failed building wheel for jsonnet
+  Running setup.py clean for jsonnet
+  Running setup.py bdist_wheel for nltk ... done
+  Stored in directory: /home/ichn/.cache/pip/wheels/f1/98/72/c2ba4734bc46df30b9c3bd3eb037c52ab8ae0110f8fa15200a
+  Running setup.py bdist_wheel for parsimonious ... done
+  Stored in directory: /home/ichn/.cache/pip/wheels/f1/a4/4b/7cac60fa74b7c16017cd9c67ab65736d3d9318064ae65e0ee0
+  Running setup.py bdist_wheel for numpydoc ... done
+  Stored in directory: /home/ichn/.cache/pip/wheels/11/76/d4/16c19c2378616c3389916bc6d7b1134b72bfe6f7abd9f80243
+  Running setup.py bdist_wheel for msgpack ... done
+  Stored in directory: /home/ichn/.cache/pip/wheels/3f/78/5a/92a8797deabe61189baf597a855e9529f6b20a391d9924d968
+  Running setup.py bdist_wheel for regex ... error
+  Complete output from command /home/ichn/anaconda3/envs/torch/bin/python -u -c ""import setuptools, tokenize;__file__='/tmp/pip-install-grk1qblh/regex/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))"" bdist_wheel -d /tmp/pip-wheel-6v75m_hn --python-tag cp37:
+  /home/ichn/anaconda3/envs/torch/lib/python3.7/site-packages/setuptools/dist.py:470: UserWarning: Normalizing '2018.01.10' to '2018.1.10'
+    normalized_version,
+  running bdist_wheel
+  running build
+  running build_py
+  creating build
+  creating build/lib.linux-x86_64-3.7
+  copying regex_3/regex.py -> build/lib.linux-x86_64-3.7
+  copying regex_3/_regex_core.py -> build/lib.linux-x86_64-3.7
+  copying regex_3/test_regex.py -> build/lib.linux-x86_64-3.7
+  running build_ext
+  building '_regex' extension
+  creating build/temp.linux-x86_64-3.7
+  creating build/temp.linux-x86_64-3.7/regex_3
+  gcc -pthread -B /home/ichn/anaconda3/envs/torch/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I/home/ichn/anaconda3/envs/torch/include/python3.7m -c regex_3/_regex.c -o build/temp.linux-x86_64-3.7/regex_3/_regex.o
+  gcc -pthread -B /home/ichn/anaconda3/envs/torch/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I/home/ichn/anaconda3/envs/torch/include/python3.7m -c regex_3/_regex_unicode.c -o build/temp.linux-x86_64-3.7/regex_3/_regex_unicode.o
+  gcc -pthread -shared -B /home/ichn/anaconda3/envs/torch/compiler_compat -L/home/ichn/anaconda3/envs/torch/lib -Wl,-rpath=/home/ichn/anaconda3/envs/torch/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.7/regex_3/_regex.o build/temp.linux-x86_64-3.7/regex_3/_regex_unicode.o -o build/lib.linux-x86_64-3.7/_regex.cpython-37m-x86_64-linux-gnu.so
+  /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/regex_3/_regex.o: unable to initialize decompress status for section .debug_info
+  /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/regex_3/_regex.o: unable to initialize decompress status for section .debug_info
+  /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/regex_3/_regex.o: unable to initialize decompress status for section .debug_info
+  /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/regex_3/_regex.o: unable to initialize decompress status for section .debug_info
+  build/temp.linux-x86_64-3.7/regex_3/_regex.o: file not recognized: file format not recognized
+  collect2: error: ld returned 1 exit status
+  error: command 'gcc' failed with exit status 1
+  
+  ----------------------------------------
+  Failed building wheel for regex
+  Running setup.py clean for regex
+  Running setup.py bdist_wheel for ujson ... error
+  Complete output from command /home/ichn/anaconda3/envs/torch/bin/python -u -c ""import setuptools, tokenize;__file__='/tmp/pip-install-grk1qblh/ujson/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))"" bdist_wheel -d /tmp/pip-wheel-97buh6vk --python-tag cp37:
+  Warning: 'classifiers' should be a list, got type 'filter'
+  running bdist_wheel
+  running build
+  running build_ext
+  building 'ujson' extension
+  creating build
+  creating build/temp.linux-x86_64-3.7
+  creating build/temp.linux-x86_64-3.7/python
+  creating build/temp.linux-x86_64-3.7/lib
+  gcc -pthread -B /home/ichn/anaconda3/envs/torch/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I./python -I./lib -I/home/ichn/anaconda3/envs/torch/include/python3.7m -c ./python/ujson.c -o build/temp.linux-x86_64-3.7/./python/ujson.o -D_GNU_SOURCE
+  gcc -pthread -B /home/ichn/anaconda3/envs/torch/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I./python -I./lib -I/home/ichn/anaconda3/envs/torch/include/python3.7m -c ./python/objToJSON.c -o build/temp.linux-x86_64-3.7/./python/objToJSON.o -D_GNU_SOURCE
+  ./python/objToJSON.c: In function ‘PyUnicodeToUTF8’:
+  ./python/objToJSON.c:154:18: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+       char *data = PyUnicode_AsUTF8AndSize(obj, &len);
+                    ^~~~~~~~~~~~~~~~~~~~~~~
+  gcc -pthread -B /home/ichn/anaconda3/envs/torch/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I./python -I./lib -I/home/ichn/anaconda3/envs/torch/include/python3.7m -c ./python/JSONtoObj.c -o build/temp.linux-x86_64-3.7/./python/JSONtoObj.o -D_GNU_SOURCE
+  gcc -pthread -B /home/ichn/anaconda3/envs/torch/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I./python -I./lib -I/home/ichn/anaconda3/envs/torch/include/python3.7m -c ./lib/ultrajsonenc.c -o build/temp.linux-x86_64-3.7/./lib/ultrajsonenc.o -D_GNU_SOURCE
+  ./lib/ultrajsonenc.c:156:23: warning: ‘g_hexChars’ is static but used in inline function ‘Buffer_AppendShortHexUnchecked’ which is not static
+     *(outputOffset++) = g_hexChars[(value & 0x000f) >> 0];
+                         ^~~~~~~~~~
+  ./lib/ultrajsonenc.c:155:23: warning: ‘g_hexChars’ is static but used in inline function ‘Buffer_AppendShortHexUnchecked’ which is not static
+     *(outputOffset++) = g_hexChars[(value & 0x00f0) >> 4];
+                         ^~~~~~~~~~
+  ./lib/ultrajsonenc.c:154:23: warning: ‘g_hexChars’ is static but used in inline function ‘Buffer_AppendShortHexUnchecked’ which is not static
+     *(outputOffset++) = g_hexChars[(value & 0x0f00) >> 8];
+                         ^~~~~~~~~~
+  ./lib/ultrajsonenc.c:153:23: warning: ‘g_hexChars’ is static but used in inline function ‘Buffer_AppendShortHexUnchecked’ which is not static
+     *(outputOffset++) = g_hexChars[(value & 0xf000) >> 12];
+                         ^~~~~~~~~~
+  gcc -pthread -B /home/ichn/anaconda3/envs/torch/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I./python -I./lib -I/home/ichn/anaconda3/envs/torch/include/python3.7m -c ./lib/ultrajsondec.c -o build/temp.linux-x86_64-3.7/./lib/ultrajsondec.o -D_GNU_SOURCE
+  creating build/lib.linux-x86_64-3.7
+  gcc -pthread -shared -B /home/ichn/anaconda3/envs/torch/compiler_compat -L/home/ichn/anaconda3/envs/torch/lib -Wl,-rpath=/home/ichn/anaconda3/envs/torch/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.7/./python/ujson.o build/temp.linux-x86_64-3.7/./python/objToJSON.o build/temp.linux-x86_64-3.7/./python/JSONtoObj.o build/temp.linux-x86_64-3.7/./lib/ultrajsonenc.o build/temp.linux-x86_64-3.7/./lib/ultrajsondec.o -o build/lib.linux-x86_64-3.7/ujson.cpython-37m-x86_64-linux-gnu.so
+  /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/./python/ujson.o: unable to initialize decompress status for section .debug_info
+  /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/./python/ujson.o: unable to initialize decompress status for section .debug_info
+  /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/./python/ujson.o: unable to initialize decompress status for section .debug_info
+  /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/./python/ujson.o: unable to initialize decompress status for section .debug_info
+  build/temp.linux-x86_64-3.7/./python/ujson.o: file not recognized: file format not recognized
+  collect2: error: ld returned 1 exit status
+  error: command 'gcc' failed with exit status 1
+  
+  ----------------------------------------
+  Failed building wheel for ujson
+  Running setup.py clean for ujson
+  Running setup.py bdist_wheel for dill ... done
+  Stored in directory: /home/ichn/.cache/pip/wheels/f6/d1/a7/c90dbb9c5613295c70d96d60e78c3e2b283143fddbbd57e14d
+  Running setup.py bdist_wheel for jsondiff ... done
+  Stored in directory: /home/ichn/.cache/pip/wheels/8f/c9/36/f9e8aea16af567ce91abbe6b8b6b650877b9e17ce8aa97fb42
+  Running setup.py bdist_wheel for PyYAML ... done
+  Stored in directory: /home/ichn/.cache/pip/wheels/11/c5/f8/4e054145468ca00fd2ab4a6c20bf7e09ec57b879572c865ee6
+  Running setup.py bdist_wheel for wrapt ... done
+  Stored in directory: /home/ichn/.cache/pip/wheels/10/a6/59/eab55ff1e60d10ca0404baf6e7b8baf52908091133608bf289
+  Running setup.py bdist_wheel for cytoolz ... error
+  Complete output from command /home/ichn/anaconda3/envs/torch/bin/python -u -c ""import setuptools, tokenize;__file__='/tmp/pip-install-grk1qblh/cytoolz/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))"" bdist_wheel -d /tmp/pip-wheel-ip_zgny_ --python-tag cp37:
+  running bdist_wheel
+  running build
+  running build_py
+  creating build
+  creating build/lib.linux-x86_64-3.7
+  creating build/lib.linux-x86_64-3.7/cytoolz
+  copying cytoolz/_signatures.py -> build/lib.linux-x86_64-3.7/cytoolz
+  copying cytoolz/__init__.py -> build/lib.linux-x86_64-3.7/cytoolz
+  copying cytoolz/utils_test.py -> build/lib.linux-x86_64-3.7/cytoolz
+  copying cytoolz/_version.py -> build/lib.linux-x86_64-3.7/cytoolz
+  copying cytoolz/compatibility.py -> build/lib.linux-x86_64-3.7/cytoolz
+  creating build/lib.linux-x86_64-3.7/cytoolz/curried
+  copying cytoolz/curried/operator.py -> build/lib.linux-x86_64-3.7/cytoolz/curried
+  copying cytoolz/curried/__init__.py -> build/lib.linux-x86_64-3.7/cytoolz/curried
+  copying cytoolz/curried/exceptions.py -> build/lib.linux-x86_64-3.7/cytoolz/curried
+  copying cytoolz/dicttoolz.pyx -> build/lib.linux-x86_64-3.7/cytoolz
+  copying cytoolz/itertoolz.pyx -> build/lib.linux-x86_64-3.7/cytoolz
+  copying cytoolz/utils.pyx -> build/lib.linux-x86_64-3.7/cytoolz
+  copying cytoolz/recipes.pyx -> build/lib.linux-x86_64-3.7/cytoolz
+  copying cytoolz/functoolz.pyx -> build/lib.linux-x86_64-3.7/cytoolz
+  copying cytoolz/dicttoolz.pxd -> build/lib.linux-x86_64-3.7/cytoolz
+  copying cytoolz/__init__.pxd -> build/lib.linux-x86_64-3.7/cytoolz
+  copying cytoolz/recipes.pxd -> build/lib.linux-x86_64-3.7/cytoolz
+  copying cytoolz/utils.pxd -> build/lib.linux-x86_64-3.7/cytoolz
+  copying cytoolz/functoolz.pxd -> build/lib.linux-x86_64-3.7/cytoolz
+  copying cytoolz/itertoolz.pxd -> build/lib.linux-x86_64-3.7/cytoolz
+  copying cytoolz/cpython.pxd -> build/lib.linux-x86_64-3.7/cytoolz
+  creating build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_none_safe.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_recipes.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_curried.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_tlz.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_itertoolz.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_functoolz.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/dev_skip_test.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_embedded_sigs.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_utils.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_docstrings.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_inspect_args.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_doctests.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_curried_toolzlike.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_serialization.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_compatibility.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_signatures.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_dev_skip_test.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  copying cytoolz/tests/test_dicttoolz.py -> build/lib.linux-x86_64-3.7/cytoolz/tests
+  running build_ext
+  building 'cytoolz.dicttoolz' extension
+  creating build/temp.linux-x86_64-3.7
+  creating build/temp.linux-x86_64-3.7/cytoolz
+  gcc -pthread -B /home/ichn/anaconda3/envs/torch/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I/home/ichn/anaconda3/envs/torch/include/python3.7m -c cytoolz/dicttoolz.c -o build/temp.linux-x86_64-3.7/cytoolz/dicttoolz.o
+  gcc -pthread -shared -B /home/ichn/anaconda3/envs/torch/compiler_compat -L/home/ichn/anaconda3/envs/torch/lib -Wl,-rpath=/home/ichn/anaconda3/envs/torch/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.7/cytoolz/dicttoolz.o -o build/lib.linux-x86_64-3.7/cytoolz/dicttoolz.cpython-37m-x86_64-linux-gnu.so
+  /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/cytoolz/dicttoolz.o: unable to initialize decompress status for section .debug_info
+  /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/cytoolz/dicttoolz.o: unable to initialize decompress status for section .debug_info
+  /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/cytoolz/dicttoolz.o: unable to initialize decompress status for section .debug_info
+  /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/cytoolz/dicttoolz.o: unable to initialize decompress status for section .debug_info
+  build/temp.linux-x86_64-3.7/cytoolz/dicttoolz.o: file not recognized: file format not recognized
+  collect2: error: ld returned 1 exit status
+  error: command 'gcc' failed with exit status 1
+  
+  ----------------------------------------
+  Failed building wheel for cytoolz
+  Running setup.py clean for cytoolz
+  Running setup.py bdist_wheel for future ... done
+  Stored in directory: /home/ichn/.cache/pip/wheels/3f/66/fe/9c4fd5c707a9f26993ba157f0752d84d5c7e26aedbefb84f76
+  Running setup.py bdist_wheel for toolz ... done
+  Stored in directory: /home/ichn/.cache/pip/wheels/73/ad/e1/f8fe78eeb9e2b31ea8396419d92adc107c553ff7eb47ad12d9
+Successfully built overrides nltk parsimonious numpydoc msgpack dill jsondiff PyYAML wrapt future toolz
+Failed to build jsonnet regex ujson cytoolz
+Installing collected packages: overrides, jsonnet, wcwidth, ftfy, singledispatch, nltk, regex, murmurhash, ujson, cymem, dill, idna, chardet, urllib3, requests, msgpack, msgpack-numpy, tqdm, wrapt, preshed, toolz, cytoolz, plac, thinc, spacy, sqlparse, itsdangerous, click, werkzeug, MarkupSafe, Jinja2, flask, flask-cors, editdistance, flaky, cycler, pytz, kiwisolver, python-dateutil, pyparsing, matplotlib, greenlet, gevent, atomicwrites, py, pluggy, attrs, more-itertools, pytest, responses, jsonpickle, aws-xray-sdk, cookies, xmltodict, pbr, mock, jsondiff, jmespath, docutils, botocore, s3transfer, boto3, PyYAML, pyaml, boto, websocket-client, docker-pycreds, docker, asn1crypto, cryptography, future, ecdsa, pycryptodome, python-jose, moto, parsimonious, Pygments, alabaster, sphinxcontrib-websupport, imagesize, snowballstemmer, babel, packaging, sphinx, numpydoc, protobuf, tensorboardX, h5py, conllu, scipy, scikit-learn, unidecode, pytorch-pretrained-bert, colorama, pyasn1, rsa, awscli, allennlp
+  Running setup.py install for jsonnet ... error
+    Complete output from command /home/ichn/anaconda3/envs/torch/bin/python -u -c ""import setuptools, tokenize;__file__='/tmp/pip-install-grk1qblh/jsonnet/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))"" install --record /tmp/pip-record-3ccckdjt/install-record.txt --single-version-externally-managed --compile:
+    running install
+    running build
+    running build_ext
+    make: 'core/desugarer.o' is up to date.
+    make: 'core/formatter.o' is up to date.
+    make: 'core/libjsonnet.o' is up to date.
+    make: 'core/lexer.o' is up to date.
+    make: 'core/parser.o' is up to date.
+    make: 'core/pass.o' is up to date.
+    make: 'core/static_analysis.o' is up to date.
+    make: 'core/string_utils.o' is up to date.
+    make: 'core/vm.o' is up to date.
+    make: 'third_party/md5/md5.o' is up to date.
+    building '_jsonnet' extension
+    creating build
+    creating build/temp.linux-x86_64-3.7
+    creating build/temp.linux-x86_64-3.7/python
+    gcc -pthread -B /home/ichn/anaconda3/envs/torch/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -Iinclude -Ithird_party/md5 -I/home/ichn/anaconda3/envs/torch/include/python3.7m -c python/_jsonnet.c -o build/temp.linux-x86_64-3.7/python/_jsonnet.o
+    python/_jsonnet.c: In function ‘cpython_native_callback’:
+    python/_jsonnet.c:147:19: warning: comparison of integer expressions of different signedness: ‘int’ and ‘size_t’ {aka ‘const long unsigned int’} [-Wsign-compare]
+         for (i = 0; i < ctx->argc; ++i) {
+                       ^
+    creating build/lib.linux-x86_64-3.7
+    g++ -pthread -shared -B /home/ichn/anaconda3/envs/torch/compiler_compat -L/home/ichn/anaconda3/envs/torch/lib -Wl,-rpath=/home/ichn/anaconda3/envs/torch/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.7/python/_jsonnet.o core/desugarer.o core/formatter.o core/libjsonnet.o core/lexer.o core/parser.o core/pass.o core/static_analysis.o core/string_utils.o core/vm.o third_party/md5/md5.o -o build/lib.linux-x86_64-3.7/_jsonnet.cpython-37m-x86_64-linux-gnu.so
+    /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/python/_jsonnet.o: unable to initialize decompress status for section .debug_info
+    /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/python/_jsonnet.o: unable to initialize decompress status for section .debug_info
+    /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/python/_jsonnet.o: unable to initialize decompress status for section .debug_info
+    /home/ichn/anaconda3/envs/torch/compiler_compat/ld: build/temp.linux-x86_64-3.7/python/_jsonnet.o: unable to initialize decompress status for section .debug_info
+    build/temp.linux-x86_64-3.7/python/_jsonnet.o: file not recognized: file format not recognized
+    collect2: error: ld returned 1 exit status
+    error: command 'g++' failed with exit status 1
+    
+    ----------------------------------------
+Command ""/home/ichn/anaconda3/envs/torch/bin/python -u -c ""import setuptools, tokenize;__file__='/tmp/pip-install-grk1qblh/jsonnet/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))"" install --record /tmp/pip-record-3ccckdjt/install-record.txt --single-version-externally-managed --compile"" failed with error code 1 in /tmp/pip-install-grk1qblh/jsonnet/
+```
+
+**To Reproduce**
+
+I am using conda 5.3.1 under archlinux with pytorch==1.0.0 preinstalled as part of the environment, and gcc of version
+
+```
+(torch) ?  ~ g++ --version
+g++ (GCC) 8.2.1 20181127
+Copyright (C) 2018 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+```
+
+also tried install gcc through conda and then rerun
+
+`pip install allennlp`
+
+but fails as well.
+
+**Expected behavior**
+
+allennlp successfully installed
+
+
+**System (please complete the following information):**
+ - Linux
+ - Python version: 3.7.2
+ - AllenNLP version: I installed from master
+ - PyTorch version: 1.0.0
+
+",1
+861,https://github.com/allenai/allennlp/issues/2514,2514,[],closed,2019-02-14 06:06:38+00:00,2,BrokenPipeError while training bidirectional language models,"**Describe the bug**
+We often observe a `BrokePipeError` while training transformer bidirectional models using the standard AllenNLP settings for the bidirectional LM transformer. This occurs at the end of an epoch. Here is a copy of the log. The program continues running.
+```
+[INFO/Process-20:1] process shutting down
+[INFO/Process-20:1] process exiting with exitcode 0
+[INFO/Process-20] worker 0 finished (1/1)
+[INFO/Process-20] process shutting down
+[INFO/Process-20] process exiting with exitcode 0
+[INFO/Process-21] created temp directory /tmp/pymp-uhoy6pc2
+loss: 6.6689 ||: 100%|##########| 1/1 [00:55<00:00, 55.63s/it]
+[INFO/Process-21] process shutting down
+[INFO/Process-21] process exiting with exitcode 0
+loss: 6.6664 ||: : 13it [01:06, 39.20s/it]
+loss: 6.6438 ||: : 25it [01:16, 27.71s/it]
+loss: 6.6302 ||: : 37it [01:27, 19.66s/it]
+loss: 6.6168 ||: : 49it [01:38, 14.03s/it]
+loss: 6.6033 ||: : 61it [01:48, 10.09s/it]
+loss: 6.5903 ||: : 73it [01:59, 7.32s/it]
+loss: 6.5774 ||: : 85it [02:09, 5.39s/it]
+[INFO/MainProcess] worker 0 finished (1 / 1)
+[INFO/MainProcess] sending shutdown message to manager
+[INFO/SyncManager-19] process shutting down
+[INFO/SyncManager-19] Failure to send message: ('#RETURN', None)
+[INFO/SyncManager-19] ... request was (None, 'shutdown', (), {})
+[INFO/SyncManager-19] ... exception was BrokenPipeError(32, 'Broken pipe')
+[INFO/SyncManager-19] process exiting with exitcode 0
+loss: 6.5672 ||: : 96it [02:19, 1.45s/it]
+
+2019-01-17 10:21:41,718 - INFO - allennlp.training.trainer - Validating
+0%| | 0/1 [00:00<?, ?it/s]
+```
+
+**System (please complete the following information):**
+ - OS: CentOS Linux 7
+ - Python version: 3.6.6
+ - AllenNLP version: Installed from master on 14th January, 2019
+ - PyTorch version: 1.0.0
+",1
+1115,https://github.com/allenai/allennlp/issues/2937,2937,[],closed,2019-06-10 17:40:47+00:00,4,Allennlp in production - Exporting the pipeline to torch script,"@joelgrus  You replied on a thread I was following in hacker news about exploring production features of pytorch 1.0.
+
+> AllenNLP dev here. We're going to do a ""PyTorch 1.0"" release of AllenNLP next week, and then after that we're planning to investigate how to incorporate the new ""production"" aspects.
+https://news.ycombinator.com/item?id=18683758
+
+Could we change most of the modules in the pipeline to be written in subset of python that torch jit script supports? 
+
+Or do you have anything on your mind on how to do this ?",1
+1308,https://github.com/allenai/allennlp/issues/3291,3291,[],closed,2019-09-27 07:21:14+00:00,3,`allennlp: command not found` After installing via pip.,"**Describe the bug**
+After installing allennlp via pip, I try to use it and I get `allennlp: command not found` .
+
+**To Reproduce**
+Python3.7
+```
+ $ pip install allennlp
+```
+Steps to reproduce the behavior
+```
+$ allennlp -V
+allennlp: command not found
+```",1
+1354,https://github.com/allenai/allennlp/issues/3373,3373,[],closed,2019-10-17 22:26:25+00:00,12,commit #3308 breaks pip install --editable,"**Describe the bug**
+After PR #3308 `pip install --editable` does not work, while it works before that commit. The following error is returned:
+```
+ERROR: Command errored out with exit status 1:
+   command: /venvs/dev/bin/python3.7 /venvs/dev/lib/python3.7/site-packages/pip/_vendor/pep517/_in_process.py get_requires_for_build_wheel /tmp/tmpvccnto17
+       cwd: /code/allennlp
+  Complete output (4 lines):
+  Traceback (most recent call last):
+    File ""/venvs/dev/lib/python3.7/site-packages/pip/_vendor/pep517/_in_process.py"", line 15, in <module>
+      from glob import glob
+  ModuleNotFoundError: No module named 'glob'
+  ----------------------------------------
+ERROR: Command errored out with exit status 1: /venvs/dev/bin/python3.7 /venvs/dev/lib/python3.7/site-packages/pip/_vendor/pep517/_in_process.py get_requires_for_build_whee
+l /tmp/tmpvccnto17 Check the logs for full command output.
+```
+**To Reproduce**
+Steps to reproduce the behavior
+```
+# PR #3308 
+git checkout 3dda5ac9
+# fails:
+pip install --editable .
+# prior commit  
+git checkout d7b38a89  
+# works:
+pip install --editable .
+
+```
+**Expected behavior**
+installation should work
+
+**System (please complete the following information):**
+ - OS: Ubuntu 16.04
+ - Python version: 3.7
+ - AllenNLP version: I installed from master
+ - PyTorch version: 1.3
+
+**Additional context**
+Running in a virtualenv in a docker container, built from `nvidia/cuda:10.0-cudnn7-devel-ubuntu16.04`
+",1
+1428,https://github.com/allenai/allennlp/issues/3492,3492,[],closed,2019-11-28 17:13:23+00:00,2,Install via pip misses files from data.tokenizers,"**Describe the bug**
+I installed the 0.9.0 and 0.8.5 via pip install and I could not find the tokenizers
+I managed it by installing from git manual.
+
+**To Reproduce**
+```pip install allennlp```
+
+**Expected behavior**
+At least spacy tokenizer in `allennlp/data/tokenizers`, shouln't it be there?
+
+**System (please complete the following information):**
+ - OS: Linux, Debian
+ - Python version: 3.7.5rc
+ - AllenNLP version: [e.g. v0.9.0, or ""I installed from master""]
+ - PyTorch version: 1.0.2
+
+**Additional context**
+Add any other context about the problem here.
+",1
+1448,https://github.com/allenai/allennlp/issues/3520,3520,[],closed,2019-12-13 21:43:30+00:00,4,pip allennlp,"Hello, 
+
+The pip version is causing conflicts, any pip updated version soon?  it causes conflicts with spacy v2.2.  I have been installing allennlp from source. 
+",1
+1541,https://github.com/allenai/allennlp/issues/3758,3758,[],closed,2020-02-10 19:13:00+00:00,2,Release nightly to pip,"We'll need a slick way to release for 1.0 given that we'll have multiple repositories.  Ideally we'd have a fully automated solution that released nightly, so releasing wouldn't be a huge deal.  This would also address some community problems as well, see https://github.com/allenai/allennlp/issues/3712.",1
+1637,https://github.com/allenai/allennlp/issues/4005,4005,[],closed,2020-03-30 22:44:11+00:00,4,RuntimeError: index out of range: Tried to access index 32730 out of table with 28995 rows. at /tmp/pip-req-build-ufslq_a9/aten/src/TH/generic/THTensorEvenMoreMath.cpp:418 ,"**System (please complete the following information):**
+ OS: Linux
+Python version: 3.7.6
+AllenNLP version: 0.9.0
+
+Hi,
+I'm trying to train crf-tagger model on ontonotes dataset for named entity recognition task. I'm using ELmo and Bert as word embedding.
+```
+{
+""dataset_reader"": {
+""type"": ""ontonotes_ner"",
+""coding_scheme"": ""BIOUL"",
+""token_indexers"": {
+""tokens"": {
+""type"": ""single_id"",
+""lowercase_tokens"": true
+},
+""token_characters"": {
+""type"": ""characters"",
+""min_padding_length"": 3
+},
+""elmo"": {
+""type"": ""elmo_characters""
+},
+}
+},
+
+""train_data_path"": ""XXXXXX"",
+""validation_data_path"": ""XXXXXX"",
+
+""model"": {
+""type"": ""crf_tagger"",
+""label_encoding"": ""BIOUL"",
+""dropout"": 0.5,
+""include_start_end_transitions"": false,
+""text_field_embedder"": {
+ ""allow_unmatched_keys"": true,
+  ""tokens"": {
+                ""type"": ""bert-pretrained"",
+                ""pretrained_model"": ""bert-base-cased""
+            },
+    ""elmo"":{
+        ""type"": ""elmo_token_embedder"",
+    ""options_file"": ""https://allennlp.s3.amazonaws.com/models/elmo/2x4096_512_2048cnn_2xhighway/elmo_2x4096_512_2048cnn_2xhighway_options.json"",
+    ""weight_file"": ""https://allennlp.s3.amazonaws.com/models/elmo/2x4096_512_2048cnn_2xhighway/elmo_2x4096_512_2048cnn_2xhighway_weights.hdf5"",
+        ""do_layer_norm"": false,
+        ""dropout"": 0.0
+    }
+ 
+},
+.....
+}
+```
+But a I am getting this error:
+`**RuntimeError: index out of range: Tried to access index 32730 out of table with 28995 rows. at /tmp/pip-req-build-ufslq_a9/aten/src/TH/generic/THTensorEvenMoreMath.cpp:418**`
+
+**Here is the full stack trace:**
+
+```
+Traceback (most recent call last): File ""/home/mrim/affim/anaconda3/envs/allennlp/bin/allennlp"", line 8, in <module> sys.exit(run()) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/allennlp/run.py"", line 18, in run main(prog=""allennlp"") File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/allennlp/commands/__init__.py"", line 102, in main args.func(args) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/allennlp/commands/train.py"", line 124, in train_model_from_args args.cache_prefix) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/allennlp/commands/train.py"", line 168, in train_model_from_file cache_directory, cache_prefix) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/allennlp/commands/train.py"", line 252, in train_model metrics = trainer.train() File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/allennlp/training/trainer.py"", line 478, in train train_metrics = self._train_epoch(epoch) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/allennlp/training/trainer.py"", line 320, in _train_epoch loss = self.batch_loss(batch_group, for_training=True) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/allennlp/training/trainer.py"", line 261, in batch_loss output_dict = self.model(**batch) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/torch/nn/modules/module.py"", line 532, in __call__ result = self.forward(*input, **kwargs) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/allennlp/models/crf_tagger.py"", line 182, in forward embedded_text_input = self.text_field_embedder(tokens) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/torch/nn/modules/module.py"", line 532, in __call__ result = self.forward(*input, **kwargs) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/allennlp/modules/text_field_embedders/basic_text_field_embedder.py"", line 132, in forward token_vectors = embedder(*tensors, **forward_params_values) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/torch/nn/modules/module.py"", line 532, in __call__ result = self.forward(*input, **kwargs) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/allennlp/modules/token_embedders/bert_token_embedder.py"", line 175, in forward attention_mask=util.combine_initial_dims(input_mask)) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/torch/nn/modules/module.py"", line 532, in __call__ result = self.forward(*input, **kwargs) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/pytorch_pretrained_bert/modeling.py"", line 730, in forward embedding_output = self.embeddings(input_ids, token_type_ids) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/torch/nn/modules/module.py"", line 532, in __call__ result = self.forward(*input, **kwargs) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/pytorch_pretrained_bert/modeling.py"", line 267, in forward words_embeddings = self.word_embeddings(input_ids) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/torch/nn/modules/module.py"", line 532, in __call__ result = self.forward(*input, **kwargs) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/torch/nn/modules/sparse.py"", line 114, in forward self.norm_type, self.scale_grad_by_freq, self.sparse) File ""/home/mrim/affim/anaconda3/envs/allennlp/lib/python3.7/site-packages/torch/nn/functional.py"", line 1484, in embedding return torch.embedding(weight, input, padding_idx, scale_grad_by_freq, sparse) RuntimeError: index out of range: Tried to access index 32730 out of table with 28995 rows. at /tmp/pip-req-build-ufslq_a9/aten/src/TH/generic/THTensorEvenMoreMath.cpp:418 
+```
+
+**Question**
+is there any idea How to overcome this issue?",0
+1274,https://github.com/allenai/allennlp/issues/3232,3232,[],closed,2019-09-10 00:18:55+00:00,4, Could not find a version that satisfies the requirement torch,"**Describe the bug**
+I have followed the installation instructions mentioned on the Github Readme and from the Allenai Website, but I always received the following prompt on the command line. 
+
+  ERROR: Could not find a version that satisfies the requirement torch<1.2,>=0.4.1 (from allennlp) (from versions: 0.1.2, 0.1.2.post1, 0.1.2.post2)
+ERROR: No matching distribution found for torch<1.2,>=0.4.1 (from allennlp)
+
+I have tried installing the conda environment, but that has failed also. I received the same error regardless of the method of installation.  
+
+**To Reproduce**
+Steps to reproduce the behavior
+1. Install Anaconda and ensure that its part of your PATH
+2. From the command prompt, run the following conda create -n allennlp python=3.6
+2. Activate conda enviroment via 'conda activate allennlp' 
+3. Then install the allennlp running the following on the command prompt: pip install allennlp
+4. See error
+![image](https://user-images.githubusercontent.com/38084191/64574262-47ed3980-d334-11e9-9a26-e2cfeace579c.png)
+
+**Expected behavior**
+I expected a clean download and install of the allennlp.
+
+**System (please complete the following information):**
+ - OS: Windows 10 Pro
+ - Python version: Python 3.6.9 and Python 3.7.3
+ - AllenNLP version: trying to install from master
+ - PyTorch version: (if you installed it yourself)
+
+**Additional context**
+Add any other context about the problem here.",2
+1744,https://github.com/allenai/allennlp/issues/4242,4242,[],closed,2020-05-15 02:16:07+00:00,4,Why does allennlp require old version of spaCy?,"I just installed allennlp that replaced my spaCy 2.2.4 with 2.1.9. But spaCy 2.1.9 would need transformers<2.1.0,>=2.0.0 which conflicts with my latest transformers 2.9. 
+
+Can we update the requirements.txt to latest packages? Thanks! ",0
+1780,https://github.com/allenai/allennlp/issues/4324,4324,"[{'id': 605609792, 'node_id': 'MDU6TGFiZWw2MDU2MDk3OTI=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/bug', 'name': 'bug', 'color': 'ee0701', 'default': True, 'description': None}]",closed,2020-06-05 08:33:10+00:00,1,Upper limit on dependencies versions,"Similar issues:
+
+- #2650
+
+I was wondering why do you quite often limit the upper version of your dependencies. See below a list of all examples from the current `setup.py`
+
+- `""torch>=1.5.0,<1.6.0""`
+- `""spacy>=2.1.0,<2.3""`
+- `""transformers>=2.9,<2.12""`
+- `""filelock>=3.0,<3.1""`
+
+Are you just afraid that the future versions of these packages are going to break `allennlp`? Or you already somehow know they will be incompatible?
+
+In my case, I am encountering a lot of issues because of this strategy. I want to use an older version `allennlp==0.9.0` however there you assert `'spacy>=2.1.0,<2.2'`. My other dependencies, however, require more recent `spacy>2.2`.
+
+Thanks for your response!",1
+2256,https://github.com/allenai/allennlp/issues/5425,5425,"[{'id': 2395308352, 'node_id': 'MDU6TGFiZWwyMzk1MzA4MzUy', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/question', 'name': 'question', 'color': '1d76db', 'default': True, 'description': ''}, {'id': 2763124639, 'node_id': 'MDU6TGFiZWwyNzYzMTI0NjM5', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/stale', 'name': 'stale', 'color': 'ededed', 'default': False, 'description': None}]",closed,2021-09-29 05:37:46+00:00,2,allennlp version with torch version ,"I would like to know the comparison table between the allennlp version and the torch version, can anyone help? thx so much ",2
+60,https://github.com/allenai/allennlp/issues/704,704,[],closed,2018-01-22 18:49:13+00:00,1,Pytorch 0.4 numpy indexing,"It seems like numpy indexing isn't supported in pytorch 0.4, so changing `sequence_lengths = mask.sum(dim=1).data.cpu().numpy()` to `sequence_lengths = mask.sum(dim=1).data.cpu().tolist()` in nn/util.py helps the elmo tests pass.",2
+14,https://github.com/allenai/allennlp/issues/544,544,[],closed,2017-11-27 21:40:27+00:00,5,install spacy model via pip / requirements.txt instead of `spacy download`,"isn't that simpler?
+
+https://spacy.io/usage/models#models-download",0
+0,https://github.com/allenai/allennlp/issues/498,498,[],closed,2017-11-15 19:38:50+00:00,6,Add a tutorial for random non-standard things a person might want to try,"There are simple ways to do a lot of small tweaks in AllenNLP models, if you've set them up correctly.  Some of these ways are probably not obvious to someone not familiar with the code.  It'd be nice to have a tutorial that collected a bunch of these things and showed how to do them easily.  Tutorial title could be something like ""What if I want to do..."".  Some examples of things to go in here: ""What if my text is in a language other than English?""  ""What if I want to use two separate embeddings for the same words?""  ""What if I want to use part-of-speech tag embeddings as my word representation?""",0
+1,https://github.com/allenai/allennlp/issues/499,499,"[{'id': 723800272, 'node_id': 'MDU6TGFiZWw3MjM4MDAyNzI=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/Help%20Wanted', 'name': 'Help Wanted', 'color': '7ee577', 'default': False, 'description': None}, {'id': 723800354, 'node_id': 'MDU6TGFiZWw3MjM4MDAzNTQ=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/Good%20First%20Issue', 'name': 'Good First Issue', 'color': 'e99695', 'default': False, 'description': 'A great place to start for first time contributors'}]",closed,2017-11-15 21:26:00+00:00,0,"Add a simple ""check dimensions match"" method","We currently have [lots of places](https://github.com/allenai/allennlp/blob/master/allennlp/models/reading_comprehension/bidaf.py#L100-L118) in our model init methods that take 5 lines to do a simple dimension check, and it's onerous to add those checks, so they don't get added a lot of the time.  We should have a simple function to call that checks that two dimensions match, and throws a `ConfigurationError` if they don't.",0
+2,https://github.com/allenai/allennlp/issues/504,504,[],closed,2017-11-16 14:39:40+00:00,1,"split out ""demo"" requirements","Almost no one using AllenNLP needs to run the demo with permalinks enabled, which means that almost no one using AllenNLP needs to install (for example) `psycopg2`. 
+
+We should split out demo requirements the same way we split out test requirements.",0
+3,https://github.com/allenai/allennlp/issues/506,506,[],closed,2017-11-16 20:24:21+00:00,1,fix `Predictor` API so that it's easier to add things to the output,"in both the SRL and sentence-tagger predictors, we need to tokenize the input sentence and add it to the output. right now this is awkward to do and we have to override predict_json. figure out a way to make it simpler/cleaner",0
+4,https://github.com/allenai/allennlp/issues/511,511,[],closed,2017-11-17 14:31:56+00:00,2,Inconsistent case in `predict` command,"Hi, this is a really minor issue. The `predict` command accepts `--output-file` optional argument, written in kebab-case. This is inconsistent with the other optional arguments which use snake_case (e.g. `--batch_size` or `--cuda_device`). Also, the metavar for `input-file` argument is also in kebab-case while others are in snake_case.",0
+5,https://github.com/allenai/allennlp/issues/513,513,[],closed,2017-11-17 19:18:54+00:00,1,Move to PyTorch 0.3,We expect PyTorch 0.3 to release on Monday 11/20.,0
+6,https://github.com/allenai/allennlp/issues/514,514,[],closed,2017-11-17 19:30:09+00:00,0,Add a tutorial for using AllenNLP as a library dependency,"Some code is already written for this, in an [example repository](https://github.com/allenai/allennlp-as-a-library-example).  We just need to write it up as a tutorial.",0
+7,https://github.com/allenai/allennlp/issues/516,516,[],closed,2017-11-18 07:20:53+00:00,6,Add a flag which avoids using the validation data for creating a vocabulary.,"Hi, I was looking at the code for `train` command and noticed that the vocabulary is built from all datasets (train, dev, test). Is this intentional? I am asking because I thought the common thing to do is to build vocabulary from train set only so that words in dev/test set that does not occur in train set are converted into `<unk>` and given a single embedding. Building vocabulary from all three sets means that there will be no unknown words in dev/test set (assuming `min_count=1`).",0
+8,https://github.com/allenai/allennlp/issues/520,520,[],closed,2017-11-21 16:47:56+00:00,5,Add versioning to the running demo.,"Presently, there is no way to tell what version of code a running copy of the demo is using.  Other software at AI2 has a `/info` route which gives an overview of the service.  For example, see https://www.semanticscholar.org/api/1/info (only available on our network).
+
+Ideally our demo would have a `/info` route as well, with information such as the following:
+
+```
+{
+  name: ""AllenNLP Demo"",
+  startTime: ""Fri, 10 Nov 2017 13:48:51 -0800"",
+  gitVersion: ""a5350d6c1b6816ce62584e707e4bb933840db8e3"",
+  githubUrl: ""http://github.com/allenai/scholar/commit/a5350d6c1b6816ce62584e707e4bb933840db8e3"",
+  gitCommitDate: ""Fri, 10 Nov 2017 10:20:18 -0800"",
+}
+```
+
+We could store the `gitVersion` and `gitCommitDate` when building a Docker image.",0
+9,https://github.com/allenai/allennlp/issues/532,532,[],closed,2017-11-22 22:34:39+00:00,5,The demo menu wraps poorly at the most dominant resolution.,"Per Google Analytics, the most common smallest resolution is 1280px wide.
+
+At that resolution, after the addition of Named Entity Recognition, the menu looks like so:
+
+![image](https://user-images.githubusercontent.com/801451/33152591-3ec882f8-cf92-11e7-9912-ae5948d97817.png)
+
+We should probably fix this :).",0
+10,https://github.com/allenai/allennlp/issues/535,535,[],closed,2017-11-22 23:43:01+00:00,3,Interactive Coref Resolution highlighting in the demo creates odd text wrapping,"This highlight style works well as a static highlight (e.g. as used in `Machine Comprehension`), but not as well for interactive `Coreference Resolution` highlighting.
+
+We probably need to tweak the CSS or add a special highlight style for Coref that doesn't affect text wrapping.
+
+![coref](https://user-images.githubusercontent.com/8367927/33154207-a9f15506-cf9b-11e7-95a0-8b236ec0a3c9.gif)",0
+11,https://github.com/allenai/allennlp/issues/537,537,[],closed,2017-11-23 02:15:15+00:00,7,Implement learning rate finder,This looks like a pretty good idea that would be relatively simple to implement: https://medium.com/@surmenok/estimating-optimal-learning-rate-for-a-deep-neural-network-ce32f2556ce0.,0
+12,https://github.com/allenai/allennlp/issues/538,538,[],closed,2017-11-24 11:16:35+00:00,8,error of from allennlp.data import Token,"File ""/home/work/venv/py35/lib/python3.5/site-packages/allennlp-0.2.1-py3.5.egg/allennlp/data/__init__.py"", line 1, in <module>
+    from allennlp.data.dataset import Dataset
+  File ""/home/work/venv/py35/lib/python3.5/site-packages/allennlp-0.2.1-py3.5.egg/allennlp/data/dataset.py"", line 34
+    all_instance_fields_and_types: List[Dict[str, str]] = [{k: v.__class__.__name__
+
+what is wrong of it?",0
+13,https://github.com/allenai/allennlp/issues/540,540,[],closed,2017-11-25 15:10:36+00:00,5,ImportError: cannot import name 'Token',"Hell, 
+Please help me with this problem
+
+```
+Python 3.6.3 (default, Oct  6 2017, 08:44:35) 
+[GCC 5.4.0 20160609] on linux
+Type ""help"", ""copyright"", ""credits"" or ""license"" for more information.
+>>> from allennlp.data import Token
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+ImportError: cannot import name 'Token'
+```
+
+Many thanks",0
+15,https://github.com/allenai/allennlp/issues/546,546,[],closed,2017-11-28 14:32:43+00:00,5,we need better documentation about what to put in a config file,"this has several components
+
+* for sure all of our `from_params` methods need much clearer documentation about what their params should look like
+* we should consider avoiding using implicit default ""type"" parameters in our example code, I think it's potentially confusing
+* we probably need a tutorial on this (or possibly just to expand the `configuring a model` tutorial)",0
+17,https://github.com/allenai/allennlp/issues/554,554,[],closed,2017-11-30 17:07:39+00:00,2,Add a way to add dependent files into the model archive,"We are definitely going to need this eventually.  The vocabulary already does this, but in a particular, hard-coded way.  ELMo embeddings would probably be easier if there were a standard way to do this.  And if we ever want to do byte pair encoding, e.g., you'd want to do it as a `Tokenizer` that takes a pre-computed byte-pair vocabulary (and this is separate from the way that our `Vocabulary` works).
+
+So, we'd want something on `Trainer` that saves all dependent files to the model archive.  That would then call a method on `Vocabulary`, the `DatasetReader`, the `Model`, and anything else, which in turn call the method on `Tokenizers`, `Modules`, and whatever else.  And when loading a model from an archive, these classes all need to know how to modify the paths that they require as input, so they point to the archive somehow instead of pointing to the originally-specified location.  Maybe `update_params_from_archive(params: Params, archive_path: str)`, or something?  That method would update the params for anything that matters - e.g., `Embedding` would remove the path to the pre-trained file, because it's not necessary anymore*, `Vocabulary` would add a path to the saved files, etc.
+
+This is a lot of boilerplate, adding methods on `Model` to pass on calls to `Modules`, etc., but I'm not sure of another way to do this.
+
+\* Actually, maybe `Embedding` would get an option to copy the embedding file over, so that you can still use it at test time, and add words to the embedding as needed...",0
+18,https://github.com/allenai/allennlp/issues/560,560,[],closed,2017-12-01 00:41:43+00:00,0,Canonicalise how we read Ontonotes data,Currently the SRL reader and Coref reader read exactly the same data in two completely different ways. ,0
+19,https://github.com/allenai/allennlp/issues/562,562,[],closed,2017-12-01 22:55:52+00:00,2,Hierplane example fails for some inputs,"http://demo.allennlp.org/semantic-role-labeling/MzQwOA==
+
+![image](https://user-images.githubusercontent.com/954798/33507088-b127dbca-d6a7-11e7-90c9-f226daade424.png)
+",0
+20,https://github.com/allenai/allennlp/issues/565,565,[],closed,2017-12-02 01:06:02+00:00,1,Unstable tests in TravisCI,"I am continuing to frequently get unstable tests in Travis CI despite `@flaky(max_runs=5)`.  Any other suggestions for avoiding these spurious failures?  I'm inclined to increase the tolerances significantly (0.0001 to 0.001).
+
+```
+______ BidirectionalAttentionFlowTest.test_model_can_train_save_and_load _______
+self = <tests.models.reading_comprehension.bidaf_test.BidirectionalAttentionFlowTest testMethod=test_model_can_train_save_and_load>
+    @flaky(max_runs=5)
+    def test_model_can_train_save_and_load(self):
+>       self.ensure_model_can_train_save_and_load(self.param_file)
+tests/models/reading_comprehension/bidaf_test.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+allennlp/common/testing/model_test_case.py:94: in ensure_model_can_train_save_and_load
+    name=key)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+field1 = Variable containing:
+Columns 0 to 5 
+-4.3761e-02 -6.1814e-02 -4.3583e-02 -6.2701e-03  1.0462e-02 -1.6368e-02
+-3.9851e... -1.5448e-02  1.0596e-02 -4.2701e-02
+-9.2831e-03 -1.5936e-02  9.6128e-03 -4.3546e-02
+[torch.FloatTensor of size 5x142]
+field2 = Variable containing:
+Columns 0 to 5 
+-4.3761e-02 -6.1814e-02 -4.3583e-02 -6.2701e-03  1.0462e-02 -1.6368e-02
+-3.9851e... -1.5448e-02  1.0596e-02 -4.2701e-02
+-9.2831e-03 -1.5936e-02  9.6128e-03 -4.3546e-02
+[torch.FloatTensor of size 5x142]
+
+tolerance = 0.0001, name = 'span_end_logits'
+    @staticmethod
+    def assert_fields_equal(field1, field2, tolerance: float = 1e-6, name: str = None) -> None:
+        if isinstance(field1, torch.autograd.Variable):
+            assert_allclose(field1.data.numpy(),
+                            field2.data.numpy(),
+                            rtol=tolerance,
+>                           err_msg=name)
+E           AssertionError: 
+E           Not equal to tolerance rtol=0.0001, atol=0
+E           span_end_logits
+E           (mismatch 0.1408450704225288%)
+E            x: array([[ -4.376138e-02,  -6.181443e-02,  -4.358323e-02,  -6.270148e-03,
+E                     1.046205e-02,  -1.636827e-02,  -2.302323e-02,   2.581067e-03,
+E                    -1.454758e-02,  -1.829709e-02,  -2.281654e-02,  -2.857263e-02,...
+E            y: array([[ -4.376138e-02,  -6.181443e-02,  -4.358323e-02,  -6.270148e-03,
+E                     1.046205e-02,  -1.636827e-02,  -2.302323e-02,   2.581067e-03,
+E                    -1.454758e-02,  -1.829709e-02,  -2.281654e-02,  -2.857263e-02,...
+allennlp/common/testing/model_test_case.py:104: AssertionError
+```
+
+",0
+21,https://github.com/allenai/allennlp/issues/567,567,[],closed,2017-12-04 18:11:40+00:00,1,Hierplane shows only one verb when two verbs exist,"Reported by @nikett 
+
+> Plants give off oxygen for animals to breathe in.
+
+![image](https://user-images.githubusercontent.com/954798/33568502-7cc1e5de-d8db-11e7-8a52-74ac57912791.png)
+
+![image](https://user-images.githubusercontent.com/954798/33568507-8221664e-d8db-11e7-953b-26b25c0150ec.png)
+",0
+23,https://github.com/allenai/allennlp/issues/574,574,[],closed,2017-12-05 08:11:24+00:00,1,Tutorial: RuntimeError ConcatBackward CRFTagger,"Running through the tutorial I ran across this error with the CrfTagger:
+```
+2017-12-05 00:00:52,542 - INFO - allennlp.common.params - random_seed = 13370
+2017-12-05 00:00:52,542 - INFO - allennlp.common.params - numpy_seed = 1337
+2017-12-05 00:00:52,542 - INFO - allennlp.common.params - pytorch_seed = 133
+2017-12-05 00:00:52,543 - INFO - allennlp.common.checks - Pytorch version: 0.2.0_3
+2017-12-05 00:00:52,544 - INFO - allennlp.common.params - dataset_reader.type = conll2003
+2017-12-05 00:00:52,544 - INFO - allennlp.common.params - dataset_reader.token_indexers.tokens.type = single_id
+2017-12-05 00:00:52,545 - INFO - allennlp.common.params - dataset_reader.token_indexers.tokens.namespace = tokens
+2017-12-05 00:00:52,545 - INFO - allennlp.common.params - dataset_reader.token_indexers.tokens.lowercase_tokens = True
+2017-12-05 00:00:52,545 - INFO - allennlp.common.params - dataset_reader.token_indexers.token_characters.type = characters
+2017-12-05 00:00:52,545 - INFO - allennlp.common.params - dataset_reader.token_indexers.token_characters.namespace = token_characters
+2017-12-05 00:00:52,545 - INFO - allennlp.common.params - dataset_reader.token_indexers.token_characters.character_tokenizer.byte_encoding = None
+2017-12-05 00:00:52,545 - INFO - allennlp.common.params - dataset_reader.token_indexers.token_characters.character_tokenizer.lowercase_characters = False
+2017-12-05 00:00:52,545 - INFO - allennlp.common.params - dataset_reader.token_indexers.token_characters.character_tokenizer.start_tokens = None
+2017-12-05 00:00:52,545 - INFO - allennlp.common.params - dataset_reader.token_indexers.token_characters.character_tokenizer.end_tokens = None
+2017-12-05 00:00:52,545 - INFO - allennlp.common.params - dataset_reader.tag_label = ner
+2017-12-05 00:00:52,545 - INFO - allennlp.common.params - dataset_reader.feature_labels = ()
+2017-12-05 00:00:52,545 - INFO - allennlp.common.params - train_data_path = tutorials/getting_started/simple_qa_subject_recognition_train.txt
+2017-12-05 00:00:52,545 - INFO - allennlp.commands.train - Reading training data from tutorials/getting_started/simple_qa_subject_recognition_train.txt
+2017-12-05 00:00:52,546 - INFO - allennlp.data.dataset_readers.conll2003 - Reading instances from lines in file at: tutorials/getting_started/simple_qa_subject_recognition_train.txt
+147355it [00:02, 55775.35it/s]
+2017-12-05 00:00:55,266 - INFO - allennlp.common.params - validation_data_path = tutorials/getting_started/simple_qa_subject_recognition_dev.txt
+2017-12-05 00:00:55,266 - INFO - allennlp.commands.train - Reading validation data from tutorials/getting_started/simple_qa_subject_recognition_dev.txt
+2017-12-05 00:00:55,267 - INFO - allennlp.data.dataset_readers.conll2003 - Reading instances from lines in file at: tutorials/getting_started/simple_qa_subject_recognition_dev.txt
+21081it [00:00, 84397.73it/s]
+2017-12-05 00:00:55,529 - INFO - allennlp.common.params - test_data_path = None
+2017-12-05 00:00:55,529 - INFO - allennlp.commands.train - Creating a vocabulary using train, validation data.
+2017-12-05 00:00:55,624 - INFO - allennlp.common.params - vocabulary.directory_path = None
+2017-12-05 00:00:55,624 - INFO - allennlp.common.params - vocabulary.min_count = 1
+2017-12-05 00:00:55,624 - INFO - allennlp.common.params - vocabulary.max_vocab_size = None
+2017-12-05 00:00:55,624 - INFO - allennlp.common.params - vocabulary.non_padded_namespaces = ('*tags', '*labels')
+2017-12-05 00:00:55,624 - INFO - allennlp.common.params - vocabulary.only_include_pretrained_words = False
+2017-12-05 00:00:55,624 - INFO - allennlp.data.vocabulary - Fitting token dictionary from dataset.
+100%|##########| 84219/84219 [00:03<00:00, 22847.17it/s]
+2017-12-05 00:00:59,381 - WARNING - root - vocabulary serialization directory tmp/subject_recognition_3/vocabulary is not empty
+2017-12-05 00:00:59,497 - INFO - allennlp.common.params - model.type = crf_tagger
+2017-12-05 00:00:59,497 - INFO - allennlp.common.params - model.text_field_embedder.type = basic
+2017-12-05 00:00:59,497 - INFO - allennlp.common.params - model.text_field_embedder.tokens.type = embedding
+2017-12-05 00:00:59,497 - INFO - allennlp.common.params - model.text_field_embedder.tokens.num_embeddings = None
+2017-12-05 00:00:59,497 - INFO - allennlp.common.params - model.text_field_embedder.tokens.vocab_namespace = tokens
+2017-12-05 00:00:59,497 - INFO - allennlp.common.params - model.text_field_embedder.tokens.embedding_dim = 50
+2017-12-05 00:00:59,497 - INFO - allennlp.common.params - model.text_field_embedder.tokens.pretrained_file = https://s3-us-west-2.amazonaws.com/allennlp/datasets/glove/glove.6B.50d.txt.gz
+2017-12-05 00:00:59,497 - INFO - allennlp.common.params - model.text_field_embedder.tokens.projection_dim = None
+2017-12-05 00:00:59,497 - INFO - allennlp.common.params - model.text_field_embedder.tokens.trainable = True
+2017-12-05 00:00:59,497 - INFO - allennlp.common.params - model.text_field_embedder.tokens.padding_index = None
+2017-12-05 00:00:59,497 - INFO - allennlp.common.params - model.text_field_embedder.tokens.max_norm = None
+2017-12-05 00:00:59,497 - INFO - allennlp.common.params - model.text_field_embedder.tokens.norm_type = 2.0
+2017-12-05 00:00:59,498 - INFO - allennlp.common.params - model.text_field_embedder.tokens.scale_grad_by_freq = False
+2017-12-05 00:00:59,498 - INFO - allennlp.common.params - model.text_field_embedder.tokens.sparse = False
+2017-12-05 00:00:59,501 - INFO - allennlp.modules.token_embedders.embedding - Reading embeddings from file
+2017-12-05 00:01:02,648 - INFO - allennlp.modules.token_embedders.embedding - Initializing pre-trained embedding layer
+2017-12-05 00:01:02,894 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.type = character_encoding
+2017-12-05 00:01:02,895 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.embedding.num_embeddings = None
+2017-12-05 00:01:02,896 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.embedding.vocab_namespace = token_characters
+2017-12-05 00:01:02,896 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.embedding.embedding_dim = 25
+2017-12-05 00:01:02,897 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.embedding.pretrained_file = None
+2017-12-05 00:01:02,897 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.embedding.projection_dim = None
+2017-12-05 00:01:02,898 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.embedding.trainable = True
+2017-12-05 00:01:02,898 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.embedding.padding_index = None
+2017-12-05 00:01:02,898 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.embedding.max_norm = None
+2017-12-05 00:01:02,899 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.embedding.norm_type = 2.0
+2017-12-05 00:01:02,899 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.embedding.scale_grad_by_freq = False
+2017-12-05 00:01:02,900 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.embedding.sparse = False
+2017-12-05 00:01:02,901 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.encoder.type = gru
+2017-12-05 00:01:02,901 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.encoder.batch_first = True
+2017-12-05 00:01:02,902 - INFO - allennlp.common.params - Converting Params object to dict; logging of default values will not occur when dictionary parameters are used subsequently.
+2017-12-05 00:01:02,902 - INFO - allennlp.common.params - CURRENTLY DEFINED PARAMETERS:
+2017-12-05 00:01:02,903 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.encoder.input_size = 25
+2017-12-05 00:01:02,903 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.encoder.hidden_size = 80
+2017-12-05 00:01:02,904 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.encoder.num_layers = 2
+2017-12-05 00:01:02,904 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.encoder.dropout = 0.25
+2017-12-05 00:01:02,904 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.encoder.bidirectional = True
+2017-12-05 00:01:02,905 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.encoder.batch_first = True
+2017-12-05 00:01:02,907 - INFO - allennlp.common.params - model.text_field_embedder.token_characters.dropout = 0.0
+2017-12-05 00:01:02,908 - INFO - allennlp.common.params - model.encoder.type = gru
+2017-12-05 00:01:02,908 - INFO - allennlp.common.params - model.encoder.batch_first = True
+2017-12-05 00:01:02,908 - INFO - allennlp.common.params - Converting Params object to dict; logging of default values will not occur when dictionary parameters are used subsequently.
+2017-12-05 00:01:02,908 - INFO - allennlp.common.params - CURRENTLY DEFINED PARAMETERS:
+2017-12-05 00:01:02,908 - INFO - allennlp.common.params - model.encoder.input_size = 210
+2017-12-05 00:01:02,908 - INFO - allennlp.common.params - model.encoder.hidden_size = 300
+2017-12-05 00:01:02,909 - INFO - allennlp.common.params - model.encoder.num_layers = 2
+2017-12-05 00:01:02,909 - INFO - allennlp.common.params - model.encoder.dropout = 0.5
+2017-12-05 00:01:02,909 - INFO - allennlp.common.params - model.encoder.bidirectional = True
+2017-12-05 00:01:02,909 - INFO - allennlp.common.params - model.encoder.batch_first = True
+2017-12-05 00:01:02,923 - INFO - allennlp.common.params - model.label_namespace = labels
+2017-12-05 00:01:02,924 - INFO - allennlp.common.params - model.initializer = []
+2017-12-05 00:01:02,924 - INFO - allennlp.common.params - model.regularizer = [['transitions$', ConfigTree([('type', 'l2'), ('alpha', 0.01)])]]
+2017-12-05 00:01:02,924 - INFO - allennlp.common.params - model.regularizer.list.list.type = l2
+2017-12-05 00:01:02,924 - INFO - allennlp.nn.initializers - Initializing parameters
+2017-12-05 00:01:02,924 - INFO - allennlp.nn.initializers - Done initializing parameters; the following parameters are using their default initialization from their code
+2017-12-05 00:01:02,924 - INFO - allennlp.nn.initializers -    crf.end_transitions
+2017-12-05 00:01:02,924 - INFO - allennlp.nn.initializers -    crf.start_transitions
+2017-12-05 00:01:02,924 - INFO - allennlp.nn.initializers -    crf.transitions
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    encoder._module.bias_hh_l0
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    encoder._module.bias_hh_l0_reverse
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    encoder._module.bias_hh_l1
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    encoder._module.bias_hh_l1_reverse
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    encoder._module.bias_ih_l0
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    encoder._module.bias_ih_l0_reverse
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    encoder._module.bias_ih_l1
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    encoder._module.bias_ih_l1_reverse
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    encoder._module.weight_hh_l0
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    encoder._module.weight_hh_l0_reverse
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    encoder._module.weight_hh_l1
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    encoder._module.weight_hh_l1_reverse
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    encoder._module.weight_ih_l0
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    encoder._module.weight_ih_l0_reverse
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    encoder._module.weight_ih_l1
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    encoder._module.weight_ih_l1_reverse
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    tag_projection_layer._module.bias
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    tag_projection_layer._module.weight
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._embedding._module.weight
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._encoder._module._module.bias_hh_l0
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._encoder._module._module.bias_hh_l0_reverse
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._encoder._module._module.bias_hh_l1
+2017-12-05 00:01:02,925 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._encoder._module._module.bias_hh_l1_reverse
+2017-12-05 00:01:02,926 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._encoder._module._module.bias_ih_l0
+2017-12-05 00:01:02,926 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._encoder._module._module.bias_ih_l0_reverse
+2017-12-05 00:01:02,926 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._encoder._module._module.bias_ih_l1
+2017-12-05 00:01:02,926 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._encoder._module._module.bias_ih_l1_reverse
+2017-12-05 00:01:02,926 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._encoder._module._module.weight_hh_l0
+2017-12-05 00:01:02,926 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._encoder._module._module.weight_hh_l0_reverse
+2017-12-05 00:01:02,926 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._encoder._module._module.weight_hh_l1
+2017-12-05 00:01:02,926 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._encoder._module._module.weight_hh_l1_reverse
+2017-12-05 00:01:02,926 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._encoder._module._module.weight_ih_l0
+2017-12-05 00:01:02,926 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._encoder._module._module.weight_ih_l0_reverse
+2017-12-05 00:01:02,926 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._encoder._module._module.weight_ih_l1
+2017-12-05 00:01:02,926 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_token_characters._encoder._module._module.weight_ih_l1_reverse
+2017-12-05 00:01:02,926 - INFO - allennlp.nn.initializers -    text_field_embedder.token_embedder_tokens.weight
+2017-12-05 00:01:02,926 - INFO - allennlp.common.params - iterator.type = basic
+2017-12-05 00:01:02,926 - INFO - allennlp.common.params - iterator.batch_size = 32
+2017-12-05 00:01:02,926 - INFO - allennlp.data.dataset - Indexing dataset
+100%|##########| 73678/73678 [00:05<00:00, 12670.97it/s]
+2017-12-05 00:01:08,741 - INFO - allennlp.data.dataset - Indexing dataset
+100%|##########| 10541/10541 [00:01<00:00, 8605.51it/s]
+2017-12-05 00:01:09,967 - INFO - allennlp.common.params - trainer.patience = 10
+2017-12-05 00:01:09,967 - INFO - allennlp.common.params - trainer.validation_metric = -loss
+2017-12-05 00:01:09,967 - INFO - allennlp.common.params - trainer.num_epochs = 50
+2017-12-05 00:01:09,967 - INFO - allennlp.common.params - trainer.cuda_device = 0
+2017-12-05 00:01:09,968 - INFO - allennlp.common.params - trainer.grad_norm = None
+2017-12-05 00:01:09,968 - INFO - allennlp.common.params - trainer.grad_clipping = None
+2017-12-05 00:01:09,968 - INFO - allennlp.common.params - trainer.learning_rate_scheduler = None
+2017-12-05 00:01:11,782 - INFO - allennlp.common.params - trainer.optimizer = adam
+2017-12-05 00:01:11,782 - INFO - allennlp.common.params - Converting Params object to dict; logging of default values will not occur when dictionary parameters are used subsequently.
+2017-12-05 00:01:11,782 - INFO - allennlp.common.params - CURRENTLY DEFINED PARAMETERS:
+2017-12-05 00:01:11,782 - INFO - allennlp.common.params - trainer.no_tqdm = False
+2017-12-05 00:01:11,788 - INFO - allennlp.common.params - evaluate_on_test = False
+2017-12-05 00:01:11,788 - INFO - allennlp.training.trainer - Beginning training.
+2017-12-05 00:01:11,789 - INFO - allennlp.training.trainer - Epoch 0/49
+  0%|          | 0/2303 [00:00<?, ?it/s]2017-12-05 00:01:11,789 - INFO - allennlp.training.trainer - Training
+Traceback (most recent call last):
+  File ""/usr/lib/python3.6/runpy.py"", line 193, in _run_module_as_main
+    ""__main__"", mod_spec)
+  File ""/usr/lib/python3.6/runpy.py"", line 85, in _run_code
+    exec(code, run_globals)
+  File ""/home/michael/Desktop/lattice/allennlp/allennlp/run.py"", line 13, in <module>
+    main(prog=""python -m allennlp.run"")
+  File ""/home/michael/Desktop/lattice/allennlp/allennlp/commands/__init__.py"", line 77, in main
+    args.func(args)
+  File ""/home/michael/Desktop/lattice/allennlp/allennlp/commands/train.py"", line 73, in train_model_from_args
+    train_model_from_file(args.param_path, args.serialization_dir)
+  File ""/home/michael/Desktop/lattice/allennlp/allennlp/commands/train.py"", line 89, in train_model_from_file
+    return train_model(params, serialization_dir)
+  File ""/home/michael/Desktop/lattice/allennlp/allennlp/commands/train.py"", line 178, in train_model
+    trainer.train()
+  File ""/home/michael/Desktop/lattice/allennlp/allennlp/training/trainer.py"", line 369, in train
+    train_metrics = self._train_epoch(epoch)
+  File ""/home/michael/Desktop/lattice/allennlp/allennlp/training/trainer.py"", line 222, in _train_epoch
+    loss.backward()
+  File ""/usr/local/lib/python3.6/dist-packages/torch/autograd/variable.py"", line 156, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph, retain_variables)
+  File ""/usr/local/lib/python3.6/dist-packages/torch/autograd/__init__.py"", line 98, in backward
+    variables, grad_variables, retain_graph)
+RuntimeError: function ConcatBackward returned a gradient different than None at position 3, but the corresponding forward input was not a Variable
+```",0
+24,https://github.com/allenai/allennlp/issues/581,581,[],closed,2017-12-06 15:14:30+00:00,11,error on importing Token,"As I try to use jupyter notebook in a Python3.6 virtual environment  these lines issued an error:
+*********************************************************************************
+from allennlp.data import Token
+from allennlp.data.fields import TextField, LabelField
+from allennlp.data.token_indexers import SingleIdTokenIndexer
+*********************************************************************************
+I got this error:
+
+ImportError                               Traceback (most recent call last)
+<ipython-input-7-755d3200beb4> in <module>()
+----> 1 from allennlp.data import Token
+      2 from allennlp.data.fields import TextField, LabelField
+      3 from allennlp.data.token_indexers import SingleIdTokenIndexer
+
+ImportError: cannot import name 'Token'
+I am running a Linux distro Fedora 25, on an AMD Phenon 6 processor, with no GPU.",0
+25,https://github.com/allenai/allennlp/issues/583,583,[],closed,2017-12-06 21:31:57+00:00,1,simple_seq2seq GPU error,"At the line below, _encoder_outputs_mask_ Tensor is explicitly cast to be a **CPU** Tensor, which results in error if the model runs on GPU:
+https://github.com/allenai/allennlp/blob/7f5d9f7587e1a799e161c37e3383686323e34956/allennlp/models/encoder_decoders/simple_seq2seq.py#L217-L219
+
+Possible fix might look like this:
+```python
+# Ensuring mask is also a FloatTensor. Or else the multiplication within attention will
+# complain.
+mask_type = torch.cuda.FloatTensor if encoder_outputs_mask.is_cuda else torch.FloatTensor
+encoder_outputs_mask = encoder_outputs_mask.type(mask_type)
+```
+
+If appropriate, I can make a PR. ",0
+26,https://github.com/allenai/allennlp/issues/591,591,[],closed,2017-12-07 15:26:59+00:00,3,Implement batch prediction for SRL,"I'm currently trying to compile a dataset of ~50M SRL-parsed sentences and was hoping to speed things up with batch processing. Unfortunately, I discovered that it's not yet implemented for SRL.
+
+https://github.com/allenai/allennlp/blob/f700584ed1b72ab45215e405ed0d22564938d1cb/allennlp/service/predictors/semantic_role_labeler.py#L52
+
+In the meantime, do you have any suggestions for speeding up SRL parsing ?
+
+I've also tried running the `predict` command with `--cuda_device 0` on a Tesla K80, but checking `nvidia-smi ` it seems that there's some bottleneck preventing it from going above 25% GPU usage. Could the lack of batch processing create some overhead that's responsible for that, or am I missing something else?
+
+Thanks!",0
+27,https://github.com/allenai/allennlp/issues/592,592,[],closed,2017-12-07 17:44:23+00:00,1,Lots of scripts relied on arrays_to_variables,"We have many scripts which needed to be updated with #580, sorry I should have caught that in the review.",0
+28,https://github.com/allenai/allennlp/issues/593,593,[],closed,2017-12-07 22:24:22+00:00,2,Announce new features,"Hi everyone, we're excited to announce the 0.3 release of AllenNLP.  We updated our key dependencies to Spacy 2.0 and PyTorch 0.3, and we have a few additional models and many new features since our 0.2 release.
+
+**Additional models**.  More details for our models are available at http://allennlp.org/models and you can use them interactively online at http://demo.allennlp.org/.
+
+* The baseline NER model from [Semi-supervised Sequence Tagging with Bidirectional Language Models](https://www.semanticscholar.org/paper/Semi-supervised-sequence-tagging-with-bidirectiona-Peters-Ammar/73e59cb556351961d1bdd4ab68cbbefc5662a9fc).
+* A coreference model with state-of-the-art performance in 2017, based on the publication [End-to-end Neural Coreference Resolution](https://www.semanticscholar.org/paper/End-to-end-Neural-Coreference-Resolution-Lee-He/3f2114893dc44eacac951f148fbff142ca200e83).
+
+**Additional examples and tutorials**.  Find them at http://allennlp.org/tutorials/.
+
+* A tutorial on using AllenNLP in your projects as a pip dependency.
+
+**New features**.
+
+* Improved SRL visualization on the demo.
+* `ListField` padding fixes.",0
+29,https://github.com/allenai/allennlp/issues/594,594,[],closed,2017-12-07 22:26:10+00:00,1,Define how we integrate external contributions.,"We decided we want to have a page where we can list contributions.  To close this out, we should choose the location and put a blurb with a ""call for models"" which invites people to add their link to our repository.
+
+One proposal here is to use the existing models page for the AllenNLP website.  We could invite contributions by PR.",0
+30,https://github.com/allenai/allennlp/issues/599,599,[],closed,2017-12-08 20:58:24+00:00,15,Experiments run with `no_tqdm: true` still have TQDM output in logs,"Found while investigating some issues with Beaker's log handling. It appears that when I run experiments with `no_tqdm: true` in my `trainer`'s config JSON, I will still see TQDM output for the steps ""Indexing dataset"" and ""Iterating over dataset""
+
+See the log output for this Beaker task: http://beaker.dev.allenai.org/tk/tk_jt3ahr2hxmch",0
+31,https://github.com/allenai/allennlp/issues/601,601,[],closed,2017-12-08 23:28:53+00:00,13,Weird comma swapping in demo,"Noticed in the demo @codeviking gave today: http://demo.allennlp.org/semantic-role-labeling/NTc1OA==.  The comma gets moved to after ""which"" in the heirplane visualization.  This doesn't happen in the text visualization.",0
+32,https://github.com/allenai/allennlp/issues/602,602,[],closed,2017-12-09 12:28:52+00:00,7,simple_seq2seq.py teacher forcing affects training time,"If scheduled_sampling_ratio is set to 1 (no teacher forcing), it takes ~3 hours per epoch on my GPU.
+But if scheduled_sampling_ratio is set to 0 (teacher forcing), all things being equal, it takes ~8 hours per epoch.
+
+Any thoughts on that?
+",0
+33,https://github.com/allenai/allennlp/issues/608,608,"[{'id': 605609792, 'node_id': 'MDU6TGFiZWw2MDU2MDk3OTI=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/bug', 'name': 'bug', 'color': 'ee0701', 'default': True, 'description': None}]",closed,2017-12-13 14:08:30+00:00,4,Data pipeline tutorial incorrectly describes vocab namespace issues,"Issue:
+The keys of the ""token_indexers"" dict passed to TextField aren't used to create the vocabulary namespace (I'm not entirely sure that this is the intended behavior but the tutorial on http://allennlp.org/tutorials/data-pipeline suggests so). Instead the TokenIndexers internal namespace is used, which leads to the behavior as shown in the example code. The specified namespace is ""some_namespace"" but the index is stored under the namespace ""tokens"", which is the default namespace for SingleIdTokenIndexer.
+
+Example code:
+```
+from allennlp.data import Token
+from allennlp.data.fields import TextField
+from allennlp.data.token_indexers import SingleIdTokenIndexer
+from allennlp.data import Instance
+from allennlp.data import Dataset
+
+from allennlp.data import Vocabulary
+
+text_field = TextField(list(map(Token, [""Here"", ""are"", ""some"", ""longer"", ""words"", "".""])),
+                       token_indexers={""some_namespace"": SingleIdTokenIndexer()})
+dataset = Dataset([Instance({""sentence"": text_field})])
+
+vocab = Vocabulary.from_dataset(dataset)
+dataset.index_instances(vocab)
+
+print('Namespaces:', vocab._index_to_token)
+print('Namespace content:', vocab.get_index_to_token_vocabulary(""some_namespace""))
+```
+
+Output:
+```
+Namespaces: defaultdict(None, {'tokens': {0: '@@PADDING@@', 1: '@@UNKNOWN@@', 2: 'Here', 3: 'are', 4: 'some', 5: 'longer', 6: 'words', 7: '.'}})
+Namespace content: {0: '@@PADDING@@', 1: '@@UNKNOWN@@'}
+```",0
+34,https://github.com/allenai/allennlp/issues/610,610,"[{'id': 605609792, 'node_id': 'MDU6TGFiZWw2MDU2MDk3OTI=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/bug', 'name': 'bug', 'color': 'ee0701', 'default': True, 'description': None}]",closed,2017-12-14 00:16:28+00:00,6,Data pipeline tutorial issues,"While working through the data pipeline tutorial (http://allennlp.org/tutorials/data-pipeline), I noticed a couple of things:
+
+1. when installing allennlp v0.2.3 via pip (python 3.6.1), the tutorial fails, because at this point Dataset has no as_tensor_dict(..) method.
+
+2. in the second example, in
+```
+print(vocab.get_index_to_token_vocabulary(""tokens""), ""\n"")
+.
+print(vocab.get_index_to_token_vocabulary(""chars""), ""\n"")
+```
+""vocab"" should be replaced with ""word_and_char_vocab""
+
+3. there is a missing comma between ""good"" and ""."" in line
+```
+review2 = TextField(list(map(Token, [""This"", ""movie"", ""was"", ""quite"", ""slow"", ""but"", ""good"" "".""])), token_indexers={""tokens"": SingleIdTokenIndexer()})
+```",0
+35,https://github.com/allenai/allennlp/issues/611,611,[],closed,2017-12-14 13:50:35+00:00,4,Add start and end tokens to source sentence in seq2seq DatasetReader,"Two points here:
+1) Is it intentional that you do not append the `@@END@@` token to the source sequence?
+2) These `@@START@@` and `@@END@@` tokens are currently added inside the seq2seq dataset reader directly. However, there is also a way to add them via WordTokenizer params. Next, one could fetch them from the WordTokenizer instance inside the dataset reader for a future use in the decoder. 
+
+",0
+36,https://github.com/allenai/allennlp/issues/612,612,"[{'id': 887719346, 'node_id': 'MDU6TGFiZWw4ODc3MTkzNDY=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/Contributions%20welcome', 'name': 'Contributions welcome', 'color': '02b8d1', 'default': False, 'description': ''}]",open,2017-12-14 18:15:17+00:00,53,Add instructions for getting AllenNLP to run on Windows,"It's currently a pain, apparently, and I'm not sure how much work we should do to support it (if you're reading this and want Windows support, add a comment please).  But @OyvindTafjord was able to get it actually working by modifying some things:
+
+1. Got pytorch from 'conda install -c peterjc123 pytorch cuda80' (https://github.com/pytorch/pytorch/issues/494)
+2. Pip install of spacy (and other things) required some VS2015 library stuff (had to be same version as used to compile python).
+3. ~~Pip install of sanic failed (because a dependency, uvloop, is not available for Windows)  [ got around it by remove serve from commands ]~~
+4. In general 'pip install -r requirements.txt' worked weirdly and I ended up running each line individually, I didn't dig into why that was.
+5. ~~Downloading dataset from S3 failed, I think because of non-allowed double quotes in the filename (from the etag) [ got around it by removing etag part of filename]~~
+6. Download also threw exception because it couldn't remove the temporary file, seems like Windows hangs onto the file for a bit, a 1 second pause didn't help [ got around by catching that exception, deleting the files manually later ] 
+7. Had issues getting appropriate tensorflow/tensorboard installed where SummaryWriter was found [ got around it by instead using TensorboardX which somebody made for this purpose ]
+
+I'm going to mark this issue as very low priority, until we hear people actually asking for us to support this.  For now, the instructions will just live in this issue.",0
+38,https://github.com/allenai/allennlp/issues/622,622,[],closed,2017-12-15 13:48:32+00:00,3,error in demo app,"result = torch.nn.functional.softmax(vector * mask, dim=-1)
+TypeError: softmax() got an unexpected keyword argument 'dim'",0
+39,https://github.com/allenai/allennlp/issues/624,624,[],closed,2017-12-15 19:45:06+00:00,1,Non-spacy Tokenizers don't show text of passage tokens in SQuAD debug,"Hi,
+
+I'm trying to use allennlp as a squad dataloader in my code, but I noticed that some passages were incorrectly tokenized by spacy due to wikipedia `[notes]` and `[citations]` (same issue as https://github.com/allenai/allennlp/issues/236).
+
+Upon switching to the `LettersDigitsWordSplitter` that solves this problem, the squad debug output for the actual tokens generated is just a list of token objects and their addresses (as opposed to readable strings), since `__repr__` / `__str__` isn't implemented. Would you mind a PR to add these (will probably just [copy from SpaCy](https://github.com/explosion/spacy/blob/master/spacy/tokens/token.pyx#L65-L77)), or do you think that there's a better way to go about solving this?
+
+Thanks!",0
+40,https://github.com/allenai/allennlp/issues/632,632,[],closed,2017-12-18 03:33:21+00:00,2,Question about SRL performance in the host page.,"
+> The AllenNLP SRL model closely matches the published model, achieving a F1 of 78.9 on English Ontonotes 5.0 dataset using the CONLL 2011/12 shared task format.
+
+My Question is that whether F1 of 78.9 was achieved  by using __single model__ on CoNLL 2012 test dataset?
+",0
+41,https://github.com/allenai/allennlp/issues/635,635,"[{'id': 887719346, 'node_id': 'MDU6TGFiZWw4ODc3MTkzNDY=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/Contributions%20welcome', 'name': 'Contributions welcome', 'color': '02b8d1', 'default': False, 'description': ''}]",open,2017-12-18 19:46:09+00:00,1,Stop gradient calculation for numeric stability trick in logsumexp,"Tensorflow has code to stop gradients from propagating when you take a max for numeric stability reasons when computing logsumexp.  It'd be nice to have a similar behavior in our code.  I'm not sure if or how pytorch allows this kind of thing, though.
+
+Relevant line: https://github.com/allenai/allennlp/blob/d47ac92f1f7fcd905618f4c928f5b95556a2997c/allennlp/nn/util.py#L554
+
+Relevant line in tensorflow: https://github.com/tensorflow/tensorflow/blob/438604fc885208ee05f9eef2d0f2c630e1360a83/tensorflow/python/ops/math_ops.py#L1670-L1674",0
+42,https://github.com/allenai/allennlp/issues/643,643,[],closed,2017-12-21 02:33:41+00:00,6,Support for alternating_highway_lstm_cuda stacked encoder in SRL,Is the default version now built on the cuda kernel which was recently added?,0
+43,https://github.com/allenai/allennlp/issues/650,650,[],closed,2017-12-25 21:50:17+00:00,2,Is it ok to have all zero grads sometimes?,"Consider a case, where you have some RNN that embeds a sentence that consists of only one word. <br>
+In the simplest case, it has two sets of parameters: input2hidden, and hidded2hidden. In our case we have only one timestep, so no grads are computed for hidden2hidden parameters, and thus the test below will fail, despite the behavior is intended.
+
+https://github.com/allenai/allennlp/blob/4cda858012261c5fa5f668236abaeb4333d587ec/allennlp/common/testing/model_test_case.py#L119-L121",0
+44,https://github.com/allenai/allennlp/issues/651,651,[],closed,2017-12-25 22:54:01+00:00,3, Sparse Embedding Error,"Hi,
+
+I use SGD optimizer without momentum and sparse embedding (parameters are set via config file).
+However, I get following error when sparse is True: `AttributeError: ‘torch.sparse.FloatTensor’ object has no attribute ‘ge’`. If I pass `""sparse"": false` everything works fine.
+
+> 
+> Traceback (most recent call last):
+>   File ""run.py"", line 17, in <module>
+>     main(prog=""python run.py"")
+>   File ""/home/del/Desktop/RESEARCH-PROJECTS/umt/sp/allennlp/commands/__init__.py"", line 77, in main
+>     args.func(args)
+>   File ""/home/del/Desktop/RESEARCH-PROJECTS/umt/sp/allennlp/commands/train.py"", line 73, in train_model_from_args
+>     train_model_from_file(args.param_path, args.serialization_dir)
+>   File ""/home/del/Desktop/RESEARCH-PROJECTS/umt/sp/allennlp/commands/train.py"", line 89, in train_model_from_file
+>     return train_model(params, serialization_dir)
+>   File ""/home/del/Desktop/RESEARCH-PROJECTS/umt/sp/allennlp/commands/train.py"", line 178, in train_model
+>     trainer.train()
+>   File ""/home/del/Desktop/RESEARCH-PROJECTS/umt/sp/allennlp/training/trainer.py"", line 374, in train
+>     train_metrics = self._train_epoch(epoch)
+>   File ""/home/del/Desktop/RESEARCH-PROJECTS/umt/sp/allennlp/training/trainer.py"", line 224, in _train_epoch
+>     loss.backward()
+>   File ""/home/del/anaconda2/envs/umt/lib/python3.6/site-packages/torch/autograd/variable.py"", line 167, in backward
+>     torch.autograd.backward(self, gradient, retain_graph, create_graph, retain_variables)
+>   File ""/home/del/anaconda2/envs/umt/lib/python3.6/site-packages/torch/autograd/__init__.py"", line 99, in backward
+>     variables, grad_variables, retain_graph)
+>   File ""/home/del/Desktop/RESEARCH-PROJECTS/umt/sp/allennlp/training/trainer.py"", line 159, in <lambda>
+>     clip_function = lambda grad: grad.clamp(-self._grad_clipping, self._grad_clipping)
+>   File ""/home/del/anaconda2/envs/umt/lib/python3.6/site-packages/torch/autograd/variable.py"", line 336, in clamp
+>     return Clamp.apply(self, min, max)
+>   File ""/home/del/anaconda2/envs/umt/lib/python3.6/site-packages/torch/autograd/_functions/pointwise.py"", line 99, in forward
+>     ctx._mask = (i.ge(min_val) * i.le(max_val))
+> AttributeError: 'torch.sparse.FloatTensor' object has no attribute 'ge'
+
+Can it be the case that using nn.Embedding instead of functional API will solve the problem?
+
+Thanks,
+Maksym",0
+45,https://github.com/allenai/allennlp/issues/652,652,[],closed,2017-12-26 09:00:59+00:00,6,Reading Instances from lines in file: out of memory error,"Hi,
+
+I am implementing skip-gram model using allennlp so I have a huge amount of training examples (word pairs). Say 150,000,000 or even more in the future. 
+
+allennlp reads all these lines into Instances to build a Dataset, but it keeps the whole thing in the memory so that I run out of memory pretty fast. 
+
+Are there any ways around it? 
+
+Thanks,
+Maksym
+
+  ",0
+46,https://github.com/allenai/allennlp/issues/653,653,[],closed,2017-12-29 20:30:09+00:00,3,JSONL requirement in `Predict` is too restrictive,"for context, I am playing around with using AllenNLP for 
+
+https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge
+
+I have trained a model, and now I need to create a CSV of predictions on the test set. The input file is a CSV {""comment_id"", ""comment_text""}. Right now in order to run `predict` on this, I have to convert it to a JSONL file. That's not hard, but it seems like an unnecessary step.
+
+The relevant code in `predict.py` is
+
+```
+    batch_json_data = []
+    for line in input_file:
+        if not line.isspace():
+            # Collect batch size amount of data.
+            json_data = json.loads(line)
+            batch_json_data.append(json_data)
+            if len(batch_json_data) == batch_size:
+                _run_predictor(batch_json_data)
+                batch_json_data = []
+```
+
+Of course we don't want to break backward compatibility. One immediate idea is to give the base `Predictor` class a method
+
+```
+def line_to_json(line: str) -> JsonDict:
+    return json.loads(line)
+```
+
+and then call that (rather than `json.loads`) from `predict.py`. Then in my example I could override it like
+
+```
+def line_to_json(line: str) -> JsonDict:
+    id, text = parse_csv_line(line)
+    return {""id"": id, ""text"": text}
+```
+
+and be able to use my `test.csv` rather than have to make a JSONL file.
+
+and then probably we'd do the same for the output:
+
+```
+def json_output_to_line(line: str) -> JsonDict:
+    return json.dumps(line)
+```
+
+and I'd override that too
+",0
+47,https://github.com/allenai/allennlp/issues/654,654,[],closed,2017-12-30 02:49:40+00:00,3,unlabeled test set cannot be included in training vocabulary ,"In the ""Kaggle competition"" use case, the test dataset has no labels. This means that if you try to specify `test_data_path` (e.g. in order to get the embeddings for that vocabulary), the trainer will crash with
+
+```
+allennlp.common.checks.ConfigurationError: 'You cannot construct a Dataset with non-homogeneous Instances.'
+```
+
+I was able to workaround this by having the `DatasetReader` generate fake labels, but that's not a good solution.",0
+48,https://github.com/allenai/allennlp/issues/659,659,[],closed,2018-01-03 07:26:22+00:00,8,Which functions are to apply AllenNLP to answer questions?,"I'm a green hand in NLP. I want to build a machine reading system that once I give it a text and a question, it can generate the answer based on this text. Do AllenNLP provide such functions? Or I need to explore by myself? Thank you!",0
+49,https://github.com/allenai/allennlp/issues/661,661,[],closed,2018-01-04 20:08:02+00:00,0,Read the Docs link is broken,"In the README.md file, our badge / link to readthedocs leads to a 404.
+
+The offending line is:
+
+    [![docs](https://readthedocs.org/projects/allennlp/badge/?version=latest)](https://readthedocs.org/projects/allennlp/)",0
+50,https://github.com/allenai/allennlp/issues/664,664,[],closed,2018-01-05 18:27:04+00:00,1,`scripts/compile_coref_data.sh` is missing,"From Roy: 
+
+> Hi, the allennlp documentation page for the coref model refers to the `scripts/compile_coref_data.sh` script, but I couldn’t find it anywhere. Am I missing something? Thanks!
+
+The text he is referring to is under evaluation on http://allennlp.org/models.
+
+> The Coreference model was evaluated on the CoNLL 2012 dataset. Unfortunately we cannot release this data due to licensing restrictions by the LDC. To compile the data in the right format for evaluating the Coreference model, please see scripts/compile_coref_data.sh. This script requires the Ontonotes 5.0 dataset, available on the LDC website.
+
+I suspect the file was never checked in.",0
+51,https://github.com/allenai/allennlp/issues/667,667,[],closed,2018-01-08 17:08:51+00:00,7,Make Span F1 match perl script exactly for SRL model,"The Span based F1 metric doesn't exactly match the perl script for evaluating the SRL model. I think this is because the perl script treats continuation and reference spans (C-B-TAG, R-B-TAG) as part of the same span as what they are continuing or referencing, whereas the allennlp metric treats these as separate spans. ",0
+52,https://github.com/allenai/allennlp/issues/671,671,[],closed,2018-01-09 21:40:02+00:00,1,Add a health route to the demo,"The health route would disable detailed logging and:
+
+* Curl port 80
+* Post to one of the models
+* ???
+
+We would then update Pingdom to read the health route rather than /.",0
+53,https://github.com/allenai/allennlp/issues/684,684,[],closed,2018-01-16 16:47:18+00:00,5,Demo header is missing AI2 brand badge,"After updating http://allennlp.org/ with the new AI2-branded header/nav, Oren pointed out that a similar treatment is missing from the Demo header.",0
+54,https://github.com/allenai/allennlp/issues/685,685,[],closed,2018-01-16 18:52:13+00:00,0,elmo use of `Registrable` is useless because it's not a subclass of a class with a from_params method,"https://github.com/allenai/allennlp/blame/master/allennlp/modules/elmo.py#L25
+
+not sure if there's a use case for it, maybe it should just be gotten rid of",0
+56,https://github.com/allenai/allennlp/issues/693,693,[],closed,2018-01-17 14:58:29+00:00,4,`AdaptiveIterator` cannot be instantiated from JSON config file because it requires a `Callable` param,"https://github.com/allenai/allennlp/blob/master/allennlp/data/iterators/adaptive_iterator.py#L54
+
+I guess if you wanted to use it you'd have to write your own custom `train` command? That seems not optimal. (I don't know what a good solution is.)",0
+57,https://github.com/allenai/allennlp/issues/694,694,[],closed,2018-01-17 15:01:07+00:00,1,investigate whether `allennlp.run` could take auxiliary modules as command line args and use importlib,"i.e. it's possible that if I make my own models etc in `allennlp_joel.models`, `allennlp_joel.dataset_readers`, and so on, that I could do something like
+
+```
+python -m allennlp.run --extra-modules allennlp_joel train ...
+```
+
+and use `importlib` to programmatically import everything and not have to write my own executable",0
+58,https://github.com/allenai/allennlp/issues/697,697,[],closed,2018-01-18 12:07:31+00:00,12,GPU doesn't get recognised with docker image,"I can successfully run all tests on CPU but for some reason I can't get the GPU to work on a DGX-1. pytorch's official image works but allennlp one doesn't:
+
+```
+$ nvidia-docker run --rm -ti --ipc=host pytorch/pytorch:latest
+root@5a84fdfadea1:/workspace# python -c ""import torch;print(torch.cuda.is_available())""
+True
+
+$ nvidia-docker run -p 8000:8000 -it --rm allennlp/allennlp
+root@5fc4428edb93:/stage# python -c ""import torch;print(torch.cuda.is_available())""
+False
+```
+
+Has anyone an idea about what might be going on?",0
+59,https://github.com/allenai/allennlp/issues/703,703,[],closed,2018-01-20 01:42:27+00:00,1,Vocabulary.from_instance ?,"says the `tutorials/notebooks/data_pipeline.ipynb`.
+I guess it should be `Vocabulary.from_dataset`",0
+61,https://github.com/allenai/allennlp/issues/723,723,[],closed,2018-01-25 23:23:12+00:00,1,Add a mininterval to tqdm,"Presently tqdm spews multiple logging lines per second (mininterval = 0.1) when running in Beaker.  While these updates are somewhat helpful when running locally, if the output is redirected to a file it all just adds up to a waste of space.
+
+We could have a global (configurable?) setting for the mininterval (1s?) that TQDM invocations use.",0
+62,https://github.com/allenai/allennlp/issues/728,728,[],closed,2018-01-29 01:19:49+00:00,2,bilm-tf is gone,"Hi:
+
+It is a great work. When could you release the tf version ? the link is gone 
+
+regards",0
+63,https://github.com/allenai/allennlp/issues/732,732,[],closed,2018-01-29 21:53:58+00:00,0,Add the ELMo HowTo to the website,https://github.com/allenai/allennlp/blob/master/tutorials/how_to/elmo.md,0
+64,https://github.com/allenai/allennlp/issues/736,736,[],closed,2018-01-30 18:14:19+00:00,3,Make it easy to use ELMo,"I/O for sentences -> word vectors
+* How to use ELMo in my existing ALlenNLP model
+* How to use ELMo if I want to use TensorFlow",0
+65,https://github.com/allenai/allennlp/issues/737,737,[],closed,2018-01-30 18:33:09+00:00,3,enable lazy datasets,"there's currently a `LazyDataset` abstraction, and then #725 will get rid of Datasets all together and basically just replace them with `Iterable[Instance]`. This results in a cleaner API, but is a breaking change.",0
+66,https://github.com/allenai/allennlp/issues/738,738,[],closed,2018-01-30 18:36:05+00:00,3,simple server that serves up a single model,"this already exists as `service/server_simple.py`, but we also need
+
+* a tutorial about how to use it (#589) which is in progress but waiting on #727 
+* an easy way to get visualizations into it",0
+67,https://github.com/allenai/allennlp/issues/740,740,[],closed,2018-01-30 20:39:52+00:00,2,How-to for visualizing model internals in your demo,"This is still a little rough, but it's to the point that we could include a how-to, particularly if we merge the `HeatMap` components into the demo code from #692.",0
+68,https://github.com/allenai/allennlp/issues/756,756,[],closed,2018-02-02 03:27:08+00:00,12,Why allennlp seq2seq model takes up so much memory?,"Hi, I have tried to use the allennlp framework to build up a baseline for my model. I simply use the model provided in allennlp.
+This is my config file:
+
+```
+{
+  ""dataset_reader"":{
+    ""type"":""seq2seq"",
+
+    ""source_token_indexers"": {
+      ""tokens"": {
+        ""type"": ""single_id"",
+        ""namespace"": ""source_tokens""
+      }
+    },
+
+    ""target_token_indexers"": {
+      ""tokens"": {
+        ""type"": ""single_id"",
+        ""namespace"": ""target_tokens""
+      }
+    }
+  },
+
+
+  ""train_data_path"": ""xxxxxxx"",
+  ""validation_data_path"": ""xxxxxxx"",
+  ""test_data_path"": ""xxxxxxx"",
+
+  ""model"": {
+    ""type"": ""simple_seq2seq"",
+    ""source_embedder"": {
+      ""tokens"": {
+        ""type"": ""embedding"",
+        ""embedding_dim"":150,
+        ""vocab_namespace"": ""source_tokens"",
+        ""trainable"": true
+      }
+    },
+
+    ""encoder"": {
+      ""type"": ""lstm"",
+      ""input_size"": 150,
+      ""hidden_size"": 150,
+      ""num_layers"": 5
+    },
+
+    ""max_decoding_steps"": 200,
+    ""target_namespace"": ""target_tokens"",
+    ""attention_function"": {""type"": ""dot_product""}
+  },
+
+  ""iterator"": {
+    ""type"": ""bucket"",
+    ""batch_size"" : 16
+  },
+
+  ""trainer"": {
+    ""num_epochs"": 15,
+    ""patience"": 10,
+    ""cuda_device"": -1,
+    ""optimizer"": {
+      ""type"": ""adam"",
+      ""lr"": 0.01
+    }
+  }
+}
+```
+
+
+Before I through everything onto the computing cluster, I ran a test with only 5 training pairs which are about **2.4 kb in total**. I add `memory_profiler` decorator to track the memory usage.
+
+This is what I have in the end:
+```
+Filename: run.py
+
+Line #    Mem usage    Increment   Line Contents
+\================================================
+    18     49.3 MiB     49.3 MiB   @profile
+    19                             def profWrap() -> None:
+    20    148.7 MiB     99.4 MiB       cProfile.run('from allennlp.commands.train import train_model_from_file')
+    21    377.7 MiB    228.9 MiB       cProfile.run('train_model_from_file(""./model/baseline.json"", ""./result"")')
+```
+I was shocked, the memory usage increase 150 thousands times.....",0

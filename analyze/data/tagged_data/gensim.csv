@@ -1,0 +1,2514 @@
+﻿,html_url,number,labels,state,created_at,comments,title,body,rel
+9,https://github.com/RaRe-Technologies/gensim/issues/1586,1586,[],closed,2017-09-12 03:13:19+00:00,4,Building Vector for a sentence in doc2vec from an untrained data set,"I do have a dataset (corpus size = 6 million).
+
+Environment And Package Version:
+`Linux-3.10.0-327.18.2.el7.x86_64-x86_64-with-redhat-7.2-Maipo`
+`Python 3.6.0 |Anaconda 4.3.1 (64-bit)| (default, Dec 23 2016, 12:22:00) `
+`[GCC 4.4.7 20120313 (Red Hat 4.4.7-1)]`
+`NumPy 1.13.1`
+`SciPy 0.19.1`
+`gensim 2.3.0`
+`FAST_VERSION 1`
+
+I have trained the Doc2Vec model using below steps and parameters:
+Step 1: Preprocessing:
+Change to lower case
+
+Step 2: Preparing the Tagged Document.
+
+`docs = []`
+`docs = [TaggedDocument(words = desc.split(),tags=[df['UNQ_ID'].ix[idx]]) for idx,desc in` `enumerate(df['DOCUMENT'].values)]`
+
+
+Step 3: Model Training.
+
+`iteration = 150`
+`model = gensim.models.Doc2Vec(size=300, window=8, min_count=5, workers=8,   iter=iteration)`
+`model.build_vocab(docs)`
+`model.train(docs, total_examples=model.corpus_count, epochs=model.iter)`
+
+
+Step 4: Save the Model.
+
+`model.save(SAVE_NAME)`
+
+
+Step 5: Find Similarity:
+
+`UNIQUE_ID='XXX'`
+`sims = mod.docvecs.most_similar(UNIQUE_ID, topn=5)`
+
+
+For existing trained documents, the similarity score is above 0.8 on the average. This is good as per my use case.
+
+There are cases. when new untrained documents are encountered.
+Those scenarios, give below error:
+TypeError: '<' not supported between instances of 'str' and 'int'
+
+I tried using infec_vector() using below steps and parameters.
+
+
+`UNIQUE_ID='XXX'`
+`try:`
+`            sims = mod.docvecs.most_similar(UNIQUE_ID, topn=5)`
+`            print(""EXECUTING REGULAR mod.docvecs.most_similar"")`
+`except:`
+`            token = df.loc[df['UNQ_ID']==UNIQUE_ID].DOCUMENT`
+`            token = token.str.split()`
+`            mod.random.seed(0)`
+`            new_vector = mod.infer_vector(token, steps=150)`
+`            sims = mod.docvecs.most_similar([new_vector], topn=5) `
+`            print(""EXECUTING infer_vector mod.docvecs.most_similar"")`
+`sims`
+
+
+But the similarity score is very less; for the inferred vectors.
+
+Please let know, is there any way through which we can better logical similarity score for untrained documents.
+
+Or other way around, how can we do real time training for Untrained documents.
+
+Googling Around: I got below link: 
+[https://stackoverflow.com/questions/32796485/building-vector-for-a-sentence-in-doc2vec-from-an-untrained-data-set?rq=1]
+But in latest Gensim version (Gensim 2.3.0), we need to build_vocab before train. In real time, build_vocab for entire data set, will take more time.
+
+`Note:`
+Fixed the non-deterministic behaviour of infer_vector() using this link:
+https://github.com/RaRe-Technologies/gensim/issues/447",2
+18,https://github.com/RaRe-Technologies/gensim/issues/1600,1600,"[{'id': 175640, 'node_id': 'MDU6TGFiZWwxNzU2NDA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/feature', 'name': 'feature', 'color': '0b02e1', 'default': False, 'description': 'Issue described a new feature'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",open,2017-09-26 11:18:39+00:00,1,Only take forward window step of a sentence for Word2vec,"According to Word2vec doc, the parameter window is the maximum distance between the current and predicted word within a sentence, it will take backward and forward distance around a word as a context, 
+but how can I only take the forward distance, add a patch? 
+",2
+19,https://github.com/RaRe-Technologies/gensim/issues/1601,1601,[],closed,2017-09-28 10:34:40+00:00,2,Word2Vec RAM error when vector size is large,"I'm using word2vec model on MacBook with 16GB of RAM. The input text is 45GB in h5df. 
+
+When the vector size is 50. It runs successfully. When the vector size is 100, it prints
+
+>2017-09-28 14:52:30,736 : INFO : PROGRESS: at 0.29% examples, 42940 words/s, in_qsize 0, out_qsize 0
+>Killed: 9 
+
+How can I solve this error?
+
+",1
+82,https://github.com/RaRe-Technologies/gensim/issues/1743,1743,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-11-28 20:01:41+00:00,5,`save/load_word2vec_format` fails for `FastText` models,"#### Description
+Saving and loading using `save_word2vec_format` and `load_word2vec_format` fails for both native FastText models and models loaded using the wrapper.
+#### Steps/Code/Corpus to Reproduce
+Example:
+```python
+from gensim.models import fasttext as ft
+from gensim.models.wrappers import fasttext as ft_wrapper
+from gensim.models.word2vec import Text8Corpus
+
+corpus = Text8Corpus('gensim/test/test_data/lee_background.cor')
+native_model = ft.FastText()
+native_model.build_vocab(corpus)
+
+print(native_model.wv.most_similar('wars'))
+>>> # prints results
+
+print(native_model.wv['wars'])
+>>> # prints results
+
+native_model.wv.save_word2vec_format('test.wv')
+wv = ft_wrapper.FastTextKeyedVectors.load_word2vec_format('test.wv')
+```
+
+```
+print(wv.most_similar('wars'))
+
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-5-43e12f136081> in <module>()
+----> 1 print(wv.most_similar('wars'))
+
+~/Projects/gensim/gensim/gensim/models/keyedvectors.py in most_similar(self, positive, negative, topn, restrict_vocab, indexer)
+    318             negative = []
+    319 
+--> 320         self.init_sims()
+    321 
+    322         if isinstance(positive, string_types) and not negative:
+
+~/Projects/gensim/gensim/gensim/models/wrappers/fasttext.py in init_sims(self, replace)
+    125             else:
+    126                 self.syn0_ngrams_norm = \
+--> 127                     (self.syn0_ngrams / sqrt((self.syn0_ngrams ** 2).sum(-1))[..., newaxis]).astype(REAL)
+    128 
+    129     def __contains__(self, word):
+
+TypeError: unsupported operand type(s) for ** or pow(): 'NoneType' and 'int'
+```
+
+```
+print(wv['wars'])
+
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-6-ce05f767b013> in <module>()
+----> 1 print(wv['wars'])
+
+~/Projects/gensim/gensim/gensim/models/keyedvectors.py in __getitem__(self, words)
+    601         if isinstance(words, string_types):
+    602             # allow calls like trained_model['office'], as a shorthand for trained_model[['office']]
+--> 603             return self.word_vec(words)
+    604 
+    605         return vstack([self.word_vec(word) for word in words])
+
+~/Projects/gensim/gensim/gensim/models/wrappers/fasttext.py in word_vec(self, word, use_norm)
+     91             return super(FastTextKeyedVectors, self).word_vec(word, use_norm)
+     92         else:
+---> 93             word_vec = np.zeros(self.syn0_ngrams.shape[1], dtype=np.float32)
+     94             ngrams = compute_ngrams(word, self.min_n, self.max_n)
+     95             ngrams = [ng for ng in ngrams if ng in self.ngrams]
+
+AttributeError: 'NoneType' object has no attribute 'shape'
+```
+
+From a quick glance, it looks like this resulted from the changes made to `FastTextKeyedVectors` during the native implementation of `FastText` where two different matrices - `syn0_vocab` and `syn0_ngrams` were created.
+Although, I'm not sure `save_word2vec_format` is even suitable for `FastText` seeing as how the ngram vectors aren't stored to disk.",1
+885,https://github.com/RaRe-Technologies/gensim/issues/3152,3152,[],open,2021-05-18 13:40:01+00:00,6,standardize 'corpus_iterable' (over 'sentences') everywhere,"I'd thought that after our discussion on the merits of changing `sentences` to `corpus_iterable` during other renaming/refactoring, I'd changed it everywhere. But after this SO question – https://stackoverflow.com/q/67573416/130288 – I see that `sentences` persists a bunch of places, like the `Word2Vec`/`FastText` initializers & some of the doc-comment examples, including the `FastText` doc-comment – but is not supported elsewhere, such as the `build_vocab()`/`train()` methods specifically shown as using it in the doc-comments.  
+
+To TLDR that discussion: `sentences` often confuses users into thinking that they *must* run a sentences-splitter, as if the algorithms only work on true 'sentences'. It also seems slightly more likely for people to assume that any string-containing-a-sentence is ok, rather than a list-of-tokens. It also is somewhat in-apt with regard to `Doc2Vec`, or the common use of these algorithms on data that isn't literally natural-language sentences. Using `corpus_iterable` instead helps re-emphasize that the 'iterable' interface is all-important – a source of many usage erros – and has a useful parallelism to the `corpus_file` alternative, as only one or the other of `corpus_iterable` or `corpus_file` should be provided. (To the extent it then requires someone to look at the doc-comment, rather than assume the type of its individual items, it might also provide a better hook for communicating the requirement that each item be a list-of-tokens.)
+
+I think for consitency all use of `sentences` should be eliminated, in method signatures & docs, in favor of `corpus_iterable`. ",1
+15,https://github.com/RaRe-Technologies/gensim/issues/1595,1595,[],closed,2017-09-20 05:03:13+00:00,5,Can not load LineSentencePath ,"`sentences =  gensim.models.word2vec.LineSentencePath('/apsarapangu/disk3/yanan/')`
+
+I try to specify the path to read the files under it. There are many files in the path as sentences.
+But it comes that `'module' object has no attribute 'LineSentencePath'`.
+What's wrong with it ?
+Any example code about how to read huge files as sentences ? ",1
+28,https://github.com/RaRe-Technologies/gensim/issues/1623,1623,"[{'id': 175640, 'node_id': 'MDU6TGFiZWwxNzU2NDA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/feature', 'name': 'feature', 'color': '0b02e1', 'default': False, 'description': 'Issue described a new feature'}, {'id': 233082, 'node_id': 'MDU6TGFiZWwyMzMwODI=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20hard', 'name': 'difficulty hard', 'color': '00a000', 'default': False, 'description': 'Hard issue: required deep gensim understanding & high python/cython skills'}]",closed,2017-10-11 06:03:13+00:00,17,"Potential unification/optimization/simplification/enhancement refactor of *2Vec & related algorithms (FastText, Sent2Vec, FastSent, etc)","Word2Vec, Doc2Vec, FastText, FastSent (#612), Sent2Vec (#1376), 'Doc2VecWithCorruption' (#1159) and others are variants on the same core technique. They should share more code, and perhaps even be implemented as alternate parameter-choices on the same refactored core functions.
+
+A big refactoring (including from-scratch API design) could potentially offer some or all of the following:
+
+1. sharing more code between different modes (SG/CBOW/DBOW/DM/FastText-classification/other), by discovering the ways they're parameterized variants of a shared process
+
+2. making other creative variations possible, even if just experimentally (different kinds of context-windows, dropout strategies, alternate learning-optimizations like AdaGrad/etc, re-weightings of individual examples/vectors, separate input/output vocabularies, 'bloom embeddings', more kinds of 'inference', etc)
+
+3. making it easier to use non-natural-language datasets, perhaps by providing ability to supply examples in an interim (raw-int-indexes) format (other than string tokens), and example transformer/caching classes that turn either texts or other corpuses into the right format
+
+4. eliminating the hard-to-maintain dual-path pure-Python & Cython implementations - perhaps by going to something like Numba-only, or removing the (performance-non-competitive) pure-Python paths whenever Cython code is clean enough
+
+5. avoiding common user errors & sources of confusion - by renaming parameters/methods, updating defaults, separating logically distinct steps into independent code/classes – then providing updated demo notebooks showing the new modes of operation
+
+6. throughput optimizations, including getting away from the 'master single-corpus-reader thread', or using processes rather than threads if that's the only way to avoid GIL contention bottlenecks
+
+7. separating vocabulary-management into explicitly different classes/objects, for more control/customization, perhaps including closer integration with new n-gram (phrasing) options
+
+",1
+0,https://github.com/RaRe-Technologies/gensim/issues/1564,1564,[],closed,2017-09-04 18:49:00+00:00,9,Cannot get weights from get_embedding_layer ,"So basically i am training a doc2vec model. I came across something called get_embedding_layer in KeyedVectors class which returns a embedding layer. But I am unable to retrieve the weights for this layer. 
+The following is my code:
+```
+text_corpora = [[""hi how are you""],[""I am all good""],[""We are all good""]]
+sentences = [TaggedDocument(words= text_corpora[0][0].split(),tags = ['1']),TaggedDocument(words= text_corpora[1][0].split(),tags = ['2']),TaggedDocument(words= text_corpora[2][0].split(),tags = ['3'])]
+model = Doc2Vec(size = 200, window = 300, min_count = 1, workers = 4)
+model.build_vocab(sentences)
+
+model.train(sentences,total_examples=model.corpus_count,epochs=model.iter)
+```
+`model.wv.get_embedding_layer().get_weights()`  should give me the embeddings but its returning an empty array.
+` Is model.wv.syn0` a way to retrieve the weights and initialize in the embedding layer in keras ?
+
+
+Also please say whether this is the correct way to train the model.",1
+1,https://github.com/RaRe-Technologies/gensim/issues/1566,1566,[],closed,2017-09-05 06:24:27+00:00,8,LDA multicore using high amount of system cpu. upto 30 million kernel context per second,"48 core, 256 GB machine. no iops recorded.
+also checked with strace a very large number of sched_yield() = 0",1
+2,https://github.com/RaRe-Technologies/gensim/issues/1575,1575,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}]",closed,2017-09-07 23:15:52+00:00,0,Add preprocessing in summarize function to remove newlines in the middle of sentences,"#### Description
+The `summarize` function depends on the text having at least 10 sentences as measured by `clean_text_by_sentences`.  If the text is shorter than that then the summarization fails in an undocumented way. Moreover  `clean_text_by_sentences` cannot handle properly a text with new lines
+at the middle of a sentence. I suggest a preprocessing step to purge those.
+
+I'm currently using this to workaround this bug
+```
+import re
+text = re.sub(r'\n|\r|\t', ' ', text)
+text = re.sub(r'\s+', ' ', text)
+```
+
+#### Versions
+- Python 3.6.2 (default, Jul 17 2017, 16:44:45)
+[GCC 4.2.1 Compatible Apple LLVM 8.1.0 (clang-802.0.42)]
+- NumPy 1.13.0
+- SciPy 0.19.1
+- gensim 2.3.0
+- FAST_VERSION 0",1
+80,https://github.com/RaRe-Technologies/gensim/issues/1737,1737,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}, {'id': 721000065, 'node_id': 'MDU6TGFiZWw3MjEwMDAwNjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/good%20first%20issue', 'name': 'good first issue', 'color': '7057ff', 'default': True, 'description': 'Issue for new contributors (not required gensim understanding + very simple)'}, {'id': 1072221028, 'node_id': 'MDU6TGFiZWwxMDcyMjIxMDI4', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/Hacktoberfest', 'name': 'Hacktoberfest', 'color': 'b396e0', 'default': False, 'description': 'Issues marked for hacktoberfest'}]",open,2017-11-23 08:29:44+00:00,8,"Confusing ""TypeError: '<' not supported between … 'str' and 'int'"" when doc-tag not present for `most_similar()`","I am facing an issue while using the model.docvecs.most_similar() function.
+gensim: 2.3.0
+Python 3.6.0
+Error message: '<' not supported between instances of 'str' and 'int'
+
+My code follows:
+```python
+def vectorize_doc2vec():
+    sentence1 = 'Dogo is a dog'
+    sentence2 = 'dog is a pet'
+    sentence3 = 'pets are cool'
+    sentence={sentence1:'j1', sentence2:'j2', sentence3:'j3'}
+    
+    sentences = LabeledLineSentence(sentence)
+    
+    model = Doc2Vec(min_count=1, window=10, size=100, sample=1e-4, negative=5, workers=8)
+    model.build_vocab(sentences.to_array())
+    
+    model.train(sentences.sentences_perm(), total_examples=model.corpus_count, epochs=10)
+    
+    print(model.docvecs.most_similar('dog', topn=1))
+```
+
+The class LabeledLineSentence is as follows:
+
+```python
+class LabeledLineSentence(object):
+    def __init__(self, sources):
+        self.sources = sources
+        
+        flipped = {}
+        
+        # make sure that keys are unique
+        for key, value in sources.items():
+            if value not in flipped:
+                flipped[value] = [key]
+            else:
+                raise Exception('Non-unique prefix encountered')
+    
+    def __iter__(self):
+        for description, id in self.sources.items():
+            yield LabeledSentence(description, id)
+
+    def to_array(self):
+        self.sentences = []
+        for description, id in self.sources.items():
+            self.sentences.append(LabeledSentence(description, id))
+        return self.sentences
+    
+    def sentences_perm(self):
+        shuffle(self.sentences)
+        return self.sentences
+```
+
+Error StackTrace:
+```
+INFO:gensim.models.doc2vec:collecting all words and their counts
+WARNING:gensim.models.doc2vec:Each 'words' should be a list of words (usually unicode strings).First 'words' here is instead plain <class 'str'>.
+INFO:gensim.models.doc2vec:PROGRESS: at example #0, processed 0 words (0/s), 0 word types, 0 tags
+INFO:gensim.models.doc2vec:collected 14 word types and 4 unique tags from a corpus of 3 examples and 38 words
+INFO:gensim.models.word2vec:Loading a fresh vocabulary
+INFO:gensim.models.word2vec:min_count=1 retains 14 unique words (100% of original 14, drops 0)
+INFO:gensim.models.word2vec:min_count=1 leaves 38 word corpus (100% of original 38, drops 0)
+INFO:gensim.models.word2vec:deleting the raw counts dictionary of 14 items
+INFO:gensim.models.word2vec:sample=0.0001 downsamples 14 most-common words
+INFO:gensim.models.word2vec:downsampling leaves estimated 1 word corpus (3.7% of prior 38)
+INFO:gensim.models.word2vec:estimated required memory for 14 words and 100 dimensions: 20600 bytes
+INFO:gensim.models.word2vec:resetting layer weights
+INFO:gensim.models.word2vec:training model with 8 workers on 14 vocabulary and 100 features, using sg=0 hs=0 sample=0.0001 negative=5 window=10
+INFO:gensim.models.word2vec:worker thread finished; awaiting finish of 7 more threads
+INFO:gensim.models.word2vec:worker thread finished; awaiting finish of 6 more threads
+INFO:gensim.models.word2vec:worker thread finished; awaiting finish of 5 more threads
+INFO:gensim.models.word2vec:worker thread finished; awaiting finish of 4 more threads
+INFO:gensim.models.word2vec:worker thread finished; awaiting finish of 3 more threads
+INFO:gensim.models.word2vec:worker thread finished; awaiting finish of 2 more threads
+INFO:gensim.models.word2vec:worker thread finished; awaiting finish of 1 more threads
+INFO:gensim.models.word2vec:worker thread finished; awaiting finish of 0 more threads
+INFO:gensim.models.word2vec:training on 380 raw words (77 effective words) took 0.0s, 3374 effective words/s
+WARNING:gensim.models.word2vec:under 10 jobs per worker: consider setting a smaller `batch_words' for smoother alpha decay
+INFO:gensim.models.doc2vec:precomputing L2-norms of doc weight vectors
+Traceback (most recent call last):
+
+File """", line 17, in #
+ vectorize_doc2vec()
+File """", line 14, in vectorize_doc2vec
+print(model.docvecs.most_similar('dog', topn=1))
+
+File ""C:\Users\humblebee\AppData\Local\Continuum\Anaconda3\lib\site-packages\gensim\models\doc2vec.py"", line 461, in most_similar
+elif doc in self.doctags or doc < self.count:
+
+TypeError: '<' not supported between instances of 'str' and 'int' # #
+```
+
+#1586 ",1
+107,https://github.com/RaRe-Technologies/gensim/issues/1810,1810,[],closed,2017-12-21 18:17:53+00:00,4,word2vec: is there a way to change the smoothing parameter 0.75,"I am trying to use word2vec in gensim and reading https://radimrehurek.com/gensim/models/word2vec.html
+
+The negative samples are sampled using `make_cum_table(power=0.75, domain=2147483647)`, which is called internally. I am wondering is there a way to change this smoothing parameter 0.75 when the function `word2vec.Word2Vec()` is called?
+
+
+Thanks,
+Matt
+
+",1
+113,https://github.com/RaRe-Technologies/gensim/issues/1836,1836,[],closed,2018-01-11 14:12:39+00:00,2,Word2Vec 3.2.0 performance regression for corpus on s3 with smart-open 1.5.6,"<!--
+If your issue is a usage or a general question, please submit it here instead:
+- Mailing List: https://groups.google.com/forum/#!forum/gensim
+For more information, see Recipes&FAQ: https://github.com/RaRe-Technologies/gensim/wiki/Recipes-&-FAQ
+-->
+
+<!-- Instructions For Filing a Bug: https://github.com/RaRe-Technologies/gensim/blob/develop/CONTRIBUTING.md -->
+
+#### Description
+Upgrading to gensim 3.2.0 also upgrades smart-open to 1.5.6 which seems to have changed s3 code.
+After the upgrade there is a performance regression in Word2Vec that leads to a > 2x slowdown when streaming a gzipped corpus from s3 (> 250K Words/sec  =>  < 100K Words/sec).
+Downgrading smart-open to 1.5.3 fixes the issue.
+
+The release notes of smart-open 1.5.6 from Dec 28 state:
+- Improve S3 read performance. Fix #152 (PR #157, @mpenkov)
+Perhaps there need to be some adjustments made
+
+#### Steps/Code/Corpus to Reproduce
+We use a private corpus of about 4M documents with about 150M words, chunked up into 2-3 MB sized gzipped files that we stream from s3 using smart-open.
+
+#### Expected Results
+Performance should be back to level of smart open 1.5.3.
+
+#### Actual Results
+See above
+
+#### Versions
+gensim with smart-open 1.5.6
+",1
+126,https://github.com/RaRe-Technologies/gensim/issues/1872,1872,[],closed,2018-02-02 03:02:50+00:00,1,Doesn't work word2vectensor.py,"<!--
+If your issue is a usage or a general question, please submit it here instead:
+- Mailing List: https://groups.google.com/forum/#!forum/gensim
+For more information, see Recipes&FAQ: https://github.com/RaRe-Technologies/gensim/wiki/Recipes-&-FAQ
+-->
+
+<!-- Instructions For Filing a Bug: https://github.com/RaRe-Technologies/gensim/blob/develop/CONTRIBUTING.md -->
+
+#### Description
+TODO: change commented example
+Used word2vectensor.py to generate tensor and metadata files
+<!-- Example: Vocabulary size is not what I expected when training Word2Vec. -->
+
+#### Steps/Code/Corpus to Reproduce
+<!--
+Example:
+```
+from gensim.models import word2vec
+
+sentences = ['human', 'machine']
+model = word2vec.Word2Vec(sentences)
+print(model.syn0.shape) 
+```
+If the code is too long, feel free to put it in a public gist and link
+it in the issue: https://gist.github.com
+-->
+python word2vec2tensor.py -i trained_tensor.w2v -o texts_plot
+
+#### Expected Results
+<!-- Example: Expected shape of (100,2).-->
+
+#### Actual Results
+<!-- Example: Actual shape of (100,5). 
+
+Please paste or specifically describe the actual output or traceback. -->
+2018-02-02 11:52:23,501 : MainThread : INFO : running word2vec2tensor.py -i trained_tensor.w2v -o texts_plot
+2018-02-02 11:52:23,504 : MainThread : INFO : loading projection weights from trained_tensor.w2v
+2018-02-02 11:53:04,497 : MainThread : INFO : loaded (73935, 400) matrix from trained_tensor.w2v
+Traceback (most recent call last):
+  File ""word2vec2tensor.py"", line 75, in <module>
+    word2vec2tensor(args.input, args.output, args.binary)
+  File ""word2vec2tensor.py"", line 53, in word2vec2tensor
+    file_metadata.write(gensim.utils.to_utf8(word) + gensim.utils.to_utf8('\n'))
+TypeError: write() argument must be str, not bytes
+
+#### Versions
+<!--
+Please run the following snippet and paste the output below.
+import platform; print(platform.platform())
+import sys; print(""Python"", sys.version)
+import numpy; print(""NumPy"", numpy.__version__)
+import scipy; print(""SciPy"", scipy.__version__)
+import gensim; print(""gensim"", gensim.__version__)
+from gensim.models import word2vec;print(""FAST_VERSION"", word2vec.FAST_VERSION)
+-->
+>>> import platform; print(platform.platform())
+Darwin-15.6.0-x86_64-i386-64bit
+>>> import sys; print(""Python"", sys.version)
+Python 3.6.2 |Anaconda custom (64-bit)| (default, Sep 21 2017, 18:29:43)
+[GCC 4.2.1 Compatible Clang 4.0.1 (tags/RELEASE_401/final)]
+>>> import numpy; print(""NumPy"", numpy.__version__)
+NumPy 1.13.1
+>>> import scipy; print(""SciPy"", scipy.__version__)
+SciPy 0.19.1
+>>> import gensim; print(""gensim"", gensim.__version__)
+gensim 3.1.0
+>>> from gensim.models import word2vec;print(""FAST_VERSION"", word2vec.FAST_VERSION)
+FAST_VERSION 1
+
+<!-- Thanks for contributing! -->
+
+",1
+128,https://github.com/RaRe-Technologies/gensim/issues/1874,1874,[],closed,2018-02-02 15:05:13+00:00,1,Dov2Vec: AttributeError: Can't get attribute 'EuclideanKeyedVectors',"Hi,
+
+I can't find anything related to my issue, so I'm posting it here. I trained a doc2vec model, then saved it using `model.save(""my.model"")`. It saved 4 files:
+
+- my.model
+- my.model.docvecs.doctag_syn0.npy
+- my.model.syn1neg.npy
+- my.model.wv.syn0.npy
+
+I then try to load it, using `d2v = gensim.models.Doc2Vec.load('my.model')`, and it returns:
+```
+Traceback (most recent call last):
+  File ""lstm.py"", line 41, in <module>
+    d2v = gensim.models.Doc2Vec.load('my.model')
+  File ""/home/fiorinin/deeplearning/lib/python3.4/site-packages/gensim/models/word2vec.py"", line 1412, in load
+    model = super(Word2Vec, cls).load(*args, **kwargs)
+  File ""/home/fiorinin/deeplearning/lib/python3.4/site-packages/gensim/utils.py"", line 276, in load
+    obj = unpickle(fname)
+  File ""/home/fiorinin/deeplearning/lib/python3.4/site-packages/gensim/utils.py"", line 938, in unpickle
+    return _pickle.load(f, encoding='latin1')
+AttributeError: Can't get attribute 'EuclideanKeyedVectors' on <module 'gensim.models.keyedvectors' from '/home/fiorinin/deeplearning/lib/python3.4/site-packages/gensim/models/keyedvectors.py'>
+```
+
+Any idea? Is it normal that it uses word2vec anyway - I assume this is a parent class? 
+I tried updating, just in case, but there's the same error. Also, note that the training was done on a different machine, accessing the same directory. Can it be an incompatibility maybe, and if so, how to solve it?
+
+Thanks!",1
+34,https://github.com/RaRe-Technologies/gensim/issues/1630,1630,"[{'id': 175640, 'node_id': 'MDU6TGFiZWwxNzU2NDA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/feature', 'name': 'feature', 'color': '0b02e1', 'default': False, 'description': 'Issue described a new feature'}, {'id': 233082, 'node_id': 'MDU6TGFiZWwyMzMwODI=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20hard', 'name': 'difficulty hard', 'color': '00a000', 'default': False, 'description': 'Hard issue: required deep gensim understanding & high python/cython skills'}]",open,2017-10-13 08:46:49+00:00,0,Adding topic modeling methods based on word embeddings,"Could be a real plus value to add another type of topic modeling which use word embeddings as prior. For example, these also have public codes: [https://rajarshd.github.io/papers/acl2015.pdf](https://rajarshd.github.io/papers/acl2015.pdf) [https://arxiv.org/abs/1606.02979](https://arxiv.org/abs/1606.02979)",1
+42,https://github.com/RaRe-Technologies/gensim/issues/1651,1651,"[{'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}, {'id': 721000065, 'node_id': 'MDU6TGFiZWw3MjEwMDAwNjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/good%20first%20issue', 'name': 'good first issue', 'color': '7057ff', 'default': True, 'description': 'Issue for new contributors (not required gensim understanding + very simple)'}]",closed,2017-10-25 14:18:55+00:00,12,Mutable vector returned by KeyedVectors.word_vector,"<!--
+If your issue is a usage or a general question, please submit it here instead:
+- Mailing List: https://groups.google.com/forum/#!forum/gensim
+For more information, see Recipes&FAQ: https://github.com/RaRe-Technologies/gensim/wiki/Recipes-&-FAQ
+-->
+
+<!-- Instructions For Filing a Bug: https://github.com/RaRe-Technologies/gensim/blob/develop/CONTRIBUTING.md -->
+
+#### Description
+TODO: change commented example
+<!-- Example: Vocabulary size is not what I expected when training Word2Vec. -->
+
+#### Steps/Code/Corpus to Reproduce
+<!--
+Example:
+```
+from gensim.models import word2vec
+
+sentences = ['human', 'machine']
+model = word2vec.Word2Vec(sentences)
+print(model.syn0.shape) 
+```
+If the code is too long, feel free to put it in a public gist and link
+it in the issue: https://gist.github.com
+-->
+
+Method `KeyedVectors.word_vector` returned ""mutable"" vector if we call `model['anywords']` (for `model[['anywords']]` works correctly because [vstack make a copy.](https://github.com/RaRe-Technologies/gensim/blob/269028975e0db48e37e01edfb54e66018db7b61b/gensim/models/keyedvectors.py#L600)
+
+Simple example
+
+```python
+from gensim.models import KeyedVectors
+
+model = KeyedVectors.load_word2vec_format('path/to/model')
+vector = model['word_from_model']
+assert ~np.allclose(vector, np.zeros(vector.shape))  # check that our vector isn't zero
+vector *= 0.
+
+assert ~np.allclose(model['word_from_model'], np.zeros(vector.shape))  # failed, because now model['word_from_model'] is zero vector
+
+```
+
+
+
+#### Expected Results
+assert passed
+
+#### Actual Results
+assert failed
+
+#### What needs to fix
+Add `arr.setflags(write=False)`  in [word_vec](https://github.com/RaRe-Technologies/gensim/blob/269028975e0db48e37e01edfb54e66018db7b61b/gensim/models/keyedvectors.py#L266)
+",1
+4,https://github.com/RaRe-Technologies/gensim/issues/1578,1578,[],closed,2017-09-08 16:53:14+00:00,1,Doc2Vec Segmentation Fault Windows and Linux,"I've tried this basic code on both Linux and Windows.  I'm trying to do some online training and it seems like after a couple passes it throws a seg fault.
+
+Code to recreate problem.
+````
+from gensim.models.doc2vec import Doc2Vec, LabeledSentence, TaggedDocument
+
+
+sentences = [('food', 'I like to eat broccoli and bananas.'),
+             ('food', 'I ate a banana and spinach smoothie for breakfast.'),
+             ('animals', 'Chinchillas and kittens are cute.'),
+             ('animals', 'My sister adopted a kitten yesterday.'),
+             ('animals', 'Look at this cute hamster munching on a piece of broccoli.')]
+
+convSentences = []
+for s in sentences:
+    convSentences.append(LabeledSentence(tags=[s[0]], words = s[1].split()))
+
+model = Doc2Vec(size=300, window=8, min_count=1, workers=1)
+
+print(""Pass 1:"")
+model.build_vocab([convSentences[0]])
+model.train([convSentences[0]], total_examples=model.corpus_count)
+
+print(""Pass 2:"")
+model.build_vocab([convSentences[1]], update=True)
+model.train([convSentences[1]], total_examples=model.corpus_count)
+
+print(""Pass 3:"")
+model.build_vocab([convSentences[2]], update=True)
+model.train([convSentences[2]], total_examples=model.corpus_count)
+
+print(""Pass 4:"")
+model.build_vocab([convSentences[3]], update=True)
+model.train([convSentences[3]], total_examples=model.corpus_count)
+
+print(""Pass 5:"")
+model.build_vocab([convSentences[4]], update=True)
+model.train([convSentences[4]], total_examples=model.corpus_count)
+````
+
+Here's the output running in Windows Idle.  Python 3.5.2
+
+```
+Warning (from warnings module):
+  File ""C:\Python35\lib\site-packages\gensim\utils.py"", line 855
+    warnings.warn(""detected Windows; aliasing chunkize to chunkize_serial"")
+UserWarning: detected Windows; aliasing chunkize to chunkize_serial
+Pass 1:
+Pass 2:
+Pass 3:
+```
+
+Passes 1-3 go quick, then a long pause and Linux throws a segmentation fault, Windows throws an unspecified error.",1
+83,https://github.com/RaRe-Technologies/gensim/issues/1746,1746,[],closed,2017-11-30 10:02:16+00:00,12,total_vec don't exists,"I wanted to save the most important vectors or similar words, but I tried to cut the length of the embeddings using `model.save_word2vec_format('try.c.w2v', total_vec=10000)` but it says total_vec doesn't exists, but it's in the [documentation](https://radimrehurek.com/gensim/models/keyedvectors.html#gensim.models.keyedvectors.KeyedVectors.save_word2vec_format). ",1
+87,https://github.com/RaRe-Technologies/gensim/issues/1752,1752,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-12-03 22:15:05+00:00,2,Incorrect learning of word vectors during online training using `FastText` native implementation,"#### Description
+A bug in Fasttext native implementation causes `syn0` to be equal to `syn0_vocab` at the end of training. This causes incorrect learning of vectors during online training.
+
+#### Steps/Code/Corpus to Reproduce
+
+```
+from gensim.models.word2vec import LineSentence
+from gensim.models.fasttext import FastText as FT_gensim
+import os
+import gensim
+
+data_dir = '{}'.format(os.sep).join([gensim.__path__[0], 'test', 'test_data']) + os.sep
+data_file = '{}lee_background.cor'.format(data_dir)
+sentences = LineSentence(data_file)
+
+model = FT_gensim(sg=1, hs=0,window=2, negative=5, iter=1)
+model.build_vocab(sentences)
+model.train(sentences, total_examples=model.corpus_count, epochs=model.iter)
+
+print (model.wv.syn0 == model.wv.syn0_vocab).all()
+```
+#### Expected Results
+`False`
+
+#### Actual Results
+`True`
+
+#### Versions
+Linux-4.10.0-40-generic-x86_64-with-Ubuntu-16.04-xenial
+('Python', '2.7.12 (default, Nov 19 2016, 06:48:10) \n[GCC 5.4.0 20160609]')
+('NumPy', '1.13.3')
+('SciPy', '1.0.0')
+('gensim', '3.1.0')
+('FAST_VERSION', 1)
+
+
+",1
+89,https://github.com/RaRe-Technologies/gensim/issues/1759,1759,[],closed,2017-12-04 20:26:00+00:00,0,Updating vocab of a `FastText` model results in change in `dtype` of `model.wv.syn0_vocab`,"#### Description
+Updating vocabulary causes an unintended change in the `dtype` of `model.wv.syn0_vocab` from `float32` to `float64`. The primary cause of this issue is the `float64` type `numpy` array returned by `numpy.random.uniform` which when `vstack`ed with a `float32` numpy array casues the change in dtype. This also produces unpredictable segmentation faults in Cython implementation -- #1742.
+
+#### Steps/Code/Corpus to Reproduce
+```
+from gensim.models.word2vec import LineSentence
+from gensim.models.fasttext import FastText as FT_gensim
+from gensim.test.utils import common_texts as sentences
+
+new_sentences = [
+    ['computer', 'artificial', 'intelligence'],
+    ['artificial', 'trees'],
+    ['human', 'intelligence'],
+    ['artificial', 'graph'],
+    ['intelligence'],
+    ['artificial', 'intelligence', 'system']
+]
+
+model = FT_gensim(size=10, min_count=1)
+model.build_vocab(sentences)
+print model.wv.syn0_vocab.dtype
+
+model.build_vocab(new_sentences, update=True)
+print model.wv.syn0_vocab.dtype
+```
+#### Expected Results
+```
+float32
+float32
+```
+
+#### Actual Results
+```
+float32
+float64
+```
+#### Versions
+Linux-4.10.0-40-generic-x86_64-with-Ubuntu-16.04-xenial
+('Python', '2.7.12 (default, Nov 19 2016, 06:48:10) \n[GCC 5.4.0 20160609]')
+('NumPy', '1.13.3')
+('SciPy', '1.0.0')
+('gensim', '3.1.0')
+('FAST_VERSION', 1)
+",1
+116,https://github.com/RaRe-Technologies/gensim/issues/1847,1847,"[{'id': 708355863, 'node_id': 'MDU6TGFiZWw3MDgzNTU4NjM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/need%20info', 'name': 'need info', 'color': 'fbca04', 'default': False, 'description': 'Not enough information for reproduce an issue, need more info from author'}]",closed,2018-01-19 16:06:35+00:00,6,Running word2vec2tensor produces UnicodeDecodeError,"Hi,
+
+When I run
+
+`python -m gensim.scripts.word2vec2tensor --input dans-word2vec.model --output tsv`
+
+It returns the following error:
+
+```
+2018-01-19 17:02:50,687 : MainThread : INFO : running /home/brandsena/exp/lib/python3.4/site-packages/gensim/scripts/word2vec2tensor.py --input dans-word2vec.model --output tsv
+2018-01-19 17:02:50,709 : MainThread : INFO : loading projection weights from dans-word2vec.model
+Traceback (most recent call last):
+  File ""/usr/lib64/python3.4/runpy.py"", line 170, in _run_module_as_main
+    ""__main__"", mod_spec)
+  File ""/usr/lib64/python3.4/runpy.py"", line 85, in _run_code
+    exec(code, run_globals)
+  File ""/home/brandsena/exp/lib/python3.4/site-packages/gensim/scripts/word2vec2tensor.py"", line 83, in <module>
+    word2vec2tensor(args.input, args.output, args.binary)
+  File ""/home/brandsena/exp/lib/python3.4/site-packages/gensim/scripts/word2vec2tensor.py"", line 55, in word2vec2tensor
+    model = gensim.models.KeyedVectors.load_word2vec_format(word2vec_model_path, binary=binary)
+  File ""/home/brandsena/exp/lib/python3.4/site-packages/gensim/models/keyedvectors.py"", line 196, in load_word2vec_format
+    header = utils.to_unicode(fin.readline(), encoding=encoding)
+  File ""/home/brandsena/exp/lib/python3.4/site-packages/gensim/utils.py"", line 243, in any2unicode
+    return unicode(text, encoding, errors=errors)
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0x80 in position 0: invalid start byte
+
+```
+
+I'm not sure what's going on or how to fix this..
+
+Thanks,
+
+Alex.
+
+",1
+127,https://github.com/RaRe-Technologies/gensim/issues/1873,1873,[],closed,2018-02-02 06:02:03+00:00,18,Is this a bug in the CBOW code or my misunderstanding?,"In `gensim/gensim/models/word2vec.py`, line 394 and line 401
+
+```
+    if learn_vectors:
+        # learn input -> hidden, here for all words in the window separately
+        if is_ft:
+            **if not model.cbow_mean and input_word_indices:**
+                neu1e /= (len(input_word_indices[0]) + len(input_word_indices[1]))
+            for i in input_word_indices[0]:
+                context_vectors_vocab[i] += neu1e * context_locks_vocab[i]
+            for i in input_word_indices[1]:
+                context_vectors_ngrams[i] += neu1e * context_locks_ngrams[i]
+        else:
+            **if not model.cbow_mean and input_word_indices:**
+                neu1e /= len(input_word_indices)
+            for i in input_word_indices:
+                context_vectors[i] += neu1e * context_locks[i]
+
+    return neu1e
+```
+
+Shouldn't this be `if model.cbow_mean and input_word_indices` rather than `if not model.cbow_mean and input_word_indices`?",1
+33,https://github.com/RaRe-Technologies/gensim/issues/1629,1629,"[{'id': 175640, 'node_id': 'MDU6TGFiZWwxNzU2NDA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/feature', 'name': 'feature', 'color': '0b02e1', 'default': False, 'description': 'Issue described a new feature'}, {'id': 175642, 'node_id': 'MDU6TGFiZWwxNzU2NDI=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/wishlist', 'name': 'wishlist', 'color': 'd7e102', 'default': False, 'description': 'Feature request'}, {'id': 233082, 'node_id': 'MDU6TGFiZWwyMzMwODI=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20hard', 'name': 'difficulty hard', 'color': '00a000', 'default': False, 'description': 'Hard issue: required deep gensim understanding & high python/cython skills'}]",open,2017-10-13 06:40:17+00:00,2,Trans-gram,"Feature request for cross-lingual embedding
+
+**Maillist thread**: https://groups.google.com/forum/#!topic/gensim/zksGwKHnIUA
+**Paper**:  http://aclweb.org/anthology/D15-1131
+**Abstract**: *Trans-gram*, a simple and computationally-efficient method to simultaneously learn and align wordembeddings for a variety of languages, using only monolingual data and a smaller set of sentence-aligned data. We use our new method to compute aligned wordembeddings for twenty-one languages using English as a pivot language. We show that some linguistic features are aligned across languages for which we do not have aligned data, even though those properties do not exist in the pivot language. We also achieve state of the art results on standard cross-lingual text classification and word translation tasks.",1
+35,https://github.com/RaRe-Technologies/gensim/issues/1634,1634,"[{'id': 175640, 'node_id': 'MDU6TGFiZWwxNzU2NDA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/feature', 'name': 'feature', 'color': '0b02e1', 'default': False, 'description': 'Issue described a new feature'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}, {'id': 721000065, 'node_id': 'MDU6TGFiZWw3MjEwMDAwNjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/good%20first%20issue', 'name': 'good first issue', 'color': '7057ff', 'default': True, 'description': 'Issue for new contributors (not required gensim understanding + very simple)'}]",closed,2017-10-18 00:48:09+00:00,3,TextCorpus doesn't provide a way to convert document text to indices as needed for say DL NLP models,"<!--
+If your issue is a usage or a general question, please submit it here instead:
+- Mailing List: https://groups.google.com/forum/#!forum/gensim
+For more information, see Recipes&FAQ: https://github.com/RaRe-Technologies/gensim/wiki/Recipes-&-FAQ
+-->
+
+<!-- Instructions For Filing a Bug: https://github.com/RaRe-Technologies/gensim/blob/develop/CONTRIBUTING.md -->
+
+#### Description
+TextCorpus doesn't provide a way to convert text in a document to indices per the dictionary as needed for say Deep Learning NLP models. TextCorpus uses Dictionary objects `doc2bow` function which is great for most ML models but for DL models where we need sequential indices for text its not usable in most cases.
+#### Steps/Code/Corpus to Reproduce
+
+sample.txt
+```
+hello how are you ?
+i am good
+```
+
+code:
+```
+from gensim.corpora.textcorpus import TextCorpus
+
+some_file_name = ""sample.txt""
+some_dictionary = {
+    '<UNK>': 0,
+    'how': 1,
+    'hello': 2,
+    'hi': 3,
+    'are': 4,
+    'you': 5,
+    '?': 6,
+    'good': 7
+}
+
+gensim_dictionary = Dictionary()
+gensim_dictionary.token2id = some_dictionary
+
+txt_corpus = TextCorpus(input=some_file_name, dictionary=gensim_dictionary, token_filters=[])
+
+for text in txt_corpus:
+    print list(text)
+```
+
+
+#### Expected Results
+Some way to simply convert the corpus to indices per the token2id dict object in Dictionary class, also adding in option to provide an unknown token id which replaces all unknown tokens.
+So either adding a `doc2idx()` in `TextCorpus` or integrating that in `Dictionary` class along with `doc2bow()`
+[2, 1, 4, 5, 6]
+[0, 0, 7]
+
+#### Actual Results
+[(1, 1), (2, 1), (4, 1), (5, 1), (6, 1)]
+[(7, 1)]
+
+#### Versions
+<!--
+Please run the following snippet and paste the output below.
+import platform; print(platform.platform())
+import sys; print(""Python"", sys.version)
+import numpy; print(""NumPy"", numpy.__version__)
+import scipy; print(""SciPy"", scipy.__version__)
+import gensim; print(""gensim"", gensim.__version__)
+from gensim.models import word2vec;print(""FAST_VERSION"", word2vec.FAST_VERSION)
+-->
+Darwin-16.4.0-x86_64-i386-64bit
+('Python', '2.7.12 |Anaconda custom (x86_64)| (default, Jul  2 2016, 17:43:17) \n[GCC 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2336.11.00)]')
+('NumPy', '1.13.1')
+('SciPy', '0.19.1')
+<!-- Thanks for contributing! -->
+
+",1
+36,https://github.com/RaRe-Technologies/gensim/issues/1635,1635,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-10-18 21:39:38+00:00,6,Scoring function in Phrases model is hardcoded,"The [Phrases model](https://github.com/RaRe-Technologies/gensim/blob/develop/gensim/models/phrases.py) is based on word counting and bigram counting and it can process sentences by a given scoring function, which can be supplied via the construtor of `Phrases` (the parameter `scoring`). However, the field for scoring function is used only in the `export_phrases` method. Have a look here: 
+https://github.com/RaRe-Technologies/gensim/blob/develop/gensim/models/phrases.py#L269
+and here:
+https://github.com/RaRe-Technologies/gensim/blob/develop/gensim/models/phrases.py#L284
+
+```
+count_a = float(vocab[word_a])
+count_b = float(vocab[word_b])
+count_ab = float(vocab[bigram_word])
+score = scoring_function(count_a, count_b, count_ab)
+```
+
+However, in the `__getitem__` method, the scoring uses the default scoring always https://github.com/RaRe-Technologies/gensim/blob/develop/gensim/models/phrases.py#L334 :
+```
+pa = float(vocab[word_a])
+pb = float(vocab[word_b])
+pab = float(vocab[bigram_word])
+score = (pab - min_count) / pa / pb * len(vocab)
+```
+
+This looks like a bug to me (we are always using the default scoring, even if we explicitly stated npmi in the constructor). Is it okay if I open a pull request fixing this one?",1
+5,https://github.com/RaRe-Technologies/gensim/issues/1581,1581,"[{'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}, {'id': 575779925, 'node_id': 'MDU6TGFiZWw1NzU3Nzk5MjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/breaks%20backward-compatibility', 'name': 'breaks backward-compatibility', 'color': 'e96f1b', 'default': False, 'description': 'Change breaks backward compatibility'}, {'id': 1162250977, 'node_id': 'MDU6TGFiZWwxMTYyMjUwOTc3', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/fasttext', 'name': 'fasttext', 'color': 'ad52ea', 'default': False, 'description': 'Issues related to the FastText model'}]",open,2017-09-10 11:15:14+00:00,0,Add __init__ method in FastText,"Issue #1514 
+
+[FastText](https://github.com/RaRe-Technologies/gensim/blob/develop/gensim/models/wrappers/fasttext.py#L138)  can't make default initializer. only make using `train` or `load_fasttext_format` methods( `train` method calls `load_fasttext_format` )
+And input text is only received from the file.
+
+So, If in `__init__` method receiving from python string, will be able to use it more efficiently and not be confused with the FastText constructor( In [Fasttext API](https://radimrehurek.com/gensim/models/wrappers/fasttext.html), It looks like it can be used as a constructor. because base by Word2Vec).
+
+`def __init__(self, ft_path, corpus_text, output_file=None, model='cbow', size=100, alpha=0.025, window=5, min_count=5,
+              word_ngrams=1, loss='ns', sample=1e-3, negative=5, iter=5, min_n=3, max_n=6, sorted_vocab=1, threads=12):`
+How about like above method? These method arguments follow `train` but `corpus_file` changed to `corpus_text`",0
+21,https://github.com/RaRe-Technologies/gensim/issues/1604,1604,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",open,2017-10-02 10:38:52+00:00,15,Fix irrelevant wiki pages,"We have several pages in wiki part, but a huge part of the information is outdated. Need to fix it.
+
+- Word2Vec & Doc2Vec Wishlist - outdated, need to remove
+- Home - useless, need to remove
+- Developer page - need to update for current state
+- GSOC 2017 project ideas - mark as archive (GSOC 2017 was finished)
+- Student Projects / Ideas & Feature proposals - merge this to one & remove unrelevant & add info about what's already implement
+- Recipes & FAQ - Need to refactor from start
+- Roadmap - outdated, need to write new
+",0
+27,https://github.com/RaRe-Technologies/gensim/issues/1617,1617,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233082, 'node_id': 'MDU6TGFiZWwyMzMwODI=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20hard', 'name': 'difficulty hard', 'color': '00a000', 'default': False, 'description': 'Hard issue: required deep gensim understanding & high python/cython skills'}]",closed,2017-10-10 04:05:44+00:00,2,Under utilization of CPU cores when running Word2Vec,"#### Description
+I am training a word2vec model with a preprocessed wiki corpus(~8GB) on a dedicated Softlayer cloud instance with the following system configuration:
+`56 cores x 2.0GHz, 128GB RAM, 100GB(SAN), Ubuntu Linux 16.04 LST Minimal Install (64 bit).`
+I run the code in a docker with **56 workers**. While I can see 56 processes(in training phase), the aggregated CPU utilization is around **1100%**. Screenshots of CPU utilization of each process can be seen below.
+Why is total CPU utilization not around 5600%? Is this behavior expected? Am I missing something trivial?
+
+#### Steps/Code/Corpus to Reproduce
+Link to gensim [code](https://github.com/manneshiva/benchmark-word2vec-frameworks/blob/master/nn_frameworks/gensim/gensim_word2vec.py)
+Link to [Dockerfile](https://github.com/manneshiva/benchmark-word2vec-frameworks/blob/master/Dockerfile-cpu-tfsource)
+
+#### Expected Results
+Total CPU utilization > 1100%. Should be around 5600%. 
+
+#### Actual Results
+Link to [INFO logs](https://gist.github.com/manneshiva/c4b7fd200507664fa3145b591be17be7).
+
+`top -H -p <PID>`
+![top](https://user-images.githubusercontent.com/26998249/31368736-300b7624-ad9d-11e7-9c38-4876e8d679af.png)
+
+`htop`
+![selection_006](https://user-images.githubusercontent.com/26998249/31368794-828f3714-ad9d-11e7-8a58-bafe552b3fae.jpg)
+
+#### Versions
+Linux-4.10.0-21-generic-x86_64-with-Ubuntu-16.04-xenial
+('Python', '2.7.12 (default, Nov 19 2016, 06:48:10) \n[GCC 5.4.0 20160609]')
+('NumPy', '1.13.1')
+('SciPy', '0.19.1')
+('gensim', '2.1.0')
+('FAST_VERSION', 1)
+
+
+",0
+3,https://github.com/RaRe-Technologies/gensim/issues/1576,1576,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}, {'id': 708430967, 'node_id': 'MDU6TGFiZWw3MDg0MzA5Njc=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/performance', 'name': 'performance', 'color': 'd93f0b', 'default': False, 'description': 'Issue related to performance (in HW meaning)'}, {'id': 721000065, 'node_id': 'MDU6TGFiZWw3MjEwMDAwNjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/good%20first%20issue', 'name': 'good first issue', 'color': '7057ff', 'default': True, 'description': 'Issue for new contributors (not required gensim understanding + very simple)'}, {'id': 1072221028, 'node_id': 'MDU6TGFiZWwxMDcyMjIxMDI4', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/Hacktoberfest', 'name': 'Hacktoberfest', 'color': 'b396e0', 'default': False, 'description': 'Issues marked for hacktoberfest'}]",open,2017-09-08 13:33:00+00:00,6,Check what's the reason to use double-precision in topic models,"Our TMs return vectors with double-precision `float64`, it looks like very suspicious, because `float32` is enough for all. Need to check, what's a reason of this behavior and what's a concrete method.
+
+The first step - look at [this line in the test](https://github.com/RaRe-Technologies/gensim/blob/develop/gensim/test/basetmtests.py#L51), after it - collect all TMs, that depends on this tests and check, where and why `float64` happened.
+
+Result - detailed description (where and why), and fixing this behavior after discussion (if needed)",0
+6,https://github.com/RaRe-Technologies/gensim/issues/1583,1583,"[{'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}, {'id': 575779925, 'node_id': 'MDU6TGFiZWw1NzU3Nzk5MjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/breaks%20backward-compatibility', 'name': 'breaks backward-compatibility', 'color': 'e96f1b', 'default': False, 'description': 'Change breaks backward compatibility'}]",open,2017-09-11 13:40:36+00:00,3,Move unstable/experimental models to distinct subpackage,"Now we have many models/corpses in `gensim.models.*`, but not all of this is very useful/popular/stable/fast.
+
+
+For this reason, we should split this into distinct packages
+
+How it looks now: `gensim.corpora.*` and `gensim.models.*`
+How it should looks in future: distinct subpackage + copy part of tree structure: `gensim.experimental.corpora.*` and  `gensim.experimental.models.*`
+
+
+What's candidates for moving to experimental: `ATModel`, `HDP`, `LdaSeq`, all wrappers (maybe, need to discussed it).
+Also, maybe move `ucicorpus`, `sharedcorpus`, `indexcorpus` and `csvcorpus` too (or remove, need additional discussion)
+
+
+
+
+
+
+
+
+
+
+",0
+7,https://github.com/RaRe-Technologies/gensim/issues/1584,1584,"[{'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}, {'id': 575779925, 'node_id': 'MDU6TGFiZWw1NzU3Nzk5MjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/breaks%20backward-compatibility', 'name': 'breaks backward-compatibility', 'color': 'e96f1b', 'default': False, 'description': 'Change breaks backward compatibility'}]",open,2017-09-11 14:38:53+00:00,16,Remove/refactor useless subpackages,"In gensim, we have many sub-packages, but several of this should be a part of another subpackage, another part is broken/useless and should be removed.
+
+Candidates:
+- [x] `/examples` - Old broken code + confused users with name, should be removed.
+- [x] ~`/parsing` - Not relevant for gensim (all of this already implemented in NLTK/etc.), should be removed (but before, need to check that this isn't used).~
+- [x]  `/scripts` - Many scripts for Wikipedia + symlinks + some conversions + w2v_standalone. Need to look into all wiki scripts and understand why this needed, remove all that no needed (w2v_standalone too).
+- [ ] ~`/summarization` - need to refactor code and create one model, no need distinct subpackage for this.~
+- [x] ~`/topic_coherence` - same as `summarization`~
+- [x] `nose.py` - unused runner for nose, should be removed.
+
+
+
+
+
+
+",0
+8,https://github.com/RaRe-Technologies/gensim/issues/1585,1585,"[{'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",open,2017-09-11 14:48:38+00:00,1,Initial investigation/refactoring for gensim.corpora and gensim.similarities,"Tasks:
+
+1.Go into gensim.similarities and understand what's needed/not needed, maybe refactor a little if needed.
+2. In corpora, we have many corpuses and many problems with interfaces, need to go into and refactor this code.
+
+About corpora - we have many classes (each for concrete format), maybe it will be a good idea to merge all to one wrapper `Corpus` class, with parameter, for example:
+
+Now
+```
+corpus_mallet = MalletCorpus(""/path/to/filename"", metadata=True)
+corpus_simple = TextCorpus(input=""/path/to/folder"", metadata=False)
+```
+
+In my proposal
+```
+corpus_mallet = Corpus(""/path/to/filename"", metadata=True, type=""mallet"")
+corpus_simple = Corpus(""/path/to/filename"", metadata=True, type=""text"")
+```
+
+For the one hand, this simplifies the code, no need to find a concrete class, need to change only one parameter. For the other hand, this class has a lot of responsibility, it's not a good pattern.",0
+10,https://github.com/RaRe-Technologies/gensim/issues/1587,1587,[],closed,2017-09-13 11:35:53+00:00,8,Gensim reached 5k stars on github!,"Hooray! :bomb: :fire: Gensim reached 5k stars ?? .
+
+Many thanks to our contributors, you are the best!
+
+As a token of appreciation, we're sending a little gift to our contributors (T-shirts, mugs and other things).
+
+**What's needed to receive the gift?**
+
+1. You must be a contributor (at least 1 merged PR to Gensim, Smart-open or Sqlitedict)
+
+2. Write an email to `opensource@rare-technologies.com` with the subject ""Gensim 5k*"". In the email body please include:
+    - A link to your Github account
+    - A link to your contribution (PR)
+    - Your preferred T-shirt size
+    - Your postal address
+
+Here's an **incomplete** list of people who qualify. If I missed you - don't worry, if you are a contributor - send us an email too!
+
+CC: @tmylk @chinmayapancholi13 @gojomo @cscorley @sotte @sebastien-j @parulsethi @mattilyra @bhargavvader @fbarrios @ziky90 @olavurmortensen @mataddy @prakhar2b @markroxor @dsquareindia @larsmans @hyhan @davechallis @dedan @temerick @jayantj @erbas @phdowling @droudy @quole @macks22 @KCzar @josephcc @hajicj @vlejd @mfcabrera @fedelopez77 @svenkreiss @jesterhazy @Arttii @alekol @tpsatish95 @isohyt @anmolgulati @souravsingh @shubhvachher @buma @luispedro @Tiepies @lechatpito @aneesh-joshi @charliejharrison @metalaman @akutuzov
+
+
+",0
+11,https://github.com/RaRe-Technologies/gensim/issues/1588,1588,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233082, 'node_id': 'MDU6TGFiZWwyMzMwODI=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20hard', 'name': 'difficulty hard', 'color': '00a000', 'default': False, 'description': 'Hard issue: required deep gensim understanding & high python/cython skills'}, {'id': 708430967, 'node_id': 'MDU6TGFiZWw3MDg0MzA5Njc=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/performance', 'name': 'performance', 'color': 'd93f0b', 'default': False, 'description': 'Issue related to performance (in HW meaning)'}]",open,2017-09-16 09:04:16+00:00,12,LDA multicore stuck after a few passes,"after running properly for a 10 passes the process is stuck.
+48core : 194GB , 6.7 million documents, 57,000 tokens
+    num_topics = 64
+    chunksize = 10000
+    passes = 20
+    iterations = 100
+**logs stopped printing at ----**
+_2017-09-15 20:10:40,745 INFO 140583487252288 PROGRESS: pass 11, dispatched chunk #147 = documents up to #1480000/6748579, outstanding queue size 109
+2017-09-15 20:10:40,932 INFO 140583487252288 PROGRESS: pass 11, dispatched chunk #148 = documents up to #1490000/6748579, outstanding queue size 110
+2017-09-15 20:10:41,173 INFO 140583487252288 PROGRESS: pass 11, dispatched chunk #149 = documents up to #1500000/6748579, outstanding queue size 111
+2017-09-15 20:10:41,410 DEBUG 140583487252288 9924/10000 documents converged within 100 iterations
+2017-09-15 20:10:41,550 INFO 140583487252288 PROGRESS: pass 11, dispatched chunk #150 = documents up to #1510000/6748579, outstanding queue size 112
+2017-09-15 20:10:41,680 DEBUG 140583487252288 processed chunk, queuing the result
+2017-09-15 20:10:41,955 DEBUG 140583487252288 result put
+2017-09-15 20:10:41,956 DEBUG 140583487252288 getting a new job
+2017-09-15 20:10:45,384 DEBUG 140554940122880 worker process entering E-step loop
+2017-09-15 20:10:45,404 DEBUG 140554940122880 getting a new job
+2017-09-15 20:10:49,148 DEBUG 140554940122880 worker process entering E-step loop
+2017-09-15 20:10:49,195 DEBUG 140554940122880 getting a new job
+2017-09-15 20:10:49,441 DEBUG 140583487252288 9920/10000 documents converged within 100 iterations
+2017-09-15 20:10:49,630 DEBUG 140583487252288 processed chunk, queuing the result
+2017-09-15 20:10:49,830 DEBUG 140583487252288 result put
+2017-09-15 20:10:49,831 DEBUG 140583487252288 getting a new job
+2017-09-15 20:10:51,158 DEBUG 140583487252288 9925/10000 documents converged within 100 iterations
+2017-09-15 20:10:51,322 DEBUG 140583487252288 processed chunk, queuing the result
+2017-09-15 20:10:51,344 DEBUG 140583487252288 result put
+2017-09-15 20:10:51,345 DEBUG 140583487252288 getting a new job
+2017-09-15 20:10:52,413 DEBUG 140583487252288 9925/10000 documents converged within 100 iterations
+2017-09-15 20:10:52,597 DEBUG 140583487252288 processed chunk, queuing the result
+2017-09-15 20:10:52,640 DEBUG 140554940122880 worker process entering E-step loop
+2017-09-15 20:10:52,642 DEBUG 140554940122880 getting a new job
+2017-09-15 20:10:53,889 DEBUG 140583487252288 result put
+2017-09-15 20:10:53,891 DEBUG 140583487252288 getting a new job
+2017-09-15 20:10:54,895 DEBUG 140583487252288 9934/10000 documents converged within 100 iterations
+2017-09-15 20:10:55,026 DEBUG 140583487252288 processed chunk, queuing the result
+2017-09-15 20:10:55,054 DEBUG 140583487252288 result put
+2017-09-15 20:10:55,201 DEBUG 140583487252288 getting a new job
+2017-09-15 20:10:57,169 DEBUG 140554940122880 worker process entering E-step loop
+2017-09-15 20:10:57,177 DEBUG 140554940122880 getting a new job
+2017-09-15 20:11:01,548 DEBUG 140554940122880 worker process entering E-step loop
+2017-09-15 20:11:02,448 DEBUG 140554940122880 getting a new job
+2017-09-15 20:11:13,901 DEBUG 140554940122880 worker process entering E-step loop
+2017-09-15 20:11:13,905 DEBUG 140554940122880 getting a new job
+2017-09-15 20:11:17,107 DEBUG 140554940122880 worker process entering E-step loop
+2017-09-15 20:11:17,123 DEBUG 140554940122880 getting a new job
+2017-09-15 20:11:21,198 DEBUG 140554940122880 worker process entering E-step loop
+2017-09-15 20:11:21,201 DEBUG 140554940122880 getting a new job
+2017-09-15 20:12:19,365 DEBUG 140583487252288 processing chunk #49 of 10000 documents
+2017-09-15 20:12:19,372 DEBUG 140583487252288 performing inference on a chunk of 10000 documents
+2017-09-15 20:13:02,963 DEBUG 140583487252288 9938/10000 documents converged within 100 iterations
+2017-09-15 20:13:03,053 DEBUG 140583487252288 processed chunk, queuing the result
+2017-09-15 20:13:03,058 DEBUG 140583487252288 result put
+2017-09-15 20:13:03,058 DEBUG 140583487252288 getting a new job_
+
+**the strace of master process is full of --- poll([{fd=6, events=POLLIN}], 1, 0)     = 0 (Timeout)**
+----
+
+**with a little activity n between. ------ like below**
+
+_poll([{fd=6, events=POLLIN}], 1, 0)     = 0 (Timeout)
+futex(0x8fffc4, FUTEX_WAKE_OP_PRIVATE, 1, 1, 0x8fffc0, {FUTEX_OP_SET, 0, FUTEX_OP_CMP_GT, 1}) = 1
+futex(0x8fff80, FUTEX_WAKE_PRIVATE, 1)  = 1
+poll([{fd=6, events=POLLIN}], 1, 0)     = 0 (Timeout)
+futex(0x8fffc4, FUTEX_WAIT_BITSET_PRIVATE|FUTEX_CLOCK_REALTIME, 3905250003, {1505552174, 730881000}, ffffffff) = 0
+futex(0x8fff80, FUTEX_WAKE_PRIVATE, 1)  = 0
+futex(0x8fffc0, FUTEX_WAKE_PRIVATE, 1)  = 1
+futex(0x8fffc4, FUTEX_WAIT_BITSET_PRIVATE|FUTEX_CLOCK_REALTIME, 3905250005, {1505552174, 730998000}, ffffffff) = -1 EAGAIN (Resource temporarily unavailable)
+futex(0x8fff80, FUTEX_WAKE_PRIVATE, 1)  = 0
+futex(0x8fffc0, FUTEX_WAKE_PRIVATE, 1)  = 1
+futex(0x8fffc4, FUTEX_WAIT_BITSET_PRIVATE|FUTEX_CLOCK_REALTIME, 3905250007, {1505552174, 731179000}, ffffffff) = -1 EAGAIN (Resource temporarily unavailable)
+futex(0x8fff80, FUTEX_WAKE_PRIVATE, 1)  = 0
+futex(0x8fffc0, FUTEX_WAKE_PRIVATE, 1)  = 1
+futex(0x8fffc4, FUTEX_WAIT_BITSET_PRIVATE|FUTEX_CLOCK_REALTIME, 3905250009, {1505552174, 731287000}, ffffffff) = -1 EAGAIN (Resource temporarily unavailable)
+futex(0x8fff80, FUTEX_WAKE_PRIVATE, 1)  = 0
+futex(0x8fffc4, FUTEX_WAKE_OP_PRIVATE, 1, 1, 0x8fffc0, {FUTEX_OP_SET, 0, FUTEX_OP_CMP_GT, 1}) = 1
+futex(0x8fffc4, FUTEX_WAKE_OP_PRIVATE, 1, 1, 0x8fffc0, {FUTEX_OP_SET, 0, FUTEX_OP_CMP_GT, 1}) = 1
+futex(0x8fff80, FUTEX_WAKE_PRIVATE, 1)  = 1
+poll([{fd=6, events=POLLIN}], 1, 0)     = 0 (Timeout)
+futex(0x8fffc4, FUTEX_WAKE_OP_PRIVATE, 1, 1, 0x8fffc0, {FUTEX_OP_SET, 0, FUTEX_OP_CMP_GT, 1}) = 1
+futex(0x8fff80, FUTEX_WAKE_PRIVATE, 1)  = 1
+futex(0x8fffc4, FUTEX_WAIT_BITSET_PRIVATE|FUTEX_CLOCK_REALTIME, 3905250017, {1505552174, 731764000}, ffffffff) = -1 EAGAIN (Resource temporarily unavailable)
+futex(0x8fff80, FUTEX_WAKE_PRIVATE, 1)  = 0
+futex(0x8fffc0, FUTEX_WAKE_PRIVATE, 1)  = 1
+futex(0x8fffc4, FUTEX_WAIT_BITSET_PRIVATE|FUTEX_CLOCK_REALTIME, 3905250019, {1505552174, 731798000}, ffffffff) = -1 EAGAIN (Resource temporarily unavailable)
+futex(0x8fff80, FUTEX_WAKE_PRIVATE, 1)  = 0
+futex(0x8fffc4, FUTEX_WAKE_OP_PRIVATE, 1, 1, 0x8fffc0, {FUTEX_OP_SET, 0, FUTEX_OP_CMP_GT, 1}) = 1
+poll([{fd=6, events=POLLIN}], 1, 0)     = 0 (Timeout)
+futex(0x8fffc4, FUTEX_WAKE_OP_PRIVATE, 1, 1, 0x8fffc0, {FUTEX_OP_SET, 0, FUTEX_OP_CMP_GT, 1}) = 1
+futex(0x8fff80, FUTEX_WAKE_PRIVATE, 1)  = 1
+futex(0x8fffc4, FUTEX_WAIT_BITSET_PRIVATE|FUTEX_CLOCK_REALTIME, 3905250025, {1505552174, 732150000}, ffffffff) = -1 EAGAIN (Resource temporarily unavailable)
+futex(0x8fff80, FUTEX_WAKE_PRIVATE, 1)  = 0
+futex(0x8fffc0, FUTEX_WAKE_PRIVATE, 1)  = 1
+futex(0x8fffc4, FUTEX_WAIT_BITSET_PRIVATE|FUTEX_CLOCK_REALTIME, 3905250027, {1505552174, 732184000}, ffffffff) = -1 EAGAIN (Resource temporarily unavailable)
+futex(0x8fff80, FUTEX_WAKE_PRIVATE, 1)  = 0
+futex(0x8fffc0, FUTEX_WAKE_PRIVATE, 1)  = 1
+futex(0x8fffc4, FUTEX_WAIT_BITSET_PRIVATE|FUTEX_CLOCK_REALTIME, 3905250029, {1505552174, 732269000}, ffffffff) = -1 EAGAIN (Resource temporarily unavailable)
+futex(0x8fff80, FUTEX_WAKE_PRIVATE, 1)  = 0
+futex(0x8fffc0, FUTEX_WAKE_PRIVATE, 1)  = 1
+futex(0x8fffc4, FUTEX_WAIT_BITSET_PRIVATE|FUTEX_CLOCK_REALTIME, 3905250031, {1505552174, 732372000}, ffffffff) = -1 EAGAIN (Resource temporarily unavailable)
+futex(0x8fff80, FUTEX_WAKE_PRIVATE, 1)  = 0
+futex(0x8fffc4, FUTEX_WAKE_OP_PRIVATE, 1, 1, 0x8fffc0, {FUTEX_OP_SET, 0, FUTEX_OP_CMP_GT, 1}) = 1
+futex(0x8fff80, FUTEX_WAKE_PRIVATE, 1)  = 1
+poll([{fd=6, events=POLLIN}], 1, 0)     = 0 (Timeout)
+poll([{fd=6, events=POLLIN}], 1, 0)     = 0 (Timeout)_
+
+
+----- **mater process is taking 100% of cpu on one core, all the other process are not taking any cpu.
+there is still 5GB free ram on the system.** ",0
+12,https://github.com/RaRe-Technologies/gensim/issues/1589,1589,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-09-16 17:44:54+00:00,9,Problem using bound function in Author Topic model!!,"Hi
+I am trying to use author topic model. When I used bound function to evaluate my model I received this error in python:
+```
+Traceback (most recent call last):
+  File ""C:\Users\Sara\Desktop\E-COM\Final Project\Working on data\at_clustering.py"", line 161, in <module>
+    test_corpus = test_corpus, test_d2a = test_doc2author, test_a2d = test_author2doc, limit = 25)
+  File ""C:\Users\Sara\Desktop\E-COM\Final Project\Working on data\at_clustering.py"", line 70, in evaluate_k
+    pr = np.exp2(-model.bound(test_corpus, doc2author=test_d2a, author2doc=test_a2d)/number_of_words)
+  File ""C:\Python27\lib\site-packages\gensim\models\atmodel.py"", line 835, in bound
+    phinorm = self.compute_phinorm(ids, authors_d, expElogtheta[authors_d, :], expElogbeta[:, ids])
+IndexError: arrays used as indices must be of integer (or boolean) type
+```
+ I think the problem is `` expElogbeta[:, ids] `` because this is not acceptable in python!
+
+Please test bound function and fix source code.
+Thanks
+",0
+13,https://github.com/RaRe-Technologies/gensim/issues/1591,1591,[],closed,2017-09-18 07:53:51+00:00,3,lda returns TypeError: only integer scalar arrays can be converted to a scalar index,"hello
+i am working on urdu language and want to do topic modeling in it.i followed this link  https://github.com/RaRe-Technologies/gensim/blob/develop/docs/notebooks/lda_training_tips.ipynb but i am getting type error. 
+Traceback (most recent call last):
+  File ""main.py"", line 88, in <module>
+    top_topics = lda.top_topics(corpus, num_words=5)
+  File ""/home/aziya/.local/lib/python3.5/site-packages/gensim/models/ldamodel.py"", line 880, in top_topics
+    for l in top_words[:m_index - 1]:
+TypeError: only integer scalar arrays can be converted to a scalar index
+
+i even tried it by reducing num of words to 5.this is my code.kindly help me by guiding me where i am doing something wrong.as i am new in gensim and lda. ",0
+14,https://github.com/RaRe-Technologies/gensim/issues/1592,1592,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233082, 'node_id': 'MDU6TGFiZWwyMzMwODI=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20hard', 'name': 'difficulty hard', 'color': '00a000', 'default': False, 'description': 'Hard issue: required deep gensim understanding & high python/cython skills'}, {'id': 708430967, 'node_id': 'MDU6TGFiZWw3MDg0MzA5Njc=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/performance', 'name': 'performance', 'color': 'd93f0b', 'default': False, 'description': 'Issue related to performance (in HW meaning)'}]",open,2017-09-18 14:15:29+00:00,2,lda multicore not scaling into large number of cores,"I believe it is due to the primary process being unable to keep up with both filling up the  queues and also merging the result. 
+
+Will it not work better if we split the queue filling part of the code into the a separate process. 
+If there are separate processes for queue filling and result queue processing. i dont see any issue. 
+
+Note: i am sure it is not a IO issue as i dont see any IO load on using iostat and iotop
+
+Or may be I should be usig some other corpus format which takes less time to deserialize. ??
+
+Any guidance will help. thanks in advance",0
+16,https://github.com/RaRe-Technologies/gensim/issues/1596,1596,[],closed,2017-09-20 13:50:48+00:00,1,gensim support GPU programming?,"Dear,
+
+gensim support GPU programming? 
+I tried to import gensim and using model.lsi, it seems it does not support GPU programming.
+
+",0
+17,https://github.com/RaRe-Technologies/gensim/issues/1597,1597,[],closed,2017-09-23 16:45:02+00:00,2,Error when most_important_docs in summarizer.py is None,"```python
+In [0]: gensim.__version__
+Out [0]: '2.3.0'
+```
+Description:
+I was working on a set of Chinese sentences. And when I call the function `gensim.summarization.summarize()`.The Error below was occurred: 
+``` python
+  File ""/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/gensim/summarization/summarizer.py"", line 215, in summarize
+    extracted_sentences = _extract_important_sentences(sentences, corpus, most_important_docs, word_count)
+  File ""/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/gensim/summarization/summarizer.py"", line 114, in _extract_important_sentences
+    important_sentences = _get_important_sentences(sentences, corpus, important_docs)
+  File ""/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/gensim/summarization/summarizer.py"", line 89, in _get_important_sentences
+    return [sentences_by_corpus[tuple(important_doc)] for important_doc in important_docs]
+TypeError: 'NoneType' object is not iterable
+```
+It seems that the important_doc is None, and NoneType cannot be iterated. 
+Well, I didn't learn so much of TextRank Algorithm, and I am trying to go on to work. Maybe someone can tell what is happening? 
+
+PS: Sorry that I could not afford the test case I was using, for it is full of Chinese name. (If someone ask me privately, maybe i could.) Anyway, there is a bug in it. For some reason the `most_important_docs` at line 212, `summarizer.py` is `None`. This situation should be handled properly. I suppose that summarize() should return None or raise some other Error for debugging when `most_important_docs` is `None`. Or even better, optimize the implementation of TextRank Algorithm, which is fully out of my ability for now... 
+``` python
+>>> s = '`a string full of different Chinese name, with the number of more than 1 thousand.`'
+>>> import gensim.summarization as gsum
+>>> gsum.summarize(s)
+```
+",0
+81,https://github.com/RaRe-Technologies/gensim/issues/1740,1740,[],closed,2017-11-26 19:33:16+00:00,2,Travis timeout of tests,"Currently, Travis times out due to the max time limit for the jobs. The time out error can be seen here- https://travis-ci.org/RaRe-Technologies/gensim/jobs/307547006
+
+I suggest adding ``travis_wait`` to increase the max time limit.",0
+84,https://github.com/RaRe-Technologies/gensim/issues/1747,1747,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}, {'id': 721000065, 'node_id': 'MDU6TGFiZWw3MjEwMDAwNjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/good%20first%20issue', 'name': 'good first issue', 'color': '7057ff', 'default': True, 'description': 'Issue for new contributors (not required gensim understanding + very simple)'}]",closed,2017-11-30 11:04:04+00:00,0,Update show_topics method from Mallet wrapper,Need to update https://github.com/RaRe-Technologies/gensim/blob/3.1.0/gensim/models/wrappers/ldamallet.py#L250 (replace `num_words` to `topn`) to prevent warning (report comes from https://groups.google.com/forum/#!topic/gensim/r3YIaqPRmzU),0
+85,https://github.com/RaRe-Technologies/gensim/issues/1748,1748,[],closed,2017-12-01 10:46:32+00:00,2,Parameter `work` does not seem to end up being used in `train_document_dbow()`,"https://github.com/RaRe-Technologies/gensim/blob/b6234e7d90ffe9aeda7fab4b39c484381d7c5930/gensim/models/doc2vec.py#L769
+
+By just eyeballing the code, it seems that in this particular function call (and the similar function calls below it), the value passed in `work` is not used inside `train_document_dbow()`. I'm not saying I think it should be used, but if it is not used, perhaps it is cleaner not to pass it in the first place.",0
+86,https://github.com/RaRe-Technologies/gensim/issues/1751,1751,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}]",closed,2017-12-02 21:34:58+00:00,8,Gensim 3.1.0 Phrase loader incompatible with older models due to introduction of common_terms,"I have a Phrases model that was computed using Gensim 2.2.0 but because of changes in 3.1.0 (I believe), I cannot load it anymore. This is the error I get:
+
+```
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<timed exec> in <module>()
+
+~/Stuff/Sources/anaconda3/envs/nlp/lib/python3.6/site-packages/gensim/models/phrases.py in __init__(self, phrases_model)
+    546         self.delimiter = phrases_model.delimiter
+    547         self.scoring = phrases_model.scoring
+--> 548         self.common_terms = phrases_model.common_terms
+    549         corpus = self.pseudocorpus(phrases_model)
+    550         self.phrasegrams = {}
+
+AttributeError: 'Phrases' object has no attribute 'common_terms'
+```
+
+Cheers!",0
+88,https://github.com/RaRe-Technologies/gensim/issues/1753,1753,"[{'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}]",closed,2017-12-04 05:35:34+00:00,0,Add explicit deprecation warnings for outdated stuff,"Need to add explicit deprecation warnings for all outdated stuff.
+Docstrings isn't good enough for this situation.
+
+
+What should contain the warning:
+- What's an alternative (if exists), i.e. ""Call X instead of DEPRECATED_Y""
+- When this function will be removed (concrete version, for example, 4.0.0)
+
+
+related message https://github.com/RaRe-Technologies/gensim/issues/1746#issuecomment-348680651
+
+",0
+90,https://github.com/RaRe-Technologies/gensim/issues/1762,1762,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}, {'id': 721000065, 'node_id': 'MDU6TGFiZWw3MjEwMDAwNjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/good%20first%20issue', 'name': 'good first issue', 'color': '7057ff', 'default': True, 'description': 'Issue for new contributors (not required gensim understanding + very simple)'}]",closed,2017-12-05 10:09:42+00:00,2,ipython notebook starts ipython3 kernel also when choosing python2 Kernel,"#### Description
+ipython notebook starts ipython3 kernel also when choosing python2 Kernel
+
+#### Steps/Code/Corpus to Reproduce
+Example:
+1. Build a docker and login to it.
+2. Open a new jupyter notebook with python2 kernel
+3. Try running code that is only suitable to python2 syntax like: 
+```
+print 1
+```
+
+4. On Ubuntu you can also run:
+```    
+ps -ef | grep jupyter
+```
+and verify the new notebook was started with ipython3 kernel
+
+#### Expected Results
+The new notebook will be ran with ipython2 kernel
+
+#### Actual Results
+The new notebook will be ran with ipython2 kernel
+
+### Cause:
+Both Kernels has the same command - _python_ as the first _argv_ parameter:
+```
+root@273133a334a2:/# cat /usr/local/share/jupyter/kernels/python3/kernel.json
+{
+ ""argv"": [
+  ""python"",
+  ""-m"",
+  ""ipykernel_launcher"",
+  ""-f"",
+  ""{connection_file}""
+ ],
+ ""display_name"": ""Python 3"",
+ ""language"": ""python""
+}root@273133a334a2:/# cat /usr/local/share/jupyter/kernels/python2/kernel.json
+{
+ ""display_name"": ""Python 2"",
+ ""language"": ""python"",
+ ""argv"": [
+  ""python"",
+  ""-m"",
+  ""ipykernel_launcher"",
+  ""-f"",
+  ""{connection_file}""
+ ]
+}
+```
+
+### Solution
+Running the following commands (as described [here](https://github.com/jupyter/notebook/issues/2563)):
+```
+root@273133a334a2:/# ipython2 kernel install
+Installed kernelspec python2 in /usr/local/share/jupyter/kernels/python2
+root@273133a334a2:/# ipython3 kernel install
+Installed kernelspec python3 in /usr/local/share/jupyter/kernels/python3
+```
+ Fixes the issue:
+```
+root@273133a334a2:/# cat /usr/local/share/jupyter/kernels/python2/kernel.json
+{
+ ""display_name"": ""Python 2"",
+ ""language"": ""python"",
+ ""argv"": [
+  ""/usr/bin/python"",
+  ""-m"",
+  ""ipykernel_launcher"",
+  ""-f"",
+  ""{connection_file}""
+ ]
+}root@273133a334a2:/# cat /usr/local/share/jupyter/kernels/python3/kernel.json
+{
+ ""argv"": [
+  ""/usr/bin/python3"",
+  ""-m"",
+  ""ipykernel_launcher"",
+  ""-f"",
+  ""{connection_file}""
+ ],
+ ""display_name"": ""Python 3"",
+ ""language"": ""python""
+}
+```
+
+### Actions Required:
+Add the following lines to the Dockerfile:
+```
+RUN ipython2 kernel install
+RUN ipython3 kernel install
+```
+I'll submit a Pull request containing these changes soon
+",0
+91,https://github.com/RaRe-Technologies/gensim/issues/1765,1765,[],closed,2017-12-06 18:47:45+00:00,3,Bucket Argument in fasttext not working as expected ?,"Hi, For the fasttext native from gensim:
+
+My understanding is that according to the hashing trick, if bucket is < total # of subwords, there will be collisions and some subwords will be mapped to the same integers.  Am I wrong? 
+However, it is not what I see on a toy example: 
+
+```python
+import gensim
+from gensim.models.fasttext import FastText
+
+sent = [['lol', 'dds', 'sdsf'], ['anticonsti']]
+model = FastText(min_count = 1, bucket = 20)
+model.build_vocab(sentences=sent)
+model.train(sentences = sent, epochs = 1, report_delay = 1.0)
+
+model.wv.ngrams
+```
+#### Expected Results
+Dictionary with ngrams and their mappings to integers between 0 and 19 ( buckets = 20)
+
+#### Actual Results
+Dictionary with ngrams and their mappings to integers between 0 and 55 ( number of ngrams is 56 here)
+
+#### Versions
+>>> import platform; print(platform.platform())
+Windows-10-10.0.14393-SP0
+>>> import sys; print(""Python"", sys.version)
+Python 3.5.2 |Continuum Analytics, Inc.| (default, Jul  5 2016, 11:41:13) [MSC v.1900 64 bit (AMD64)]
+>>> import numpy; print(""NumPy"", numpy.__version__)
+NumPy 1.13.3
+>>> import scipy; print(""SciPy"", scipy.__version__)
+SciPy 1.0.0
+>>> import gensim; print(""gensim"", gensim.__version__)
+gensim 3.1.0
+>>> from gensim.models import word2vec;print(""FAST_VERSION"", word2vec.FAST_VERSION)
+FAST_VERSION 0
+>>> 
+
+
+
+",0
+92,https://github.com/RaRe-Technologies/gensim/issues/1771,1771,[],closed,2017-12-08 19:12:02+00:00,0,Pyro4.naming exception in `get_my_ip`,"On a multi home nic computer, get_my_ip() is failing to use socket connection to nameserver to retrieve the external ip address to use. The code is proceeding to the default case to use hostname and to look up by ip address, which is currently resolving to virtualbox ethernet adapter that is not reachable from the dispatcher.
+
+Specifically, the line 
+`ns = Pyro4.naming.locateNS()`
+is throwing exception 
+`module 'Pyro4' has no attribute 'naming'`
+
+when using Pyro4 version 4.62, thus get_my_ip() is defaulting to use
+`result = socket.gethostbyname(socket.gethostname())`
+
+The solution is to add 
+`import Pyro4.naming`",0
+93,https://github.com/RaRe-Technologies/gensim/issues/1778,1778,"[{'id': 175642, 'node_id': 'MDU6TGFiZWwxNzU2NDI=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/wishlist', 'name': 'wishlist', 'color': 'd7e102', 'default': False, 'description': 'Feature request'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",open,2017-12-11 23:28:12+00:00,3,Explore the possibility of using Tangent for gradients in Poincare embeddings,"The current implementation makes use of [autograd](https://github.com/HIPS/autograd/) to auto-differentiate the loss function. As the automatic differentiation is too slow, we chose to not use this feature for training, instead computing the derivatives ourselves and adding an option to perform verification of the computed derivatives by comparing it to the autograd values every 10k iterations or so. This is a very useful feature for debugging.
+
+Another library to consider is [Tangent](https://github.com/google/tangent) library (thanks to @alexbw for the suggestion!), which does ahead-of-time gradient computations. The main concern here is speed - auto-differentiation should be similar to or faster than computing the derivatives ourselves.
+
+",0
+94,https://github.com/RaRe-Technologies/gensim/issues/1779,1779,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}, {'id': 1162250977, 'node_id': 'MDU6TGFiZWwxMTYyMjUwOTc3', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/fasttext', 'name': 'fasttext', 'color': 'ad52ea', 'default': False, 'description': 'Issues related to the FastText model'}]",open,2017-12-12 00:00:02+00:00,7,Bucket bug for FastText.load_fasttext_format ,"Hi,
+I tried loading a pretrained model from Facebook's fasttext into gemsim using FastText.load_fasttext_format, and it looks like there is a bug to be fixed for bucket here as well. 
+
+I noticed that for bucket = 2,000,000 we had model.wv.syn0_ngrams.shape[0] = 7,221,731 instead of 2,000,000. 
+
+Also, in https://github.com/RaRe-Technologies/gensim/blob/develop/gensim/models/wrappers/fasttext.py 
+
+I don't see why we do have to compute the n-grams from the word vocabulary again. Aren't these already imported from the fastText .bin file? 
+
+
+
+
+#### Steps/Code/Corpus to Reproduce
+
+>>> from gensim.models.wrappers import FastText 
+
+First download the zip file from https://s3-us-west-1.amazonaws.com/fasttext-vectors/wiki.en.zip.
+Then unzip and put the file 'wiki.en.bin' in your working directory.
+>>> model = FastText.load_fasttext_format('wiki.en')
+
+>>> print(model.wv.syn0_ngrams.shape)[0]
+
+#### Expected Results
+Expected value of 2,000,000 which is the default value of bucket. 
+
+#### Actual Results
+7,221,731 which is here equal to len(model.wv.ngrams).
+In other words, it looks like there were no collusions although we had more n-grams than buckets.
+
+Also, please note that it took 10 minutes to load the fasttext model. I wonder if some parts of the code (especially in load_vectors) are really needed.  
+
+Thanks,
+Carl
+
+#### Versions
+>>> import platform; print(platform.platform())
+Windows-10-10.0.14393-SP0
+>>> import sys; print(""Python"", sys.version)
+Python 3.5.2 |Continuum Analytics, Inc.| (default, Jul  5 2016, 11:41:13) [MSC v.1900 64 bit (AMD64)]
+>>> import numpy; print(""NumPy"", numpy.__version__)
+NumPy 1.13.3
+>>> import scipy; print(""SciPy"", scipy.__version__)
+SciPy 1.0.0
+>>> import gensim; print(""gensim"", gensim.__version__)
+gensim 3.1.0
+>>> from gensim.models import word2vec;print(""FAST_VERSION"", word2vec.FAST_VERSION)
+FAST_VERSION 0
+-->
+
+
+
+
+",0
+95,https://github.com/RaRe-Technologies/gensim/issues/1782,1782,"[{'id': 175640, 'node_id': 'MDU6TGFiZWwxNzU2NDA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/feature', 'name': 'feature', 'color': '0b02e1', 'default': False, 'description': 'Issue described a new feature'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-12-12 23:22:48+00:00,6,New Feature save_fasttext_format ? ,"Hi, 
+Are there plans to release the feature save_fasttext_format based on save_word2vec_format but for FastText? If so when are you planning to release it?
+Currently, we have to use load and save, which saves the whole model. If we do not want to continue training it, we only need the .wv attribute, which is smaller in size than the whole model object... 
+
+Thanks,
+Carl
+
+",0
+96,https://github.com/RaRe-Technologies/gensim/issues/1783,1783,"[{'id': 175640, 'node_id': 'MDU6TGFiZWwxNzU2NDA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/feature', 'name': 'feature', 'color': '0b02e1', 'default': False, 'description': 'Issue described a new feature'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",open,2017-12-13 08:13:00+00:00,10,Reduce gensim distribution size,"Right now, size of gensim `wheel`/`tar.gz` is `~16MB`, this is less than `50MB+`, but still huge.
+Need to ""cut"" big files that used for tests and rewrite the affected tests
+
+Previous issue #1698 ",0
+97,https://github.com/RaRe-Technologies/gensim/issues/1784,1784,[],closed,2017-12-13 12:26:17+00:00,4,why HDP model topic is always 150?,"<!--
+If your issue is a usage or a general question, please submit it here instead:
+- Mailing List: https://groups.google.com/forum/#!forum/gensim
+For more information, see Recipes&FAQ: https://github.com/RaRe-Technologies/gensim/wiki/Recipes-&-FAQ
+-->
+
+<!-- Instructions For Filing a Bug: https://github.com/RaRe-Technologies/gensim/blob/develop/CONTRIBUTING.md -->
+
+#### Description
+**I use hdp model to get topics，I want to get all topics 。so I set `num_topic = -1`, but get topics number are alway 150。I found some reason [here](https://stackoverflow.com/questions/31543542/hierarchical-dirichlet-process-gensim-topic-number-independent-of-corpus-size/31847553), but it did not working for me。so, how I get all topics**
+
+TODO: change commented example
+<!-- Example: Vocabulary size is not what I expected when training Word2Vec. -->
+
+#### Steps/Code/Corpus to Reproduce
+
+```
+import os
+import re
+import jieba
+import codecs
+import numpy as np
+from gensim.corpora import Dictionary
+from gensim.models import hdpmodel
+
+def hdp_train(doc_path, stop_path):
+    stop_file = codecs.open(stop_path, 'r', 'utf-8')
+    stopwords = [line.strip() for line in stop_file]
+    stop_file.close()
+
+    doc_file = codecs.open(doc_path, 'r', 'utf-8')
+    documents = [document.strip() for document in doc_file]
+    doc_file.close()
+
+    word_counts = []
+    for document in documents:
+        word_counts_id = []
+        tokens = jieba.cut(document)
+        for word in tokens:
+            if len(word) > 1 and not re.search('[0-9]', word) and word not in stopwords:
+                word_counts_id.append(word)
+        word_counts.append(word_counts_id)
+
+    dic = Dictionary(word_counts)
+    corpus = [dic.doc2bow(i) for i in word_counts]
+
+    return dic, corpus
+
+yuzhang_dic, yuzhang_corpus = hdp_train(""data/yuzhang.txt"", ""data/stopWord.dic"")
+yuzhang_hdp_model = hdpmodel.HdpModel(corpus=yuzhang_corpus, id2word=yuzhang_dic)
+yuzhang_hdp_model.print_topics(num_topics=-1)
+```
+
+
+#### Expected Results
+I want get all topics
+
+#### Actual Results
+but HdpModel init `T=150`，so `num_topics=-1` get 150 ?。please give some links how do I get all topics (Forgive my poor English.)
+
+
+#### Versions
+<!--
+Please run the following snippet and paste the output below.
+import platform; print(platform.platform())
+import sys; print(""Python"", sys.version)
+import numpy; print(""NumPy"", numpy.__version__)
+import scipy; print(""SciPy"", scipy.__version__)
+import gensim; print(""gensim"", gensim.__version__)
+from gensim.models import word2vec;print(""FAST_VERSION"", word2vec.FAST_VERSION)
+-->
+
+
+<!-- Thanks for contributing! -->
+
+",0
+98,https://github.com/RaRe-Technologies/gensim/issues/1785,1785,"[{'id': 175640, 'node_id': 'MDU6TGFiZWwxNzU2NDA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/feature', 'name': 'feature', 'color': '0b02e1', 'default': False, 'description': 'Issue described a new feature'}, {'id': 175642, 'node_id': 'MDU6TGFiZWwxNzU2NDI=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/wishlist', 'name': 'wishlist', 'color': 'd7e102', 'default': False, 'description': 'Feature request'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-12-13 13:45:27+00:00,1,Add smart information retrieval system for TFIDF,"https://en.wikipedia.org/wiki/SMART_Information_Retrieval_System
+
+The current [TFIDF](https://github.com/RaRe-Technologies/gensim/blob/develop/gensim/models/tfidfmodel.py) model uses natural TF and IDF for computing TFIDF. The idea is to try various transformation like logarithmic, augmented,boolean etc. before computing the vectors.
+
+More about this - http://www.cs.odu.edu/~jbollen/IR04/readings/article1-29-03.pdf and https://nlp.stanford.edu/IR-book/pdf/06vect.pdf
+
+Will send a PR tomorrow.
+",0
+99,https://github.com/RaRe-Technologies/gensim/issues/1786,1786,"[{'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-12-13 18:22:13+00:00,1,Add contributor information to developers wiki page,"#1604 mentions that the developer documentation is outdated. Besides updating it, I think there is some information missing for contributors.
+
+The main things I think are missing:
+- How to set up a developer environment
+- How to build Gensim
+- How to send a pull request following the git flow described in the page
+
+While the information provided seems appropriate for core developers of the project, contributors sending pull requests would in my opinion require those additional sections.
+
+Regarding the developer environment, I don't see a requirements.txt (or requirements-dev.txt) file that can be used to install it. I guess there are also other project requirements for the project, and it'd be nice to know how contributors are expected to set up those things.
+
+About the git flow, I think it should be obvious for open source contributors how to send a pull request to master. But given that the pull requests need to be sent to develop, I think it'd be useful to have a short documentation on how the whole flow looks like. It's nicely documented for core developers who can push to the repo, but not for contributors sending pull requests.
+
+May be it could be a good idea to have separate pages for core developers and external contributors. And may be move this content to the CONTRIBUTING.md page.",0
+100,https://github.com/RaRe-Technologies/gensim/issues/1788,1788,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}, {'id': 721000065, 'node_id': 'MDU6TGFiZWw3MjEwMDAwNjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/good%20first%20issue', 'name': 'good first issue', 'color': '7057ff', 'default': True, 'description': 'Issue for new contributors (not required gensim understanding + very simple)'}]",closed,2017-12-15 01:50:21+00:00,1,os.path.isfile('question-words.txt') should be 'questions-...,"Minor typo in file doc2vec-IMDB.ipynb
+
+File name used in the statement (Note missing 's' after the word `question` in file name)
+
+`if os.path.isfile('question-words.txt')
+`
+should be:
+
+`if os.path.isfile('questions-words.txt')`",0
+101,https://github.com/RaRe-Technologies/gensim/issues/1789,1789,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}, {'id': 721000065, 'node_id': 'MDU6TGFiZWw3MjEwMDAwNjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/good%20first%20issue', 'name': 'good first issue', 'color': '7057ff', 'default': True, 'description': 'Issue for new contributors (not required gensim understanding + very simple)'}]",closed,2017-12-15 01:57:07+00:00,5,"open('aclImdb/alldata-id.txt', encoding='utf-8') doesn't work in Python 2.x ","In file doc2vec-IMDB.ipynb, this statement is not supported in Python 2.x but is in Python 3.x
+
+`with open('aclImdb/alldata-id.txt', encoding='utf-8') as alldata:
+`
+
+This works in Python 2.7:
+
+`import codecs
+`
+`with codecs.open('aclImdb/alldata-id.txt', encoding='utf-8') as alldata:
+`",0
+102,https://github.com/RaRe-Technologies/gensim/issues/1790,1790,[],closed,2017-12-15 06:58:52+00:00,6,accuracy had KeyError,"<!--
+If your issue is a usage or a general question, please submit it here instead:
+- Mailing List: https://groups.google.com/forum/#!forum/gensim
+For more information, see Recipes&FAQ: https://github.com/RaRe-Technologies/gensim/wiki/Recipes-&-FAQ
+-->
+
+<!-- Instructions For Filing a Bug: https://github.com/RaRe-Technologies/gensim/blob/develop/CONTRIBUTING.md -->
+
+#### Description
+TODO: change commented example
+<!-- Example: Vocabulary size is not what I expected when training Word2Vec. -->
+
+#### Steps/Code/Corpus to Reproduce
+<!--
+Example:
+```
+from gensim.models import word2vec
+
+sentences = ['human', 'machine']
+model = word2vec.Word2Vec(sentences)
+print(model.syn0.shape) 
+```
+If the code is too long, feel free to put it in a public gist and link
+it in the issue: https://gist.github.com
+-->
+while going to have an accuracy computation by calling
+```
+model.wv.accuracy('question-file-name')
+```
+I got error message as followings:
+
+```
+KeyErrorTraceback (most recent call last)
+<ipython-input-123-8a545c3407ef> in <module>()
+----> 1 model.wv.accuracy('./questions_words.txt',restrict_vocab=1000000)
+
+/opt/anaconda2/lib/python2.7/site-packages/gensim/models/keyedvectors.pyc in accuracy(self, questions, restrict_vocab, most_similar, case_insensitive)
+    662 
+    663         """"""
+--> 664         ok_vocab = [(w, self.vocab[w]) for w in self.index2word[:restrict_vocab]]
+    665         ok_vocab = dict((w.upper(), v) for w, v in reversed(ok_vocab)) if case_insensitive else dict(ok_vocab)
+    666 
+
+KeyError: u'a'
+```
+
+When I looked into the code inside the file **keyedvectors.py** for the called function **accuracy** I found this:
+
+```
+ok_vocab = [(w, self.vocab[w]) for w in self.index2word[:restrict_vocab]]
+```
+
+Then I double checked the size of both `self.vocab` and `self.index2word` , surprisingly I found both size are not matched. That told me that word 'a' is **NOT** in `self.vocab` though it **IS** in `self.index2word`.
+
+My questions raised:
+
+1. why and how happened for the different size of two (self.vocab and self.index2word)?
+2. how about change the calculation code to:
+
+```
+ok_vocab = [(w, self.vocab[w]) for w in self.index2word if w in self.vocab][:restrict_vocab]
+```
+
+Any helps? Thanks.
+",0
+103,https://github.com/RaRe-Technologies/gensim/issues/1794,1794,[],closed,2017-12-15 18:29:47+00:00,3,"Use magic ""%%time"" for timing your code instead of using getting start and end time","The use of
+
+`%%time
+`
+
+to time a cell is much cleaner than explicitly having to get the start and end times.  (%% indicates to time the whole cell.)
+
+See::  http://ipython.readthedocs.io/en/stable/interactive/magics.html
+",0
+104,https://github.com/RaRe-Technologies/gensim/issues/1798,1798,[],closed,2017-12-18 22:30:45+00:00,2,init_ngrams in wrapper filling the wrong dictionary? (syn0 instead of syn0_vocab)? (FastText),"By looking again at the init_ngrams() function used when loading a pre-trained model in fasttext (see fasttext wrapper) in the .bin format, apart from the other issues discussed previously, I was wondering: 
+
+Shouldn't the words embeddings be filled into syn0_vocab and not syn0, and then compute ourselves the average embeddings of word and subwords in order to get syn0? 
+
+Thanks,
+Carl",0
+105,https://github.com/RaRe-Technologies/gensim/issues/1807,1807,"[{'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-12-20 08:39:43+00:00,0,Move building documentation to CircleCI,"Travis has problems with some ""latex-related"" packages, than needed for us for build documentation, for example `dvipng`, `texlive-latex-extra`, etc. 
+
+The problem happens first time in #1714, where we need some additional stuff for png-rendering from latex (because we fix formulas).
+
+Also, this related to really useful feature #1725 (than easier to implement based on `CircleCI`)
+
+",0
+106,https://github.com/RaRe-Technologies/gensim/issues/1808,1808,"[{'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",open,2017-12-20 18:08:04+00:00,0,Reformat API reference page,"Currently, [API reference page](https://radimrehurek.com/gensim/apiref.html) doesn't reflect the structure of gensim and has a lot of redundant references, I think that it should be fixed.
+
+There's [sklearn API reference](http://scikit-learn.org/stable/modules/classes.html), which can be used as a model.",0
+108,https://github.com/RaRe-Technologies/gensim/issues/1818,1818,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}]",closed,2017-12-26 22:11:55+00:00,1,Incorrect setting of FastText parameters during online training  ,"#### Description
+The `FastText` model is trained with wrong parameters (`epochs`, `total_examples`, `start_alpha`, `end_alpha`) when calling `FastText.train` after building vocabulary. Since the above-mentioned training parameters are not logged, this bug is hidden from the users (probably explains why no one reported this issue earlier). This is a result of incorrect parameter setting ([here](https://github.com/RaRe-Technologies/gensim/blob/develop/gensim/models/fasttext.py#L531)) in the original pure python native implementation PR #1525 ([here](https://github.com/RaRe-Technologies/gensim/pull/1525/files#diff-d600f54965c37a9b12d856fe05956d90R205)).
+
+#### Steps/Code/Corpus to Reproduce
+No code -- since this issue is not detectable through code.
+
+#### Expected Results
+On calling `model.train(....)`, the model should train with parameters provided in the method call.
+
+#### Actual Results
+Model trains with the parameters set during model initialization.
+",0
+109,https://github.com/RaRe-Technologies/gensim/issues/1820,1820,"[{'id': 175986, 'node_id': 'MDU6TGFiZWwxNzU5ODY=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/testing', 'name': 'testing', 'color': '444444', 'default': False, 'description': 'Issue related with testing (code, documentation, etc)'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-12-27 15:00:00+00:00,3,Re-run & fix all notebooks with python3,"It's hard to support both python versions for notebook (and make completely impossible any testing), for this reason, need to do several things:
+- [ ] Re-run all notebooks with python3
+- [ ] Add `!pip install` line in the head of the notebook, if notebook required some additional dependencies 
+- [ ] Fix PEP8
+- [ ] Fix bugs (if exist)
+- [ ] Make easier work with downloaded datasets (add to gensim-data or something else)
+
+
+
+",0
+110,https://github.com/RaRe-Technologies/gensim/issues/1824,1824,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}]",closed,2018-01-03 15:12:11+00:00,10,FastText memory usage greatly exceeds value returned by `estimate_memory`,"#### Description
+When using `gensim.models.fasttext.FastText`, the actual memory usage is much higher (>2x) than predicted by `FastText.estimate_memory`.
+My usage scenario is to generate 300-dimensional word embeddings using SkipGram training with window size 8. My corpus has ~55,000,000 documents with ~4,144,457 word types across ~20,000,000,000 tokens. The machine has 16GB of available memory, 15GB of which are available for the Gensim process, as well as 16GB of Swap space.
+
+The estimated memory usage is ~11.2GB (see below), which is identical to the size estimated for the Word2Vec model with the same parameters. Training with Word2Vec works flawlessly and uses almost exactly as much memory as estimated.
+
+It seems that `FastText` does not implement its own `estimate_memory` method, but inherits it from the `Word2Vec` class, yielding unreliable values as can be seen below.  The critical section where the most memory is used seems to be this part in `FastText.init_ngrams`:
+
+```python
+all_ngrams = []
+for w, v in self.wv.vocab.items():
+    self.wv.ngrams_word[w] = compute_ngrams(w, self.min_n, self.max_n)
+    all_ngrams += self.wv.ngrams_word[w]
+```
+
+#### Steps/Code/Corpus to Reproduce
+
+```python
+from gensim.models import fasttext
+
+model = fasttext.FastText(size=300, sg=1, window=8, min_count=50, workers=8, iter=5)
+
+# Word frequencies loaded from a finite state transducer on disk, i.e. no memory usage
+freqs = load_frequencies()
+vocab_size = sum(1 for typ, cnt in freqs.items() if cnt >= 50)
+model.estimate_memory(vocab_size=vocab_size, report=True)
+# { 'syn0': 4973348400,
+#   'syn1neg': 4973348400,
+#   'vocab': 2072228500
+#   'total': 12018925300 }
+# I.e. ~11.2GB, well within the available memory
+
+model.build_vocab_from_freq(freqs, corpus_count=54878750)
+# Memory usage is at ~7GB now, identical to Word2Vec
+
+model.init_ngrams()
+# ... Killed by OOM killer after swap space has run out
+```
+
+#### Expected Results
+Should finish training without running out of memory.
+
+#### Actual Results
+Runs out of memory.
+
+#### Versions
+```
+Linux-4.10.0-28-generic-x86_64-with-Ubuntu-16.04-xenial
+Python 3.5.2 (default, Nov 23 2017, 16:37:01)
+[GCC 5.4.0 20160609]
+NumPy 1.13.3
+SciPy 1.0.0
+gensim 3.2.0
+FAST_VERSION (fasttext) 1
+FAST_VERSION (word2vec) 1
+```
+
+",0
+111,https://github.com/RaRe-Technologies/gensim/issues/1828,1828,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 721000065, 'node_id': 'MDU6TGFiZWw3MjEwMDAwNjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/good%20first%20issue', 'name': 'good first issue', 'color': '7057ff', 'default': True, 'description': 'Issue for new contributors (not required gensim understanding + very simple)'}]",closed,2018-01-07 10:36:39+00:00,1,BM25 : Incorrect scoring function,"https://github.com/RaRe-Technologies/gensim/blob/develop/gensim/summarization/bm25.py
+**Instead of ""len(document)"" it should be the length of the _index_ document of the corpus.**
+  
+```
+ def get_score(self, document, index, average_idf): 
+           # in this line it should be the length of the index document in the corpus
+            score += (idf * self.f[index][word] * (PARAM_K1 + 1)
+                      / (self.f[index][word] + PARAM_K1 * (1 - PARAM_B + PARAM_B * len(document) / self.avgdl)))
+```
+",0
+112,https://github.com/RaRe-Technologies/gensim/issues/1834,1834,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}]",closed,2018-01-09 08:01:23+00:00,4,D2VTransformer.fit_transform doesn't work,"The **X** parameter of the **fit_transform** method of **D2VTransformer** doesn't accept variables of any type, nor list of token lists (raises _AttributeError: 'list' object has no attribute 'words'_), nor list of TaggedDocument (raises _TypeError: sequence item 0: expected str instance, list found_).
+
+Example:
+```python
+from gensim.sklearn_api import D2VTransformer
+from gensim.models import doc2vec
+
+class_dict = {'mathematics': 1, 'physics': 0}
+train_data = [
+    (['calculus', 'mathematical'], 'mathematics'), (['geometry', 'operations', 'curves'], 'mathematics'),
+    (['natural', 'nuclear'], 'physics'), (['science', 'electromagnetism', 'natural'], 'physics')
+]
+d2v_sentences = [doc2vec.TaggedDocument(words[0], [i]) for i, words in enumerate(train_data)]
+train_input = list(map(lambda x: x[0], train_data))
+train_target = list(map(lambda x: class_dict[x[1]], train_data))
+
+model = D2VTransformer(min_count=1)
+model.fit_transform(train_input, train_target)
+#model.fit_transform(d2v_sentences, train_target)
+```
+Versions:
+Windows-10-10.0.16299-SP0
+Python 3.6.4 | packaged by conda-forge | (default, Dec 24 2017, 10:11:43) [MSC v.1900 64 bit (AMD64)]
+NumPy 1.13.3
+SciPy 0.19.1
+gensim 3.2.0
+FAST_VERSION 1",0
+114,https://github.com/RaRe-Technologies/gensim/issues/1844,1844,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}]",closed,2018-01-18 11:55:07+00:00,16,CalledProcessError,"Key lines:
+Mallet_Loc = r""/Users/myself/mallet-2.0.7""
+lda = gensim.models.wrappers.LdaMallet(Mallet_Loc,corpus, num_topics=Nos_Topics, id2word = dictionary)
+
+gives the following error
+
+Traceback (most recent call last):
+  File ""/Users/myself/Documents/JH_LDA Processing Gensim Mallet v3.py"", line 91, in <module>
+    lda = gensim.models.wrappers.LdaMallet(Mallet_Loc,corpus, num_topics=Nos_Topics, id2word = dictionary)
+  File ""/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/gensim/models/wrappers/ldamallet.py"", line 98, in __init__
+    self.train(corpus)
+  File ""/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/gensim/models/wrappers/ldamallet.py"", line 156, in train
+    self.convert_input(corpus, infer=False)
+  File ""/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/gensim/models/wrappers/ldamallet.py"", line 153, in convert_input
+    check_output(args=cmd, shell=True)
+  File ""/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/gensim/utils.py"", line 1174, in check_output
+    raise error
+subprocess.CalledProcessError: Command '/Users/jamiehamilton/mallet-2.0.7 import-file --preserve-case --keep-sequence --remove-stopwords --token-regex ""\S+"" --input /var/folders/hl/vxz79b3d7qd_ktk3dxs6gt680000gn/T/750b51_corpus.txt --output /var/folders/hl/vxz79b3d7qd_ktk3dxs6gt680000gn/T/750b51_corpus.mallet' returned non-zero exit status 126.
+
+Cant find reference to similar - any ideas?
+
+All the best
+Jamie
+
+import platform; print(platform.platform())
+Darwin-14.5.0-x86_64-i386-64bit
+>>> import sys; print(""Python"", sys.version)
+Python 3.6.2 (v3.6.2:5fd33b5926, Jul 16 2017, 20:11:06) 
+[GCC 4.2.1 (Apple Inc. build 5666) (dot 3)]
+>>> import numpy; print(""NumPy"", numpy.__version__)
+NumPy 1.13.3
+>>> import scipy; print(""SciPy"", scipy.__version__)
+SciPy 0.19.1
+>>> import gensim; print(""gensim"", gensim.__version__)
+gensim 3.0.0
+>>> from gensim.models import word2vec;print(""FAST_VERSION"", word2vec.FAST_VERSION)
+FAST_VERSION 0
+>>> ",0
+115,https://github.com/RaRe-Technologies/gensim/issues/1846,1846,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2018-01-19 07:41:43+00:00,14,Lda Model does not work with numpy 1.13,"It gives that following warning, 
+RuntimeWarning: invalid value encountered in subtract  result = psi(alpha) - psi(np.sum(alpha))
+
+It also does not result proper words probabilities for topics, and the result of show_topics looks like this: nan*w1 + nan*w2
+
+When I upgrade numpy to 1.14, LdaModel works properly.
+",0
+117,https://github.com/RaRe-Technologies/gensim/issues/1848,1848,"[{'id': 175640, 'node_id': 'MDU6TGFiZWwxNzU2NDA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/feature', 'name': 'feature', 'color': '0b02e1', 'default': False, 'description': 'Issue described a new feature'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}, {'id': 708355863, 'node_id': 'MDU6TGFiZWw3MDgzNTU4NjM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/need%20info', 'name': 'need info', 'color': 'fbca04', 'default': False, 'description': 'Not enough information for reproduce an issue, need more info from author'}]",closed,2018-01-19 17:32:54+00:00,5,time series plot of the topics,"How to create the time series plot like the once in the paper from ldaseqmodel output.
+
+Thx!!!
+
+<!--
+If your issue is a usage or a general question, please submit it here instead:
+- Mailing List: https://groups.google.com/forum/#!forum/gensim
+For more information, see Recipes&FAQ: https://github.com/RaRe-Technologies/gensim/wiki/Recipes-&-FAQ
+-->
+
+<!-- Instructions For Filing a Bug: https://github.com/RaRe-Technologies/gensim/blob/develop/CONTRIBUTING.md -->
+
+#### Description
+TODO: change commented example
+<!-- Example: Vocabulary size is not what I expected when training Word2Vec. -->
+
+#### Steps/Code/Corpus to Reproduce
+<!--
+Example:
+```
+from gensim.models import word2vec
+
+sentences = ['human', 'machine']
+model = word2vec.Word2Vec(sentences)
+print(model.syn0.shape) 
+```
+If the code is too long, feel free to put it in a public gist and link
+it in the issue: https://gist.github.com
+-->
+
+#### Expected Results
+<!-- Example: Expected shape of (100,2).-->
+
+#### Actual Results
+<!-- Example: Actual shape of (100,5). 
+
+Please paste or specifically describe the actual output or traceback. -->
+
+#### Versions
+<!--
+Please run the following snippet and paste the output below.
+import platform; print(platform.platform())
+import sys; print(""Python"", sys.version)
+import numpy; print(""NumPy"", numpy.__version__)
+import scipy; print(""SciPy"", scipy.__version__)
+import gensim; print(""gensim"", gensim.__version__)
+from gensim.models import word2vec;print(""FAST_VERSION"", word2vec.FAST_VERSION)
+-->
+
+
+<!-- Thanks for contributing! -->
+
+",0
+118,https://github.com/RaRe-Technologies/gensim/issues/1849,1849,"[{'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}, {'id': 721000065, 'node_id': 'MDU6TGFiZWw3MjEwMDAwNjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/good%20first%20issue', 'name': 'good first issue', 'color': '7057ff', 'default': True, 'description': 'Issue for new contributors (not required gensim understanding + very simple)'}]",closed,2018-01-22 11:37:37+00:00,4,Store images from README directly in repository,"**Problem**: We have [adopters table](https://github.com/RaRe-Technologies/gensim#adopters) that contains concrete companies with logo & additional information. Images (logo) stored everywhere (random CDN, sites, etc) -> can be broken (unavailable) -> README doesn't looks good.
+
+**Solution**: Store all images in repository
+
+**Warning**: We don't want to store large `.jpg`, all images should be optimized before.",0
+119,https://github.com/RaRe-Technologies/gensim/issues/1851,1851,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}, {'id': 1602279836, 'node_id': 'MDU6TGFiZWwxNjAyMjc5ODM2', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/reach%20MEDIUM', 'name': 'reach MEDIUM', 'color': 'ef7a1a', 'default': False, 'description': 'Affects a significant number of users'}, {'id': 1602334472, 'node_id': 'MDU6TGFiZWwxNjAyMzM0NDcy', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/impact%20MEDIUM', 'name': 'impact MEDIUM', 'color': '7af49f', 'default': False, 'description': 'Big annoyance for affected users'}]",closed,2018-01-23 12:37:30+00:00,34,Support streaming models split into multiple files from S3 / GCS,"Streaming small d2v models from s3 bucket works fine. Simply insert the s3 address into model.load. e.g. model.load('s3://<bucket>/<path>). However, when the model gets bigger and is split into multiple files all files except the main model file cannot be loaded. These other files are loaded by numpy and not smart_open. 
+
+The essential part of my code is
+
+```
+def load_model(model_file):
+    return Doc2Vec.load(model_file)
+
+# infer 
+def infer_docs(input_string, model_file, inferred_docs=5):
+    model = load_model(model_file)
+    processed_str = simple_preprocess(input_string, min_len=2, max_len=35)    
+    inferred_vector = model.infer_vector(processed_str)
+    return model.docvecs.most_similar([inferred_vector], topn=inferred_docs)
+```
+Trying to load from s3 on a bugger model yields: 
+
+```
+[INFO]  2018-01-21T20:44:59.613Z    f2689816-feeb-11e7-b397-b7ff2947dcec    testing keys in event dict
+[INFO]  2018-01-21T20:44:59.614Z    f2689816-feeb-11e7-b397-b7ff2947dcec    loading model from s3://data-d2v/trained_models/model_law
+[INFO]  2018-01-21T20:44:59.614Z    f2689816-feeb-11e7-b397-b7ff2947dcec    loading Doc2Vec object from s3://data-d2v/trained_models/model_law
+[INFO]  2018-01-21T20:44:59.650Z    f2689816-feeb-11e7-b397-b7ff2947dcec    Found credentials in environment variables.
+[INFO]  2018-01-21T20:44:59.707Z    f2689816-feeb-11e7-b397-b7ff2947dcec    Starting new HTTPS connection (1): s3.eu-west-1.amazonaws.com
+[INFO]  2018-01-21T20:44:59.801Z    f2689816-feeb-11e7-b397-b7ff2947dcec    Starting new HTTPS connection (2): s3.eu-west-1.amazonaws.com
+[INFO]  2018-01-21T20:45:35.830Z    f2689816-feeb-11e7-b397-b7ff2947dcec    loading wv recursively from s3://data-d2v/trained_models/model_law.wv.* with mmap=None
+[INFO]  2018-01-21T20:45:35.830Z    f2689816-feeb-11e7-b397-b7ff2947dcec    loading syn0 from s3://data-d2v/trained_models/model_law.wv.syn0.npy with mmap=None
+[Errno 2] No such file or directory: 's3://data-d2v/trained_models/model_law.wv.syn0.npy': FileNotFoundError
+Traceback (most recent call last):
+  File ""/var/task/handler.py"", line 20, in infer_handler
+    event['input_text'], event['model_file'], inferred_docs=10)
+  File ""/var/task/infer_doc.py"", line 26, in infer_docs
+    model = load_model(model_file)
+  File ""/var/task/infer_doc.py"", line 21, in load_model
+    return Doc2Vec.load(model_file)
+  File ""/var/task/gensim/models/word2vec.py"", line 1569, in load
+    model = super(Word2Vec, cls).load(*args, **kwargs)
+  File ""/var/task/gensim/utils.py"", line 282, in load
+    obj._load_specials(fname, mmap, compress, subname)
+  File ""/var/task/gensim/models/word2vec.py"", line 1593, in _load_specials
+    super(Word2Vec, self)._load_specials(*args, **kwargs)
+  File ""/var/task/gensim/utils.py"", line 301, in _load_specials
+    getattr(self, attrib)._load_specials(cfname, mmap, compress, subname)
+  File ""/var/task/gensim/utils.py"", line 312, in _load_specials
+    val = np.load(subname(fname, attrib), mmap_mode=mmap)
+  File ""/var/task/numpy/lib/npyio.py"", line 372, in load
+    fid = open(file, ""rb"")
+FileNotFoundError: [Errno 2] No such file or directory: 's3://data-d2v/trained_models/model_law.wv.syn0.npy'
+```
+My use case is to serve the models on a AWS lambda. My current workarond is to download all model files to a local folder and then load the model from the local folder which is rather slow
+",0
+120,https://github.com/RaRe-Technologies/gensim/issues/1854,1854,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}, {'id': 721000065, 'node_id': 'MDU6TGFiZWw3MjEwMDAwNjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/good%20first%20issue', 'name': 'good first issue', 'color': '7057ff', 'default': True, 'description': 'Issue for new contributors (not required gensim understanding + very simple)'}]",closed,2018-01-24 09:47:10+00:00,3,"gensim.matutils.hellinger d(x,y) != d(y,x) if len(x) = len(y)","<!--
+If your issue is a usage or a general question, please submit it here instead:
+- Mailing List: https://groups.google.com/forum/#!forum/gensim
+For more information, see Recipes&FAQ: https://github.com/RaRe-Technologies/gensim/wiki/Recipes-&-FAQ
+-->
+
+<!-- Instructions For Filing a Bug: https://github.com/RaRe-Technologies/gensim/blob/develop/CONTRIBUTING.md -->
+
+#### Description
+<!-- Example: Vocabulary size is not what I expected when training Word2Vec. -->
+Compute the distance between 2 distribution with gensim.matutils.hellinger. The d(x,y) do not equal to d(y,x) if len(x) = len(y)
+#### Steps/Code/Corpus to Reproduce
+<!--
+Example:
+```
+from gensim.models import word2vec
+
+sentences = ['human', 'machine']
+model = word2vec.Word2Vec(sentences)
+print(model.syn0.shape) 
+```
+If the code is too long, feel free to put it in a public gist and link
+it in the issue: https://gist.github.com
+-->
+from gensim.matutils import hellinger
+vec_1 = [(2, 0.1), (3, 0.4), (4, 0.1), (5, 0.1), (1, 0.1), (7, 0.2)]
+vec_2 = [(1, 0.1), (3, 0.8), (4, 0.1), (8, 0.1), (10, 0.8), (9, 0.1)]
+hellinger(vec_1,vec_2) == hellinger(vec_2,vec_1)
+
+#### Expected Results
+<!-- Example: Expected shape of (100,2).-->
+True
+#### Actual Results
+<!-- Example: Actual shape of (100,5). 
+Please paste or specifically describe the actual output or traceback. -->
+False
+#### Versions
+<!--
+Please run the following snippet and paste the output below.
+import platform; print(platform.platform())
+import sys; print(""Python"", sys.version)
+import numpy; print(""NumPy"", numpy.__version__)
+import scipy; print(""SciPy"", scipy.__version__)
+import gensim; print(""gensim"", gensim.__version__)
+from gensim.models import word2vec;print(""FAST_VERSION"", word2vec.FAST_VERSION)
+-->
+Linux-4.13.0-26-generic-x86_64-with-debian-stretch-sid
+('Python', '2.7.11 |Anaconda custom (64-bit)| (default, Dec  6 2015, 18:08:32) \n[GCC 4.4.7 20120313 (Red Hat 4.4.7-1)]')
+('NumPy', '1.13.3')
+('SciPy', '1.0.0')
+('gensim', '3.1.0')
+('FAST_VERSION', 1)
+
+<!-- Thanks for contributing! -->
+
+",0
+121,https://github.com/RaRe-Technologies/gensim/issues/1855,1855,[],closed,2018-01-24 15:09:55+00:00,3,Swapped edges in the Poincare embeddings code ?,"#### Description
+Directed edges of the Wordnet transitive closure (directed acyclic graph) used in the Poincare embeddings code are swapped in the input file wordnet_noun_hypernyms.tsv and they are never swapped back in the actual code. Why ? 
+
+#### Steps/Code/Corpus to Reproduce
+Edges are not swapped back in all the places in the Gensim Poincare implementation, e.g. in the function get_root_and_leaf_nodes from docs/notebooks/Poincare%20Evaluation.ipynb . The original wordnet_file with swapped edges is here: https://github.com/jayantj/gensim/raw/wordnet_data/docs/notebooks/poincare/data/wordnet_noun_hypernyms.tsv
+
+If not processed with the correct direction of the edges, this affects both training and evaluation. Is there any explanation for this ?
+",0
+122,https://github.com/RaRe-Technologies/gensim/issues/1857,1857,[],closed,2018-01-25 12:25:13+00:00,1,Poincare - Link Prediction train set should not exclude links with leaves,"#### Description
+Links containing root/leaves should not be excluded from the train set of the Link Prediction task in the Poincare embeddings code.
+
+#### Steps/Code/Corpus to Reproduce
+In the Poincare embeddings paper it is stated that links containing the root or a leaf node should be excluded from the validation and test set. However, in the Gensim code they are excluded also from the train set. This cannot be useful since there will be no knowledge at all about leaves at both train and test time, making the task much harder and potentially explaining the worse results obtained so far.
+
+The function that generates the train file is `train_test_split(data_file, test_ratio=0.1)` from
+https://github.com/RaRe-Technologies/gensim/blob/develop/docs/notebooks/Poincare%20Evaluation.ipynb
+
+@jayantj can you please elaborate?",0
+123,https://github.com/RaRe-Technologies/gensim/issues/1858,1858,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}, {'id': 721000065, 'node_id': 'MDU6TGFiZWw3MjEwMDAwNjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/good%20first%20issue', 'name': 'good first issue', 'color': '7057ff', 'default': True, 'description': 'Issue for new contributors (not required gensim understanding + very simple)'}]",closed,2018-01-25 14:04:56+00:00,5,Wrong distance in Lexical entailment experiment for Poincare embeddings,"The following line https://github.com/RaRe-Technologies/gensim/blob/develop/gensim/models/poincare.py#L1522
+should be:
+```
+return -1 * (1 + self.alpha * (norm_2 - norm_1)) * min_distance
+```
+otherwise `distance` is the last encountered distance, not the smallest one.",0
+124,https://github.com/RaRe-Technologies/gensim/issues/1862,1862,"[{'id': 708355863, 'node_id': 'MDU6TGFiZWw3MDgzNTU4NjM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/need%20info', 'name': 'need info', 'color': 'fbca04', 'default': False, 'description': 'Not enough information for reproduce an issue, need more info from author'}]",closed,2018-01-28 15:01:20+00:00,6,EOFError while on make_wiki,"<!--
+If your issue is a usage or a general question, please submit it here instead:
+- Mailing List: https://groups.google.com/forum/#!forum/gensim
+For more information, see Recipes&FAQ: https://github.com/RaRe-Technologies/gensim/wiki/Recipes-&-FAQ
+-->
+
+<!-- Instructions For Filing a Bug: https://github.com/RaRe-Technologies/gensim/blob/develop/CONTRIBUTING.md -->
+
+#### Description
+Midway running `gensim.scripts.make_wiki` on latest WikiPedia article dump, EOFError was spit out, which stopped the processing.
+<!-- Example: Vocabulary size is not what I expected when training Word2Vec. -->
+
+```
+2018-01-28 15:45:35,500 : INFO : resulting dictionary: Dictionary(2000000 unique tokens: [u'tripolitan', u'ftdna', u'padanagan', u'soestdijk', u'farmobil']...)
+2018-01-28 15:45:35,573 : INFO : adding document #4180000 to Dictionary(2000000 unique tokens: [u'tripolitan', u'ftdna', u'padanagan', u'soestdijk', u'farmobil']...)
+Process InputQueue-4:
+Traceback (most recent call last):
+  File ""/usr/lib64/python2.7/multiprocessing/process.py"", line 267, in _bootstrap
+    self.run()
+  File ""/home/psukys/.local/lib/python2.7/site-packages/gensim/utils.py"", line 845, in run
+    wrapped_chunk = [list(chunk)]
+  File ""/home/psukys/.local/lib/python2.7/site-packages/gensim/corpora/wikicorpus.py"", line 361, in <genexpr>
+    ((text, self.lemmatize, title, pageid, tokenization_params)
+  File ""/home/psukys/.local/lib/python2.7/site-packages/gensim/corpora/wikicorpus.py"", line 221, in extract_pages
+    for elem in elems:
+  File ""/home/psukys/.local/lib/python2.7/site-packages/gensim/corpora/wikicorpus.py"", line 206, in <genexpr>
+    elems = (elem for _, elem in iterparse(f, events=(""end"",)))
+  File ""<string>"", line 100, in next
+EOFError: compressed file ended before the logical end-of-stream was detected
+```
+
+#### Steps/Code/Corpus to Reproduce
+Run on [latest](https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles.xml.bz2) (21-Jan-2018 21:27         14705396388)
+```
+python -m gensim.script.make_wiki
+```
+",0
+125,https://github.com/RaRe-Technologies/gensim/issues/1869,1869,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2018-02-01 10:03:05+00:00,6,MmCorpus file-like object support bug,"**Into**
+We have some ""weird"" behavior if a user passes a `file-like` object to `MmCorpus`, based on [this mailing list thread](https://groups.google.com/forum/#!topic/gensim/420pRBwexKQ)
+
+**Demonstration**
+
+```python
+from gensim.corpora import MmCorpus
+import bz2
+
+f = bz2.BZ2File(""testcorpus.mm.bz2"")
+print(f.closed)  # 0
+corpus = MmCorpus(f)
+print(f.closed)  # 1 ???
+```
+
+**What happens**
+File-like object was closed when we call `MmReader`, problem located here
+
+https://github.com/RaRe-Technologies/gensim/blob/5342153eb4f4b02bb45bfa3951eef8250ac9f6b6/gensim/matutils.py#L1274
+
+
+`with` automatically close `file-like` when we out of scope, **this is OK if we open this file**, but we **shouldn't close file-like passed from user**.
+
+Related PR #1867 
+
+
+**UPD:** another problem here - call `IndexCopus.__init__`, that didn't support `file-like` object at all.",0
+129,https://github.com/RaRe-Technologies/gensim/issues/1877,1877,[],closed,2018-02-04 04:37:31+00:00,4,ImportError: cannot import name KeyedVectors,"Python 2.7.12, Mac OS High Sierra, gensim (0.13.4.1)
+
+from sklearn.externals import joblib
+from gensim.models import KeyedVectors
+
+Traceback (most recent call last):
+  File ""Test_for_ adversariality.py"", line 5, in <module>
+    from gensim.models import KeyedVectors
+ImportError: cannot import name KeyedVectors
+
+I am trying to load the skipgram.txt files. ",0
+20,https://github.com/RaRe-Technologies/gensim/issues/1602,1602,[],closed,2017-09-28 18:13:06+00:00,1,DTM tutorial steps extracted all the same topics for all timestamps,"Hi,
+
+   I've tried following the DTM tutorial almost line by line to extract topics from a corpus.  Using scikit-learn, I can see that there are distinct topics in the corpus, and also that the topics change as a function of time.  However, dtm doesn't seem to produce anything that makes sense.
+
+    Here is my 4-member list of documents:
+
+      documents = [[u'worth', u'deli', u'month', u'enjoy', u'bacon', u'second', u'street', u'even', u'new',u'ever', u'told', u'met', u'daughter', u'brought', u'spoke', u'would', u'asset', u'type', u'tell', u'phone', u'hold', u'room', u'work', u'fresher', u'give', u'household', u'want', u'keep', u'bag', u'end', u'thing', u'travel', u'hot', u'lay', u'third', u'alka', u'greet', u'green', u'enter', u'order', u'wine', u'better', u'easier', u'bread', u'meat', u'went', u'forgot', u'laid', u'got', u'free', u'local', u'tilapia', u'shopper', u'top', u'took', u'hadnt', u'matter', u'mind', u'manner', u'seen', u'seem', u'brandon', u'blue', u'though', u'regular', u'stood', u'make', u'layout', u'aldi', u'stop', u'watermelon', u'twice', u'bad', u'respond', u'best', u'said', u'away', u'yogurt', u'never', u'fault', u'tone', u'speak', u'bathroom', u'beef', u'much', u'save', u'n', u'dept', u'near', u'neat', u'gave', u'sushi', u'cant', u'im', u'ie', u'hand', u'butter', u'kept', u'contact', u'left', u'previous', u'spread', u'gift', u'cooler', u'right', u'old', u'deal', u'ice', u'discount', u'super', u'dinner', u'wrap', u'way', u'head', u'offer', u'upset', u'drive', u'check', u'floor', u'tie', u'smell', u'kroger', u'longer', u'loyal', u'time', u'mile', u'milk', u'anyway', u'item', u'team', u'guy', u'pork', u'sign', u'cost', u'patient', u'clerk', u'along', u'wait', u'box', u'shift', u'love', u'extra', u'prefer', u'market', u'visit', u'live', u'creamer', u'checkout', u'today', u'cashier', u'car', u'product', u'may', u'date', u'man', u'talk', u'still', u'thank', u'main', u'non', u'within', u'name', u'receipt', u'happen', u'correct', u'cart', u'california', u'card', u'care', u'place', u'think', u'frequent', u'first', u'one', u'long', u'ring', u'open', u'tomorrow', u'size', u'checker', u'wide', u'raincheck', u'nicer', u'say', u'saw', u'take', u'sure', u'price', u'knew', u'paid', u'seafood', u'later', u'sale', u'senior', u'shop', u'show', u'bright', u'ground', u'slow', u'enough', u'get', u'seldom', u'husband', u'across', u'sacker', u'come', u'restroom', u'pop', u'mark', u'ive', u'everyday', u'pay', u'trip', u'week', u'assist', u'fruit', u'without', u'reward', u'money', u'young', u'rest', u'speed', u'except', u'real', u'around', u'read', u'world', u'tend', u'either', u'perfer', u'highest', u'wheat', u'ok', u'act', u'road', u'coupon', u'strip', u'area', u'start', u'low', u'heb', u'regard', u'toilet', u'certain', u'incorrect', u'personnel', u'event', u'poor', u'wife', u'missouri', u'follow', u'smile', u'fav', u'fat', u'ticket', u'list', u'small', u'neighborhood', u'andor', u'past', u'section', u'prior', u'amount', u'pick', u'put', u'eye', u'two', u'particular', u'town', u'none', u'del', u'scan', u'gallon', u'huge', u'okay', u'rude', u'short', u'egg', u'help', u'paper', u'might', u'good', u'return', u'food', u'found', u'hard', u'expect', u'beyond', u'health', u'print', u'friday', u'guess', u'pleasant', u'quick', u'reason', u'ask', u'major', u'dont', u'feel', u'number', u'done', u'gourmet', u'least', u'store', u'relationship', u'park', u'kind', u'wasnt', u'sell', u'self', u'jonmark', u'reach', u'plan', u'clear', u'part', u'clean', u'fine', u'find', u'express', u'cheaper', u'cold', u'x', u'see', u'close', u'grocer', u'sold', u'water', u'last', u'mega', u'whole', u'point', u'ran', u'pm', u'citizen', u'understand', u'demand', u'look', u'frozen', u'bill', u'smart', u'error', u'higher', u'walmart', u'lower', u'person', u'cut', u'also', u'eager', u'easter', u'complaint', u'big', u'bit', u'like', u'lost', u'often', u'back', u'understood', u'run', u'question', u'fast', u'doubt', u'line', u'us', u'nice', u'lane', u'e', u'came', u'fresh', u'hello', u'code', u'go', u'sent', u'download', u'cell', u'let', u'great', u'larger', u'survey', u'app', u'use', u'next', u'sore', u'didnt', u'high', u'friendlier', u'instead', u'stand', u'watch', u'light', u'counter', u'move', u'lb', u'front', u'day', u'stock', u'special', u'red', u'que', u'could', u'david', u'lot', u'shelf', u'bother', u'need', u'pharmacist', u'request', u'hi', u'fact', u'bring', u'keyera', u'chicken', u'staff', u'fuel', u'familiar', u'closer', u'neither', u'bought', u'job', u'instant', u'etc', u'comment', u'gone', u'walk', u'commend', u'ad', u'treat', u'vanilla', u'ill', u'almost', u'began', u'cream', u'upon', u'center', u'well', u'thought', u'rush', u'less', u'half', u'match', u'know', u'desk', u'helpful', u'soft', u'church', u'home', u'although', u'justin', u'buy', u'brand', u'bagger', u'made', u'whether', u'wish', u'smooth', u'cake', u'problem'], [u'four', u'deli', u'enjoy', u'second', u'street', u'even', u'new', u'ever', u'told', u'met', u'cart', u'daughter', u'credit', u'brought', u'total', u'spoke', u'would', u'call', u'asset', u'recommend', u'tell', u'warm', u'must', u'room', u'work', u'give', u'want', u'end', u'turn', u'far', u'hot', u'mess', u'earlier', u'wrong', u'lot', u'greet', u'green', u'fan', u'order', u'wine', u'better', u'mgmt', u'bread', u'meat', u'roast', u'went', u'side', u'saturday', u'got', u'free', u'rang', u'shopper', u'top', u'listen', u'took', u'esta', u'ran', u'mind', u'ginger', u'manner', u'seen', u'seem', u'blue', u'regular', u'dog', u'came', u'layout', u'explain', u'aldi', u'stop', u'watermelon', u'bag', u'bad', u'steak', u'steam', u'best', u'said', u'away', u'muy', u'bien', u'yogurt', u'never', u'theresa', u'speak', u'much', u'life', u'xxx', u'worker', u'near', u'neat', u'k', u'cant', u'im', u'id', u'suggest', u'make', u'rain', u'hand', u'butter', u'kept', u'game', u'left', u'save', u'apart', u'gift', u'right', u'old', u'deal', u'ice', u'corn', u'discount', u'super', u'afternoon', u'way', u'head', u'offer', u'true', u'fort', u'later', u'drive', u'mold', u'trip', u'floor', u'na', u'til', u'roll', u'felt', u'weekend', u'phone', u'loyal', u'time', u'mile', u'milk', u'brown', u'level', u'item', u'team', u'quick', u'guy', u'round', u'pork', u'sign', u'cost', u'appear', u'clerk', u'address', u'along', u'wait', u'love', u'extra', u'prefer', u'visit', u'live', u'thru', u'checkout', u'today', u'cashier', u'car', u'soup', u'freezer', u'alway', u'product', u'may', u'floral', u'man', u'basket', u'talk', u'cold', u'still', u'mail', u'main', u'half', u'son', u'wont', u'name', u'en', u'receipt', u'year', u'girl', u'es', u'correct', u'card', u'care', u'thing', u'place', u'think', u'frequent', u'first', u'one', u'long', u'ring', u'open', u'size', u'given', u'plastic', u'checker', u'wide', u'pre', u'raincheck', u'say', u'saw', u'take', u'sure', u'price', u'knew', u'paid', u'seafood', u'sale', u'senior', u'shop', u'shot', u'slow', u'behind', u'get', u'husband', u'concern', u'across', u'sacker', u'come', u'por', u'squash', u'case', u'ive', u'restroom', u'pay', u'check', u'week', u'assist', u'fruit', u'without', u'reward', u'comment', u'outdoor', u'money', u'rest', u'brianna', u'rose', u'except', u'around', u'either', u'satisfecha', u'tube', u'broken', u'found', u'throw', u'ok', u'area', u'hey', u'start', u'low', u'heb', u'enough', u'younger', u'longer', u'asst', u'gone', u'ad', u'certain', u'personnel', u'event', u'poor', u'missouri', u'month', u'tx', u'program', u'smile', u'fall', u'list', u'small', u'neighborhood', u'past', u'pass', u'stood', u'section', u'full', u'reason', u'prior', u'amount', u'pick', u'ask', u'select', u'eye', u'two', u'particular', u'none', u'hour', u'learn', u'clutter', u'prompt', u'scan', u'huge', u'rather', u'rude', u'soda', u'reflect', u'short', u'began', u'help', u'soon', u'paper', u'late', u'friendliest', u'might', u'good', u'return', u'food', u'bigger', u'fish', u'hard', u'expect', u'todo', u'friday', u'guess', u'pleasant', u'dont', u'feel', u'number', u'interact', u'least', u'storm', u'store', u'option', u'deshawn', u'kind', u'toward', u'wasnt', u'self', u'also', u'part', u'cereal', u'fine', u'find', u'access', u'express', u'cheaper', u'breast', u'set', u'see', u'bare', u'sea', u'close', u'sold', u'water', u'last', u'mega', u'whole', u'load', u'point', u'sweet', u'throughout', u'due', u'pm', u'gal', u'understand', u'look', u'frozen', u'bill', u'pack', u'pound', u'kroger', u'belong', u'tiljuanna', u'higher', u'walmart', u'older', u'spent', u'person', u'spend', u'cut', u'eager', u'app', u'complaint', u'big', u'redeem', u'bit', u'often', u'back', u'pet', u'though', u'per', u'run', u'bc', u'within', u'question', u'fast', u'line', u'us', u'nice', u'clean', u'lane', u'e', u'fresh', u'hello', u'go', u'young', u'lower', u'sent', u'booth', u'download', u'cell', u'chose', u'let', u'great', u'larger', u'survey', u'opinion', u'use', u'next', u'meet', u'didnt', u'high', u'bend', u'six', u'instead', u'stock', u'farm', u'watch', u'ronald', u'counter', u'houston', u'move', u'perfect', u'lo', u'coupon', u'weber', u'front', u'day', u'red', u'que', u'could', u'put', u'keep', u'sack', u'fair', u'system', u'shelf', u'need', u'gluten', u'pharmacist', u'face', u'fact', u'bring', u'chicken', u'staff', u'fuel', u'local', u'hope', u'familiar', u'rush', u'werent', u'twice', u'stuff', u'state', u'bought', u'job', u'thank', u'etc', u'co', u'walk', u'cent', u'vanilla', u'ripe', u'almost', u'cream', u'difficult', u'upon', u'center', u'well', u'thought', u'usual', u'less', u'bell', u'add', u'citizen', u'match', u'know', u'desk', u'like', u'dept', u'page', u'home', u'although', u'justin', u'three', u'scanner', u'buy', u'brand', u'bagger', u'eat', u'made', u'wish', u'problem', u'threw', u'special', u'sick', u'stay'], [u'four', u'hate', u'restock', u'worth', u'deli', u'frozen', u'enjoy', u'almond', u'bacon', u'second', u'street', u'ill', u'even', u'new', u'ever', u'told', u'men', u'met', u'brought', u'spoke', u'would', u'call', u'type', u'tell', u'hurt', u'phone', u'must', u'word', u'room', u'work', u'ms', u'mr', u'fresher', u'give', u'want', u'end', u'turn', u'hot', u'mess', u'earlier', u'wrong', u'greet', u'order', u'feedback', u'oven', u'better', u'easier', u'interrupt', u'one', u'bank', u'bread', u'meat', u'went', u'side', u'forgot', u'got', u'free', u'rang', u'shopper', u'top', u'took', u'esta', u'ran', u'raw', u'manner', u'seen', u'seem', u'though', u'regular', u'came', u'teresa', u'layout', u'explain', u'stop', u'bar', u'bad', u'best', u'said', u'away', u'gentleman', u'yogurt', u'never', u'speak', u'beef', u'three', u'beer', u'much', u'dept', u'near', u'neat', u'cant', u'im', u'id', u'suggest', u'make', u'split', u'hand', u'butter', u'kept', u'left', u'yet', u'previous', u'ham', u'save', u'gave', u'night', u'sacker', u'right', u'old', u'deal', u'bottom', u'ice', u'discount', u'dinner', u'wan', u'wal', u'gift', u'way', u'head', u'true', u'sale', u'face', u'check', u'floor', u'na', u'smell', u'roll', u'felt', u'diet', u'younger', u'faster', u'loyal', u'fact', u'time', u'mild', u'milk', u'row', u'item', u'quick', u'guy', u'round', u'pork', u'sign', u'run', u'clerk', u'slow', u'wait', u'box', u'bob', u'love', u'extra', u'prefer', u'super', u'visit', u'live', u'today', u'cashier', u'car', u'soup', u'kym', u'sunday', u'product', u'may', u'date', u'man', u'basket', u'talk', u'cold', u'still', u'group', u'thank', u'mail', u'gel', u'non', u'half', u'son', u'name', u'rock', u'pizza', u'el', u'receipt', u'es', u'correct', u'cart', u'card', u'care', u'thing', u'place', u'think', u'frequent', u'first', u'fast', u'ring', u'open', u'size', u'plastic', u'checker', u'wide', u'bag', u'say', u'saw', u'tshey', u'greek', u'note', u'take', u'green', u'sure', u'normal', u'price', u'paid', u'seafood', u'senior', u'shop', u'shot', u'bright', u'label', u'enough', u'get', u'across', u'come', u'por', u'turkey', u'mark', u'mart', u'case', u'ive', u'clutter', u'buyl', u'pay', u'trip', u'week', u'without', u'money', u'flavor', u'except', u'around', u'read', u'traffic', u'either', u'satisfecha', u'tube', u'wheat', u'broken', u'found', u'comparison', u'act', u'road', u'coupon', u'area', u'start', u'low', u'heb', u'expect', u'toilet', u'certain', u'file', u'fill', u'incorrect', u'personnel', u'event', u'trash', u'u', u'missouri', u'lack', u'dollar', u'month', u'tx', u'program', u'smile', u'woman', u'far', u'fat', u'list', u'small', u'neighborhood', u'andor', u'past', u'stood', u'section', u'public', u'movement', u'full', u'theresa', u'search', u'ahead', u'amount', u'pick', u'select', u'eye', u'two', u'taken', u'diamond', u'particular', u'none', u'hour', u'prompt', u'scan', u'accept', u'huge', u'rather', u'sandwich', u'okay', u'rude', u'short', u'egg', u'help', u'soon', u'paper', u'might', u'good', u'return', u'food', u'weight', u'fish', u'hard', u'finish', u'beyond', u'todo', u'shipment', u'friday', u'pleasant', u'reason', u'put', u'teach', u'fruit', u'dont', u'feel', u'number', u'smaller', u'done', u'miss', u'interact', u'least', u'station', u'jed', u'store', u'part', u'kind', u'cleaner', u'wasnt', u'self', u'reach', u'clean', u'fine', u'find', u'express', u'cheaper', u'silk', u'courteous', u'see', u'close', u'sold', u'water', u'last', u'mega', u'whole', u'point', u'sweet', u'throughout', u'belt', u'due', u'pm', u'look', u'pack', u'kroger', u'higher', u'walmart', u'lower', u'older', u'spent', u'person', u'spend', u'patel', u'cut', u'big', u'bit', u'often', u'back', u'pet', u'patient', u'within', u'question', u'long', u'line', u'checkout', u'us', u'nice', u'competitor', u'ago', u'lane', u'inout', u'fresh', u'hello', u'go', u'young', u'sent', u'cell', u'rotten', u'let', u'great', u'larger', u'survey', u'app', u'use', u'next', u'salad', u'didnt', u'kassidi', u'process', u'high', u'friendlier', u'instead', u'stand', u'counter', u'move', u'meatseafood', u'perfect', u'la', u'willing', u'holiday', u'front', u'day', u'stock', u'special', u'que', u'could', u'ask', u'keep', u'sack', u'floral', u'lot', u'shelf', u'bother', u'neel', u'need', u'mix', u'pharmacist', u'bring', u'chicken', u'longer', u'staff', u'jar', u'fuel', u'hope', u'familiar', u'rush', u'werent', u'stuff', u'grab', u'salmon', u'closer', u'state', u'bought', u'job', u'etc', u'comment', u'gone', u'walk', u'respect', u'ad', u'decent', u'treat', u'almost', u'cream', u'drink', u'center', u'well', u'thought', u'usual', u'less', u'bell', u'match', u'know', u'desk', u'like', u'soft', u'italian', u'home', u'avoid', u'although', u'buy', u'gluten', u'brand', u'hi', u'bagger', u'eat', u'also', u'made', u'wish', u'cake', u'problem', u'display', u'girl'], [u'worth', u'deli', u'school', u'enjoy', u'bacon', u'second', u'street', u'even', u'new', u'ever', u'told', u'never', u'credit', u'brought', u'total', u'spoke', u'would', u'call', u'type', u'tell', u'oscar', u'phone', u'hold', u'must', u'room', u'work', u'ms', u'give', u'want', u'end', u'thing', u'greet', u'order', u'better', u'easier', u'bread', u'meat', u'went', u'got', u'free', u'small', u'rang', u'shopper', u'listen', u'took', u'manner', u'seen', u'seem', u'though', u'regular', u'came', u'teresa', u'layout', u'earn', u'bag', u'bad', u'best', u'said', u'away', u'gentleman', u'yogurt', u'speak', u'bathroom', u'beef', u'three', u'much', u'life', u'worker', u'meyer', u'n', u'dept', u'near', u'neat', u'cant', u'im', u'make', u'rain', u'hand', u'butter', u'kept', u'contact', u'left', u'yet', u'save', u'gave', u'gift', u'night', u'right', u'old', u'deal', u'ice', u'corn', u'discount', u'super', u'dinner', u'nixon', u'son', u'wal', u'way', u'war', u'head', u'offer', u'true', u'sale', u'door', u'download', u'check', u'na', u'nd', u'til', u'felt', u'diet', u'longer', u'loyal', u'time', u'mile', u'milk', u'veg', u'brown', u'cool', u'item', u'quick', u'yall', u'pork', u'cost', u'appear', u'current', u'clerk', u'water', u'wait', u'love', u'extra', u'prefer', u'visit', u'live', u'thru', u'checkout', u'today', u'cashier', u'effort', u'car', u'product', u'may', u'floral', u'man', u'basket', u'still', u'thank', u'non', u'name', u'receipt', u'year', u'space', u'cart', u'card', u'place', u'think', u'first', u'one', u'long', u'ring', u'open', u'checker', u'wide', u'coconut', u'raincheck', u'sad', u'say', u'saw', u'take', u'sure', u'price', u'knew', u'seafood', u'later', u'drive', u'senior', u'shop', u'show', u'bright', u'corner', u'ground', u'slow', u'enough', u'black', u'get', u'behind', u'across', u'come', u'turkey', u'case', u'ive', u'etc', u'pay', u'trip', u'week', u'finish', u'assist', u'fruit', u'without', u'reward', u'comment', u'money', u'flavor', u'real', u'around', u'isiss', u'either', u'found', u'ok', u'stand', u'luck', u'road', u'mart', u'area', u'start', u'low', u'heb', u'regard', u'taylor', u'ad', u'cream', u'peak', u'wife', u'missouri', u'month', u'children', u'program', u'th', u'smile', u'woman', u'far', u'list', u'yasmin', u'neighborhood', u'tea', u'cash', u'past', u'pass', u'section', u'full', u'theresa', u'pick', u'put', u'eye', u'two', u'diamond', u'dion', u'particular', u'glad', u'none', u'learn', u'accept', u'huge', u'rather', u'okay', u'rude', u'short', u'help', u'paper', u'might', u'good', u'food', u'pregnant', u'fish', u'hard', u'expect', u'beyond', u'event', u'hill', u'friday', u'pleasant', u'reason', u'ask', u'dont', u'feel', u'number', u'least', u'store', u'park', u'part', u'kind', u'toward', u'wasnt', u'sell', u'self', u'lit', u'also', u'reach', u'clear', u'mylnn', u'clean', u'gold', u'fine', u'find', u'express', u'see', u'close', u'sold', u'last', u'mega', u'whole', u'bell', u'sweet', u'church', u'belt', u'due', u'pm', u'look', u'frozen', u'budget', u'pack', u'kroger', u'higher', u'walmart', u'lower', u'person', u'five', u'patel', u'easter', u'big', u'bit', u'often', u'back', u'run', u'question', u'fast', u'line', u'us', u'nice', u'helpful', u'lane', u'e', u'fresh', u'hello', u'go', u'young', u'access', u'let', u'great', u'larger', u'survey', u'app', u'use', u'next', u'sort', u'salad', u'meet', u'didnt', u'high', u'instead', u'toddler', u'stock', u'stop', u'counter', u'move', u'bunch', u'perfect', u'lb', u'coupon', u'front', u'day', u'circular', u'lentil', u'special', u'could', u'keep', u'date', u'accent', u'lot', u'shelf', u'need', u'pharmacist', u'upset', u'fact', u'chicken', u'staff', u'fuel', u'local', u'hope', u'familiar', u'werent', u'closer', u'bought', u'job', u'walk', u'scanner', u'main', u'ripe', u'almost', u'upon', u'center', u'well', u'thought', u'usual', u'less', u'obtain', u'citizen', u'know', u'like', u'onion', u'home', u'buy', u'brand', u'bagger', u'made', u'wish', u'cake', u'problem', u'threw', u'display', u'monday']]
+
+   Then I do:
+
+     class DTMcorpus(corpora.textcorpus.TextCorpus):
+
+         def get_texts(self):
+             return self.input
+
+       def __len__(self):
+            return len(self.input)
+
+    corpus = DTMcorpus(documents)
+    time_seq = [2,2]
+
+ and 
+
+    model = DtmModel(dtm_path, corpus, time_seq, num_topics=10,
+                  id2word=corpus.dictionary, initialize_lda=True)
+
+ everything seems to run ok, so finally I print out the first 3 topics from the first time slice:
+
+    topics1 = model.show_topic(topicid=0, time=0, num_words=10)
+    topics2 = model.show_topic(topicid=1,time=0,num_words=10)
+    topics3 = model.show_topic(topicid=2,time=0,num_words=10)
+
+which gives me
+
+    ([(0.0013106159895150723, u'per'),
+    (0.0013106159895150723, u'access'),
+    (0.0013106159895150723, u'saturday'),
+    (0.0013106159895150723, u'es'),
+    (0.0013106159895150723, u'concern'),
+    (0.0013106159895150723, u'throughout'),
+    (0.0013106159895150723, u'appear'),
+    (0.0013106159895150723, u'pet'),
+    (0.0013106159895150723, u'tube'),
+    (0.0013106159895150723, u'muy')],
+    [(0.0013106159895150723, u'per'),
+    (0.0013106159895150723, u'access'),
+    (0.0013106159895150723, u'saturday'),
+    (0.0013106159895150723, u'es'),
+    (0.0013106159895150723, u'concern'),
+    (0.0013106159895150723, u'throughout'),
+    (0.0013106159895150723, u'appear'),
+    (0.0013106159895150723, u'pet'),
+    (0.0013106159895150723, u'tube'),
+    (0.0013106159895150723, u'muy')],
+    [(0.0013106159895150717, u'per'),
+    (0.0013106159895150717, u'access'),
+    (0.0013106159895150717, u'saturday'),
+    (0.0013106159895150717, u'es'),
+    (0.0013106159895150717, u'concern'),
+    (0.0013106159895150717, u'throughout'),
+    (0.0013106159895150717, u'appear'),
+    (0.0013106159895150717, u'pet'),
+    (0.0013106159895150717, u'tube'),
+    (0.0013106159895150717, u'muy')])   
+
+  I also get the exact same topics for any other time slice. 
+   
+   Could you please help.   Thank you!
+
+
+
+
+",0
+22,https://github.com/RaRe-Technologies/gensim/issues/1609,1609,[],closed,2017-10-03 18:36:00+00:00,9,How do you avoid Garbage in garbage out?,"How do you plan out your program that uses gensim? Which questions do you ask yourself to tokenize properly and get usable results? How do you avoid Garbage in garbage out?
+",0
+23,https://github.com/RaRe-Technologies/gensim/issues/1610,1610,"[{'id': 175640, 'node_id': 'MDU6TGFiZWwxNzU2NDA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/feature', 'name': 'feature', 'color': '0b02e1', 'default': False, 'description': 'Issue described a new feature'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}, {'id': 721000065, 'node_id': 'MDU6TGFiZWw3MjEwMDAwNjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/good%20first%20issue', 'name': 'good first issue', 'color': '7057ff', 'default': True, 'description': 'Issue for new contributors (not required gensim understanding + very simple)'}]",closed,2017-10-04 13:04:33+00:00,5,"Add ""DOI badge"" to gensim","Gensim's DOI is `10.13140/2.1.2393.1847`; the badge link should lead to https://www.researchgate.net/publication/255820377_Software_Framework_for_Topic_Modelling_with_Large_Corpora?channel=doi&linkId=0c960528f6404db272000000&showFulltext=true
+
+(I saw this badge in https://github.com/tqdm/tqdm via #451 ; the goal is to promote more citations)",0
+24,https://github.com/RaRe-Technologies/gensim/issues/1611,1611,"[{'id': 175640, 'node_id': 'MDU6TGFiZWwxNzU2NDA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/feature', 'name': 'feature', 'color': '0b02e1', 'default': False, 'description': 'Issue described a new feature'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}]",open,2017-10-04 15:45:13+00:00,5,There is no load with file handle,"Through ```utils.SaveLoad```, some classes (like Corups) offer saving with a filename or a file-like object (*fname_or_handle*). However, the corresponding load method only allows filenames, making it more cumbersome to work with in case one uses a non-standard file system.
+
+If this feature (adding the ability to load from file-like object) is desirable, I'd be happy to send a PR.",0
+25,https://github.com/RaRe-Technologies/gensim/issues/1613,1613,"[{'id': 175640, 'node_id': 'MDU6TGFiZWwxNzU2NDA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/feature', 'name': 'feature', 'color': '0b02e1', 'default': False, 'description': 'Issue described a new feature'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-10-05 11:57:54+00:00,0,Add tools for run all basic operations for repository,"General ""one-line"" tools for run test/docs/etc is very useful for all developers, for this reason, we need to implement this functionality. Possible tools: `make` or `fabric` (or maybe something better?)
+
+**attention**: for all actions firstly we must create clean virtual enviroment
+
+What's need to implement:
+- [x] tool test (with options full/default, where full - with all wrappers, need to install it if needed)
+- [x] tool pep8 (check all python code with pep8)
+- [x] tool docs (build documentation)
+- [x] tool docs upload (build + upload to site)
+- [x] another things (for release only, like download wheels + upload to pypi)
+
+After it, need to make several changes in repo
+- [x] Update developer guide (add new commands + describe current release process more detailed)
+- [x] Update CI (use same things for Travis, for appveyor too if possible)
+",0
+26,https://github.com/RaRe-Technologies/gensim/issues/1614,1614,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}]",closed,2017-10-06 03:23:32+00:00,0,gensim import is very slow,"#### Description
+Gensim import works very long if you'll have installed Keras+TF, report from [maillist](https://groups.google.com/forum/#!msg/gensim/HY90TZiBiAA/td4fsmwFBgAJ)
+
+#### Steps/Code/Corpus to Reproduce
+```
+import gensim
+```
+
+#### Expected Results
+Fast import (less than 0.5 sec) without any `stdout`
+
+#### Actual Results
+Slow import (more that 1 sec) + `Using TensorFlow backend.`
+
+",0
+29,https://github.com/RaRe-Technologies/gensim/issues/1624,1624,[],closed,2017-10-11 07:17:17+00:00,1,Evaluation of existing Poincaré embedding implementations,"Implementations
+- https://github.com/TatsuyaShirakawa/poincare-embedding
+- https://github.com/nishnik/poincare_embeddings
+
+Data sets
+- [WordNet](https://wordnet.princeton.edu/wordnet/download/)
+  - The version used for training/evaluation is prepared with this [script](https://github.com/TatsuyaShirakawa/poincare-embedding/blob/master/scripts/create_wordnet_noun_hierarchy.py) from the c++ poincare embedding repository 
+- [HyperLex](http://people.ds.cam.ac.uk/iv250/hyperlex.html)
+- scientific collaboration social networks
+  - [AstroPh](https://snap.stanford.edu/data/ca-AstroPh.html)
+  - [CondMat](https://snap.stanford.edu/data/ca-CondMat.html)
+  - [GrQc](https://snap.stanford.edu/data/ca-GrQc.html)
+  - [HepPh](https://snap.stanford.edu/data/ca-HepPh.html)
+
+Evaluation experiments
+- WordNet reconstruction
+- WordNet link prediction
+- link prediction in social networks
+- lexical entailment on HyperLex & WordNet (for training)
+
+Deliverables
+- Jupyter notebook
+  - evaluation code
+  - evaluation results
+  - summary
+
+Requirements
+- runnable notebook with minimal necessary dependencies
+- ideally, as part of the setup
+  - datasets are downloaded
+  - implementations are downloaded and installed
+- notebook easy to read, concise (no long printouts)
+- clean code (PEP8, DRY)",0
+30,https://github.com/RaRe-Technologies/gensim/issues/1626,1626,[],closed,2017-10-12 05:58:56+00:00,2,Why is this required?,"I just curious with the gensim code, then i little bit reading the source, but i dont really understand why is  [this expression](https://github.com/RaRe-Technologies/gensim/blob/351bdeff8e4e013d7cea7828b95cb216d215734d/gensim/models/tfidfmodel.py#L156) required? while [this line](https://github.com/RaRe-Technologies/gensim/blob/351bdeff8e4e013d7cea7828b95cb216d215734d/gensim/models/tfidfmodel.py#L154) exists, because (IMHO) however advanced the compiler is [this line](https://github.com/RaRe-Technologies/gensim/blob/351bdeff8e4e013d7cea7828b95cb216d215734d/gensim/models/tfidfmodel.py#L154) will never be executed",0
+31,https://github.com/RaRe-Technologies/gensim/issues/1627,1627,"[{'id': 175986, 'node_id': 'MDU6TGFiZWwxNzU5ODY=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/testing', 'name': 'testing', 'color': '444444', 'default': False, 'description': 'Issue related with testing (code, documentation, etc)'}, {'id': 233082, 'node_id': 'MDU6TGFiZWwyMzMwODI=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20hard', 'name': 'difficulty hard', 'color': '00a000', 'default': False, 'description': 'Hard issue: required deep gensim understanding & high python/cython skills'}]",closed,2017-10-12 09:21:16+00:00,2,Inconsistent AppVeyor wheels and MacPython automatization,"When we release gensim, we need to build wheels for different platforms (win and mac), for now, we have 2 problems
+
+1. AppVeyor loads fresh wheel to storage **always** (after each build, not only for release), for this reason, we'll have incorrect wheels in storage after any PR (that's isn't critical, because of all wheels on PyPI), but that's not good. Also, I need to disable AppVeyor when I release (and stop non-release builds), that's critical.
+Fix - push wheels in storage **if and only if** when we build **tag** commit in the **master** branch.
+
+2. Need to clone/replace/check twice for [MacPython](https://travis-ci.org/MacPython/gensim-wheels) (first - for **HEAD** commit in dev, second - for **tag** commit in master). Need to automatize this process (at least the first part). 
+Fix - maybe we should run a script through webhook or something else.
+
+
+",0
+32,https://github.com/RaRe-Technologies/gensim/issues/1628,1628,"[{'id': 175640, 'node_id': 'MDU6TGFiZWwxNzU2NDA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/feature', 'name': 'feature', 'color': '0b02e1', 'default': False, 'description': 'Issue described a new feature'}, {'id': 233082, 'node_id': 'MDU6TGFiZWwyMzMwODI=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20hard', 'name': 'difficulty hard', 'color': '00a000', 'default': False, 'description': 'Hard issue: required deep gensim understanding & high python/cython skills'}]",open,2017-10-12 20:54:35+00:00,1,Investigate Geometric Topic Modelling ,"A new method has been cited here for calculating topics using convex optimization- [https://arxiv.org/abs/1710.02952](https://arxiv.org/abs/1710.02952)
+
+The paper shows that the method is slightly better performing than LDA with collapsed Gibbs sampling and SVI sampling.
+
+It would be nice to integrate this into Gensim if we can validate the results.",0
+37,https://github.com/RaRe-Technologies/gensim/issues/1637,1637,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}]",closed,2017-10-19 14:08:43+00:00,1,FastText wrapper returns inconsistent dtypes,"#### Description
+`gensim.models.wrappers.FastText` returns inconsistent dtypes.
+
+#### Steps/Code/Corpus to Reproduce
+```python
+from gensim.models.wrappers import FastText
+embeds = FastText.load_fasttext_format(...)
+```
+For an existing word:
+```python
+embeds['the'].dtype == dtype('float32')
+```
+For an ""imputed"" word (missing from the vocabulary). The word embedding is computed as the sum of embedding for n-grams:
+
+```python
+embeds['ttttt'].dtype == dtype('float64')
+```
+
+The problem in `models/wrappers/fasttext.py::FastTextKeyedVectors.word_vec`. In the case of a missing word, the zero vector is initialised to be a 64-bit float array to which a bunch of 32-bit embeddings are added to. 
+
+#### Versions
+Linux-4.4.0-97-generic-x86_64-with-Ubuntu-16.04-xenial
+Python 3.5.2 (default, Nov 17 2016, 17:05:23)
+[GCC 5.4.0 20160609]
+NumPy 1.13.3
+SciPy 0.19.1
+gensim 3.0.1
+FAST_VERSION 1
+",0
+38,https://github.com/RaRe-Technologies/gensim/issues/1641,1641,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-10-21 13:18:42+00:00,5,Quick-start possible duplicate,"#### Description
+Quick-start tutorial possible duplicated: [One](https://github.com/RaRe-Technologies/gensim/blob/develop/gensim%20Quick%20Start.ipynb), [Two](https://github.com/RaRe-Technologies/gensim/blob/develop/docs/notebooks/gensim%20Quick%20Start.ipynb). 
+
+Second is in tutorials folder and has links from [main](https://github.com/RaRe-Technologies/gensim) page and [tutorials](https://github.com/RaRe-Technologies/gensim/blob/develop/tutorials.md#tutorials) page. Since first one is in the root and also has few more -- instructions how to install gensim and to work with Jupyter notebooks. Both notebooks are equal except 'how to' introduction. It doesn't looks very confusing. Nevertheless there's no link to first one, it appears in list of files only.",0
+39,https://github.com/RaRe-Technologies/gensim/issues/1642,1642,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-10-22 17:40:41+00:00,6,fastText models from 2.3.0 can't be loaded in 3.0.0,"#### Description
+I do have a compatibility issue with fastText and version 3.0.0. In version 2.3.0, I used the fastText C++ wrapper to train a model based on the code available at that time from 
+https://github.com/RaRe-Technologies/gensim/blob/develop/docs/notebooks/FastText_Tutorial.ipynb
+
+This code works in **2.3.0**
+```
+from gensim.models.wrappers.fasttext import FastText as FT_wrapper
+model = FT_wrapper.load(model_path)
+if key in model:
+    character_embedding = model[key]
+```
+
+In **3.0.0** it fails due to
+>     File ""scripts/foo.py"", line 43, in reduce_fasttext_embedding
+>     character_embedding = model[key]
+>   File ""/usr/local/lib/python3.5/dist-packages/gensim/models/word2vec.py"", line 1345, in __getitem__
+>     return self.wv.__getitem__(words)
+>   File ""/usr/local/lib/python3.5/dist-packages/gensim/models/keyedvectors.py"", line 602, in __getitem__
+>     return self.word_vec(words)
+>   File ""/usr/local/lib/python3.5/dist-packages/gensim/models/wrappers/fasttext.py"", line 94, in word_vec
+>     word_vec = np.zeros(self.syn0_ngrams.shape[1])
+> AttributeError: 'FastTextKeyedVectors' object has no attribute 'syn0_ngrams'
+
+#### Expected Results
+I expected the model from 2.3.0 to be loadable in 3.0.0. I was able to get my code working by downgrading to 2.3.0. I made some evaluations with trained models and I'd be happy to still use these models. Otherwise, I'm stuck at gensim 2.3.0
+
+@menshikh-iv
+I guess this has something to do with this commit https://github.com/RaRe-Technologies/gensim/commit/6e511565c1721636cfd14f88df3a08e124e14364#diff-cd6e655ec64f5b3927aa96ce5d006207 and split **'syn0_all' into 'syn0_vocab' and 'syn0_ngrams'**. I'm guessing that models trained with 2.3.0 aren't compatible with version 3. Is it possible that the load method checks whether the model was trained in 2.3.0, loads the 2.3.0 method, and internally makes the same split?
+
+
+
+
+",0
+40,https://github.com/RaRe-Technologies/gensim/issues/1644,1644,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}]",closed,2017-10-23 10:06:55+00:00,2,Fix list of ignored problems for flake8,"Now we using `--ignore=E501,E731,E12,W503,E402` parameters for `flake8`, we can be more ""strict"" and reduce list of ""ignored"" checks
+
+What this checks means (full list [here](http://pep8.readthedocs.io/en/latest/intro.html#error-codes))
+
+| Code | Message | Action (from us)|
+|---------|--------------|---------|
+|E501|line too long (>80 characters)| remove (but need track size with adequate limit, like 120)|
+|E731|do not assign a lambda expression, use a def| remove |
+|W503|line break occurred before a binary operator| - |
+|E402|module level import not at top of file | remove |
+|E12| Many checks ... | remove (need to think about E121, E123, E126) |
+
+
+Related #1636 
+
+",0
+41,https://github.com/RaRe-Technologies/gensim/issues/1646,1646,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}, {'id': 721000065, 'node_id': 'MDU6TGFiZWw3MjEwMDAwNjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/good%20first%20issue', 'name': 'good first issue', 'color': '7057ff', 'default': True, 'description': 'Issue for new contributors (not required gensim understanding + very simple)'}]",closed,2017-10-23 18:46:03+00:00,3,Fix Regex Deprecation Warnings in Python 3,"#### Description
+
+When I import gensim in Python 3, I get a lot of deprecation warnings like
+
+```
+DeprecationWarning: invalid escape sequence \[
+  RE_P2 = re.compile(""(\n\[\[[a-z][a-z][\w-]*:[^:\]]+\]\])+$"", re.UNICODE)
+```
+
+which is a 2 to 3 issue which I believe can be fixed by adding a raw flag before the string.
+
+#### Steps/Code/Corpus to Reproduce
+
+On Python 3...
+
+```
+import gensim
+```
+
+Observe the warnings.
+
+#### Expected Results
+
+No deprecation warnings.
+
+#### Actual Results
+
+Deprecation warnings.
+
+#### Versions
+
+Python 3.6.3, gensim 3.0.0
+",0
+43,https://github.com/RaRe-Technologies/gensim/issues/1654,1654,"[{'id': 175640, 'node_id': 'MDU6TGFiZWwxNzU2NDA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/feature', 'name': 'feature', 'color': '0b02e1', 'default': False, 'description': 'Issue described a new feature'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}, {'id': 708430967, 'node_id': 'MDU6TGFiZWw3MDg0MzA5Njc=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/performance', 'name': 'performance', 'color': 'd93f0b', 'default': False, 'description': 'Issue related to performance (in HW meaning)'}]",open,2017-10-25 20:32:50+00:00,7,Use Bounter for approx frequency counting,"Multiple models in gensim do a full corpus scan as their first step, to get the frequencies / counts of tokens, bigrams etc: word2vec, doc2vec, tfidf, phrases, make_wiki...
+
+This step can require a lot of memory and be slow, because it's typically not parallelized.
+
+Replace all such scanning by [Bounter](https://github.com/RaRe-Technologies/bounter). Let users specify how much memory they want to dedicate in an optional parameter, with some sane default like ""1 GB"" or ""0.25 * total RAM"" or something.
+
+This is also a good place to revisit which algorithms need only the `counts['abc']` functionality, versus full `keys()`/`items()` iteration. The current implementations of counting in gensim are probably unnecessarily demanding (use key iteration), because there's no difference for dict or Counter as they support both operations.
+
+But there is a significant difference for Bounter: counts-only is more efficient than counts-and-iteration. So unless a counting algorithm in gensim *really needs* the keys, we should rewrite it using only `bounter(need_iteration=False)`.",0
+44,https://github.com/RaRe-Technologies/gensim/issues/1657,1657,[],closed,2017-10-26 11:36:12+00:00,7,word2vec.score returns  negative values,"Hi, I've just trained a word2vec model on a Chinese corpus and the function _score_ seems to not work. It always returns a negative value given a sentence. Is this a bug or it just can't deal with such a  corpus? 
+Thanks in advance!
+
+",0
+45,https://github.com/RaRe-Technologies/gensim/issues/1659,1659,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-10-28 07:09:10+00:00,4,model_trimmed_post_training not set on `load()`ed older models,"As seen at: https://stackoverflow.com/questions/46985320/gensim-word2vec-online-training-attributeerror-word2vec-object-has-no-att/46987193#46987193
+
+User received an error because `model_trimmed_post_training` was not present on a model. 
+
+Either `load()` should impute this when missing, or some less-clunky way of tracking stripped-down model state be used, perhaps by testing for actual available properties, rather than adding another flag to be maintained. ",0
+46,https://github.com/RaRe-Technologies/gensim/issues/1663,1663,"[{'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}]",closed,2017-10-30 15:39:13+00:00,4,Turn off support of Google Style docstrings,"**All docstrings should be refactored first**
+
+To prevent contributors from using Google Style docstrings, we need to set
+
+`napoleon_google_docstring = False`,
+
+[like explained here](https://samnicholls.net/2016/06/15/how-to-sphinx-readthedocs/).",0
+47,https://github.com/RaRe-Technologies/gensim/issues/1664,1664,"[{'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-10-30 15:57:10+00:00,0,Refactor API reference gensim.parsing,"**Check this PR for the soon-to-be-deprecated modules:** #1618 
+
+Documented submodules:
+
+- [x] `__init__.py`
+- [x] `porter.py`
+- [x] `preprocessing.py`",0
+48,https://github.com/RaRe-Technologies/gensim/issues/1665,1665,"[{'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-10-30 16:10:40+00:00,2,Refactor API reference gensim.scripts,"**Check this PR for the soon-to-be-deprecated modules:** #1618 
+
+Documented submodules:
+
+- [ ] `__init__.py`
+- [x] `glove2word2vec.py`
+-  ~~`make_wiki.py`~~
+-  ~~`make_wiki_lemma.py`~~
+-  ~~`make_wiki_online.py`~~
+-  ~~`make_wiki_online_lemma.py`~~
+-  ~~`make_wiki_online_nodebug.py`~~
+- [ ] `make_wikicorpus.py`
+- [x] `word2vec2tensor.py`
+- [x] `word2vec_standalone.py`
+- [x] `segment_wiki.py`",0
+49,https://github.com/RaRe-Technologies/gensim/issues/1666,1666,"[{'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-10-30 16:12:46+00:00,1,Refactor API reference gensim.similarities,"**Check this PR for the soon-to-be-deprecated modules:** #1618 
+
+Documented submodules:
+
+- [ ] `__init__.py`
+- [x] `docsim.py`
+- [x] `index.py`",0
+50,https://github.com/RaRe-Technologies/gensim/issues/1667,1667,"[{'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}]",closed,2017-10-30 16:15:17+00:00,4,Refactor API reference gensim.sklearn_api,"**Check this PR for the soon-to-be-deprecated modules:** #1618 
+
+Documented submodules:
+
+- [ ] `__init__.py`
+- [x] `atmodel.py`
+- [x] `d2vmodel.py`
+- [x] `hdp.py`
+- [x] `ldamodel.py`
+- [x] `ldaseqmodel.py`
+- [x] `lsimodel.py`
+- [x] `phrases.py`
+- [x] `rpmodel.py`
+- [x] `text2bow.py`
+- [x] `tfidf.py`
+- [x] `w2vmodel.py`",0
+51,https://github.com/RaRe-Technologies/gensim/issues/1668,1668,"[{'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-10-30 16:27:00+00:00,0,Refactor API reference gensim.summarization,"**Check this PR for the soon-to-be-deprecated modules:** #1618 
+
+Documented submodules:
+
+- [x] `__init__.py`
+- [x] `bm25.py`
+- [x] `commons.py`
+- [x] `graph.py`
+- [x] `keywords.py`
+- [x] `pagerank_weighted.py`
+- [x] `summarizer.py`
+- [x] `syntactic_unit.py`
+- [x] `textcleaner.py`",0
+52,https://github.com/RaRe-Technologies/gensim/issues/1669,1669,"[{'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-10-30 16:33:15+00:00,0,Refactor API reference gensim.topic_coherence,"**Check this PR for the soon-to-be-deprecated modules:** #1618 
+
+Documented submodules:
+
+- [ ] `__init__.py`
+- [x] `aggregation.py`
+- [x] `direct_confirmation_measure.py`
+- [x] `indirect_confirmation_measure.py`
+- [x] `probability_estimation.py`
+- [x] `segmentation.py`
+- [x] `text_analysis.py`",0
+53,https://github.com/RaRe-Technologies/gensim/issues/1670,1670,"[{'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-10-30 16:56:25+00:00,1,Refactor API reference gensim.models.wrappers,"**Check this PR for the soon-to-be-deprecated modules:** #1618 
+
+Documented submodules:
+
+- [ ] `__init__.py`
+- [x] `dtmmodel.py`
+- [x] `fasttext.py`
+- [x] `ldamallet.py`
+- [x] `ldavowpalwabbit.py`
+- [x] `varembed.py`
+- [x] `wordrank.py`",0
+54,https://github.com/RaRe-Technologies/gensim/issues/1671,1671,"[{'id': 175643, 'node_id': 'MDU6TGFiZWwxNzU2NDM=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': 'Current issue related to documentation'}, {'id': 234670, 'node_id': 'MDU6TGFiZWwyMzQ2NzA=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20medium', 'name': 'difficulty medium', 'color': '00d000', 'default': False, 'description': 'Medium issue: required good gensim understanding & python skills'}]",closed,2017-10-30 16:58:33+00:00,5,Refactor API reference gensim.corpora,"**Check this PR for the soon-to-be-deprecated modules:** #1618 
+
+Documented submodules:
+
+- [ ] `__init__.py`
+- [x] `bleicorpus.py`
+- [x] `csvcorpus.py`
+- [x] `dictionary.py`
+- [x] `hashdictionary.py`
+- [x] `indexedcorpus.py`
+- [x] `lowcorpus.py`
+- [x] `malletcorpus.py`
+- [x] `mmcorpus.py`
+- [ ] ~~`shared_corpus.py`~~
+- [x] `svmlightcorpus.py`
+- [x] `textcorpus.py`
+- [x] `ucicorpus.py`
+- [x] `wikicorpus.py`",0
+55,https://github.com/RaRe-Technologies/gensim/issues/1676,1676,"[{'id': 175641, 'node_id': 'MDU6TGFiZWwxNzU2NDE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/bug', 'name': 'bug', 'color': 'e10c02', 'default': True, 'description': 'Issue described a bug'}, {'id': 233081, 'node_id': 'MDU6TGFiZWwyMzMwODE=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/difficulty%20easy', 'name': 'difficulty easy', 'color': '00ff00', 'default': False, 'description': 'Easy issue: required small fix'}, {'id': 721000065, 'node_id': 'MDU6TGFiZWw3MjEwMDAwNjU=', 'url': 'https://api.github.com/repos/RaRe-Technologies/gensim/labels/good%20first%20issue', 'name': 'good first issue', 'color': '7057ff', 'default': True, 'description': 'Issue for new contributors (not required gensim understanding + very simple)'}]",closed,2017-10-31 18:31:14+00:00,3,Bug in sklearn_api.hdp and in sklearn_api.ldamodel,"<!--
+If your issue is a usage or a general question, please submit it here instead:
+- Mailing List: https://groups.google.com/forum/#!forum/gensim
+For more information, see Recipes&FAQ: https://github.com/RaRe-Technologies/gensim/wiki/Recipes-&-FAQ
+-->
+
+<!-- Instructions For Filing a Bug: https://github.com/RaRe-Technologies/gensim/blob/develop/CONTRIBUTING.md -->
+
+#### Description
+The new `sklearn_api.hdp` (and also `ldamodel`) modules and/or their combination with `matutils.Sparse2Corpus` yield the wrong results when fitting models from sklearn vectorizers or other sklearn-styled sparse matrices, since they are stored in CSR format. This error might occur in other sklearn_api classes, too.
+
+I believe that either the default value of Sparse2Corpus constructor's `documents_columns` parameter should be changed:
+
+```python
+class Sparse2Corpus(object):
+    """"""
+    Convert a matrix in scipy.sparse format into a streaming gensim corpus.
+    This is the mirror function to `corpus2csc`.
+    """"""
+
+    # Change this to def __init__(self, sparse, documents_columns=False) ?
+    def __init__(self, sparse, documents_columns=True):
+        if documents_columns:
+            self.sparse = sparse.tocsc()
+        else:
+            self.sparse = sparse.tocsr().T  # make sure shape[1]=number of docs (needed in len())
+```
+
+or the following call should include that `documents_columns=False`:
+
+```python
+# Same happens in lda model
+class HdpTransformer(TransformerMixin, BaseEstimator):
+    ...
+    def fit(self, X, y=None):
+        """"""
+        Fit the model according to the given training data.
+        Calls gensim.models.HdpModel
+        """"""
+        if sparse.issparse(X):
+            corpus = matutils.Sparse2Corpus(X) # Change to matutils.Sparse2Corpus(X, False) ?
+        ...
+```
+
+
+<!-- Example: Vocabulary size is not what I expected when training Word2Vec. -->
+
+#### Steps/Code/Corpus to Reproduce
+
+Example: The number of processed documents corresponds to the number of features.
+
+```python
+from sklearn.datasets import fetch_20newsgroups
+from sklearn.feature_extraction.text import CountVectorizer
+from gensim.sklearn_api.hdp import HdpTransformer
+
+# Small dataset configuration
+ngs = fetch_20newsgroups()
+samples = ngs.data[:100]
+
+# Simple count vectorization
+vectorizer = CountVectorizer()
+# x is a sparse matrix
+x = vectorizer.fit_transform(samples)
+print(""%d documents, %d features"" % x.shape) # 100 documents, 6547 features
+
+inv_vocab = {v: k for k, v in vectorizer.vocabulary_.items()}
+
+# Train a HDP
+hdp_transformer = HdpTransformer(inv_vocab)
+hdp_transformer.fit(x)
+
+# Should be 100 but got 6547
+print(""Processed documents %d"" % hdp_transformer.gensim_model.m_num_docs_processed) # 6547
+```
+
+#### Expected Results
+We should expect that the hdp gensim model had processed the 100 documents in samples.
+```python
+print(""%d documents, %d features"" % x.shape)
+# 100 documents, 6547 features
+```
+
+#### Actual Results
+HDP processed 6547 documents
+```python
+print(""Processed documents: %d"" % hdp_transformer.gensim_model.m_num_docs_processed)
+# Processed documents: 6547
+```
+
+#### Workaround, for the record
+To make it work correctly, the sparse matrix `x` should be transposed.
+```python
+vectorizer = CountVectorizer()
+x = vectorizer.fit_transform(samples)
+inv_vocab = {v: k for k, v in vectorizer.vocabulary_.items()}
+
+hdp_transformer = HdpTransformer(inv_vocab)
+hdp_transformer.fit(x.T)
+```
+
+#### Versions
+```
+Windows-8.1-6.3.9600
+('Python', '2.7.13 |Anaconda custom (64-bit)| (default, Dec 19 2016, 13:29:36) [MSC v.1500 64 bit (AMD64)]')
+('NumPy', '1.12.1')
+('SciPy', '1.0.0')
+('gensim', '3.0.1')
+('FAST_VERSION', 0)
+```
+
+",0

@@ -1,0 +1,1957 @@
+﻿,html_url,number,labels,state,created_at,comments,title,body,rel
+2,https://github.com/nltk/nltk/issues/1250,1250,[],closed,2016-01-13 10:30:10+00:00,4,Tokenization error,"There is an error of processing dots in the tokenizer:
+The following code
+
+```
+    val ptbt = new PTBTokenizer(
+      new StringReader(""Tokenization is performed.Parameters can be specified.""),
+      new CoreLabelTokenFactory(), """")
+    while (ptbt.hasNext()) {
+      val label = ptbt.next()
+      val w = label.originalText()
+      println(w)
+    }
+```
+
+gives ""performed.Parameters"" as an word. If I put a space after 'performed' it will work, but still, natural text can be messy and omitting spaces after punctuation is very common.
+",2
+129,https://github.com/nltk/nltk/issues/1482,1482,[],closed,2016-10-17 10:05:18+00:00,1,Text tilling,"Can I use text tilling for searching boundaries of sentences among continuous text without punctuation? What is then supposed to be a paragraph?
+",2
+552,https://github.com/nltk/nltk/issues/2222,2222,[],open,2019-01-31 00:54:48+00:00,0,TweetTokenizer and punctuation inside URLs,"The twitter tokenizer exhibits (what I think is) undesirable behavior when tokenizing URLs. For example:
+```
+tok.tokenize('http://t.co/LYsklSmIVS “http://t.co/LYsklSmIVS” “http://t.co/LYsklSmIVS”xxx')
+```
+yields
+```
+['http://t.co/LYsklSmIVS',  '“',  'http://t.co/LYsklSmIVS',  '”',  '“',  'http://t.co/LYsklSmIVS”xxx']
+```
+where
+```
+['http://t.co/LYsklSmIVS',  '“',  'http://t.co/LYsklSmIVS',  '”',  '“',  'http://t.co/LYsklSmIVS',  '”',  'xxx']```
+is what I would prefer.
+
+The issue is that the regular expression used to tokenize URLs looks for the longest substring that could be an URL, and technically most punctuation marks can occur inside an URL. The regex does make an exception for a single punctuation mark at the end of an URL before a word break, but that doesn't help if there's a space missing before the next token.
+
+The current URL matcher is, in my opinion, too greedy for working with casual online texts.  While it's legally possible for an URL to have a character like `”` in the middle of it, it's much more likely that `”` ought to be split off as a separate token.
+
+In a way, parsing URLs in tweets should be trivial (because they all take the form `http://t.co/...`) and there's no real need for any fancy URL-matching regex.  But, on the other hand, twitter might change their URL format at any time and people might be using this tagger for parsing texts from other sites, so we don't want to make too many assumptions.
+
+Any thoughts about the best way to handle this?  ",2
+604,https://github.com/nltk/nltk/issues/2303,2303,"[{'id': 14019200, 'node_id': 'MDU6TGFiZWwxNDAxOTIwMA==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/good%20first%20issue', 'name': 'good first issue', 'color': '02e10c', 'default': True, 'description': ''}, {'id': 145489207, 'node_id': 'MDU6TGFiZWwxNDU0ODkyMDc=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/bug', 'name': 'bug', 'color': 'e11d21', 'default': True, 'description': None}, {'id': 718735032, 'node_id': 'MDU6TGFiZWw3MTg3MzUwMzI=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/tokenizer', 'name': 'tokenizer', 'color': '4be5a0', 'default': False, 'description': None}]",closed,2019-05-21 13:51:29+00:00,1,TreebankWordTokenizer [BUG],"Looks like there's a broken regexp on Treebank's `PUNCTUATION` patterns:
+
+```
+([^\.])(\.)([\]\)}>""\']*)\s*$
+```
+should `""` be escaped?
+",2
+666,https://github.com/nltk/nltk/issues/2431,2431,"[{'id': 1350810881, 'node_id': 'MDU6TGFiZWwxMzUwODEwODgx', 'url': 'https://api.github.com/repos/nltk/nltk/labels/invalid', 'name': 'invalid', 'color': 'cecece', 'default': True, 'description': ''}]",closed,2019-10-18 10:22:29+00:00,0,punctuation of plain text,I have plain text in lower case German language without any stop or comma or any punctuation. How to get back the punctuation and stop of sentences? to get the text into sentence structure. I tried but unsuccessful. Please guide. ,2
+13,https://github.com/nltk/nltk/issues/1267,1267,[],closed,2016-01-24 17:32:54+00:00,4,RegexpTokenizer does not handle capturing parens as advertised,"The docstring for `nltk.tokenize.regexp.RegexpTokenizer` states:
+
+```
+:param pattern: The pattern used to build this tokenizer.
+        (This pattern may safely contain capturing parentheses.)
+```
+
+But this does not seem to be the case:
+
+``` python
+import nltk
+nltk.regexp_tokenize(""foo bar baz-qux"", r""\w+(-\w+)*"")
+# returns ['', '', '-qux']
+```
+
+Contrast with:
+
+``` python
+nltk.regexp_tokenize(""foo bar baz-qux"", r""\w+(?:-\w+)*"")
+# returns ['foo', 'bar', 'baz-qux']
+```
+
+Tested both with PyPI release (`nltk-3.1`) and current `develop` branch.
+",1
+81,https://github.com/nltk/nltk/issues/1391,1391,[],closed,2016-05-04 03:32:35+00:00,4,Installed nltk with brew on OSX El Capitan and 'word_tokenize' is not found,"I just went through the example on the main page (http://www.nltk.org/).  What am I missing in terms of dependencies?
+
+```
+iMe2 nltk $ python nltk.py 
+Traceback (most recent call last):
+  File ""nltk.py"", line 1, in <module>
+    import nltk
+  File ""/Users/iMe2/projects/nltk/nltk.py"", line 3, in <module>
+    tokens = nltk.word_tokenize(sentence)
+AttributeError: 'module' object has no attribute 'word_tokenize'
+iMe2 nltk $ 
+```
+
+Thanks!
+",1
+106,https://github.com/nltk/nltk/issues/1434,1434,[],closed,2016-07-13 11:22:12+00:00,1,"word_tokenize doesn't tokenize ""»""","Hi all,
+we tried to use nltk for the part-of-speech tagging of german texts and in some of them the french quotation marks ""»"" and ""«"" are used for quotation instead of "" "" "", the normal (or standard) quotation mark.
+
+As an example consider the following sentence:
+
+»Now that I can do.«
+
+This is tokenized:
+nltk.word_tokenize(""»Now that I can do.«"")
+
+and yields:
+
+['»Now', 'that', 'I', 'can', 'do.«']
+
+instead of:
+
+['»' , 'Now', 'that', 'I', 'can', 'do', '.', '«']
+
+Can this be fixed?
+
+Best regards.
+
+Edit: Minor fix.
+",1
+124,https://github.com/nltk/nltk/issues/1472,1472,[],closed,2016-09-20 09:56:50+00:00,2,The sent tokenizer deletes end of line characters,"I am not sure whether this is a feature/bug, but the standard nltk.sent_tokenize() deletes characters from the text. 
+
+For instance:
+
+```
+s
+'In the beginning, God created the heavens and the earth. And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.'
+from nltk import sent_tokenize
+sents = sent_tokenize(s)
+sents
+['In the beginning, God created the heavens and the earth.',
+ 'And the earth was without form, and void; and darkness was upon the face of the deep.',
+ 'And the Spirit of God moved upon the face of the waters.']
+len(''.join(sents))
+197
+len(s)
+199
+```
+
+Is there a way to make sure the tokenizer does not delete characters?
+",1
+152,https://github.com/nltk/nltk/issues/1523,1523,"[{'id': 14019255, 'node_id': 'MDU6TGFiZWwxNDAxOTI1NQ==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/pleaseverify', 'name': 'pleaseverify', 'color': 'd7e102', 'default': False, 'description': None}, {'id': 159235791, 'node_id': 'MDU6TGFiZWwxNTkyMzU3OTE=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/dependency%20parsing', 'name': 'dependency parsing', 'color': 'eb6420', 'default': False, 'description': None}]",closed,2016-11-24 09:28:36+00:00,2,whitespace in corenlp_options in nltk.parse.stanford causes OSError,"I needed to keep punctuation, so I added corenlp_options='-ouputFormatOptions includePunctuationDependencies' when creating an instance of a dependency parser.
+
+Because corenlp_options is appended to cmd, the Popen fails.  Changing `cmd.append(self.corenlp_options)` to `cmd.extend(self.corenlp_options.split())` would fix the issue.
+
+Edit:
+The Neural Dependency Parser has a default corelnp_options that contains whitespace, and it works fine.  note that because it uses += to extend, that there is no whitespace inserted between user-defined options and default options.  
+
+I don't know why NDP runs fine with whitespace in corenlp_options and StanfordDependencyParser does not.",1
+159,https://github.com/nltk/nltk/issues/1537,1537,"[{'id': 23593492, 'node_id': 'MDU6TGFiZWwyMzU5MzQ5Mg==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': None}, {'id': 29356672, 'node_id': 'MDU6TGFiZWwyOTM1NjY3Mg==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/corpus', 'name': 'corpus', 'color': '0b02e1', 'default': False, 'description': None}, {'id': 718735032, 'node_id': 'MDU6TGFiZWw3MTg3MzUwMzI=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/tokenizer', 'name': 'tokenizer', 'color': '4be5a0', 'default': False, 'description': None}, {'id': 918210764, 'node_id': 'MDU6TGFiZWw5MTgyMTA3NjQ=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/inactive', 'name': 'inactive', 'color': 'cecece', 'default': False, 'description': ''}]",closed,2016-12-07 15:08:27+00:00,0,nltk.tokenize.texttiling TextTilingTokenizer parameter demo_mode not documented,There's no documentation of the parameter demo_mode for TextTilingTokenizer. It doesn't seem to be just for internal use; it's used in the example code.,1
+169,https://github.com/nltk/nltk/issues/1558,1558,[],closed,2016-12-27 07:10:00+00:00,5,word_tokenizer and Spanish,"I would like to have a word_tokenizer that works with Spanish. For example, this code:
+
+`import nltk
+from nltk.tokenize import word_tokenize
+sentences = ""¿Quién eres tú? ¡Hola! ¿Dónde estoy?""
+spanish_sentence_tokenizer = nltk.data.load('tokenizers/punkt/spanish.pickle')
+sentences = spanish_sentence_tokenizer.tokenize(sentences)
+for s in sentences:
+    print([s for s in vword_tokenize(s)])`
+
+gives the following:
+
+`['¿Quién', 'eres', 'tú', '?']
+['¡Hola', '!']
+['¿Dónde', 'estoy', '?']`
+
+ but I would have expected the following instead:
+
+`['¿' ,'Quién', 'eres', 'tú', '?']
+['¡' ,'Hola', '!']
+['¿' ,'Dónde', 'estoy', '?']`",1
+195,https://github.com/nltk/nltk/issues/1616,1616,"[{'id': 14019200, 'node_id': 'MDU6TGFiZWwxNDAxOTIwMA==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/good%20first%20issue', 'name': 'good first issue', 'color': '02e10c', 'default': True, 'description': ''}, {'id': 113906330, 'node_id': 'MDU6TGFiZWwxMTM5MDYzMzA=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/SMT', 'name': 'SMT', 'color': 'bfdadc', 'default': False, 'description': None}, {'id': 145489207, 'node_id': 'MDU6TGFiZWwxNDU0ODkyMDc=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/bug', 'name': 'bug', 'color': 'e11d21', 'default': True, 'description': None}]",closed,2017-02-09 02:10:54+00:00,5,MosesTokenizer is skipping the final fullstop.,"MosesTokenizer is skipping the final fullstop.
+
+```python
+>>> from nltk.tokenize.moses import MosesTokenizer
+>>> m = MosesTokenizer()
+>>> m.tokenize('abc def.')
+[u'abc', u'def.']
+>>> m.penn_tokenize('abc def.')
+[u'abc', u'def', u'.']
+```
+
+But MosesTokenizer's penn_tokenize works because of https://github.com/nltk/nltk/blob/develop/nltk/tokenize/moses.py#L103
+
+While the default tokenizer relies on the `handles_nonbreaking_prefixes()` to handle the final fullstop: https://github.com/nltk/nltk/blob/develop/nltk/tokenize/moses.py#L284
+
+The conditions at https://github.com/nltk/nltk/blob/develop/nltk/tokenize/moses.py#L274 is wrong since it's not checking what Moses is actually doing on https://github.com/alvations/mosesdecoder/blob/master/scripts/tokenizer/tokenizer.perl#L333
+
+The correct implementation should be:
+
+```python
+    def handles_nonbreaking_prefixes(self, text):
+        # Splits the text into tokens to check for nonbreaking prefixes.
+        tokens = text.split()
+        num_tokens = len(tokens)
+        for i, token in enumerate(tokens):
+            # Checks if token ends with a fullstop.
+            token_ends_with_period = re.findall(r'^(\S+)\.$', token)
+            if token_ends_with_period:
+                prefix = token_ends_with_period.group(1)
+                # Checks for 3 conditions if
+                # i.   the prefix contains a fullstop and
+                #      any char in the prefix is within the IsAlpha charset
+                # ii.  the prefix is in the list of nonbreaking prefixes and
+                #      does not contain #NUMERIC_ONLY#
+                # iii. the token is not the last token and that the
+                #      next token contains all lowercase.
+                if ( ('.' in prefix and self.isalpha(prefix)) or
+                     (prefix in self.NONBREAKING_PREFIXES and
+                      prefix not in self.NUMERIC_ONLY_PREFIXES) or
+                     (i != num_tokens-1 and self.islower(tokens[i+1])) ):
+                    pass # No change to the token.
+                # Checks if the prefix is in NUMERIC_ONLY_PREFIXES
+                # and ensures that the next word is a digit.
+                elif (prefix in self.NUMERIC_ONLY_PREFIXES and
+                      re.search(r'^[0-9]+', tokens[i+1])):
+                    pass # No change to the token.
+                else: # Otherwise, adds a space after the tokens before a dot.
+                    tokens[i] = prefix + ' .'
+        return "" "".join(tokens) # Stitch the tokens back.
+```
+
+After the patch:
+
+```
+$ python -c ""from nltk.tokenize.moses import MosesTokenizer; m = MosesTokenizer(); print(m.tokenize('abc def.'))""
+[u'abc', u'def', u'.']
+```",1
+258,https://github.com/nltk/nltk/issues/1729,1729,[],closed,2017-05-20 08:46:22+00:00,1,KeyError in MosesDetokenizer,"Getting a KeyError when trying to detokenize three or more symbols:
+```
+from nltk.tokenize.moses import MosesDetokenizer
+MosesDetokenizer().detokenize(['```'])
+```
+```
+  File ""/usr/local/lib/python3.6/site-packages/nltk/tokenize/moses.py"", line 613, in detokenize
+    return self.tokenize(tokens, return_str)
+  File ""/usr/local/lib/python3.6/site-packages/nltk/tokenize/moses.py"", line 574, in tokenize
+    if quote_counts[normalized_quo] % 2 == 0:
+KeyError: '```'
+```
+In printable ASCII characters, the problem seems to occur for "",  ',  and `.
+Using Python 3.",1
+277,https://github.com/nltk/nltk/issues/1761,1761,"[{'id': 145489207, 'node_id': 'MDU6TGFiZWwxNDU0ODkyMDc=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/bug', 'name': 'bug', 'color': 'e11d21', 'default': True, 'description': None}]",closed,2017-06-28 15:54:14+00:00,1,MWE tokenizer doesnt support pickling,"You can reproduce this as follows on python 2.7.11
+
+````
+from nltk.tokenize import MWETokenizer
+import pickle
+
+tokenizer = MWETokenizer([('a', 'little'), ('a', 'little', 'bit'), ('a', 'lot')])
+
+with open('tokenizer.pkl', 'wb') as f:
+    pickle.dump(tokenizer, f)
+
+with open('tokenizer.pkl', 'rb') as f:
+    t = pickle.load(f)
+
+````
+
+Error that i am getting is
+
+````
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-47-205693e12b16> in <module>()
+      1 with open('tokenizer.pkl', 'rb') as f:
+----> 2     t = pickle.load(f)
+
+/usr/local/Cellar/python/2.7.11/Frameworks/Python.framework/Versions/2.7/lib/python2.7/pickle.pyc in load(file)
+   1382 
+   1383 def load(file):
+-> 1384     return Unpickler(file).load()
+   1385 
+   1386 def loads(str):
+
+/usr/local/Cellar/python/2.7.11/Frameworks/Python.framework/Versions/2.7/lib/python2.7/pickle.pyc in load(self)
+    862             while 1:
+    863                 key = read(1)
+--> 864                 dispatch[key](self)
+    865         except _Stop, stopinst:
+    866             return stopinst.value
+
+/usr/local/Cellar/python/2.7.11/Frameworks/Python.framework/Versions/2.7/lib/python2.7/pickle.pyc in load_reduce(self)
+   1137         args = stack.pop()
+   1138         func = stack[-1]
+-> 1139         value = func(*args)
+   1140         stack[-1] = value
+   1141     dispatch[REDUCE] = load_reduce
+
+/Users/vinay/Sites/nltk_mwe/.env/lib/python2.7/site-packages/nltk/collections.pyc in __init__(self, strings)
+    611         defaultdict.__init__(self, Trie)
+    612         if strings:
+--> 613             for string in strings:
+    614                 self.insert(string)
+    615 
+
+TypeError: 'type' object is not iterable
+````
+
+",1
+303,https://github.com/nltk/nltk/issues/1799,1799,"[{'id': 145489207, 'node_id': 'MDU6TGFiZWwxNDU0ODkyMDc=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/bug', 'name': 'bug', 'color': 'e11d21', 'default': True, 'description': None}, {'id': 718735032, 'node_id': 'MDU6TGFiZWw3MTg3MzUwMzI=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/tokenizer', 'name': 'tokenizer', 'color': '4be5a0', 'default': False, 'description': None}]",closed,2017-08-01 08:16:35+00:00,3,TweetTokenizer quirk with long numbers,"When there's a number token that's >8 length, the `TweetTokenizer` tries to iteratively parse the first 8-10 digits as a phone number if it matches the phone number regex on https://github.com/alvations/nltk/blob/develop/nltk/tokenize/casual.py#L125
+
+Maybe, there should be an option to allow users to keep long digits and not try to recognize the first part as a number. 
+
+Or better yet, if there's regex fix that can prevent the number from getting split if it's longer than 10. 
+
+Details on https://stackoverflow.com/questions/45425946/tokenize-in-nltk-tweettokenizer-returning-integers-by-splitting/45431922#45431922",1
+394,https://github.com/nltk/nltk/issues/1963,1963,"[{'id': 718735032, 'node_id': 'MDU6TGFiZWw3MTg3MzUwMzI=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/tokenizer', 'name': 'tokenizer', 'color': '4be5a0', 'default': False, 'description': None}]",open,2018-02-20 15:57:21+00:00,8,"word_tokenize not tokenizing strings containing ','","I tried
+```
+from nltk.tokenize import word_tokenize
+a=""g, a, b, c, 123, g32,12 123121 {1}""
+word_tokenize(a)
+```
+**Output I am getting:** 
+['g', ',', 'a', ',', 'b', ',', 'c', ',', '123', ',', 'g32,12', '123121', '{', '1', '}']
+**Output should be**
+['g', ',', 'a', ',', 'b', ',', 'c', ',', '123', ',', 'g32',',','12', '123121', '{', '1', '}']",1
+424,https://github.com/nltk/nltk/issues/2004,2004,"[{'id': 718735032, 'node_id': 'MDU6TGFiZWw3MTg3MzUwMzI=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/tokenizer', 'name': 'tokenizer', 'color': '4be5a0', 'default': False, 'description': None}]",open,2018-04-18 07:15:25+00:00,1,`word_tokenize` could handled URL's better,"Here is what it currently does for URLs.
+
+```
+In [2]: import nltk
+
+In [3]: nltk.word_tokenize(""http://example.com"")
+Out[3]: ['http', ':', '//example.com']
+
+In [4]: nltk.word_tokenize(""http://example.com/dir/file.html"")
+Out[4]: ['http', ':', '//example.com/dir/file.html']
+
+In [5]: nltk.word_tokenize(""example@example.com"")
+Out[5]: ['example', '@', 'example.com']
+```
+
+I'm not sure what it should do.
+But I feel like the answer is _not that_
+
+I'm pretty sure one can recognise URLs with a regex.
+I think the answer might be to just pick them out at the start,
+and preform no splitting on them.
+
+
+Obs. the treeback tokenizer  that `word_tokenize`, is based on doesn't handle URLs because they were not a thing. But we have to move with the times, no?",1
+528,https://github.com/nltk/nltk/issues/2185,2185,[],closed,2018-11-20 13:39:16+00:00,1,Tokenization - Custom Tokens,"I am a new to NLP and was reading through tokenization and wondering if we have a tokenizer existing in this framework that would actually consider a ""Keyword"" or set of keywords and splits the sentence or the entire paragraph based on the keyword?.
+
+Any documentation help on the existing API would help. Appreciate your help!",1
+689,https://github.com/nltk/nltk/issues/2471,2471,"[{'id': 1350810881, 'node_id': 'MDU6TGFiZWwxMzUwODEwODgx', 'url': 'https://api.github.com/repos/nltk/nltk/labels/invalid', 'name': 'invalid', 'color': 'cecece', 'default': True, 'description': ''}]",closed,2019-12-03 12:48:14+00:00,0,same word but differnnet tokenizer,"hi，when I processed my data， I find the same word may get different tokenizer.
+for example，the word： <can't>, may get  ，<can>  <'t> or <ca> <n't>.
+Could you tell me the reason, thank you very much.",1
+241,https://github.com/nltk/nltk/issues/1699,1699,[],closed,2017-04-24 19:33:35+00:00,3,Nltk word tokenizer strange behaviour,"Given the sentence: 
+
+word = **""B. Young c Moin Khan b Wasim 0""**
+
+if we call nltk.word_tokenize(word) We'll have the following tokens:
+    **['B', '.', 'Young', 'c', 'Moin', 'Khan', 'b', 'Wasim', '0']**
+
+But, if we change the sentence to be:
+word = **""C. Young c Moin Khan b Wasim 0""**
+
+The tokens will be:
+    **['C.', 'Young', 'c', 'Moin', 'Khan', 'b', 'Wasim', '0']**
+
+The char '.' is now joined to the letter 'C' .
+
+What is more strange is that the  **'B'**  splitted from  **'.'** only occurs when the next word is **'Young'** I tried several words and none appears to reproduce the error.
+
+
+",1
+261,https://github.com/nltk/nltk/issues/1740,1740,"[{'id': 718735032, 'node_id': 'MDU6TGFiZWw3MTg3MzUwMzI=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/tokenizer', 'name': 'tokenizer', 'color': '4be5a0', 'default': False, 'description': None}]",open,2017-05-31 02:54:30+00:00,4,Errors in the Norwegian tokenizer,"Hi!
+
+While working on my master in language technology I discovered some errors in the Norwegian tokenizers:
+
+nltk.word_tokenize(“Hello NLTK”, “norwegian”)
+nltk.sent_tokenize(“My name. Is bob.”, “norwegian”)
+
+When these errors are fixed the sentence tokenizer fail 7-8 times less, while the word tokenizer will fail 6-7 times less (for Norwegian). I was wondering if this is something I could integrate with NLTK? If yes, how would you want it integrated?
+
+For instance, I could place the patch file in the tokenize folder and call it like this in the tokenize init file: 
+```
+import patch
+
+def sent_tokenize(text, language='english'):
+    if language='norwegian':
+        tokenizer = load('tokenizers/punkt/{0}.pickle'.format(language))
+        return patch.sent_patch(tokenizer.tokenize(text))
+    else:
+        tokenizer = load('tokenizers/punkt/{0}.pickle'.format(language))
+        return tokenizer.tokenize(text)
+```
+However I realize this might become messy if every language wanted a slot. Any other questions, I can elaborate, please ask ^.^
+
+:bob
+",1
+397,https://github.com/nltk/nltk/issues/1969,1969,"[{'id': 718735032, 'node_id': 'MDU6TGFiZWw3MTg3MzUwMzI=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/tokenizer', 'name': 'tokenizer', 'color': '4be5a0', 'default': False, 'description': None}, {'id': 739448068, 'node_id': 'MDU6TGFiZWw3Mzk0NDgwNjg=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/resolved', 'name': 'resolved', 'color': '2375af', 'default': False, 'description': None}]",closed,2018-02-27 20:32:25+00:00,3,Improve word tokenizer on balanced opening double quotes,"The following example:
+
+    #!/usr/bin/env python3
+    import nltk
+    text = 'He said: ""No!"" He said: ""No!"" and walked away.\nHe said: “No!” and walked away.\n\nHe asked: ""Really?"" He asked: ""Really?"" and walked away.\nHe asked: „Really?” and walked away. He asked: „Really?” and walked away.'
+    paragraphs = nltk.LineTokenizer().tokenize(text)
+    for paragraph in paragraphs:
+        sentences = nltk.tokenize.sent_tokenize(paragraph)
+        for sentence in sentences:
+            for word in nltk.tokenize.word_tokenize(sentence):
+                print(word)
+
+has output:
+
+    He
+    said
+    :
+    ``
+    No
+    !
+    ''
+    He
+    said
+    :
+    ``
+    No
+    !
+    ''
+    and
+    walked
+    away
+    .
+    He
+    said
+    :
+    “
+    No
+    !
+    ”
+    and
+    walked
+    away
+    .
+    He
+    asked
+    :
+    ``
+    Really
+    ?
+    ''
+    He
+    asked
+    :
+    ``
+    Really
+    ?
+    ''
+    and
+    walked
+    away
+    .
+    He
+    asked
+    :
+    „Really
+    ?
+    ”
+    and
+    walked
+    away
+    .
+    He
+    asked
+    :
+    „Really
+    ?
+    ”
+    and
+    walked
+    away
+    .
+
+should split two times `„Really` into `„` and `Really`.
+
+(The current version of nltk has already fixed the issue with “No from https://github.com/nltk/nltk/issues/494 )",1
+767,https://github.com/nltk/nltk/issues/2607,2607,[],closed,2020-09-27 13:18:30+00:00,2,Wrong result for word more'n in Word Tokenizer and PTB Tokenizer,"Let sentence: `It's more'n enough`
+
+If I'm not mistaken, the PTB Tokenizer should result something like this:
+
+`[""It"", ""'s"", ""more"", ""'n"", ""enough""]`
+
+But, it's not. It returns:
+
+`[""It"", ""'s"", ""more"", ""'"", ""n"", ""enough""]`
+
+Since Word Tokenizer trying to implement PTB contraction, the result should be like that, right?
+
+**PS**: Word Tokenizer contraction is `mor'n`, while original PTB contraction is `more'n`. Need clarification.",1
+41,https://github.com/nltk/nltk/issues/1322,1322,[],closed,2016-03-08 09:49:36+00:00,2,german stopwords,"the german stopword file contains wrong inflected forms of ""uns""
+
+instead of
+
+```
+'unse', 'unsem', 'unsen', 'unser', 'unses'
+```
+
+in lines 190-194 of the stopword file `stopwords/german`, it should be 
+
+```
+'unsere', 'unserem', 'unseren', 'unser', 'unseres'
+```
+",1
+0,https://github.com/nltk/nltk/issues/1246,1246,[],closed,2016-01-04 19:27:09+00:00,5,"Add ""ll"" to nltk.corpus.stopwords.word(""english"")","I think that ""ll"" should be added to this corpus, as ""s"" and ""t"" are already there, and when sentences with contractions such as ""they'll"" or ""you'll"" are tokenized, ""ll"" will be added as a token, and if we filter out stopwords, ""ll"" should be removed as well.
+",1
+1,https://github.com/nltk/nltk/issues/1248,1248,"[{'id': 29356672, 'node_id': 'MDU6TGFiZWwyOTM1NjY3Mg==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/corpus', 'name': 'corpus', 'color': '0b02e1', 'default': False, 'description': None}, {'id': 416522805, 'node_id': 'MDU6TGFiZWw0MTY1MjI4MDU=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/nice%20idea', 'name': 'nice idea', 'color': 'fef2c0', 'default': False, 'description': None}, {'id': 718743421, 'node_id': 'MDU6TGFiZWw3MTg3NDM0MjE=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/parsing', 'name': 'parsing', 'color': '94e06d', 'default': False, 'description': None}]",open,2016-01-08 19:25:24+00:00,8,Turkish language extension,"Hello all,
+I'm a Turkish NLP developer and I'd like to add Turkish language libraries including a morphological analyzer and a parser. Would anyone be interested?
+",0
+3,https://github.com/nltk/nltk/issues/1251,1251,"[{'id': 918210764, 'node_id': 'MDU6TGFiZWw5MTgyMTA3NjQ=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/inactive', 'name': 'inactive', 'color': 'cecece', 'default': False, 'description': ''}]",closed,2016-01-13 17:16:18+00:00,1,corpus.reader.knbc misreads annotation for 33 words,"When using the corpus reader for the KNB Corpus, tags are misread / displayed wrongly for 33 words.
+
+`nltk.corpus.reader.knbc.tagged_words()` returns a list of touples in the following form:
+
+```
+tagged_word = (word(str), tags(str))
+tags = ""reading lemma pos1 posid1 pos2 posid2 pos3 posid3 others ...""
+```
+
+(note that this is a different form than what the comments in the code document, on line 39, 40, 41 in  knbc.py says)
+
+This misreading happens for 30 occurrences of '特殊', which appears to be used in the corpus to mark some kind of special non-word entity and is not annotated with _reading_ nor _lemma_.
+
+Word number 14768 '５００', returns a double space between _reading_ and _lemma_, causing the lemma tag to appear empty and the pos1 tag to appear as the lemma.
+
+Word 54546 and 54678 are smileys that have been loaded wrongly by the corpus reader and part of the smileys appear in the string that represents 
+
+Words for which tags are returned with a wrong form are:
+
+[1396, 7219, 8750, 10916, 14445, 14464, 14768, 18538, 18540, 20655, 23116, 23120, 23123, 23128, 26698, 32867, 32869, 32871, 32873, 32875, 32877, 32892, 32894, 44702, 46037, 46490, 46492, 46494, 46496, 46498, 46557, 54546, 54678]
+",0
+4,https://github.com/nltk/nltk/issues/1252,1252,[],closed,2016-01-16 23:08:40+00:00,0,"Tox fails with ""ERROR: Failure: ImportError (No module named 'six')""","When I try to run the tests with Tox (on Ubuntu) from within a local clone of the repo, it manages to install the dependencies but blows up when trying to import things from within NLTK.
+
+I imagine I can work around this by figuring out how to manually run just the tests I care about, but it's inconvenient.
+
+I'm not sure whether I'm doing something dumb or whether the Tox setup is broken; if the former, the CONTRIBUTING docs should probably mention what needs to be done besides just running Tox; if the latter, it should probably be fixed.
+
+Here's the full output (had to pastebin it due to GitHub's post length limit):
+
+http://pastebin.com/ENuCLnv6
+",0
+5,https://github.com/nltk/nltk/issues/1253,1253,[],closed,2016-01-17 11:25:40+00:00,30,how to download corpus panlex_lite package in nltk in python,"I am able to download all the packages except the panlex_lite how to download it?
+",0
+6,https://github.com/nltk/nltk/issues/1254,1254,[],closed,2016-01-18 06:09:47+00:00,4,Loading jars from custom path.,"Hello Team,
+ I want to load the stanfor-parser.jar file from my custom defined path. I dont want to set ENV variable for jar locations. Is this possible ? If yes then how?
+
+Thanks,
+Rahul 
+",0
+7,https://github.com/nltk/nltk/issues/1255,1255,"[{'id': 14019255, 'node_id': 'MDU6TGFiZWwxNDAxOTI1NQ==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/pleaseverify', 'name': 'pleaseverify', 'color': 'd7e102', 'default': False, 'description': None}, {'id': 145489207, 'node_id': 'MDU6TGFiZWwxNDU0ODkyMDc=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/bug', 'name': 'bug', 'color': 'e11d21', 'default': True, 'description': None}, {'id': 719374994, 'node_id': 'MDU6TGFiZWw3MTkzNzQ5OTQ=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/GUI', 'name': 'GUI', 'color': 'f9b3d9', 'default': False, 'description': None}, {'id': 918210764, 'node_id': 'MDU6TGFiZWw5MTgyMTA3NjQ=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/inactive', 'name': 'inactive', 'color': 'cecece', 'default': False, 'description': ''}]",closed,2016-01-18 13:00:40+00:00,3,Printing to postscript error,"I draw a syntax tree with tree.draw(), which is below:
+
+![2016-01-18 8 56 33](https://cloud.githubusercontent.com/assets/5208653/12391905/0683e8a8-be26-11e5-85f7-fba3b98c1626.png)
+
+But after i save it as a ps file using 'File --> Print to Postscript', I get below:
+
+![2016-01-18 8 58 20](https://cloud.githubusercontent.com/assets/5208653/12391934/3f2fa23c-be26-11e5-9494-36cd0e99427d.png)
+
+So what is wrong with it?? can somebody help me?
+",0
+8,https://github.com/nltk/nltk/issues/1256,1256,[],closed,2016-01-18 13:27:37+00:00,11,Reading wordnet error,"My environment is Python3.5.1 and nltk3.1. When I executed the second command below, it throws an AssertionError.
+
+``` python
+from nltk.corpus import wordnet as wn
+wn.synsets('dog')
+```
+
+I find that there is a bug in class OpenOnDemandZipFile(data.py) about file reference count.
+I modified the member function read() and it worked.
+
+``` python
+def read(self, name):
+　　assert self.fp is None
+　　self.fp = open(self.filename, 'rb')
+　　self._fileRefCnt += 1 #my modification
+　　value = zipfile.ZipFile.read(self, name)
+　　self.close()
+　　return value
+```
+",0
+9,https://github.com/nltk/nltk/issues/1258,1258,"[{'id': 14019255, 'node_id': 'MDU6TGFiZWwxNDAxOTI1NQ==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/pleaseverify', 'name': 'pleaseverify', 'color': 'd7e102', 'default': False, 'description': None}, {'id': 29356672, 'node_id': 'MDU6TGFiZWwyOTM1NjY3Mg==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/corpus', 'name': 'corpus', 'color': '0b02e1', 'default': False, 'description': None}, {'id': 145489207, 'node_id': 'MDU6TGFiZWwxNDU0ODkyMDc=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/bug', 'name': 'bug', 'color': 'e11d21', 'default': True, 'description': None}, {'id': 918210764, 'node_id': 'MDU6TGFiZWw5MTgyMTA3NjQ=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/inactive', 'name': 'inactive', 'color': 'cecece', 'default': False, 'description': ''}]",closed,2016-01-20 10:33:09+00:00,1,Potential wordnet lemmatization issue,"I am not sure if its an issue with wordnet corpus or with nltk or my way of using it, but I've found one case where I am not getting expected result:
+~/nltk_data/corpora/wordnet/noun.exc contain this line:
+antae anta
+
+where (according to wikipedia) anta is singular and antae plural.
+yet this code:
+
+from nltk.stem import WordNetLemmatizer
+wnl = WordNetLemmatizer()
+print(wnl.lemmatize('antae'))
+
+prints antae, not anta.
+same goes for antalkalies -> antalkali
+but antefixa -> antefix works fine.
+
+Is it a bug (and where?) or I am wrong expecting it to be lemmatized this way?
+",0
+10,https://github.com/nltk/nltk/issues/1259,1259,[],closed,2016-01-20 17:22:30+00:00,3,ImportError: No module named sentiment  for python 2.7 on Windows PC and Anaconda  installation,"I use python 2.7 on Windows PC and Anaconda python installation
+Pls help run  example from  http://www.nltk.org/howto/sentiment.html 
+can not import nltk.sentiment, error comes from `from nltk.sentiment import SentimentAnalyzer`
+
+It gives the error:
+
+```
+Traceback (most recent call last):
+  Debug Probe, prompt 1, line 1
+ImportError: No module named sentiment
+from nltk.corpus import subjectivity
+Traceback (most recent call last):
+  Debug Probe, prompt 2, line 1
+ImportError: cannot import name subjectivity
+```
+
+but nltk import is ok 
+
+`import nltk` and `NaiveBayesClassifier` import is ok seems to be everything 
+
+```
+from nltk.classify import NaiveBayesClassifier
+```
+
+but 
+
+```
+from nltk.sentiment fails to import 
+```
+
+gives 
+
+```
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+Traceback (most recent call last):
+  Debug Probe, prompt 6, line 1
+ImportError: No module named sentiment.vader
+```
+",0
+11,https://github.com/nltk/nltk/issues/1260,1260,[],closed,2016-01-21 20:46:15+00:00,3,SRL in SENNA,"Just a quick raincheck. Is there a reason why semantic role labeling (SRL) was left out in the [nltk.tag.senna.py](https://github.com/nltk/nltk/blob/develop/nltk/tag/senna.py)? Is someone working on adding it?  
+",0
+12,https://github.com/nltk/nltk/issues/1266,1266,[],closed,2016-01-24 08:23:07+00:00,1,AttributeError with convert_regexp_to_noncapturing_parsed,"I've got this error working with TextBlob, the traceback is more or less all on the NLTK side though.
+
+Essentially, running `blob.noun_phrases` throws an AttributeError. Here's the end of the dump:
+
+```
+/usr/lib/python3.5/site-packages/nltk/__init__.py in compile_regexp_to_noncapturing(pattern, flags)
+     54     """"""
+     55     global _java_bin, _java_options
+---> 56     _java_bin = find_binary('java', bin, env_vars=['JAVAHOME', 'JAVA_HOME'], verbose=verbose, binary_names=['java.exe'])
+     57 
+     58     if options is not None:
+
+/usr/lib/python3.5/site-packages/nltk/__init__.py in convert_regexp_to_noncapturing_parsed(parsed_pattern)
+     50         ``'-Xmx512m'``, which tells Java binary to increase
+     51         the maximum heap size to 512 megabytes.  If no options are
+---> 52         specified, then do not modify the options list.
+     53     :type options: list(str)
+     54     """"""
+
+AttributeError: can't set attribute
+```
+
+Could this be a problem with the Java install?
+",0
+14,https://github.com/nltk/nltk/issues/1268,1268,[],closed,2016-01-25 02:06:09+00:00,6,Technical issues in BLEU,"This is an issue with how BLEU works and not exactly the implementation that causes an error with https://nltk.ci.cloudbees.com/job/nltk/TOXENV=py35-jenkins,jdk=jdk8latestOnlineInstall/492/testReport/junit/(root)/bleu_doctest/bleu_doctest/
+
+---
+
+There are many flaws in the original formulation of BLEU in http://www.aclweb.org/anthology/P02-1040.pdf but there's a big problem that we've all overlooked. 
+
+Equation in section 2.3 in the paper:
+
+```
+BLEU = BP * exp (sum (w_n * log(p_n)))
+```
+
+where `p_n` is the modified precision calculated with the formula from section 2.1.1 and `w_n` is the corresponding weights as per each order of ngram set by the user. 
+
+Consider the case where the numerator in the `p_n` formula of section 2.1.1 is 0 for every order of ngram. So `log(p_n)` becomes invalid because the logarithm curve is asymptotic at 0 (giving a math domain error).
+
+So if the solution was to simply set `log(p_n) = 0 if p_n == 0 else log(p_n)` then we get into another problem when the sum of all `log(p_n)` is 0 and our `exp(0)` returns 1 which gives perfect BLEU scores for 0 precision. 
+
+The assumption is that BLEU is measured at corpus level so having absolute 0 for all hypothesis-reference pairs for all order of ngram seems ridiculous.
+
+So at segment level, there seem to be multiple ways to overcome that according to http://acl2014.org/acl2014/W14-33/pdf/W14-3346.pdf .
+
+**How should we proceed with the implementation of BLEU in NLTK?**
+- Implement the Chen and Cherry (2014) methods and enforce one of the smoothing by default
+- If numerator == 0, do the ""stupid"" smoothing i.e. to add 1 to numerator and denominator (name from http://www.aclweb.org/anthology/D07-1090.pdf)
+- Leave it as it is, and use the awkward doctest as an example of how BLEU is inadequate at sentence level
+",0
+15,https://github.com/nltk/nltk/issues/1276,1276,"[{'id': 918210764, 'node_id': 'MDU6TGFiZWw5MTgyMTA3NjQ=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/inactive', 'name': 'inactive', 'color': 'cecece', 'default': False, 'description': ''}]",closed,2016-01-27 17:29:15+00:00,0,Tgrep label predicates fail without macros tgrep.py line 696,"I'm not a tgrep expert but I was futzing around with nltk's implementation and it seems like tgrep strings of the form:
+""NNP=n: =n > NP;"" fail because the NNP predicate is a string and the source code is expecting the lambda function.
+
+The NLTK implementation fails on the above tgrep string because the string 'NNP' isn't a lambda function like the code in tgrep.py line 696 assumes.
+
+The following does work:
+""@ NNPM /NNP/; @NNPM=n: =n > NP;"" Correctly returns any NNP that is dominated by an NP.
+
+From what I can tell from the tgrep2 documentation, it _should_ allow non-macro predicates.
+
+If I am correct that tgrep should allow non-macro label predicates, maybe the NLTK implementation could provide some documentation that tgrep node labeling only works with declared macros.
+",0
+16,https://github.com/nltk/nltk/issues/1277,1277,"[{'id': 23593492, 'node_id': 'MDU6TGFiZWwyMzU5MzQ5Mg==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': None}, {'id': 718773983, 'node_id': 'MDU6TGFiZWw3MTg3NzM5ODM=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/classifier', 'name': 'classifier', 'color': '60d2ff', 'default': False, 'description': None}]",closed,2016-01-28 14:44:56+00:00,1,Better documentation for HMM unsupervised training,"I had some problems using unsupervised training for hmms.
+The docs say:
+
+```
+        :param unlabeled_sequences: the unsupervised training data, a set of
+            sequences of observations
+        :type unlabeled_sequences: list
+```
+
+When i read this i thought about a List [ word_1, ..., word_n ] < a unlabeled sequence > but the correct way is [ (word_1, tag_1),...,(word_n,tag_n) ] < a labeled sequence imo > .
+I think we should explain this better to avoid confusion.
+",0
+17,https://github.com/nltk/nltk/issues/1278,1278,[],closed,2016-01-29 07:36:44+00:00,2,use source-code to install fail,"git clone code;
+sudo python setup.py install;
+a problem:
+Traceback (most recent call last):
+  File ""setup.py"", line 30, in <module>
+    from setuptools import setup, find_packages
+ImportError: No module named setuptools
+",0
+18,https://github.com/nltk/nltk/issues/1279,1279,[],closed,2016-01-29 18:56:00+00:00,8,OSError when downloading/unzipping NLTK data (Python 3.5.1),"I'm getting an OSError when I try to download data via the NLTK command line interface. This occurs when unzipping `corpora/panlex_lite.zip`
+
+Running NLTK 3.1 on Python 3.5.1 (Python installed via Homebrew, NLTK installed via pip) on Mac OS X 10.11.3
+
+Tried running `python3 -m nltk.downloader all` as suggested on http://www.nltk.org/data.html
+
+```
+sandip ~> python3 -m nltk.downloader all
+[nltk_data] Downloading collection 'all'
+[nltk_data]    | 
+[nltk_data]    | Downloading package abc to /Users/sandip/nltk_data...
+[nltk_data]    |   Package abc is already up-to-date!
+[nltk_data]    | Downloading package alpino to
+[nltk_data]    |     /Users/sandip/nltk_data...
+[nltk_data]    |   Package alpino is already up-to-date!
+[nltk_data]    | Downloading package biocreative_ppi to
+[nltk_data]    |     /Users/sandip/nltk_data...
+[nltk_data]    |   Package biocreative_ppi is already up-to-date!
+[nltk_data]    | Downloading package brown to
+[nltk_data]    |     /Users/sandip/nltk_data...
+[nltk_data]    |   Package brown is already up-to-date!
+[nltk_data]    | Downloading package brown_tei to
+[nltk_data]    |     /Users/sandip/nltk_data...
+[nltk_data]    |   Package brown_tei is already up-to-date!
+[nltk_data]    | Downloading package cess_cat to
+[nltk_data]    |     /Users/sandip/nltk_data...
+[nltk_data]    |   Package cess_cat is already up-to-date!
+[nltk_data]    | Downloading package cess_esp to
+[nltk_data]    |     /Users/sandip/nltk_data...
+[nltk_data]    |   Package cess_esp is already up-to-date!
+[nltk_data]    | Downloading package chat80 to
+[nltk_data]    |     /Users/sandip/nltk_data...
+...
+[nltk_data]    | Downloading package panlex_lite to
+[nltk_data]    |     /Users/sandip/nltk_data...
+[nltk_data]    |   Unzipping corpora/panlex_lite.zip.
+Traceback (most recent call last):
+  File ""/usr/local/Cellar/python3/3.5.1/Frameworks/Python.framework/Versions/3.5/lib/python3.5/runpy.py"", line 170, in _run_module_as_main
+    ""__main__"", mod_spec)
+  File ""/usr/local/Cellar/python3/3.5.1/Frameworks/Python.framework/Versions/3.5/lib/python3.5/runpy.py"", line 85, in _run_code
+    exec(code, run_globals)
+  File ""/usr/local/lib/python3.5/site-packages/nltk/downloader.py"", line 2267, in <module>
+    halt_on_error=options.halt_on_error)
+  File ""/usr/local/lib/python3.5/site-packages/nltk/downloader.py"", line 664, in download
+    for msg in self.incr_download(info_or_id, download_dir, force):
+  File ""/usr/local/lib/python3.5/site-packages/nltk/downloader.py"", line 543, in incr_download
+    for msg in self.incr_download(info.children, download_dir, force):
+  File ""/usr/local/lib/python3.5/site-packages/nltk/downloader.py"", line 529, in incr_download
+    for msg in self._download_list(info_or_id, download_dir, force):
+  File ""/usr/local/lib/python3.5/site-packages/nltk/downloader.py"", line 572, in _download_list
+    for msg in self.incr_download(item, download_dir, force):
+  File ""/usr/local/lib/python3.5/site-packages/nltk/downloader.py"", line 549, in incr_download
+    for msg in self._download_package(info, download_dir, force):
+  File ""/usr/local/lib/python3.5/site-packages/nltk/downloader.py"", line 638, in _download_package
+    for msg in _unzip_iter(filepath, zipdir, verbose=False):
+  File ""/usr/local/lib/python3.5/site-packages/nltk/downloader.py"", line 2039, in _unzip_iter
+    outfile.write(contents)
+OSError: [Errno 22] Invalid argument
+```
+",0
+110,https://github.com/nltk/nltk/issues/1441,1441,[],closed,2016-07-25 20:09:53+00:00,4,NLTK Installation Failure,"Hi all, I am completely new to the use of NLTK and Python, and I would really appreciate some help on the basics.  I currently have Python 2.7 installed on the OSX El Captain.  When I key in 
+
+> sudo pip install -U nltk
+> ""SyntaxError: invalid syntax""
+
+as advised by the website.  That is what I kept on getting, which means I could not install NLTK by any means. 
+
+I shall be grateful for any advice/comments.  Thanks in advance guys!
+",0
+115,https://github.com/nltk/nltk/issues/1448,1448,[],closed,2016-08-07 00:53:05+00:00,1,Problem installing NLTK data on mac,"Hi,
+
+I am not able to install NLTK data from NLTK Downloader. I have Python 3.5.2 and NLTK 3.2.1.
+
+A screenshot of NLTK Downloader with the error message is attached.
+
+Any help is very much appreciated. Thank you very much.
+
+![screen shot 2016-08-06 at 8 47 09 pm](https://cloud.githubusercontent.com/assets/1740553/17459814/a254a904-5c17-11e6-9e93-52073a28d034.png)
+",0
+127,https://github.com/nltk/nltk/issues/1479,1479,"[{'id': 719083862, 'node_id': 'MDU6TGFiZWw3MTkwODM4NjI=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/installation', 'name': 'installation', 'color': 'f7731b', 'default': False, 'description': None}, {'id': 918210764, 'node_id': 'MDU6TGFiZWw5MTgyMTA3NjQ=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/inactive', 'name': 'inactive', 'color': 'cecece', 'default': False, 'description': ''}]",closed,2016-10-12 02:48:29+00:00,4,Cannot import nltk after installation,"The package is installed in `/Library/Python/2.7/lib/python/site-packages` but I cannot import nltk. Please advice
+",0
+172,https://github.com/nltk/nltk/issues/1574,1574,[],closed,2017-01-02 04:16:33+00:00,27,Cannot Install on Windows,"I'm having issues installing NLTK on a Windows 7 64-bit machine with Python 3.5 32-bit installed.  I'm using the executable located here :  https://pypi.python.org/pypi/nltk
+
+However, I am prompted with an error after running the executable that reads:
+
+""Python version -32 required, which was not found in the registry"".
+
+I've tried this installation against Windows 7 systems with Python 2.7, 3.4, 3.5 & 3.6 installed and they all fail with the same error.  The 32-bit entry for Python exists in the Current User and Local Machine hives, however, the installation does not process.
+
+Please help, thanks.",0
+313,https://github.com/nltk/nltk/issues/1817,1817,"[{'id': 14019200, 'node_id': 'MDU6TGFiZWwxNDAxOTIwMA==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/good%20first%20issue', 'name': 'good first issue', 'color': '02e10c', 'default': True, 'description': ''}, {'id': 23593492, 'node_id': 'MDU6TGFiZWwyMzU5MzQ5Mg==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': None}, {'id': 29356472, 'node_id': 'MDU6TGFiZWwyOTM1NjQ3Mg==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/admin', 'name': 'admin', 'color': '444444', 'default': False, 'description': None}, {'id': 416522805, 'node_id': 'MDU6TGFiZWw0MTY1MjI4MDU=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/nice%20idea', 'name': 'nice idea', 'color': 'fef2c0', 'default': False, 'description': None}, {'id': 739448068, 'node_id': 'MDU6TGFiZWw3Mzk0NDgwNjg=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/resolved', 'name': 'resolved', 'color': '2375af', 'default': False, 'description': None}]",closed,2017-08-22 03:37:44+00:00,4,Better installation instructions for Windows,"Windows users faces issues when installing NLTK. 
+We should have better documentation to install and use NLTK in Windows. 
+
+Anyone up to write some extended documentation and improve the [nltk webpage](https://github.com/nltk/nltk.github.com) ?",0
+374,https://github.com/nltk/nltk/issues/1923,1923,"[{'id': 718738467, 'node_id': 'MDU6TGFiZWw3MTg3Mzg0Njc=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/windows%20related', 'name': 'windows related', 'color': 'fce4ba', 'default': False, 'description': None}, {'id': 719083862, 'node_id': 'MDU6TGFiZWw3MTkwODM4NjI=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/installation', 'name': 'installation', 'color': 'f7731b', 'default': False, 'description': None}, {'id': 789518993, 'node_id': 'MDU6TGFiZWw3ODk1MTg5OTM=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/need-help', 'name': 'need-help', 'color': 'e0609e', 'default': False, 'description': None}]",closed,2017-12-24 01:10:23+00:00,12,Windows installation problem,"I have been stuck at the installation stage. Could anybody help please?
+The error message I get is ""Python version -32 required which was not found in the registry."" 
+
+When I run the register.py script, I get a ""file not found"" error. No clue which file it is looking for.
+And besides, I wonder what NLTK is looking for in the registry?  
+
+My environment is Win7, Python 3.5.0, and NLTK 3.2.5. Installpath and Python path in in the ""environment variables"" and Python can be directly invoked at any directory. 
+",0
+452,https://github.com/nltk/nltk/issues/2053,2053,"[{'id': 719083862, 'node_id': 'MDU6TGFiZWw3MTkwODM4NjI=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/installation', 'name': 'installation', 'color': 'f7731b', 'default': False, 'description': None}, {'id': 719395503, 'node_id': 'MDU6TGFiZWw3MTkzOTU1MDM=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/twitter', 'name': 'twitter', 'color': '99ecf7', 'default': False, 'description': None}]",closed,2018-06-28 22:14:42+00:00,6,"Remove the ""twython library has not been installed"" warning?","I'm using nltk for sentiment analysis in a Django project. Every time I run a command with Django's `manage.py`, I get this output:
+
+```
+/var/www/example.com/venv-example/lib/python3.5/site-packages/nltk/twitter/__init__.py:20: UserWarning: The twython library has not been installed. Some functionality from the twitter package will not be available.
+  warnings.warn(""The twython library has not been installed. ""
+```
+
+I also get emailed by cron since cron emails whenever output is generated. Could this warning just be in the nltk documentation or is it important for it to be in the code too?",0
+481,https://github.com/nltk/nltk/issues/2098,2098,"[{'id': 23593492, 'node_id': 'MDU6TGFiZWwyMzU5MzQ5Mg==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': None}, {'id': 486810128, 'node_id': 'MDU6TGFiZWw0ODY4MTAxMjg=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/tests', 'name': 'tests', 'color': 'fbca04', 'default': False, 'description': None}, {'id': 910625822, 'node_id': 'MDU6TGFiZWw5MTA2MjU4MjI=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/CI', 'name': 'CI', 'color': '76dbed', 'default': False, 'description': ''}]",closed,2018-08-28 06:28:42+00:00,2,"Moving to Travis, cleaning up setup/installation and better CI",More and updated documentation is necessary for [`continuous-integration` section from the `CONTRIBUTING.md`](https://github.com/nltk/nltk/blob/develop/CONTRIBUTING.md#continuous-integration),0
+555,https://github.com/nltk/nltk/issues/2228,2228,"[{'id': 739448068, 'node_id': 'MDU6TGFiZWw3Mzk0NDgwNjg=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/resolved', 'name': 'resolved', 'color': '2375af', 'default': False, 'description': None}, {'id': 1032922666, 'node_id': 'MDU6TGFiZWwxMDMyOTIyNjY2', 'url': 'https://api.github.com/repos/nltk/nltk/labels/nltk_data', 'name': 'nltk_data', 'color': 'ed6fd1', 'default': False, 'description': ''}]",closed,2019-02-08 18:03:51+00:00,4,make it installable with pip or at least link download page,"To reproduce:
+
+- start with an environment without `nltk`
+- run `sudo pip install nltk`
+- create file with simple `nltk` script (see below)
+- run this script
+
+I tested with 
+
+```import nltk
+
+print(nltk.word_tokenize(""test string     aaaaa\n\n\nfinal.""))
+``` 
+
+based on https://stackoverflow.com/a/37559340/4130619
+
+
+I got error where relevant part is 
+```
+LookupError: 
+**********************************************************************
+  Resource punkt not found.
+  Please use the NLTK Downloader to obtain the resource:
+
+  >>> import nltk
+  >>> nltk.download('punkt')
+  
+  Attempted to load tokenizers/punkt/PY3/english.pickle
+```
+
+It is surprising as I would expect pip to install package and all necessary resources, not only parts of it.
+
+If it is really necessary to make installation more complicated - please link the real download page or help page in the error message.
+
+full error message: https://pastebin.com/raw/VsjrxvZ5",0
+638,https://github.com/nltk/nltk/issues/2354,2354,[],closed,2019-08-04 07:07:16+00:00,1,Cannot install ntlk library,"![image](https://user-images.githubusercontent.com/33275883/62420705-7fb2f280-b69f-11e9-802e-e4a2ffd457dc.png)
+",0
+702,https://github.com/nltk/nltk/issues/2492,2492,"[{'id': 718738467, 'node_id': 'MDU6TGFiZWw3MTg3Mzg0Njc=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/windows%20related', 'name': 'windows related', 'color': 'fce4ba', 'default': False, 'description': None}, {'id': 719083862, 'node_id': 'MDU6TGFiZWw3MTkwODM4NjI=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/installation', 'name': 'installation', 'color': 'f7731b', 'default': False, 'description': None}, {'id': 1350810881, 'node_id': 'MDU6TGFiZWwxMzUwODEwODgx', 'url': 'https://api.github.com/repos/nltk/nltk/labels/invalid', 'name': 'invalid', 'color': 'cecece', 'default': True, 'description': ''}]",closed,2020-01-30 09:55:42+00:00,4,Install NTLK did not work on clean Anaconda python 3.7,"To reproduce
+On a Windows 10 machine uninstall old versions of Anaconda and Pycharm. Delete by hand everything python or anaconda I could find (including the registry).
+Install Anaconda
+pip install ntlk.
+You get an error ""could not find version to satisfy the requirement"". It doesn't say version for what.
+What fixes the problem is
+pip install ntlk=3.3
+Which means I can't use the newest version of NTLK.
+This used to work before. I noticed there is a new version now.",0
+721,https://github.com/nltk/nltk/issues/2525,2525,[],closed,2020-04-04 15:18:52+00:00,4,install NLTK ,"Last login: Sat Apr  4 17:02:21 on ttys000
+hanadys-mbp:~ hanadyahmed$ import nltk
+-bash: import: command not found
+hanadys-mbp:~ hanadyahmed$ python
+Python 2.7.10 (default, Jul 14 2015, 19:46:27) 
+[GCC 4.2.1 Compatible Apple LLVM 6.0 (clang-600.0.39)] on darwin
+Type ""help"", ""copyright"", ""credits"" or ""license"" for more information.
+>>> import nltk
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+ImportError: No module named nltk
+>>> 
+",0
+840,https://github.com/nltk/nltk/issues/2766,2766,"[{'id': 29356472, 'node_id': 'MDU6TGFiZWwyOTM1NjQ3Mg==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/admin', 'name': 'admin', 'color': '444444', 'default': False, 'description': None}, {'id': 719083862, 'node_id': 'MDU6TGFiZWw3MTkwODM4NjI=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/installation', 'name': 'installation', 'color': 'f7731b', 'default': False, 'description': None}]",closed,2021-07-29 17:37:25+00:00,3,NTLK invalid package metdata breaks install via poetry,"It appears poetry is enforcing PEP440 on package metadata.  The NLTK uses package metadata that does not conform and so poetry fails to install (with poetry 1.2.0 and later, it seems - 1.1.4 doesn't seem affected).
+
+```
+[[package]]
+name = ""nltk""
+version = ""3.6.2""
+description = ""Natural Language Toolkit""
+category = ""main""
+optional = false
+python-versions = "">=3.5.*""
+```
+
+Error message (in docker)
+```
+STEP 14: RUN poetry install
+Creating virtualenv science-lens-BYYjfetP-py3.8 in /home/1001/.cache/pypoetry/virtualenvs
+Installing dependencies from lock file
+
+  InvalidVersion
+
+  Invalid PEP 440 version: '3.5.'
+
+  at /usr/local/lib/python3.8/site-packages/poetry/core/version/pep440/parser.py:67 in parse
+       63│     @classmethod
+       64│     def parse(cls, value: str, version_class: Optional[Type[""PEP440Version""]] = None):
+       65│         match = cls._regex.search(value) if value else None
+       66│         if not match:
+    →  67│             raise InvalidVersion(f""Invalid PEP 440 version: '{value}'"")
+       68│ 
+       69│         if version_class is None:
+       70│             from poetry.core.version.pep440.version import PEP440Version
+       71│ 
+
+The following error occurred when trying to handle this error:
+
+
+  ValueError
+
+  Could not parse version constraint: >=3.5.*
+
+  at /usr/local/lib/python3.8/site-packages/poetry/core/semver/helpers.py:139 in parse_single_constraint
+      135│ 
+      136│         try:
+      137│             version = Version.parse(version)
+      138│         except ValueError:
+    → 139│             raise ValueError(
+      140│                 ""Could not parse version constraint: {}"".format(constraint)
+      141│             )
+      142│ 
+      143│         if op == ""<"":
+subprocess exited with status 1
+subprocess exited with status 1
+error building at STEP ""RUN poetry install"": exit status 1
+level=error msg=""exit status 1""
+```",0
+852,https://github.com/nltk/nltk/issues/2796,2796,"[{'id': 719083862, 'node_id': 'MDU6TGFiZWw3MTkwODM4NjI=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/installation', 'name': 'installation', 'color': 'f7731b', 'default': False, 'description': None}, {'id': 1032922666, 'node_id': 'MDU6TGFiZWwxMDMyOTIyNjY2', 'url': 'https://api.github.com/repos/nltk/nltk/labels/nltk_data', 'name': 'nltk_data', 'color': 'ed6fd1', 'default': False, 'description': ''}]",closed,2021-09-04 02:51:20+00:00,2,NLTK installation failed,"![image](https://user-images.githubusercontent.com/88143204/132080065-cbec8e76-252a-4654-b7fa-fb31b0bc29e8.png)
+",0
+19,https://github.com/nltk/nltk/issues/1283,1283,[],closed,2016-02-05 11:08:45+00:00,12,panlex is offline (404),"```
+>>> nltk.download('panlex_lite')
+[nltk_data] Downloading package panlex_lite to
+[nltk_data]     /Users/username/nltk_data...
+[nltk_data] Error downloading u'panlex_lite' from
+[nltk_data]     <https://raw.githubusercontent.com/nltk/nltk_data/gh-
+[nltk_data]     pages/packages/corpora/panlex_lite.zip>:   HTTP Error
+[nltk_data]     404: Not Found
+False
+```
+",0
+20,https://github.com/nltk/nltk/issues/1285,1285,[],closed,2016-02-16 14:45:23+00:00,21,Weird issue with bleu scores,"I discovered a weird issue when trying to calculate bleu scores for individual sentences with evaluation code [https://github.com/nltk/nltk/blob/develop/nltk/translate/bleu_score.py](here).
+The method that contains the weird behaviour is : `sentence_bleu`
+The problem occurs whenever the pn value becomes 1.
+
+When for example calculating the bleu 1 score for the following candidate sentence:
+_[this,is,an,example]_
+When given two reference sentences:
+_[this,is,something]
+[this,is,an,example]_
+
+`_modified_precision` correctly gives 1 as an answer, since the sentence is exactly the reference sentence. Then the logarithm gets taken which results in a zero value. This still seems correct. Next all the different p_n's gets summed which in this case is just one zero value. So the sum is still 0.
+
+Then however the following code seems rather odd:
+`if sum_s == 0:
+        return 0`
+
+This way the resulting bleu-score is 0. I don't understand why this needs to be here.
+Without this if-clause, the zero-value correctly gets put in the rest of the formula and a correct 1 is returned.
+",0
+21,https://github.com/nltk/nltk/issues/1288,1288,[],closed,2016-02-17 16:04:38+00:00,6,BLEU test failing,"The CI server reports the following failure for the BLEU doctest.
+
+```
+File ""/scratch/jenkins/workspace/nltk/TOXENV/py34-jenkins/jdk/jdk8latestOnlineInstall/nltk/test/bleu.doctest"", line 9, in bleu.doctest
+Failed example:
+    bleu(
+        ['The candidate has no alignment to any of the references'.split()],
+        'John loves Mary'.split(),
+        [1],
+    )
+Expected:
+    0
+Got:
+    0.09697196786440505
+```
+",0
+22,https://github.com/nltk/nltk/issues/1289,1289,[],closed,2016-02-18 12:09:11+00:00,1,"Module not found sentiment_analyzer (Python3.5.2, NLTK3.1)","This piece of code should, according to my best knowledge, work:
+
+``` python
+import nltk.sentiment
+nltk.sentiment.util.demo_sent_subjectivity('This is great')
+```
+
+c:\users\user\appdata\local\programs\python\python35-32\lib\site-packages\nltk\sentiment\util.py in demo_sent_subjectivity(text)
+    598         print('Cannot find the sentiment analyzer you want to load.')
+    599         print('Training a new one using NaiveBayesClassifier.')
+--> 600         sentim_analyzer = demo_subjectivity(NaiveBayesClassifier.train, True)
+    601 
+    602     # Tokenize and convert to lower case
+
+c:\users\user\appdata\local\programs\python\python35-32\lib\site-packages\nltk\sentiment\util.py in demo_subjectivity(trainer, save_analyzer, n_instances, output)
+    537     :param output: the output file where results have to be reported.
+    538     """"""
+--> 539     from sentiment_analyzer import SentimentAnalyzer
+    540     from nltk.corpus import subjectivity
+    541 
+
+ImportError: No module named 'sentiment_analyzer'
+",0
+23,https://github.com/nltk/nltk/issues/1291,1291,"[{'id': 23593492, 'node_id': 'MDU6TGFiZWwyMzU5MzQ5Mg==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': None}, {'id': 739448068, 'node_id': 'MDU6TGFiZWw3Mzk0NDgwNjg=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/resolved', 'name': 'resolved', 'color': '2375af', 'default': False, 'description': None}]",closed,2016-02-19 12:52:41+00:00,1,NLTK relation extraction,"I am trying to extract relations from a text 
+the example that is provided in the book uses ieer corpus 
+I tried to make it on a single text but it's not working , I am not getting anything
+Can anyone help ?
+
+Here is my code :
+
+import nltk
+import re
+sent = ""Barack Obama is the president of America""
+tokens = nltk.word_tokenize(sent)
+tagged = nltk.pos_tag(tokens)
+grammar = r""""""
+    NP : {<DT|PP\$>?<JJ>_<NN>}
+         {<NNP>+}
+         {<NN>+}
+         }<VBD|IN>+{
+  """"""
+cp = nltk.RegexpParser(grammar)
+result = cp.parse(tagged)
+IN = re.compile(r'._\bin\b(?!\b.+ing)')
+headline=[""test headline for sentence""]
+for i,sent in enumerate(tagged):
+    text = nltk.ne_chunk(sent)
+    for rel in nltk.sem.relextract.extract_rels('ORG', 'LOC', sent, corpus='ace', pattern=IN):
+        print(nltk.sem.rtuple(rel) )
+",0
+24,https://github.com/nltk/nltk/issues/1293,1293,"[{'id': 113906330, 'node_id': 'MDU6TGFiZWwxMTM5MDYzMzA=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/SMT', 'name': 'SMT', 'color': 'bfdadc', 'default': False, 'description': None}]",closed,2016-02-22 05:15:32+00:00,4,Gale-Church aligner raises TypeError,"Running
+
+```
+nltk.translate.gale_church.align_blocks([10] * 20, [200, 400])
+```
+
+raises
+
+```
+TypeError: 'NoneType' object is not iterable
+```
+
+---
+
+Example:
+
+``` python
+>>> from nltk.translate import gale_church
+>>> gale_church.align_blocks([5,5,5], [7,7,7])
+[(0, 0), (1, 1), (2, 2)]
+>>> gale_church.align_blocks([10,] * 20, [5])
+[(18, 0), (19, 0)]
+>>> gale_church.align_blocks([10,] * 20, [5, 10])
+[(16, 0), (17, 0), (18, 1), (19, 1)]
+>>> gale_church.align_blocks([10] * 20, [5, 10])
+[(16, 0), (17, 0), (18, 1), (19, 1)]
+>>> gale_church.align_blocks([10] * 20, [200, 400])
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""nltk/translate/gale_church.py"", line 168, in align_blocks
+    return trace(backlinks, source_sents, target_sents)
+  File ""nltk/translate/gale_church.py"", line 84, in trace
+    s, t = backlinks[pos]
+TypeError: 'NoneType' object is not iterable
+```
+",0
+25,https://github.com/nltk/nltk/issues/1294,1294,[],closed,2016-02-22 12:49:35+00:00,38,Malt parser not parsing sentences,"whenever I parse a sentence using malt parser it gives me the following exception:
+mp.parse_one(token)
+
+Exception: MaltParser parsing (java -cp D:/Python Files/maltparser-1.8.1\maltparser-1.8.1.jar:D:/Python Files/maltparser-1.8.1\lib\liblinear-1.8.jar:D:/Python Files/maltparser-1.8.1\lib\libsvm.jar:D:/Python Files/maltparser-1.8.1\lib\log4j.jar org.maltparser.Malt -c engmalt.poly-1.7.mco -i C:\Users\MUSTUF~1\AppData\Local\Temp\malt_input.conll.9ck59rmy -o C:\Users\MUSTUF~1\AppData\Local\Temp\malt_output.conll.1j7w_xvw -m parse) failed with exit code 1
+",0
+26,https://github.com/nltk/nltk/issues/1296,1296,"[{'id': 14019255, 'node_id': 'MDU6TGFiZWwxNDAxOTI1NQ==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/pleaseverify', 'name': 'pleaseverify', 'color': 'd7e102', 'default': False, 'description': None}, {'id': 29356672, 'node_id': 'MDU6TGFiZWwyOTM1NjY3Mg==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/corpus', 'name': 'corpus', 'color': '0b02e1', 'default': False, 'description': None}]",closed,2016-02-23 10:19:29+00:00,4,Fail to load vader_lexicon.txt,"I'd like to use `SentimentIntensityAnalyzer`, but got such a error:
+
+```
+[Errno 2] No such file or directory: '/Users/yobichi/mc2/lib/python3.5/site-packages/nltk/sentiment/vader_lexicon.txt'
+```
+
+How can I fix it? Or where can I download it manually?
+",0
+27,https://github.com/nltk/nltk/issues/1297,1297,[],closed,2016-02-23 14:36:50+00:00,1,panlex_lite 404 ,"I am still get error, refer below log.
+Any update documents or something else? Thanks 
+/usr/local/bin/python2.7 -m nltk.downloader -q all -d /usr/local/share/nltk_data
+[nltk_data] Error downloading u'panlex_lite' from
+[nltk_data] [nltk_data] pages/packages/corpora/panlex_lite.zip>: HTTP Error
+[nltk_data] 404: Not Found
+",0
+28,https://github.com/nltk/nltk/issues/1298,1298,[],closed,2016-02-23 23:34:55+00:00,2,stanford parser setup error,"Hi,
+i am using the following code to parse a sentence using stanford parser and for setting the variables
+
+import os
+java_path = ""C:/Program Files/Java/jdk1.8.0_60""
+os.environ['JAVAHOME'] = java_path
+os.environ['CLASSPATH'] ='C:\Users\ASUS\Downloads\stanford-parser-full-2015-12-09\stanford-parser-full-2015-12-09'
+os.environ['STANFORD_MODELS'] = 'C:\Users\ASUS\Downloads\stanford-parser-full-2015-12-09\stanford-parser-full-2015-12-09'
+
+from nltk.parse.stanford  import StanfordDependencyParser 
+
+dep_parser = StanfordDependencyParser(model_path='edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz' )
+
+sentences = dep_parser.raw_parse_sents([""""""
+
+The product was old but it was good.
+An excellent product packed very well with a very prompt delivery !
+    """"""])
+print (str (sentences))
+
+for line in sentences:
+    for sentence in line:
+        sentence.draw()
+
+But I am getting the following error
+
+Traceback (most recent call last):
+  File ""C:/Users/ASUS/PycharmProjects/untitled2/parse.py"", line 11, in <module>
+    dep_parser = StanfordDependencyParser(model_path='edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz' )
+  File ""C:\Python34\lib\site-packages\nltk\parse\stanford.py"", line 61, in **init**
+    key=lambda model_name: re.match(self._MODEL_JAR_PATTERN, model_name)
+TypeError: unorderable types: NoneType() > NoneType()
+
+Please help me 
+
+thanks
+",0
+29,https://github.com/nltk/nltk/issues/1299,1299,[],closed,2016-02-24 04:43:02+00:00,1,zipfile problem for Python 3.5,"The bulk of the CI errors concern zipfiles in Python 3.5:
+
+https://nltk.ci.cloudbees.com/job/nltk/TOXENV=py35-jenkins,jdk=jdk8latestOnlineInstall/lastCompletedBuild/testReport/
+",0
+30,https://github.com/nltk/nltk/issues/1304,1304,[],closed,2016-02-26 15:27:37+00:00,4,Last stanford-pos-tagger (2015-12-09) jar problem,"Hello,
+
+First I'm really new to nltk and what i learn is amazing, so really thank you for this great piece of software.
+
+I'm trying to use stanford-pos-tagger, and the last version seems to be currently uncompatible with nltk.
+
+The problem is related in this stackoverflow post:
+http://stackoverflow.com/questions/34361725/nltk-stanfordnertagger-noclassdeffounderror-org-slf4j-loggerfactory-in-windo/34916721#34916721
+
+This version needs 2 additional jars in the `CLASSPATH`: slf4j-api and slf4j-simple. The problem is that those jars are not loaded and it is impossible the load those jars without modifying nltk. Why ? because when launching the stanford jar, nltk resets the classpath to keep only one jar: the stanford one, it removes all other jars, even the jars specified in the classpath. Consequently there is no way to add slf4j-api and slf4j-simple to the classpath. 
+
+Is there any particular reason to always reset the classpath? I suppose, classpath is cleared to avoid dependency problems, but since stanford jars used to have no dependencies at all would it be possible to disable this feature. Like proposed here: http://stackoverflow.com/a/34916721/3256942 ?
+
+Have a good day !!!
+",0
+31,https://github.com/nltk/nltk/issues/1305,1305,"[{'id': 718773983, 'node_id': 'MDU6TGFiZWw3MTg3NzM5ODM=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/classifier', 'name': 'classifier', 'color': '60d2ff', 'default': False, 'description': None}]",open,2016-02-26 16:45:01+00:00,0,confusing maxent formula.,"I dont understand this formula from  [ nltk.classify.maxent](http://www.nltk.org/_modules/nltk/classify/maxent.html)
+
+> ```
+>                     dotprod(weights, encode(fs,label))
+>   prob(fs|label) = ---------------------------------------------------
+>                  sum(dotprod(weights, encode(fs,l)) for l in labels)
+> ```
+
+Isin't maxent same as logistic regression classifier? So the correct formula for p(fs| label) should be:
+
+> ```
+>    p(fs|label) =         exp( dotprod(weights, encode(fs,label))
+>                          --------------------------------------------------------------
+>                    sum( exp( dotprod(weights, encode(f,label)) for f in all_fs)
+> ```
+
+There seems to be 2 mistakes in the original formula, is should have been p(label|fs) and the dot product should be exponentiated.
+
+Am I missing something?
+",0
+32,https://github.com/nltk/nltk/issues/1307,1307,[],closed,2016-02-26 20:57:50+00:00,1,Unicode support in CCG.doctest fails when using Python 2.7,"The result looks like this:
+
+```
+Expected:                                                                                                                                                                               [6/797]
+       el    ministro    anunció              pero              el    presidente   desmintió     la    nueva  ley
+     (NP/N)     N      ((S\NP)/NP)  (((S/NP)\(S/NP))/(S/NP))  (NP/N)      N       ((S\NP)/NP)  (NP/N)  (N/N)   N
+    --------Leaf
+     (NP/N)
+            ----------Leaf
+                N
+ ... something long...
+    -------------------------------------------------------------------------------------------------------------->
+                                                          S
+Got nothing
+```
+
+It produces nothing. 
+
+I have figured out that it is because of the word `panadería` (https://github.com/nltk/nltk/blob/develop/nltk/test/ccg.doctest#L306). When deleting that line, a parse is produced. But the test still fails because of some other issues (see #1306).
+
+I'm guessing that `í` causes a failure in the lexicon.
+
+Please note that the problem only occurs in Python 2.7.
+",0
+33,https://github.com/nltk/nltk/issues/1308,1308,[],closed,2016-02-26 22:22:27+00:00,0,BufferedGzipFile in Python3.5,"On the [CI tests for Python 3.5](https://nltk.ci.cloudbees.com/job/nltk/TOXENV=py35-jenkins,jdk=jdk8latestOnlineInstall/lastCompletedBuild/testReport/%28root%29/data_doctest/data_doctest/), `BufferedGzipFile` test is breaking at https://github.com/nltk/nltk/blob/develop/nltk/test/data.doctest#L327
+
+This is because of the change in how buffer is read when code was modified from Python3.4 -> 3.5:
+- **Python3.4**: https://github.com/python/cpython/blob/3.4/Lib/gzip.py#L189
+- **Python3.5**: https://github.com/python/cpython/blob/3.5/Lib/gzip.py#L174
+
+There's a new `GzipFile._buffer` variable in Python3.5 that clashes with `nltk.data.BufferedGzipFile._buffer`, so at https://github.com/nltk/nltk/blob/develop/nltk/data.py#L372 , 
+- [When initializing a `nltk.data.BufferedGzipFile`](https://github.com/nltk/nltk/blob/develop/nltk/data.py#L370), it uses the `gzip.GzipFile.__init__` that [sets the `._buffer` variable to the file object](https://github.com/python/cpython/blob/3.5/Lib/gzip.py#L173)
+- And [when `nltk.data.BufferedGzipFile` sets `self._buffer = BytesIO()`](https://github.com/nltk/nltk/blob/develop/nltk/data.py#L372), the super-class' buffer was overwritten and unloaded the file object within the `self._buffer` and it reads an empty file causing `test.read()` in the doctest to be None.
+
+Since by default Python3.5 uses a buffer reader, it should have the same functionality as `nltk.data.BufferedGzipFile`. Assuming that the core Python team don't backport this functionality, we should consider deprecating this when we start dropping `python2.7` support.
+
+Meanwhile I think the easiest fix is to refactor `BufferedGzipFile._buffer` to do something like `BufferedGzipFile._nltk_buffer`. And that should resolve Python3.4 -> 3.5 related issues for now =)
+",0
+34,https://github.com/nltk/nltk/issues/1309,1309,"[{'id': 14019200, 'node_id': 'MDU6TGFiZWwxNDAxOTIwMA==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/good%20first%20issue', 'name': 'good first issue', 'color': '02e10c', 'default': True, 'description': ''}, {'id': 23593492, 'node_id': 'MDU6TGFiZWwyMzU5MzQ5Mg==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/documentation', 'name': 'documentation', 'color': '02d7e1', 'default': True, 'description': None}, {'id': 29356672, 'node_id': 'MDU6TGFiZWwyOTM1NjY3Mg==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/corpus', 'name': 'corpus', 'color': '0b02e1', 'default': False, 'description': None}]",closed,2016-02-26 22:35:28+00:00,2,Example in SentiWordNet doctest is outdated. ,"The example in SentiWordNet doctest is outdated given the current version of expanded SentiWordNet in NLTK, see https://github.com/nltk/nltk/blob/develop/nltk/corpus/reader/sentiwordnet.py#L19 causing [failed tests on the CI server ](https://nltk.ci.cloudbees.com/job/nltk/TOXENV=py35-jenkins,jdk=jdk8latestOnlineInstall/lastCompletedBuild/testReport/nltk.corpus/reader/sentiwordnet/)
+
+This can be fixed easily by using these output instead of the existing one:
+
+```
+>>> from nltk.corpus import sentiwordnet as swn
+>>> list(swn.senti_synsets('slow'))
+[SentiSynset('decelerate.v.01'), SentiSynset('slow.v.02'), SentiSynset('slow.v.03'), SentiSynset('slow.a.01'), SentiSynset('slow.a.02'), SentiSynset('dense.s.04'), SentiSynset('slow.a.04'), SentiSynset('boring.s.01'), SentiSynset('dull.s.08'), SentiSynset('slowly.r.01'), SentiSynset('behind.r.03')]
+>>> happy = swn.senti_synsets('happy', 'a')
+>>> happy0 = list(happy)[0]
+>>> happy0.pos_score()
+0.875
+>>> happy0.neg_score()
+0.0
+>>> happy0.obj_score()
+0.125
+```
+
+Any brave soul want to try to contribute this `good-first-bug`?
+",0
+35,https://github.com/nltk/nltk/issues/1311,1311,"[{'id': 14019255, 'node_id': 'MDU6TGFiZWwxNDAxOTI1NQ==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/pleaseverify', 'name': 'pleaseverify', 'color': 'd7e102', 'default': False, 'description': None}]",closed,2016-02-27 00:56:43+00:00,2,Stanford NER tagging results differ between JAVA GUI and NLTK,"Hi there,
+
+For some reason the NER tagging results for my test paragraph differ between JAVA GUI and NLTK's wrapper, even though I used the same trained classifier (english.conll.4class.distsim.crf.ser.gz).  The test sentence I used was:
+
+The studio is super great. **LOCATION LOCATION LOCATION**. 2 blocks from **Union Square**, 1 block from **Chinatown**, right in the middle of restaurants, cafeterias, bars, retail/designer stores. Accessible to bus, train, railcar, hop-on hop-off tour buses.   The place is excellent, the most comfortable bed I have ever stayed at any hotel, (I told **Heather** personally), clean, with all the amenities stated on the listing. Loved it.  **Heather** is always there to help get around town or any other questions you might have.   I would definitely recommend it to my friends and to you, the reader.
+
+The Java GUI picked out all bold instances, while the NLTK wrapper picked out:
+great.
+LOCATION
+LOCATION
+LOCATION.
+Union
+Heather
+personally),
+listing.
+Loved
+Heather
+
+Chinatown was not picked out, and there are a few words mistakenly picked out.  A stackoverflow question brought up [the same issue](http://stackoverflow.com/questions/34626555/result-difference-in-stanford-ner-tagger-nltk-python-vs-java).  What is the reason for the difference?  Is there a model parameter that I need to turn on?  
+
+Thank you for any help!
+",0
+36,https://github.com/nltk/nltk/issues/1313,1313,[],closed,2016-02-27 19:03:11+00:00,1,Semantic predicate for CCG parser,"A little bit of the background: I was one of the @ewan-klein's student that extended the CCG parser in 2009. Sadly, the code was never merged. But I'd like to make the work into the codebase.
+
+The extension included:
+- Semantic predicate calculation
+- Probability calculation
+- Feature value -- right now we have `NP[sg]`. But `NP[num=sg]` or `NP[num=?x]` (variable-value) are better because it fits better with the word `the -> NP[num=?x]/NP[num=?x]`
+- Packed chart technique 
+
+We can talk about those in detail later and discuss whether or not to integrate a feature. For example, the packed chart technique is an optimisation that removes some similar parses, so it might not be useful for educational purpose.
+
+I'd like to integrate the above features one-by-one in order to avoid driving reviewers crazy. And it's probably better for code quality maintenance as well.
+
+So, first I'd like to start with semantic predicate calculation.
+
+Here's how the lexicon should look like:
+
+```
+    :- S, NP, N
+    TransVsg :: (S\NP[sg])/NP {sem=\x y.SYM(y,x)}
+
+    She => NP[sg] {sem=she}
+    has => TransVsg  {sym=have}
+    a => NP[sg]/N[sg] {sem=\x.one(x)}
+    book => N[sg] {sem=book}
+```
+
+and here's how the output should look like:
+
+```
+       She                         has                                   a                         book       
+ NP[sg] {she}  ((S\NP[sg])/NP) {\x y.have(y,x)}  (NP[sg]/N[sg]) {\x.one(x)}  N[sg] {book} 
+------------------------>T
+(S/(S\NP[sg])) {\T.T(she)}
+-------------------------------------------------------------------->B
+                      (S/NP) {\x.have(she,x)}
+                                                                    ------------------------------------------------------------------>
+                                                                                          NP[sg] {one(book)}
+-------------------------------------------------------------------------------------------------------------------------------------->
+                                                       S {have(she,one(book))}
+```
+
+Here are questions I'd like to address:
+- Should we integrate the semantic predicate calculation at all? Would it be useful?
+- Does the formalisation of semantic predicate look good?
+- Should the semantic predicate be optional (on the lexicon level)? I lean toward making it optional because it'll be annoying to force everyone to use the semantic predicate. On another hand, it makes the code more complicated.
+
+Thank you!
+",0
+38,https://github.com/nltk/nltk/issues/1315,1315,[],closed,2016-02-29 04:55:40+00:00,5,Dispersion Plot has an incorrectly used Parameter,"`nltk.draw.dispersion.dispersion_plot(text, words, ignore_case=False, title='Lexical Dispersion Plot')[source]¶
+`
+'title' is seen to be a parameter in the source code and above(documentation), but we cannot modify this parameter.
+",0
+39,https://github.com/nltk/nltk/issues/1317,1317,"[{'id': 14019200, 'node_id': 'MDU6TGFiZWwxNDAxOTIwMA==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/good%20first%20issue', 'name': 'good first issue', 'color': '02e10c', 'default': True, 'description': ''}, {'id': 29356672, 'node_id': 'MDU6TGFiZWwyOTM1NjY3Mg==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/corpus', 'name': 'corpus', 'color': '0b02e1', 'default': False, 'description': None}, {'id': 112364689, 'node_id': 'MDU6TGFiZWwxMTIzNjQ2ODk=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/enhancement', 'name': 'enhancement', 'color': '006b75', 'default': True, 'description': None}, {'id': 416522805, 'node_id': 'MDU6TGFiZWw0MTY1MjI4MDU=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/nice%20idea', 'name': 'nice idea', 'color': 'fef2c0', 'default': False, 'description': None}, {'id': 1355143093, 'node_id': 'MDU6TGFiZWwxMzU1MTQzMDkz', 'url': 'https://api.github.com/repos/nltk/nltk/labels/model', 'name': 'model', 'color': '2646af', 'default': False, 'description': ''}]",open,2016-03-02 03:24:40+00:00,3,Training the default perceptron tagger with bigger corpus,"The default pickle for the `PerceptronTagger` is nice but it's a little too small for realistic usage:
+
+``` python
+>>> from nltk import PerceptronTagger
+>>> len(PerceptronTagger(load=True).tagdict)
+1549
+```
+
+Would it be possible to retrain a model on something like the full Penn TreeBank or BNC? Is the model then releasable on NLTK? 
+",0
+40,https://github.com/nltk/nltk/issues/1320,1320,[],closed,2016-03-05 20:50:48+00:00,3,No module nltk.sentiment,"I'm trying to follow on along with this example http://www.nltk.org/howto/sentiment.html, but there is no nltk.sentiment module. Do I have to install it separately? 
+",0
+42,https://github.com/nltk/nltk/issues/1323,1323,"[{'id': 918210764, 'node_id': 'MDU6TGFiZWw5MTgyMTA3NjQ=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/inactive', 'name': 'inactive', 'color': 'cecece', 'default': False, 'description': ''}]",closed,2016-03-08 18:21:43+00:00,1,Error in BigramAssocMeasures _contingency?,"Hello, 
+Before submitting a pull request I would like to know if this was done deliberately for some reason:
+
+The contingency table in BigramAssocMeasures seems incorrect to me.
+When I give a set of identical bigrams, i.e. [(X,X), (X,X), (X,X)] what should the table say?
+I think:
+n_ii = 3, n_io = 0, n_oi = 0, n_oo = 0.
+Instead, we get 3, 1, 1, -1.
+
+This causes the likelihood_ratio and chi_sq tests to fail.
+
+The counts also seem wrong for [(X,X), (X,X), (X,Y)]
+
+In this case we should get the following contingencies:
+for (X,X):
+2, 1, 0, 0
+or
+for (X,Y):
+1, 2, 0, 0
+
+Bug or feature?
+
+The error[?] is due to word_fd.
+",0
+43,https://github.com/nltk/nltk/issues/1324,1324,"[{'id': 22487250, 'node_id': 'MDU6TGFiZWwyMjQ4NzI1MA==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/python3', 'name': 'python3', 'color': 'b3fca6', 'default': False, 'description': ''}, {'id': 145489207, 'node_id': 'MDU6TGFiZWwxNDU0ODkyMDc=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/bug', 'name': 'bug', 'color': 'e11d21', 'default': True, 'description': None}, {'id': 718785550, 'node_id': 'MDU6TGFiZWw3MTg3ODU1NTA=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/pythonic', 'name': 'pythonic', 'color': '66e88d', 'default': False, 'description': None}, {'id': 738078305, 'node_id': 'MDU6TGFiZWw3MzgwNzgzMDU=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/python2.7', 'name': 'python2.7', 'color': '7be833', 'default': False, 'description': None}]",open,2016-03-09 00:50:03+00:00,2,ParentedTree breaks deepcopy,"Can deepcopy Tree but not ParentedTree, not sure if may be related to this: https://github.com/nltk/nltk/issues/130
+
+> > > from nltk.tree import Tree,ParentedTree
+> > > t1 = Tree.fromstring(""(TOP (S (NP (NNP Bell,)) (NP (NP (DT a) (NN company)) (SBAR (WHNP (WDT which)) (S (VP (VBZ is) (VP (VBN based) (PP (IN in) (NP (NNP LA,)))))))) (VP (VBZ makes) (CC and) (VBZ distributes) (NP (NN computer))) (. products.)))"")
+> > > t2 = copy.deepcopy(t1)
+> > > t3 = ParentedTree.fromstring(""(TOP (S (NP (NNP Bell,)) (NP (NP (DT a) (NN company)) (SBAR (WHNP (WDT which)) (S (VP (VBZ is) (VP (VBN based) (PP (IN in) (NP (NNP LA,)))))))) (VP (VBZ makes) (CC and) (VBZ distributes) (NP (NN computer))) (. products.)))"")
+> > > import copy
+> > > t4 = copy.deepcopy(t3)
+> > > Traceback (most recent call last):
+> > >   File ""<input>"", line 1, in <module>
+> > >   File ""/usr/local/Cellar/python/2.7.10_2/Frameworks/Python.framework/Versions/2.7/lib/python2.7/copy.py"", line 190, in deepcopy
+> > >     y = _reconstruct(x, rv, 1, memo)
+> > >   File ""/usr/local/Cellar/python/2.7.10_2/Frameworks/Python.framework/Versions/2.7/lib/python2.7/copy.py"", line 351, in _reconstruct
+> > >     item = deepcopy(item, memo)
+> > >   File ""/usr/local/Cellar/python/2.7.10_2/Frameworks/Python.framework/Versions/2.7/lib/python2.7/copy.py"", line 190, in deepcopy
+> > >     y = _reconstruct(x, rv, 1, memo)
+> > >   File ""/usr/local/Cellar/python/2.7.10_2/Frameworks/Python.framework/Versions/2.7/lib/python2.7/copy.py"", line 351, in _reconstruct
+> > >     item = deepcopy(item, memo)
+> > >   File ""/usr/local/Cellar/python/2.7.10_2/Frameworks/Python.framework/Versions/2.7/lib/python2.7/copy.py"", line 190, in deepcopy
+> > >     y = _reconstruct(x, rv, 1, memo)
+> > >   File ""/usr/local/Cellar/python/2.7.10_2/Frameworks/Python.framework/Versions/2.7/lib/python2.7/copy.py"", line 352, in _reconstruct
+> > >     y.append(item)
+> > >   File ""/usr/local/lib/python2.7/site-packages/nltk/tree.py"", line 1061, in append
+> > >     self._setparent(child, len(self))
+> > >   File ""/usr/local/lib/python2.7/site-packages/nltk/tree.py"", line 1221, in _setparent
+> > >     raise ValueError('Can not insert a subtree that already '
+> > > ValueError: Can not insert a subtree that already has a parent.
+",0
+44,https://github.com/nltk/nltk/issues/1325,1325,[],closed,2016-03-09 17:52:21+00:00,2,Number text representation,"Within the framework of the project I am currently working on I have to develop a library that will convert a number to its text representation in Russian and English.
+For instance, given the number **1235** the library will output ""one thousand two hundred and thirty five"" for English and ""одна тысяча двести тридцать пять"" for Russian.
+I can design this library in such a way that it is localizable for any language and language extension grammar files are shipped via nltk_data repository. In the future the reverse process, i.e. parsing of text to number, can also be included within this library which will be a handy tool for discovering numbers in natural language.
+
+Do you think it makes sense to include such a library into NLTK?
+",0
+45,https://github.com/nltk/nltk/issues/1326,1326,[],closed,2016-03-10 15:54:53+00:00,2,Receiving GetURLError,"When calling function nltk.pos_tag, I get the following error in nltk-3.2:
+
+```
+Traceback (most recent call last):
+  File ""nltk-tests.py"", line 22, in <module>
+    tagged = nltk.pos_tag(tokens)
+  File ""C:\Users\Vukan\AppData\Local\Programs\Python\Python35\lib\site-packages\nltk\tag\__init__.py"", line 110, in pos_tag
+    tagger = PerceptronTagger()
+  File ""C:\Users\Vukan\AppData\Local\Programs\Python\Python35\lib\site-packages\nltk\tag\perceptron.py"", line 141, in __init__
+    self.load(AP_MODEL_LOC)
+  File ""C:\Users\Vukan\AppData\Local\Programs\Python\Python35\lib\site-packages\nltk\tag\perceptron.py"", line 209, in load
+    self.model.weights, self.tagdict, self.classes = load(loc)
+  File ""C:\Users\Vukan\AppData\Local\Programs\Python\Python35\lib\site-packages\nltk\data.py"", line 801, in load
+    opened_resource = _open(resource_url)
+  File ""C:\Users\Vukan\AppData\Local\Programs\Python\Python35\lib\site-packages\nltk\data.py"", line 924, in _open
+    return urlopen(resource_url)
+  File ""C:\Users\Vukan\AppData\Local\Programs\Python\Python35\lib\urllib\request.py"", line 162, in urlopen
+    return opener.open(url, data, timeout)
+  File ""C:\Users\Vukan\AppData\Local\Programs\Python\Python35\lib\urllib\request.py"", line 465, in open
+    response = self._open(req, data)
+  File ""C:\Users\Vukan\AppData\Local\Programs\Python\Python35\lib\urllib\request.py"", line 488, in _open
+    'unknown_open', req)
+  File ""C:\Users\Vukan\AppData\Local\Programs\Python\Python35\lib\urllib\request.py"", line 443, in _call_chain
+    result = func(*args)
+  File ""C:\Users\Vukan\AppData\Local\Programs\Python\Python35\lib\urllib\request.py"", line 1310, in unknown_open
+    raise URLError('unknown url type: %s' % type)
+urllib.error.URLError: <urlopen error unknown url type: c>
+```
+
+The error does not happen in nltk-3.1. I am using Windows 7, python 3.5.1
+",0
+46,https://github.com/nltk/nltk/issues/1327,1327,"[{'id': 14019200, 'node_id': 'MDU6TGFiZWwxNDAxOTIwMA==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/good%20first%20issue', 'name': 'good first issue', 'color': '02e10c', 'default': True, 'description': ''}, {'id': 29356672, 'node_id': 'MDU6TGFiZWwyOTM1NjY3Mg==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/corpus', 'name': 'corpus', 'color': '0b02e1', 'default': False, 'description': None}, {'id': 112364689, 'node_id': 'MDU6TGFiZWwxMTIzNjQ2ODk=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/enhancement', 'name': 'enhancement', 'color': '006b75', 'default': True, 'description': None}, {'id': 416522805, 'node_id': 'MDU6TGFiZWw0MTY1MjI4MDU=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/nice%20idea', 'name': 'nice idea', 'color': 'fef2c0', 'default': False, 'description': None}, {'id': 918210764, 'node_id': 'MDU6TGFiZWw5MTgyMTA3NjQ=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/inactive', 'name': 'inactive', 'color': 'cecece', 'default': False, 'description': ''}]",closed,2016-03-10 18:15:23+00:00,0,Proposal for a CorpusReader for presidential debate texts,"Hi all,
+
+I wrote a CorpusReader for reading presidential debates as formatted here: http://www.presidency.ucsb.edu/debates.php
+
+My implementation is here: https://github.com/ELind77/Candidate_Classifier/blob/master/candidate_classifier/debate_corpus_reader.py
+
+Tests are here: https://github.com/ELind77/Candidate_Classifier/blob/master/tests/test_debate_corpus_reader.py
+
+It would need a bit of work to be up to the nltk coding standards, but if there is any interest in this please let me know and I will do my best to bring it up to the project coding standards and submit a pull request.
+
+-- Eric
+",0
+47,https://github.com/nltk/nltk/issues/1328,1328,[],closed,2016-03-12 06:14:37+00:00,6,Regression in BLEU code,"It looks like #1319 has caused a new set of regressions.
+@josiahwang, @alvations – any input would be appreciated, thanks.
+",0
+48,https://github.com/nltk/nltk/issues/1330,1330,"[{'id': 113906330, 'node_id': 'MDU6TGFiZWwxMTM5MDYzMzA=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/SMT', 'name': 'SMT', 'color': 'bfdadc', 'default': False, 'description': None}]",closed,2016-03-13 19:44:26+00:00,9,BLEU Issues,"The BLEU implementation has sort of generated quite a lot of ""wack-a-mole"" situations where the fringe cases of using BLEU cause errors or unexpected output values from the following issues: #1328 #1288 #1285 #1268 #775 #789 #922 #926 #989 #1172 #1241
+
+To resolve the issues, possibly our best chance is to emulate [`mteval-13a.perl`](https://github.com/moses-smt/mosesdecoder/blob/master/scripts/generic/mteval-v13a.pl) from @moses-smt. 
+
+As a best practice, it should accompanied with a lot more test cases. 
+
+**Any takers on writing/thinking of test cases?**
+
+Contributors can also try to writing wrapper code or port code to NLTK from the following libraries:
+- https://github.com/odashi/mteval
+- https://github.com/moses-smt/mosesdecoder/blob/master/mert/sentence-bleu.cpp
+",0
+50,https://github.com/nltk/nltk/issues/1335,1335,"[{'id': 14019255, 'node_id': 'MDU6TGFiZWwxNDAxOTI1NQ==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/pleaseverify', 'name': 'pleaseverify', 'color': 'd7e102', 'default': False, 'description': None}]",closed,2016-03-14 23:11:29+00:00,3,pkg_resources.DistributionNotFound: nltk-contrib==3.1,"`Traceback (most recent call last):
+  File ""/usr/local/bin/nltk-server"", line 5, in <module>
+    from pkg_resources import load_entry_point
+  File ""/usr/lib/python3/dist-packages/pkg_resources.py"", line 2749, in <module>
+    working_set = WorkingSet._build_master()
+  File ""/usr/lib/python3/dist-packages/pkg_resources.py"", line 446, in _build_master
+    return cls._build_from_requirements(__requires__)
+  File ""/usr/lib/python3/dist-packages/pkg_resources.py"", line 459, in _build_from_requirements
+    dists = ws.resolve(reqs, Environment())
+  File ""/usr/lib/python3/dist-packages/pkg_resources.py"", line 628, in resolve
+    raise DistributionNotFound(req)
+pkg_resources.DistributionNotFound: nltk-contrib==3.1
+`
+While starting the nltk-server with command nltk-server -v 8881 , I get the above error. I have nltk3.1 installed on my ubuntu. Please suggest a solution
+",0
+51,https://github.com/nltk/nltk/issues/1336,1336,"[{'id': 145489207, 'node_id': 'MDU6TGFiZWwxNDU0ODkyMDc=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/bug', 'name': 'bug', 'color': 'e11d21', 'default': True, 'description': None}, {'id': 739448068, 'node_id': 'MDU6TGFiZWw3Mzk0NDgwNjg=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/resolved', 'name': 'resolved', 'color': '2375af', 'default': False, 'description': None}]",closed,2016-03-16 16:39:15+00:00,2,ZeroDivisionError when computing Krippendorff's alpha,"(1) Steps to reproduce:
+
+``` python
+    from nltk.metrics.agreement import AnnotationTask
+    atask = AnnotationTask(data=[('c1', '1', 1),('c2', '1', 1)])
+    atask.alpha()
+```
+
+(2) Error:
+
+``` python
+    Traceback (most recent call last):
+      File ""<stdin>"", line 1, in <module>
+      File ""/home/sidorenko/.local/lib/python2.7/site-packages/nltk/metrics/agreement.py"", line 316, in alpha
+        ret = 1.0 - (self.Do_alpha() / De)
+    ZeroDivisionError: float division by zero
+```
+
+(3) Expected return value:
+
+```
+    1.
+```
+
+(4) System information:
+
+```
+    nltk.__version__: '3.0.5'
+    python --version: Python 2.7.6
+    uname -srm: Linux 3.19.0-42-generic x86_64
+```
+",0
+52,https://github.com/nltk/nltk/issues/1337,1337,"[{'id': 918210764, 'node_id': 'MDU6TGFiZWw5MTgyMTA3NjQ=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/inactive', 'name': 'inactive', 'color': 'cecece', 'default': False, 'description': ''}]",closed,2016-03-19 15:01:27+00:00,0,log_probability bug and inconsistent documentation for HMM tagger,"The log_probability function doc in HMM tagger says:
+
+> :param sequence: the sequence of symbols which must contain the TEXT
+>             property, and optionally the TAG property
+>         :type sequence:  Token
+
+This is vague and also inconsistent with what a labeled and unlabeled sequence are defined in other functions of the same class (a list of tuples and a list of symbols respectively). In another function such as ""train"", unlabeled_sequence is defined as a list of lists, presumably a list of unlabeled sequences. I think it should be plural for clarity, as it correctly is in some other functions of the same class.
+This issue in log_probability causes a bug (more often than not) if you pass an unlabeled sequence of symbols as the ""sequence"" parameter: 
+
+`HMMTagger.log_probability(['a', 'test'])`
+
+will result in:
+
+```
+Traceback (most recent call last):
+  File ""<input>"", line 1, in <module>
+  File ""...\nltk\tag\hmm.py"", line 247, in log_probability
+    state = sequence[t][_TAG]
+IndexError: string index out of range
+```
+
+because it attempts to look at position _TAG which is 1 which does not exist in an unlabeled sequence. Well, it would work if all the symbols had more than one character, but the result will be incorrect. 
+",0
+53,https://github.com/nltk/nltk/issues/1338,1338,[],closed,2016-03-22 01:37:40+00:00,32,panlex_lite installation via nltk.download() appears to fail,"Platform: Python 3.5 on Mac OS X 10.11.2
+Steps to reproduce:
+1. $ python3
+2. >>> import nltk; nltk.download('all', halt_on_error=False)
+
+Symptoms:
+ # Partial console write:
+[nltk_data]    | Downloading package panlex_lite to
+[nltk_data]    |     /Users/beng/nltk_data...
+[nltk_data]    |   Unzipping corpora/panlex_lite.zip.
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""/usr/local/lib/python3.5/site-packages/nltk/downloader.py"", line 664, in download
+    for msg in self.incr_download(info_or_id, download_dir, force):
+  File ""/usr/local/lib/python3.5/site-packages/nltk/downloader.py"", line 543, in incr_download
+    for msg in self.incr_download(info.children, download_dir, force):
+  File ""/usr/local/lib/python3.5/site-packages/nltk/downloader.py"", line 529, in incr_download
+    for msg in self._download_list(info_or_id, download_dir, force):
+  File ""/usr/local/lib/python3.5/site-packages/nltk/downloader.py"", line 572, in _download_list
+    for msg in self.incr_download(item, download_dir, force):
+  File ""/usr/local/lib/python3.5/site-packages/nltk/downloader.py"", line 549, in incr_download
+    for msg in self._download_package(info, download_dir, force):
+  File ""/usr/local/lib/python3.5/site-packages/nltk/downloader.py"", line 638, in _download_package
+    for msg in _unzip_iter(filepath, zipdir, verbose=False):
+  File ""/usr/local/lib/python3.5/site-packages/nltk/downloader.py"", line 2039, in _unzip_iter
+    outfile.write(contents)
+OSError: [Errno 22] Invalid argument
+",0
+54,https://github.com/nltk/nltk/issues/1339,1339,[],closed,2016-03-22 11:58:24+00:00,1,dispersion_plot incorrectly imported in nltk/text.py,"The issue is around line 444
+`from nltk.draw import dispersion_plot`
+The function is actually defined in nltk/draw/dispersion.py
+The above line causes a failure to import name error in a NLTK book chapter one example
+The correct import should be:
+`from nltk.draw.dispersion import dispersion_plot`
+",0
+55,https://github.com/nltk/nltk/issues/1340,1340,[],closed,2016-03-23 17:00:09+00:00,0,Problem with lazy corpus loading in CHILDES?,"I would expect the following to display the beginning of the list fairly quickly:
+
+``` py
+>>> from nltk.corpus.reader.childes import CHILDESCorpusReader
+>>> childes = CHILDESCorpusReader('/Users/nschneid/nltk_data/corpora/childes/data-xml/Eng-USA', '.*.xml')
+>>> childes.tagged_words()
+```
+
+But it hangs, suggesting that it's trying to load the entire corpus. Is there a more efficient way to implement this?
+",0
+56,https://github.com/nltk/nltk/issues/1342,1342,"[{'id': 29356672, 'node_id': 'MDU6TGFiZWwyOTM1NjY3Mg==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/corpus', 'name': 'corpus', 'color': '0b02e1', 'default': False, 'description': None}, {'id': 81645781, 'node_id': 'MDU6TGFiZWw4MTY0NTc4MQ==', 'url': 'https://api.github.com/repos/nltk/nltk/labels/language-model', 'name': 'language-model', 'color': 'd4c5f9', 'default': False, 'description': ''}, {'id': 112364689, 'node_id': 'MDU6TGFiZWwxMTIzNjQ2ODk=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/enhancement', 'name': 'enhancement', 'color': '006b75', 'default': True, 'description': None}, {'id': 416522805, 'node_id': 'MDU6TGFiZWw0MTY1MjI4MDU=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/nice%20idea', 'name': 'nice idea', 'color': 'fef2c0', 'default': False, 'description': None}, {'id': 486810128, 'node_id': 'MDU6TGFiZWw0ODY4MTAxMjg=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/tests', 'name': 'tests', 'color': 'fbca04', 'default': False, 'description': None}]",closed,2016-03-25 07:53:30+00:00,21,Discussion: Resurrecting the Ngram Model,"Hi folks!
+
+I'm working on making sure the Ngram Model module could be added back into NLTK and would like to bring up a couple of issues for discussion.
+
+**Issue 1**
+[Here](https://github.com/nltk/nltk/issues/367#issuecomment-15716162) @afourney said it would be nice to add interpolation as an alternative to the default Katz backoff as a way of handling unseen ngrams. I've been thinking about this and I might have an idea how this could work. I'd like to run it by all interested parties.
+
+The current class structure of the `model` module is as follows:
+- `model.api.ModelI` -> this is supposed to be an Abstract class or an Interface, I guess.
+- `model.ngram.NgramModel` -> extends above class, contains current implementation of the ngram model.
+
+Here's what I propose:
+- `model.api.Model` -> I'm honestly not sure I see the point of this, ambivalent on whether to keep it or ditch it.
+- `model.ngram.BasicNgramModel` -> This is the same as `NgramModel`, **minus** everything that has to do with backoff. Basically, it can't handle ngrams unseen in training. ""Why have this?"" - you might ask. I think this would be a great demo of the need for backoff/interpolation. Students can simply try this out and see how badly it performs to convince themselves to use the other classes.
+- `model.ngram.BackoffNgramModel` -> Inherits from `BasicNgramModel` to yield the current implementation of `NgramModel`, except that it's more explicit about the backoff part.
+- `model.ngram.InterpolatedNgramModel` -> Also inherits from `BasicNgramModel`, but uses interpolation instead of backoff.
+
+The long-term goals here are:
+
+a) to allow any `ProbDist` class to be used as a probability estimator since interpolation/backoff are (mostly) agnostic of the smoothing algorithm being used.
+b) to allow anyone who wants to _optimize_ an NgramModel for their own purposes to be able to easily inherit some useful defaults from the classes in NLTK.
+
+**Issue 2**
+Unfortunately the probability module has it's own problems (eg. #602 and (my) Kneser-Ney implementation is wonky). So for now I'm only testing correctness with `LidstoneProbDist`, since it is easy to compute by hand. Should I be worried about the lack of support for the more advanced smoothing methods? Or do we want to maybe proceed this way to ensure at least that Ngram Model works, and _then_ tackle the problematic probability classes separately?
+
+**Python 3 `super()`**
+When calling `super()`, do I need to worry about supporting python 2? See [this](http://stackoverflow.com/a/10483204/4501212) for context.
+",0
+58,https://github.com/nltk/nltk/issues/1345,1345,[],closed,2016-03-27 03:14:09+00:00,0,Problem with parsing Chinese models output from StanfordPOSTagger,"The parser for the StanfordPOSTagger relies on a Separator to receive the output.
+
+This is usually an underscore ('_'), but the output for the Chinese models for some reason uses '#'. This can be fixed by resetting the _SEPARATOR attribute before using the tagger.
+
+```
+> english_postagger.tag('What is the airspeed of an unladen swallow ?'.split())
+
+[('What', 'WP'),
+ ('is', 'VBZ'),
+ ('the', 'DT'),
+ ('airspeed', 'NN'),
+ ('of', 'IN'),
+ ('an', 'DT'),
+ ('unladen', 'JJ'),
+ ('swallow', 'VB'),
+ ('?', '.')]
+
+> chinese_postagger.tag('骑 自行车 那 个 人 是 谁 ？'.split())
+
+[('', '骑#VV'),
+ ('', '自行车#NN'),
+ ('', '那#DT'),
+ ('', '个#M'),
+ ('', '人#NN'),
+ ('', '是#VC'),
+ ('', '谁#PN'),
+ ('', '？#PU')]
+
+> print ('Default separator:', chinese_postagger._SEPARATOR)
+
+Default separator: _
+
+> chinese_postagger._SEPARATOR = '#'
+> chinese_postagger.tag('骑 自行车 那 个 人 是 谁 ？'.split())
+
+[('骑', 'VV'),
+ ('自行车', 'NN'),
+ ('那', 'DT'),
+ ('个', 'M'),
+ ('人', 'NN'),
+ ('是', 'VC'),
+ ('谁', 'PN'),
+ ('？', 'PU')]
+```
+
+Setup like this:
+
+```
+from nltk.tag import StanfordPOSTagger as POSTagger
+from nltk.internals import find_jars_within_path
+
+def fix_path(path):
+    """"""Fix the jar-path for the tagger._stanford_jar.
+
+    See: https://github.com/nltk/nltk/issues/1304
+    """"""
+    stanford_dir = path.rpartition('/')[0]
+    stanford_jars = find_jars_within_path(stanford_dir)
+    string_jars = ':'.join(stanford_jars)
+    return string_jars
+
+tagger_dir = HOME_DIR + 'nlp/stanford-postagger-full-2015-12-09/'
+tagger_jar     = tagger_dir + 'stanford-postagger.jar'
+english_tagger = tagger_dir + 'models/english-bidirectional-distsim.tagger'
+# Same result for both Chinese models:
+chinese_tagger = tagger_dir + 'models/chinese-distsim.tagger'
+#chinese_tagger = tagger_dir + 'models/chinese-nodistsim.tagger'
+
+english_postagger = POSTagger(english_tagger, tagger_jar)
+chinese_postagger = POSTagger(chinese_tagger, tagger_jar)
+
+english_postagger._stanford_jar = fix_path(english_postagger._stanford_jar)
+chinese_postagger._stanford_jar = fix_path(chinese_postagger._stanford_jar)
+```
+",0
+60,https://github.com/nltk/nltk/issues/1356,1356,"[{'id': 718743421, 'node_id': 'MDU6TGFiZWw3MTg3NDM0MjE=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/parsing', 'name': 'parsing', 'color': '94e06d', 'default': False, 'description': None}, {'id': 918210764, 'node_id': 'MDU6TGFiZWw5MTgyMTA3NjQ=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/inactive', 'name': 'inactive', 'color': 'cecece', 'default': False, 'description': ''}]",closed,2016-04-03 17:17:04+00:00,5,A probabilistic parsing for CCG,"I'm thinking about implementing a probabilistic parsing for CCG because it might be wanted. It is mentioned in https://github.com/nltk/nltk/wiki/Semantic-Parsing, https://groups.google.com/forum/#!topic/nltk-users/m5rdxSFExF4, and http://stackoverflow.com/questions/26829904/lambda-calculus-representation-in-nltk-ccg
+### The API
+
+With semantics:
+
+```
+lex = lexicon.fromstring('''
+   :- S, NP, N
+   She => NP {she} [1.0]
+   has => (S\\NP)/NP {\\x y.have(y, x)} [0.5]
+   a => NP/N {\\P.exists z.P(z)} [0.6]
+   book => N {book}
+   ''',
+   True)
+```
+
+Without semantics:
+
+```
+lex = lexicon.fromstring('''
+   :- S, NP, N
+   She => NP [1.0]
+   has => (S\\NP)/NP [1.0]
+   a => NP/N
+   book => N
+   ''',
+   False)
+```
+
+If `[NUM]` is missing, it means the probability is `1.0`.
+### The implementation
+
+A leaf node has been `Token` since #1321 (https://github.com/nltk/nltk/blob/develop/nltk/ccg/lexicon.py#L48). We can simply add a probability field. The probability computation will happen while retrieving a parse. Please note that semantics computation also happens at that stage. Here it is: https://github.com/nltk/nltk/blob/develop/nltk/ccg/chart.py#L261
+### Probability computation
+
+I'm a bit out of date in this area, but I think the logarithm of probabilities might make more sense. Because a product of probabilities for a long sentence might become too low to compute. (This probability computation should be refactored in a way that it can be swapped easily)
+
+The results will be sorted based on parses' probabilities.
+### Important notes
+- There's no probability on the rules. Therefore, if the category assignment (on words) is the same, the probabilities will be equal. This might not make sense. For example, `the weird beautiful woman` might have multiple parses with identical category assignment, but those parses **might** offer different semantics interpretations. Nevertheless, I can add this later. I'll ask Mark Steedman about it.
+- There's no such thing as non-probabilistic parsing anymore. That simply means every token's probability is `1.0`.
+- This is a part of my master thesis (mentioned here #1313), which is a bit out of date. The end goal is to make the CCG parser work with CCGBank out of the box. Ideally, a user can choose a method to train models from CCGBank. Then, the user can use the parser to parse (probabilistically) an input sentence.
+
+@stevenbird @ewan-klein Would this go along with NLTK's vision/mission? Would it be something we want? Does the API part look ok?
+",0
+61,https://github.com/nltk/nltk/issues/1357,1357,[],closed,2016-04-10 01:41:30+00:00,1,ChangeLog date errors,"Your ChangeLog (https://github.com/nltk/nltk/blob/develop/ChangeLog) appears to have the wrong release dates:
+
+Currently: Version 3.2 2015-03-03
+Should be: Version 3.2 2016-03-03
+
+Currently: Version 3.2.1 2015-04-09
+Should be: Version 3.2.1 2016-04-09
+",0
+62,https://github.com/nltk/nltk/issues/1361,1361,[],closed,2016-04-13 11:26:59+00:00,5,SyntaxError,"On Travis CI the following error occurs for `Python 3.2.5`
+Just by calling `from nltk import download`
+Actually it even happens with just `import nltk`
+
+```
+Traceback (most recent call last):
+  File ""/opt/python/3.2.5/lib/python3.2/runpy.py"", line 161, in _run_module_as_main
+    ""__main__"", fname, loader, pkg_name)
+  File ""/opt/python/3.2.5/lib/python3.2/runpy.py"", line 74, in _run_code
+    exec(code, run_globals)
+  File ""/home/travis/virtualenv/python3.2.5/lib/python3.2/site-packages/nalaf/download_corpora.py"", line 10, in <module>
+    from nltk import download
+  File ""/home/travis/virtualenv/python3.2.5/lib/python3.2/site-packages/nltk/__init__.py"", line 177, in <module>
+    from nltk import ccg, chunk, classify, collocations
+  File ""/home/travis/virtualenv/python3.2.5/lib/python3.2/site-packages/nltk/ccg/__init__.py"", line 21, in <module>
+    from nltk.ccg.chart import CCGEdge, CCGLeafEdge, CCGChartParser, CCGChart
+  File ""/home/travis/virtualenv/python3.2.5/lib/python3.2/site-packages/nltk/ccg/chart.py"", line 338
+    if op == u'Leaf':
+                   ^
+SyntaxError: invalid syntax
+```
+",0
+65,https://github.com/nltk/nltk/issues/1370,1370,"[{'id': 112364689, 'node_id': 'MDU6TGFiZWwxMTIzNjQ2ODk=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/enhancement', 'name': 'enhancement', 'color': '006b75', 'default': True, 'description': None}]",closed,2016-04-21 04:00:08+00:00,4,FrameNet corpus reader: display sentence with inline target & FE annotations,"Given that lexicographic and full-text annotations are available (#1369), we want a user-friendly way to display them in the console for interactive browsing.
+
+The proposed solution has the following displays:
+## Full-text sentence display
+
+Sentences in full-text documents (potentially) contain multiple annotated targets. This display notes which spans are targets and indicates the corresponding annotationSet indices:
+
+```
+>>> s
+full-text sentence (4097611) in NorthKorea_NuclearCapabilities:
+
+
+[POS] 14 tags
+
+[POS_tagset] PENN
+
+[text] + [annotationSet]
+
+Therefore , obtaining reliable open source information on such
+            ********* ******** ****        ***********
+            Getting   Trust    Secr        Information
+            [1]       [6]      [5]         [2]
+
+programs is very challenging .
+********         ***********
+Project          Difficulty
+[3] !            [4]
+```
+- Frame names are truncated to fit the character width of the span.
+- Many full-text targets are annotated for the frame only (no FEs; status is `UNANN`). These are indicated with a `!` next to the index.
+
+```
+>>> fn.ft_sents()[230]
+full-text sentence (4164978) in Fires_1:
+
+
+[POS] 23 tags
+
+[POS_tagset] PENN
+
+[text] + [annotationSet]
+
+Four people have perished so far in the blazes which the
+                 ******** ******        ******
+                 Death    Contin        Fire_b
+                 [1]      [6]           [2]
+
+government says were started intentionally by arsonists over a
+********** ****      *******                  *********
+Organizati Stat      Setting                  Arson
+[3]        [4]       [7] ?                    [5]
+
+week ago .
+```
+- Targets annotated with Problem LUs are designated with `?`.
+## Frame annotation sentence display
+
+Drilling down in the full-text sentence—or at the top level of a lexicographic exemplar sentence, which only has one target in the first place—we see the full sentence, now with one target and any FEs indicated:
+
+```
+>>> s.annotationSet[4]
+annotation set (6528787):
+
+[status] MANUAL
+
+[LU] (6573) challenging.a in Difficulty
+
+[frame] (375) Difficulty
+
+[GF] 2 relations
+
+[PT] 2 phrases
+
+[text] + [Target] + [FE] + [Adj]
+
+Therefore , obtaining reliable open source information on such
+            ---------------------------------------------------
+            Activity
+
+programs is very challenging .
+-------- ^^ ---- ***********
+         co Degr
+ (co=cop, Degr=Degree)
+```
+- FE names are truncated to fit, with the expansion shown after the sentence in parentheses. The frame name is not shown inline.
+- LUs of certain parts-of-speech may be annotated with special FE-extrinsic spans such as `Cop` (copula), `Supp` (support), `Ctrlr` (controller), `Gov` (governor), and `Asp` (aspectual particle). See notes in updated code. For the display, these are lowercased and shown beneath a span indicated with `^` characters to distinguish them from FEs. In the above case, the `Adj` layer of challenging.a contains a `Cop` span, displayed in truncated form as `co`.
+  - `X` phrase spans (which generally include the target and its FEs) will not be displayed.
+- The underlying information in the display comes from a combination of the `text`, `Target`, `FE`, and `Adj` attributes of the sentence object, and is therefore preceded with `[text] + [Target] + [FE] + [Adj]`.
+### Denoted FEs
+
+```
+>>> s.annotationSet[2]
+annotation set (6528785):
+
+[status] MANUAL
+
+[LU] (12537) information.n in Information
+
+[frame] (1591) Information
+
+[GF] 2 relations
+
+[PT] 2 phrases
+
+[text] + [Target] + [FE]
+
+Therefore , obtaining reliable open source information on such
+                               ----------- =========== --------
+                               Means_of_ga Information Topic
+
+programs is very challenging .
+--------
+
+ (Means_of_ga=Means_of_gathering)
+```
+- If an FE span includes the target, the overlapping portion is indicated with `=` underlining rather than `*`.
+  - There are rare cases in which the FE span and the target span are not identical; these are handled but not shown here. 
+### Null instantiations
+
+```
+>>> s.annotationSet[1]
+annotation set (6528784):
+
+[status] MANUAL
+
+[LU] (7499) obtain.v in Getting
+
+[frame] (179) Getting
+
+[GF] 1 relation
+
+[PT] 1 phrase
+
+[text] + [Target] + [FE]
+
+Therefore , obtaining reliable open source information on such
+            ********* -----------------------------------------
+                      Theme
+
+programs is very challenging .
+--------
+         [Recipient:CNI]
+```
+- NIs are displayed in brackets after the sentence.
+### Multiple FE layers
+
+If present, second-layer and even third-layer FE annotations are stored in `.FE2` and `.FE3` attributes, respectively. All FE layers are displayed:
+
+```
+>>> fn.ft_sents()[13].annotationSet[6].FE
+([(115, 127, 'Place'), (137, 153, 'Product')], {})
+>>> fn.ft_sents()[13].annotationSet[6].FE2
+([(115, 127, 'Producer')], {})
+>>> fn.ft_sents()[13].annotationSet[6]
+annotation set (6528894):
+
+[status] MANUAL
+
+[LU] (7523) produce.v in Manufacturing
+
+[frame] (408) Manufacturing
+
+[GF] 2 relations
+
+[PT] 2 phrases
+
+[text] + [Target] + [FE] + [FE2]
+
+However , all countries known to have successfully acquired
+
+
+
+
+
+nuclear weapons have done so primarily on the basis of
+
+
+
+
+
+indigenously produced fissile material .
+------------ ******** ----------------
+Place                 Product
+------------
+Producer
+
+
+```
+### `UNANN` annotationSets
+
+```
+>>> s.annotationSet[3]
+annotation set (6528786):
+
+[status] UNANN
+
+[LU] (10724) program.n in Project
+
+[frame] (1158) Project
+
+[GF] 0 relations
+
+[PT] 0 phrases
+
+[text] + [Target] + [FE]
+
+Therefore , obtaining reliable open source information on such
+
+
+
+programs is very challenging .
+********
+```
+- Frame annotations with status `UNANN` have a boring display, as they have a target but no FEs.
+### Other, Sent layers
+- The **Other** layer marks expletive subject spans (`Null`, `Exist`) and relative clause antecedent/relativizer spans (`Ant`, `Rel`). This information can be accessed but is not displayed.
+- The **Sent** layer appears to be for flags that help the annotator categorize lexicographic exemplars (e.g., `sense1`, `Metaphor`, `Idiom`, `reexamine`). This information can be accessed but is not displayed.
+## POS annotation display
+
+This is always available in `.annotationSet[0]`:
+
+```
+>>> s.annotationSet[0]
+POS annotation set (6528581) PENN in sentence 4097611:
+
+Therefore , obtaining reliable open source information on such
+--------- - --------- -------- ---- ------ ----------- -- ----
+rb        , VVG       jj       jj   nn     nn          in jj
+
+programs is  very challenging .
+-------- --  ---- ----------- -
+nns      VBZ rb   jj          sent
+```
+",0
+66,https://github.com/nltk/nltk/issues/1371,1371,"[{'id': 112364689, 'node_id': 'MDU6TGFiZWwxMTIzNjQ2ODk=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/enhancement', 'name': 'enhancement', 'color': '006b75', 'default': True, 'description': None}, {'id': 918210764, 'node_id': 'MDU6TGFiZWw5MTgyMTA3NjQ=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/inactive', 'name': 'inactive', 'color': 'cecece', 'default': False, 'description': ''}]",closed,2016-04-21 04:02:08+00:00,1,"FrameNet corpus reader: PT, GF display","In addition to #1370, there ought to be a user-friendly display of PT (phrase type) and GF (grammatical function) information on each FE (perhaps with PT.GF notation, e.g. `PP.Dep`). Two obstacles at present:
+1. Always showing this in addition to FE names risks cluttering the annotationSet display. Perhaps make the display configurable with a global option? E.g. `fn.set_opt(show_pt_gf=True)` (and the `set_opt()` function would allow for other global options)?
+2. How to handle really short FEs? Right now the FE name is truncated, but this could become unwieldy for syntactic info. Have a non-inline way to display it? Set a minimum width of the displayed FE?
+",0
+67,https://github.com/nltk/nltk/issues/1372,1372,"[{'id': 112364689, 'node_id': 'MDU6TGFiZWwxMTIzNjQ2ODk=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/enhancement', 'name': 'enhancement', 'color': '006b75', 'default': True, 'description': None}, {'id': 918210764, 'node_id': 'MDU6TGFiZWw5MTgyMTA3NjQ=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/inactive', 'name': 'inactive', 'color': 'cecece', 'default': False, 'description': ''}]",closed,2016-04-21 04:23:18+00:00,0,FrameNet corpus reader: deduplicate sentences?,"Esp. when iterating over both exemplars and full-text (as full-text sentences may show up in exemplars)? Do sentences have consistent IDs to make this possible, and is it always clear which version should be provided?
+",0
+68,https://github.com/nltk/nltk/issues/1373,1373,"[{'id': 112364689, 'node_id': 'MDU6TGFiZWwxMTIzNjQ2ODk=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/enhancement', 'name': 'enhancement', 'color': '006b75', 'default': True, 'description': None}, {'id': 918210764, 'node_id': 'MDU6TGFiZWw5MTgyMTA3NjQ=', 'url': 'https://api.github.com/repos/nltk/nltk/labels/inactive', 'name': 'inactive', 'color': 'cecece', 'default': False, 'description': ''}]",closed,2016-04-21 04:25:29+00:00,1,FrameNet corpus reader: specify experimental splits?,"There are standard splits of FN 1.5 into train/dev/test (e.g., as used in [Das et al. 2014](http://dx.doi.org/10.1162/COLI_a_00163)). Should we provide a simple interface for accessing sentences according to these splits? What to do with data that is changed or added in FN 1.6+?
+",0
