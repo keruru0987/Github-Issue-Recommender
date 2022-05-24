@@ -61,6 +61,9 @@ def get_tagged_raw_data(api=''):
         # 消除报错 一般两行
         pattern3 = r'File .*\n.*'
         text = re.sub(pattern3, '', text)
+        # 消除说明
+        pattern4 = r'<!--.*-->'
+        text = re.sub(pattern4, '', text)
         html = markdown(text)
         non_code_texts.append(BeautifulSoup(html, 'html.parser').get_text())
 
@@ -98,6 +101,7 @@ def process_query(query):
     # 删图片
     pattern2 = r'<img.*?>'
     text = re.sub(pattern2, '', text)
+    # 删链接
     re_query = BeautifulSoup(text, 'html.parser').get_text()
     return re_query
 
@@ -134,7 +138,7 @@ def get_tagged_data(api=''):
     nlp_api = settings.nlp_api[nlp_choose]
     if api != '':
         nlp_api = api
-    print('当前api为：' + nlp_api)
+    # print('当前api为：' + nlp_api)
 
     # 数据的获取以及处理
     fpath = settings.tagged_github_filepath[nlp_api]
@@ -158,6 +162,9 @@ def get_tagged_data(api=''):
         # 消除报错 一般两行
         pattern3 = r'File .*\n.*'
         text = re.sub(pattern3, '', text)
+        # 消除说明
+        pattern4 = r'<!--.*-->'
+        text = re.sub(pattern4, '', text)
         html = markdown(text)
         non_code_texts.append(BeautifulSoup(html, 'html.parser').get_text())
 
