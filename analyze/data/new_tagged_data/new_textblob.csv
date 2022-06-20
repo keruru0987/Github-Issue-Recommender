@@ -1,0 +1,2500 @@
+﻿,Unnamed: 0,html_url,number,labels,state,created_at,pull_request,comments,title,body,rel1,rel2,rel3,rel4,rel5,rel6,rel7,rel8,rel9,rel10
+0,115,https://github.com/sloria/TextBlob/issues/293,293,[],open,2019-12-18 04:46:59+00:00,0,0,Python Textblob Sentiment,"Hi Steve,
+
+Thanks a lot for the wonderful package.
+I would like to inform that I have been working with Textblob package for sentiment analysis of text.
+
+Could you please help me in understanding the sentiment returned by Textblob.The following text sentiment along with different expectation has been shared for reference.
+
+1.Website is not working.
+
+Textblob sentiment: Neutral with polarity score=0.
+Expected sentiment: Negative.
+
+2.Things are resolved.
+
+Textblob sentiment: Neutral with polarity score=0.
+Expected sentiment: Positive
+
+3.The process is lengthy.
+
+Textblob sentiment: Neutral with polarity score=0.
+Expected sentiment: Negative
+
+4.Cheap Products
+
+Textblob sentiment: Positive with polarity score>0.
+Expected sentiment: Negative
+
+Thanks a lot in advance.",1,1,0,0,0,1,0,0,0,1
+1,40,https://github.com/sloria/TextBlob/issues/146,146,[],open,2016-12-24 13:51:00+00:00,0,0,"Sentiment Running, but thousands of rows have no data....","Hi, it appears somewhat weird what we are experiencing , same data feed, so nothing there. 
+
+But i'd say a good 50% of our feed is not being analysed. 
+
+We've put it down to 'text blob' not having words or other in it's db to cat or other. 
+
+A) Where can we see the physical db for the TB
+B) How can we feed every word/sentence other in to the TB
+c) How can we teach it to learn based on the data coming in
+
+Many thanks. ",1,1,1,0,0,0,0,0,0,1
+2,10,https://github.com/sloria/TextBlob/issues/108,108,[],open,2016-01-13 21:35:18+00:00,0,0,POS tags with sentiment polarity,"My understanding is that textblob follows pattern's implementation of sentiment analysis, which relies on a feature lexicon of adjectives (http://www.clips.ua.ac.be/pages/pattern-en#sentiment).
+Is it expected behavior that when a word that can have multiple syntactic roles (not just adjective) is encountered with a different POS tag, it still will be processed as if it was an adjective?
+
+``` python
+In []: tb = TextBlob(""Reliance Jio breaks away from conservative parent firm in marketing LYF smartphone"")
+
+In []: print tb.sentiment.polarity
+Out[]: -0.2
+
+In []: for w in tb.words: print (w,TextBlob(w.string).sentiment.polarity) 
+Out[]:
+('Reliance', 0.0)
+('Jio', 0.0)
+('breaks', 0.0)
+('away', 0.0)
+('from', 0.0)
+('conservative', 0.0)
+('parent', 0.0)
+('firm', -0.2)
+('in', 0.0)
+('marketing', 0.0)
+('LYF', 0.0)
+('smartphone', 0.0)
+
+In []: print tb.tags
+[('Reliance', u'NNP'), ('Jio', u'NNP'), ('breaks', u'VBZ'), ('away', u'RB'), ('from', u'IN'), ('conservative', u'JJ'), ('parent', u'NN'), ('firm', u'NN'), ('in', u'IN'), ('marketing', u'VBG'), ('LYF', u'NNP'), ('smartphone', u'NN')] 
+```
+
+The sentiment polarity of the entire sentence is driven by the term 'firm' with a weight of -0.2. However, it seems that this term is included in pattern's lexicon based on it being an adjective, while textblob parses it as a noun in this case. 
+Shouldn't it be expected behavior that only tokens parsed as adjectives are looked up from the sentiment lexicon?
+
+This code example reflects textblob version 0.11.0
+",1,1,0,0,0,0,0,0,0,1
+3,67,https://github.com/sloria/TextBlob/issues/183,183,[],closed,2017-12-05 20:40:48+00:00,0,1,How to calculate the accuracy of NaiveBayesAnalyzer for Sentiment Analysis,NaiveBayesAnalyzer is pre trained i want to use it it on a new test set it will give the result. but the problem is how to test its accuracy for the new set,1,1,0,0,0,0,0,0,0,1
+4,83,https://github.com/sloria/TextBlob/issues/209,209,[],open,2018-05-22 14:53:40+00:00,0,2,How can I use TextBlob with Spanish input for sentiment analysis?,"I recently ran a sentiment analysis and polarity test on a sample of tweets with the keyword ""elecciones."" My results indicate that most have a subjectivity and polarity of 0 even when this is clearly not the case. I'm wondering if textblob is missing something because I didn't configure it properly to handle Spanish input? Is there another package or library that I should import to get more accurate subjectivity and polarity data in Spanish? ",1,1,1,0,0,0,0,0,0,1
+5,89,https://github.com/sloria/TextBlob/issues/220,220,[],closed,2018-07-17 20:02:07+00:00,0,2,what paper method/ algorithm is used for sentiment analysis?,"what paper method/ algorithm is used for sentiment analysis?
+how good is it, what performance are?
+Thanks",1,1,0,0,0,0,0,0,0,1
+6,104,https://github.com/sloria/TextBlob/issues/272,272,[],open,2019-06-17 16:26:34+00:00,0,0,The range of neutral sentiment?,"Hello, 
+
+May I ask for the TextBlob, what is the sentiment range of neutral emotion is? I know from -1 to 1, -1 represents pretty negative while 1 means very positive. But does TextBlob defines a range that can represents the neutral emotion, for example, [-0.05,0.05]?
+
+",1,1,0,0,0,0,0,0,0,1
+7,71,https://github.com/sloria/TextBlob/issues/190,190,[],open,2018-01-25 10:38:16+00:00,0,0,Negative or above 1 subjectivity sentiment using text blob fr,"Hello,
+
+I am using the French extension to textblob, the textblob-fr available on github here: https://github.com/sloria/textblob-fr.
+
+I am interested in calculating the sentiment polarity and subjectivity measures. 
+However I thought (it is definitly the case in the English case) the range of the subjectivity index was [0,1], and yet for a very small number of cases I find a >1 or <0 subjectivity value.
+
+Where could this come from?
+
+Example:
+text=""Il vrai qu'avec seulement trois grandes valeurs il n'a pas de quoi occuper des analystes 鑴?temps plein.""
+blob=TextBlob(text, pos_tagger=PatternTagger(), analyzer=PatternAnalyzer())
+print(blob.sentiment[1])
+
+I get : 6.083333333333333",1,0,0,0,0,0,0,0,0,1
+8,84,https://github.com/sloria/TextBlob/issues/211,211,[],closed,2018-06-04 06:22:14+00:00,0,2,how can I use Chinese language sentiment analysis,"am trying to do sentiment analysis for Chinese language. it's not working properly. I added training data also it's not working 
+",1,1,0,0,0,0,0,0,0,1
+9,126,https://github.com/sloria/TextBlob/issues/329,329,[],open,2020-06-08 14:36:51+00:00,0,0,out of vocab words results in neutral sentiment,"![image](https://user-images.githubusercontent.com/13018526/84043012-c8989f00-a973-11ea-8bcb-46099955c6d9.png)
+
+- death is definitely not positive, at least most of the cases the word death implies sad/ negative emotion
+
+- Empathy is strong positive word, but Textblob predicts it as neutral.
+
+ 
+",1,0,0,0,0,0,0,0,0,1
+10,128,https://github.com/sloria/TextBlob/issues/335,335,[],open,2020-06-29 21:17:46+00:00,0,0,updating built-in sentiment analysis,"I have a situation where there are certain words that are 100% positive or negative even if they wouldn't typically be categorized that way.
+
+Is there any way to update the built-in analysis to include these domain dependant words without needing to build a brand new classifier?",1,0,0,0,0,0,0,0,0,1
+11,132,https://github.com/sloria/TextBlob/issues/344,344,[],open,2020-09-07 06:33:43+00:00,0,1,What algorithm is used in sentiment analysis?,"We are writing an article, 
+using TextBlob calculation of English emotion, 
+can you tell us what algorithm we used? 
+Thank you very much",1,0,0,0,0,0,0,0,0,1
+12,150,https://github.com/sloria/TextBlob/issues/391,391,[],open,2021-07-16 09:37:57+00:00,0,0,Bugs in calculating sentiment,"I found bugs in calculating sentiment: 
+- Sentiment for the phrase ""definitely happy"" is the same as sentiment for word ""happy"" (polarity=0.8, subjectivity=1.0) - but ""definitely"" has intensity=""2.0"", so polarity of ""definitely happy"" should by 1.0.
+- Sentiment for ""very no happy"" is (polarity=-0.5, subjectivity=1.0) and for ""very not happy"" is (polarity=-0.1, subjectivity=0.65) - but it should be the same.",1,0,0,0,0,0,0,0,0,1
+13,146,https://github.com/sloria/TextBlob/issues/375,375,[],open,2021-03-22 21:11:53+00:00,0,0,python -m textblob.download_corpora not win32 error on valid python 3,"raceback (most recent call last):
+  File ""C:\Users\Andrew\AppData\Local\Programs\Python\Python37\lib\runpy.py"", line 183, in _run_module_as_main
+    mod_name, mod_spec, code = _get_module_details(mod_name, _Error)
+  File ""C:\Users\Andrew\AppData\Local\Programs\Python\Python37\lib\runpy.py"", line 109, in _get_module_details
+    __import__(pkg_name)
+  File ""C:\AA\dev\python\first\venv\lib\site-packages\textblob\__init__.py"", line 2, in <module>
+    from .blob import TextBlob, Word, Sentence, Blobber, WordList
+  File ""C:\AA\dev\python\first\venv\lib\site-packages\textblob\blob.py"", line 28, in <module>
+    import nltk
+  File ""C:\AA\dev\python\first\venv\lib\site-packages\nltk\__init__.py"", line 128, in <module>
+    from nltk.collocations import *
+  File ""C:\AA\dev\python\first\venv\lib\site-packages\nltk\collocations.py"", line 39, in <module>
+    from nltk.metrics import (
+  File ""C:\AA\dev\python\first\venv\lib\site-packages\nltk\metrics\__init__.py"", line 16, in <module>
+    from nltk.metrics.scores import (
+  File ""C:\AA\dev\python\first\venv\lib\site-packages\nltk\metrics\scores.py"", line 15, in <module>
+    from scipy.stats.stats import betai
+  File ""C:\AA\dev\python\first\venv\lib\site-packages\scipy\__init__.py"", line 136, in <module>
+    from . import _distributor_init
+  File ""C:\AA\dev\python\first\venv\lib\site-packages\scipy\_distributor_init.py"", line 61, in <module>
+    WinDLL(os.path.abspath(filename))
+  File ""C:\Users\Andrew\AppData\Local\Programs\Python\Python37\lib\ctypes\__init__.py"", line 356, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: [WinError 193] %1 is not a valid Win32 application",0,0,0,0,0,1,0,1,1,0
+14,31,https://github.com/sloria/TextBlob/issues/134,134,[],closed,2016-08-10 08:11:39+00:00,0,1,pyinstaller issue,"Having a problem using textblob with pyinstaller (so that it can run on machines without python).
+
+I create this file as TestTextBlob.py:
+
+`from textblob import TextBlob`
+`blobject = TextBlob(""Gee, I really love how textblob automatically scores sentences for polarity. But I really hate how it works with pyinstaller."")`
+`for sent in blobject.sentences:`
+`print('Sentence: %s   |    Polarity: %s' % (sent,sent.polarity))`
+
+When I run it I get a polarity of 0.5 and -0.8
+
+Then, I turn this file into an exe using:
+
+`pyinstaller --onefile --clean --noupx ""C:\path\LaunchTestSearch.py""`
+
+However, when I run the exe now, the polarity (and subjectivity) come out as zero. 
+
+I'm trying to follow through the pyinstaller help (https://github.com/pyinstaller/pyinstaller/wiki/How-to-Report-Bugs) but as textblob is not generating any errors that I can see, I'm not sure where to start debugging?
+
+Thanks
+",0,0,0,0,0,0,0,0,1,0
+15,46,https://github.com/sloria/TextBlob/issues/155,155,[],closed,2017-02-28 04:43:17+00:00,0,1,pip doesn't install the latest version (0.12.0),"After `pip install -U textblob` still installed 0.11.1 I tried giving it a specific version as argument, but it seems to not be found on PyPI. Maybe because the wheel is missing on there?
+
+```>pip install textblob==0.12.0
+Collecting textblob==0.12.0
+  Could not find a version that satisfies the requirement textblob==0.12.0 (from
+ versions: 0.1, 0.1.2, 0.1.3, 0.1.31, 0.1.32, 0.1.33, 0.1.34, 0.1.35, 0.1.36, 0.
+2.0, 0.2.1, 0.2.3, 0.2.4, 0.2.5, 0.2.6, 0.3.0, 0.3.1, 0.3.2, 0.3.3, 0.3.4, 0.3.5
+, 0.3.6, 0.3.7, 0.3.8, 0.3.9, 0.3.10, 0.4.0, 0.5.0, 0.5.1, 0.5.2, 0.5.3, 0.6.0,
+0.6.1, 0.6.2, 0.6.3, 0.7.0, 0.7.1, 0.8.0, 0.8.1, 0.8.2, 0.8.3, 0.8.4, 0.9.0, 0.9
+.1, 0.10.0, 0.11.0, 0.11.1)
+No matching distribution found for textblob==0.12.0```",0,0,0,0,0,0,0,0,1,0
+16,68,https://github.com/sloria/TextBlob/issues/185,185,[],closed,2017-12-28 05:45:01+00:00,0,7,How to add a hook for textblob in pyinstaller,"when i create a .exe file using pyinstaller and execute it it is not fetching any result from
+`b = TextBlob(ar)
+
+score = b.sentiment.polarity`
+
+it returns proper value when executed on console but return 0 when executed with .exe
+your help will be really appreciated .
+thank you",0,0,0,0,0,0,0,0,1,0
+17,75,https://github.com/sloria/TextBlob/issues/197,197,[],closed,2018-02-21 02:25:22+00:00,0,3,Error finishing textblob install,"trying to install textblob  on a Mac, but the second step doesn't work
+Any suggestions??
+Also, not sure why pip got installed as pip3 ????
+
+$ pip3 install -U textblob
+Collecting textblob
+  Downloading textblob-0.15.1-py2.py3-none-any.whl (631kB)
+    100% |閳诲牃鏋呴埢鍫氭瀰閳诲牃鏋呴埢鍫氭瀰閳诲牃鏋呴埢鍫氭瀰閳诲牃鏋呴埢鍫氭瀰閳诲牃鏋呴埢鍫氭瀰閳诲牃鏋呴埢鍫氭瀰閳诲牃鏋呴埢鍫氭瀰閳诲牃鏋呴埢鍫氭瀰| 634kB 1.5MB/s 
+Collecting nltk>=3.1 (from textblob)
+  Downloading nltk-3.2.5.tar.gz (1.2MB)
+    100% |閳诲牃鏋呴埢鍫氭瀰閳诲牃鏋呴埢鍫氭瀰閳诲牃鏋呴埢鍫氭瀰閳诲牃鏋呴埢鍫氭瀰閳诲牃鏋呴埢鍫氭瀰閳诲牃鏋呴埢鍫氭瀰閳诲牃鏋呴埢鍫氭瀰閳诲牃鏋呴埢鍫氭瀰| 1.2MB 1.1MB/s 
+Collecting six (from nltk>=3.1->textblob)
+  Downloading six-1.11.0-py2.py3-none-any.whl
+Installing collected packages: six, nltk, textblob
+  Running setup.py install for nltk ... done
+Successfully installed nltk-3.2.5 six-1.11.0 textblob-0.15.1
+
+$ python -m textblob.download_corpora
+/usr/bin/python: No module named textblob
+",0,0,0,0,0,0,0,0,1,0
+18,91,https://github.com/sloria/TextBlob/issues/227,227,[],closed,2018-09-19 02:31:35+00:00,0,0,unable to install under nixos,Create a package for NixOS for easy distribution.,0,0,0,0,0,0,0,0,1,0
+19,99,https://github.com/sloria/TextBlob/issues/244,244,[],closed,2019-01-05 14:20:00+00:00,0,1,Install TextBlob if NLTK 3.4 is already installed on Win10/Anaconda?,"I just came across TextBlob and would like to install it w/o overriding my NLTK install on Win10 / Anaconda. I wonder who can advise how to get TextBlob properly installed, please?",0,0,0,0,0,0,0,0,1,0
+20,136,https://github.com/sloria/TextBlob/issues/349,349,[],open,2020-10-26 17:42:45+00:00,0,0,Error installing textblob on pycharm,"hi, I've tried to install textblob in numerous ways, but continue to get this error:
+
+Collecting textblob
+  Using cached textblob-0.15.3-py2.py3-none-any.whl (636 kB)
+Collecting nltk>=3.1
+  Using cached nltk-3.5.zip (1.4 MB)
+Requirement already satisfied: click in /Users/nhashmi/Twitter/lib/python3.8/site-packages (from nltk>=3.1->textblob) (7.1.2)
+Requirement already satisfied: joblib in /Users/nhashmi/Twitter/lib/python3.8/site-packages (from nltk>=3.1->textblob) (0.17.0)
+Collecting regex
+  Using cached regex-2020.10.23.tar.gz (690 kB)
+Collecting tqdm
+  Using cached tqdm-4.51.0-py2.py3-none-any.whl (70 kB)
+Using legacy 'setup.py install' for nltk, since package 'wheel' is not installed.
+Using legacy 'setup.py install' for regex, since package 'wheel' is not installed.
+Installing collected packages: regex, tqdm, nltk, textblob
+    Running setup.py install for regex: started
+    Running setup.py install for regex: finished with status 'error'
+
+DEPRECATION: The -b/--build/--build-dir/--build-directory option is deprecated. pip 20.3 will remove support for this functionality. A possible replacement is use the TMPDIR/TEMP/TMP environment variable, possibly combined with --no-clean. You can find discussion regarding this at https://github.com/pypa/pip/issues/8333.
+    ERROR: Command errored out with exit status 1:
+     command: /Users/nhashmi/Twitter/bin/python -u -c 'import sys, setuptools, tokenize; sys.argv[0] = '""'""'/private/var/folders/70/z4mp0z_j61j67rr3j8h46234w3wkkr/T/pycharm-packaging/regex/setup.py'""'""'; __file__='""'""'/private/var/folders/70/z4mp0z_j61j67rr3j8h46234w3wkkr/T/pycharm-packaging/regex/setup.py'""'""';f=getattr(tokenize, '""'""'open'""'""', open)(__file__);code=f.read().replace('""'""'\r\n'""'""', '""'""'\n'""'""');f.close();exec(compile(code, __file__, '""'""'exec'""'""'))' install --record /private/var/folders/70/z4mp0z_j61j67rr3j8h46234w3wkkr/T/pip-record-7j_ymwp4/install-record.txt --single-version-externally-managed --compile --install-headers /Users/nhashmi/Twitter/include/site/python3.8/regex
+         cwd: /private/var/folders/70/z4mp0z_j61j67rr3j8h46234w3wkkr/T/pycharm-packaging/regex/
+    Complete output (19 lines):
+    running install
+    running build
+    running build_py
+    creating build
+    creating build/lib.macosx-10.9-x86_64-3.8
+    creating build/lib.macosx-10.9-x86_64-3.8/regex
+    copying regex_3/__init__.py -> build/lib.macosx-10.9-x86_64-3.8/regex
+    copying regex_3/regex.py -> build/lib.macosx-10.9-x86_64-3.8/regex
+    copying regex_3/_regex_core.py -> build/lib.macosx-10.9-x86_64-3.8/regex
+    copying regex_3/test_regex.py -> build/lib.macosx-10.9-x86_64-3.8/regex
+    warning: build_py: byte-compiling is disabled, skipping.
+    
+    running build_ext
+    building 'regex._regex' extension
+    creating build/temp.macosx-10.9-x86_64-3.8
+    creating build/temp.macosx-10.9-x86_64-3.8/regex_3
+    gcc -Wno-unused-result -Wsign-compare -Wunreachable-code -fno-common -dynamic -DNDEBUG -g -fwrapv -O3 -Wall -arch x86_64 -g -I/Users/nhashmi/Twitter/include -I/Library/Frameworks/Python.framework/Versions/3.8/include/python3.8 -c regex_3/_regex.c -o build/temp.macosx-10.9-x86_64-3.8/regex_3/_regex.o
+    xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun
+    error: command 'gcc' failed with exit status 1
+    ----------------------------------------
+ERROR: Command errored out with exit status 1: /Users/nhashmi/Twitter/bin/python -u -c 'import sys, setuptools, tokenize; sys.argv[0] = '""'""'/private/var/folders/70/z4mp0z_j61j67rr3j8h46234w3wkkr/T/pycharm-packaging/regex/setup.py'""'""'; __file__='""'""'/private/var/folders/70/z4mp0z_j61j67rr3j8h46234w3wkkr/T/pycharm-packaging/regex/setup.py'""'""';f=getattr(tokenize, '""'""'open'""'""', open)(__file__);code=f.read().replace('""'""'\r\n'""'""', '""'""'\n'""'""');f.close();exec(compile(code, __file__, '""'""'exec'""'""'))' install --record /private/var/folders/70/z4mp0z_j61j67rr3j8h46234w3wkkr/T/pip-record-7j_ymwp4/install-record.txt --single-version-externally-managed --compile --install-headers /Users/nhashmi/Twitter/include/site/python3.8/regex Check the logs for full command output.
+",0,0,0,0,0,0,0,0,1,0
+21,59,https://github.com/sloria/TextBlob/issues/172,172,[],closed,2017-07-26 06:30:11+00:00,0,7,python -m textblob.download_corpora not working,"here's the output
+
+```[nltk_data] Error loading brown: HTTP Error 405: Not allowed.
+[nltk_data] Error loading punkt: HTTP Error 405: Not allowed.
+[nltk_data] Error loading wordnet: HTTP Error 405: Not allowed.
+[nltk_data] Error loading averaged_perceptron_tagger: HTTP Error 405:
+[nltk_data]     Not allowed.
+[nltk_data] Error loading conll2000: HTTP Error 405: Not allowed.
+[nltk_data] Error loading movie_reviews: HTTP Error 405: Not allowed
+```
+
+on using python shell using  `nltk.download()`
+its still return same error like above `HTTP Error 405: Not allowed`
+",0,0,1,0,0,1,0,1,0,0
+22,122,https://github.com/sloria/TextBlob/issues/315,315,[],closed,2020-04-13 16:51:34+00:00,0,4,python -m textblob.download_corpora is giving error on Python 2,"It seems `nltk` library released [version 3.5](https://pypi.org/project/nltk/#history) today. It is Python 3 only. This breaks textblob on Python 2.
+
+I was able to fix the errors by adding the static nltk==3.4.5 in requirements.",0,0,0,0,0,1,0,1,0,0
+23,140,https://github.com/sloria/TextBlob/issues/363,363,[],open,2021-02-06 05:04:43+00:00,0,0,SyntaxError: invalid syntax FOR python -m textblob.download_corpora ON Python 3.7.3,"Command:
+python -m textblob.download_corpora
+
+Error:
+File ""<ipython-input-17-bec4ba3f7ac1>"", line 1
+    python -m textblob.download_corpora
+                     ^
+SyntaxError: invalid syntax
+
+
+Versions:
+python: 3.7.3
+nltk: 3.5
+textblob: 0.15.3
+
+
+Thanks.",0,0,0,0,0,1,0,1,0,0
+24,13,https://github.com/sloria/TextBlob/issues/111,111,"[{'id': 45792776, 'node_id': 'MDU6TGFiZWw0NTc5Mjc3Ng==', 'url': 'https://api.github.com/repos/sloria/TextBlob/labels/enhancement', 'name': 'enhancement', 'color': '84b6eb', 'default': True, 'description': None}]",open,2016-01-24 05:46:33+00:00,0,1,concerning the destination path for `download_corpora`,"Unsure if it was the tool I wanted for my task at hand, I installed TextBlob in a virtualenv, tried to call `.sentences` on a `TextBlob`, and it failed with a message saying that I needed to run `python -m textblob.download_corpora` to download additional data needed for this feature. I did so, and was somewhat surprised and disappointed to find that it created a non-dotfile directory in my `$HOME`&mdash;I would have expected and wanted it to stay within the virtualenv. It [looks like we're calling](https://github.com/sloria/TextBlob/blob/dev/textblob/download_corpora.py#L39) a `download` function from `nltk`, which [does seem to have a `download_dir` kwarg](https://github.com/nltk/nltk/blob/7653786ad/nltk/downloader.py#L646), so downloading the corpora to a less-intrusive place by default (or making the destination directory prominently configurable) seems like a plausibly feasible user-experience enhancement.
+
+(Sorry, I feel guilty about filing an issue without a patch, but ...)
+",0,0,0,1,0,0,0,1,0,0
+25,30,https://github.com/sloria/TextBlob/issues/133,133,[],closed,2016-06-23 18:28:04+00:00,0,8,Download of textblob.download_corpora failed | SSL error,"[nltk_data] Error loading brown: <urlopen error [SSL:
+[nltk_data]     CERTIFICATE_VERIFY_FAILED] certificate verify failed
+[nltk_data]     (_ssl.c:590)>
+[nltk_data] Error loading punkt: <urlopen error [SSL:
+[nltk_data]     CERTIFICATE_VERIFY_FAILED] certificate verify failed
+[nltk_data]     (_ssl.c:590)>
+[nltk_data] Error loading wordnet: <urlopen error [SSL:
+[nltk_data]     CERTIFICATE_VERIFY_FAILED] certificate verify failed
+[nltk_data]     (_ssl.c:590)>
+[nltk_data] Error loading averaged_perceptron_tagger: <urlopen error
+[nltk_data]     [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify
+[nltk_data]     failed (_ssl.c:590)>
+[nltk_data] Error loading conll2000: <urlopen error [SSL:
+[nltk_data]     CERTIFICATE_VERIFY_FAILED] certificate verify failed
+[nltk_data]     (_ssl.c:590)>
+[nltk_data] Error loading movie_reviews: <urlopen error [SSL:
+[nltk_data]     CERTIFICATE_VERIFY_FAILED] certificate verify failed
+[nltk_data]     (_ssl.c:590)>
+Finished.
+
+**Ubuntu Xenial**
+",0,0,1,0,0,0,0,1,0,0
+26,5,https://github.com/sloria/TextBlob/issues/103,103,[],closed,2015-11-24 02:42:10+00:00,0,2,textblob download_corpora error,"when I run 
+
+python -m textblob.download_corpora
+
+there were some errors 
+
+  File ""D:\SoftWare\Anaconda2X86_27\lib\xml\etree\ElementTree.py"", l_raiseerror
+    raise err
+xml.etree.ElementTree.ParseError: mismatched tag: line 15, column 3
+
+What can I do? Thanks!
+",0,0,0,0,0,0,0,1,0,0
+27,82,https://github.com/sloria/TextBlob/issues/208,208,[],open,2018-04-30 09:55:25+00:00,0,0,Unable to call textblob.download_corpora behind proxy.,"When working behind a http proxy, executing `$ python -m textblob.download_corpora` times out.
+
+This can be fixed by calling `nltk.set_proxy('host:port', ('username', 'password'))` within `download_corpora.py`. 
+
+Perhaps arguments could be set for `download_corpora.py` to pass the proxy information to nltk to allow download?",0,0,0,0,0,0,0,1,0,0
+28,87,https://github.com/sloria/TextBlob/issues/214,214,[],open,2018-06-13 21:03:48+00:00,0,0,"After training my own classifier with nltk, how do I load it in textblob?","The built-in classifier in textblob is pretty dumb. It's trained on movie reviews, so I created a huge set of examples in my context (57,000 stories, categorized as positive or negative) and then trained it using nltk. I tried using textblob to train it but it always failed:
+
+```
+with open('train.json', 'r') as fp:
+    cl = NaiveBayesClassifier(fp, format=""json"")
+```
+
+That would run for hours and end in a memory error.
+
+I looked at the source and found it was just using nltk and wrapping that, so I used that instead, and it worked.
+
+The structure for nltk training set needed to be a list of tuples, with the first part was a Counter of words in the text and frequency of appearance. The second part of tuple was 'pos' or 'neg' for sentiment.
+
+```
+>>> train_set = [(Counter(i[""text""].split()),i[""label""]) for i in data[200:]]
+>>> test_set = [(Counter(i[""text""].split()),i[""label""]) for i in data[:200]] # withholding 200 examples for testing later
+
+>>> cl = nltk.NaiveBayesClassifier.train(train_set) # <-- this is the same thing textblob was using
+
+>>> print(""Classifier accuracy percent:"",(nltk.classify.accuracy(cl, test_set))*100)
+('Classifier accuracy percent:', 66.5)
+>>>>cl.show_most_informative_features(75)
+```
+
+Then I pickled it.
+
+```
+with open('storybayes.pickle','wb') as f:
+    pickle.dump(cl,f)
+```
+Now... I took this pickled file, and re opened it to get the nltk.classifier 'nltk.classify.naivebayes.NaiveBayesClassifier'> -- and tried to feed it into textblob. Instead of
+
+```
+from textblob.classifiers import NaiveBayesClassifier
+blob = TextBlob(""I love this library"", analyzer=NaiveBayesAnalyzer())
+```
+
+I tried:
+
+```
+>>> import cPickle as pickle
+>>> with open('storybayes.pickle','rb') as f:
+    cl = pickle.load(f)   
+>>> type(cl)
+<class 'nltk.classify.naivebayes.NaiveBayesClassifier'>
+>>> from textblob import TextBlob
+>>> blob = TextBlob(""I love this library"", classifier=cl)
+>>> blob
+TextBlob(""I love this library"")
+>>> blob.classify()
+
+Traceback (most recent call last):
+  File ""<pyshell#11>"", line 1, in <module>
+    blob.classify()
+  File ""C:\python\lib\site-packages\textblob\blob.py"", line 412, in classify
+    return self.classifier.classify(self.raw)
+  File ""C:\python\lib\site-packages\nltk\classify\naivebayes.py"", line 88, in classify
+    return self.prob_classify(featureset).max()
+  File ""C:\python\lib\site-packages\nltk\classify\naivebayes.py"", line 94, in prob_classify
+    featureset = featureset.copy()
+AttributeError: 'str' object has no attribute 'copy'
+```
+
+I also posted this here:  https://stackoverflow.com/questions/50828262/after-training-my-own-classifier-with-nltk-how-do-i-load-it-in-textblob",0,1,0,0,0,0,0,1,0,0
+29,137,https://github.com/sloria/TextBlob/issues/352,352,[],open,2020-11-24 14:51:39+00:00,0,1,Error loading textblob,"For some reason this is happening on BigSur while importing textblob:
+
+```
+% python3 -m textblob 
+Python(22068,0x1185b2e00) malloc: can't allocate region
+:*** mach_vm_map(size=18446744071598305280, flags: 100) failed (error code=3)
+Python(22068,0x1185b2e00) malloc: *** set a breakpoint in malloc_error_break to debug
+init_dgelsd failed init
+Traceback (most recent call last):
+  File ""/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.8/lib/python3.8/runpy.py"", line 184, in _run_module_as_main
+    mod_name, mod_spec, code = _get_module_details(mod_name, _Error)
+  File ""/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.8/lib/python3.8/runpy.py"", line 143, in _get_module_details
+    return _get_module_details(pkg_main_name, error)
+  File ""/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.8/lib/python3.8/runpy.py"", line 110, in _get_module_details
+    __import__(pkg_name)
+  File ""/Users/nkts/Library/Python/3.8/lib/python/site-packages/textblob/__init__.py"", line 2, in <module>
+    from .blob import TextBlob, Word, Sentence, Blobber, WordList
+  File ""/Users/nkts/Library/Python/3.8/lib/python/site-packages/textblob/blob.py"", line 28, in <module>
+    import nltk
+  File ""/Users/nkts/Library/Python/3.8/lib/python/site-packages/nltk/__init__.py"", line 128, in <module>
+    from nltk.collocations import *
+  File ""/Users/nkts/Library/Python/3.8/lib/python/site-packages/nltk/collocations.py"", line 39, in <module>
+    from nltk.metrics import (
+  File ""/Users/nkts/Library/Python/3.8/lib/python/site-packages/nltk/metrics/__init__.py"", line 37, in <module>
+    from nltk.metrics.segmentation import windowdiff, ghd, pk
+  File ""/Users/nkts/Library/Python/3.8/lib/python/site-packages/nltk/metrics/segmentation.py"", line 44, in <module>
+    import numpy as np
+  File ""/Users/nkts/Library/Python/3.8/lib/python/site-packages/numpy/__init__.py"", line 286, in <module>
+    raise RuntimeError(msg)
+RuntimeError: Polyfit sanity test emitted a warning, most likely due to using a buggy Accelerate backend. If you compiled yourself, see site.cfg.example for information. Otherwise report this to the vendor that provided NumPy.
+RankWarning: Polyfit may be poorly conditioned
+```
+
+```
+% pip3 list -v |grep textblob
+textblob          0.15.3     /Users/nkts/Library/Python/3.8/lib/python/site-packages                                                                  pip
+```",0,0,0,0,0,0,0,1,1,0
+30,92,https://github.com/sloria/TextBlob/issues/230,230,[],closed,2018-10-03 19:01:17+00:00,0,1,"The `correct()` method in Python 3.7 gives ""RuntimeError: generator raised StopIteration""","In Python 3.7 the following gives `RuntimeError: generator raised StopIteration`
+````
+>>> b = TextBlob(""I havv goood speling!"")
+>>> print(b.correct())
+````
+
+I believe [this](https://stackoverflow.com/a/51371879/2445273) SO post describes what needs to be done to address this problem.
+
+Edit: same problem with `spellcheck()` method.",0,0,0,0,0,1,1,0,0,0
+31,0,https://github.com/sloria/TextBlob/issues/95,95,[],open,2015-09-27 23:34:59+00:00,0,1,problem with noun_phrases and case sensitivity,"Is it possible to get a word in source case?
+
+``` Python
+>>>text = '''Main Python wrapper for correcting spelling and grammar mistakes.'''
+>>> blob = TextBlob(text)
+>>> blob.sentences[0].noun_phrases[0]
+'python'
+>>> blob.sentences[0].noun_phrases[0].islower()
+True
+>>> blob.replace(blob.sentences[0].noun_phrases[0], 'Program')
+TextBlob(""Main Python wrapper for correcting spelling and grammar mistakes."")
+```
+",0,0,0,0,0,0,1,0,0,0
+32,42,https://github.com/sloria/TextBlob/issues/151,151,[],closed,2017-02-13 19:28:59+00:00,0,2,Issue with .correct() ,"I'm just testing out TextBlob and in particular the spelling functionality. Perhaps I'm missing something, but the basic example of the .correct() method is returning an empty Texblob. (I'm using Python 2.7 in Jupyter Notebooks). Other Texblob functionality has worked as expected/demonstrated in docs. 
+
+input:
+phrase = TextBlob(""Do you get thaksgiving day off?"")
+phrase.correct()
+
+output: 
+TextBlob("""")
+",0,0,0,0,0,0,1,0,0,0
+33,95,https://github.com/sloria/TextBlob/issues/238,238,[],closed,2018-12-03 00:39:31+00:00,0,1,Extend the dictionary with domain specific words?,"Hey there, I was wondering how I can extend the dictionary behind the spell check, so that domain specific words dont get classified as wirtten wrong",0,0,0,1,0,0,1,0,0,0
+34,114,https://github.com/sloria/TextBlob/issues/290,290,"[{'id': 1857753522, 'node_id': 'MDU6TGFiZWwxODU3NzUzNTIy', 'url': 'https://api.github.com/repos/sloria/TextBlob/labels/question', 'name': 'question', 'color': '45a30b', 'default': True, 'description': ''}]",closed,2019-11-14 16:19:28+00:00,0,2,Word.spellcheck() method returns inconsistent results,"I'm currently playing around with TextBlob and I found that spellcheck() method is giving me a lot of false positives. For example, for the word 'upload', the spellcheck() output is the following: `[('unload', 1.0)]` where I would expect something more similar to the following: `[('upload', 0.64), ('unload'), 0.36]`. Another example is with the plurals. For instance, given the word ""building"" the spellcheck() output is the following: `[('buildings', 1.0)]`. Is this the expected behavior? Is there something I'm missing?",0,0,0,0,0,0,1,0,0,0
+35,121,https://github.com/sloria/TextBlob/issues/313,313,[],open,2020-04-10 17:30:41+00:00,0,0,Add custom words to the frequency list to check Spelling,I'm not able to add custom words such as names into the frequency list for spelling correction. I've using this library as a post-processing step for an ocr tool,0,0,0,1,0,0,1,0,0,0
+36,124,https://github.com/sloria/TextBlob/issues/327,327,[],open,2020-06-04 06:15:14+00:00,0,0,Not able to recognize merged words,"TextBlob is not able to identify merged words during spelling correction, it is returning them as correct. Here are a few examples:
+```[python]
+>>> textblob.__version__
+'0.15.3'
+>>> TextBlob('mynameis').correct()
+TextBlob(""mynameis"")
+>>> TextBlob('upperright corner').correct()
+TextBlob(""upperright corner"")
+```
+Am I missing something or is that a bug?",0,0,0,0,0,0,1,0,0,0
+37,148,https://github.com/sloria/TextBlob/issues/386,386,[],open,2021-06-22 10:09:00+00:00,0,0,Too much time taking to execute TextBlob.correct(),"I am applying this method for spelling correction on some text present in a csv file, but the code is still running, it's been more than 30 minutes, and even now it is running. Can someone please points out what needs to be done in this case and why is it taking this much of time?",0,0,0,0,0,0,1,0,0,0
+38,6,https://github.com/sloria/TextBlob/issues/104,104,[],open,2015-12-12 03:43:14+00:00,0,2,Importing nltk on cgi-bin python webpage on localhost.,"Hello,
+
+I have a cgi-bin webpage. I use textblob in my python codes. When I run my website on localhost, I get the following error: ""Resource u'tokenizers/punkt/english.pickle' not found.  Please
+  use the NLTK Downloader to obtain the resource:""
+
+nltk.download('all'), or ""python -m textblob.download_corpora"" didn't solve my problem.
+
+How can I fix this issue?
+
+Thanks
+",0,0,0,0,0,1,0,0,0,0
+39,102,https://github.com/sloria/TextBlob/issues/270,270,[],closed,2019-06-12 12:07:26+00:00,0,1,Python 3.5: no mudule named textblob,"When i start tihs program in python 3.5 there came an no module error. But in python 2 it works.
+Why",0,0,0,0,0,1,0,0,0,0
+40,119,https://github.com/sloria/TextBlob/issues/302,302,[],open,2020-02-09 06:23:24+00:00,0,0,Deprecation warning due to invalid escape sequences in Python 3.8,"Deprecation warnings are raised due to invalid escape sequences in Python 3.8 . Below is a log of the warnings raised during compiling all the python files. Using raw strings or escaping them will fix this issue.
+
+```
+find . -iname '*.py'  | xargs -P 4 -I{} python -Wall -m py_compile {} 
+
+./textblob/_text.py:218: DeprecationWarning: invalid escape sequence \.
+  RE_ABBR1 = re.compile(""^[A-Za-z]\.$"")       # single letter, ""T. De Smedt""
+./textblob/_text.py:219: DeprecationWarning: invalid escape sequence \.
+  RE_ABBR2 = re.compile(""^([A-Za-z]\.)+$"")    # alternating letters, ""U.S.""
+./build/lib/textblob/_text.py:218: DeprecationWarning: invalid escape sequence \.
+  RE_ABBR1 = re.compile(""^[A-Za-z]\.$"")       # single letter, ""T. De Smedt""
+./build/lib/textblob/_text.py:219: DeprecationWarning: invalid escape sequence \.
+  RE_ABBR2 = re.compile(""^([A-Za-z]\.)+$"")    # alternating letters, ""U.S.""
+./tests/test_translate.py:47: DeprecationWarning: invalid escape sequence \d
+  assert_true(re.match('.+&tk=\d+\.\d+$', url))
+```",0,0,0,0,0,1,0,0,0,0
+41,134,https://github.com/sloria/TextBlob/issues/346,346,[],closed,2020-09-24 12:15:22+00:00,0,0,Dependabot couldn't authenticate with https://pypi.python.org/simple/,"Dependabot couldn't authenticate with https://pypi.python.org/simple/.
+
+You can provide authentication details in your [Dependabot dashboard](https://app.dependabot.com/accounts/sloria) by clicking into the account menu (in the top right) and selecting 'Config variables'.
+
+[View the update logs](https://app.dependabot.com/accounts/sloria/update-logs/48605488).",0,0,0,0,0,1,0,0,0,0
+42,16,https://github.com/sloria/TextBlob/issues/115,115,[],closed,2016-02-15 09:58:06+00:00,0,8,Translation not working - always returns empty string as response,"Hello,
+
+Google must have changed something.
+
+``` python
+In [1]: import textblob
+
+In [2]: blob = textblob.TextBlob(""bonjour"")
+
+In [3]: blob.translate()
+> /home/alopez/.virtualenvs/proj/lib/python2.7/site-packages/textblob/translate.py(42)translate()
+     41         import ipdb; ipdb.set_trace()
+---> 42         json5 = self._get_json5(self.url, host=host, type_=type_, data=data)
+     43         if self._translation_successful(json5):
+
+ipdb> s
+--Call--
+> /home/alopez/.virtualenvs/proj/lib/python2.7/site-packages/textblob/translate.py(84)_get_json5()
+     83 
+---> 84     def _get_json5(self, url, host=None, type_=None, data=None):
+     85         encoded_data = urlencode(data).encode('utf-8')
+
+ipdb> n
+> /home/alopez/.virtualenvs/proj/lib/python2.7/site-packages/textblob/translate.py(85)_get_json5()
+     84     def _get_json5(self, url, host=None, type_=None, data=None):
+---> 85         encoded_data = urlencode(data).encode('utf-8')
+     86         req = request.Request(url=url, headers=self.headers, data=encoded_data)
+
+ipdb> 
+> /home/alopez/.virtualenvs/proj/lib/python2.7/site-packages/textblob/translate.py(86)_get_json5()
+     85         encoded_data = urlencode(data).encode('utf-8')
+---> 86         req = request.Request(url=url, headers=self.headers, data=encoded_data)
+     87         if host or type_:
+
+ipdb> 
+> /home/alopez/.virtualenvs/proj/lib/python2.7/site-packages/textblob/translate.py(87)_get_json5()
+     86         req = request.Request(url=url, headers=self.headers, data=encoded_data)
+---> 87         if host or type_:
+     88             req.set_proxy(host=host, type=type_)
+
+ipdb> 
+> /home/alopez/.virtualenvs/proj/lib/python2.7/site-packages/textblob/translate.py(89)_get_json5()
+     88             req.set_proxy(host=host, type=type_)
+---> 89         resp = request.urlopen(req)
+     90         content = resp.read()
+
+ipdb> 
+> /home/alopez/.virtualenvs/proj/lib/python2.7/site-packages/textblob/translate.py(90)_get_json5()
+     89         resp = request.urlopen(req)
+---> 90         content = resp.read()
+     91         return content.decode('utf-8')
+
+ipdb> 
+> /home/alopez/.virtualenvs/proj/lib/python2.7/site-packages/textblob/translate.py(91)_get_json5()
+     90         content = resp.read()
+---> 91         return content.decode('utf-8')
+     92 
+
+ipdb> content
+'""""'
+ipdb> resp.code
+200
+ipdb> resp.msg
+'OK'
+```
+
+I will post an update if I find out something...
+",0,0,0,1,1,0,0,0,0,0
+43,9,https://github.com/sloria/TextBlob/issues/107,107,[],closed,2016-01-13 20:22:06+00:00,0,4,Unable to translate a text file,"Please let me know if I am doing this wrong? 
+
+I'm trying to open and read a text file with multiple keywords and phrases in different languages.
+I would like to be able to translate this using a case statement if at all possible.
+Every time I try to pass a file format I get an error stating ""only strings"" 
+
+Is there a way to pass in a file to the translate module? 
+
+from textblob import TextBlob
+
+> > > myfile = open('keywords' ,'r')
+> > > blob = TextBlob(myfile)
+
+  File ""/usr/local/lib/python2.7/dist-packages/textblob/blob.py"", line 346, in _
+_init__
+    'must be a string, not {0}'.format(type(text)))
+TypeError: The `text` argument passed to `__init__(text)` must be a string, not
+<type 'file'>
+
+Any help would be greatly appreciated.
+
+Thanks in advance
+",0,0,0,0,1,0,0,0,0,0
+44,15,https://github.com/sloria/TextBlob/issues/113,113,"[{'id': 45792776, 'node_id': 'MDU6TGFiZWw0NTc5Mjc3Ng==', 'url': 'https://api.github.com/repos/sloria/TextBlob/labels/enhancement', 'name': 'enhancement', 'color': '84b6eb', 'default': True, 'description': None}]",open,2016-02-10 09:59:40+00:00,0,2,Translation 1 or 2 character Chinese words,"Thank you for making this amazing tool!! 
+
+I have an easy issue. I use textblob to translate Chinese. In Translate.py in def detect with comment """"""Detect the source text's language."""""" requires a minimum length of 3 otherwise it will through an exception. This is not so handy for Chinese characters. For example: 婵?means ""it is good"".
+
+Maybe there is away to change this without losing the effectiveness of detecting the correct language. If you can detect if they are Chinese characters you could drop the minimum length requirement.
+
+Thanks and keep up the good work :)
+",0,0,0,0,1,0,0,0,0,0
+45,18,https://github.com/sloria/TextBlob/issues/117,117,[],closed,2016-02-15 22:16:03+00:00,0,13,Translation not working - NotTranslated: Translation API returned the input string unchanged.,"Hi, 
+The translation is not working. 
+thanks in advance,
+
+In [1]: from textblob import TextBlob
+
+In [2]: en_blob = TextBlob(u'Simple is better than complex.')
+## In [3]: en_blob.translate(to='es')
+
+NotTranslated                             Traceback (most recent call last)
+<ipython-input-3-147f0b9c660d> in <module>()
+----> 1 en_blob.translate(to='es')
+
+/usr/local/lib/python2.7/dist-packages/textblob-0.11.0-py2.7.egg/textblob/blob.pyc in translate(self, from_lang, to)
+    507             from_lang = self.translator.detect(self.string)
+    508         return self.**class**(self.translator.translate(self.raw,
+--> 509                         from_lang=from_lang, to_lang=to))
+    510 
+    511     def detect_language(self):
+
+/usr/local/lib/python2.7/dist-packages/textblob-0.11.0-py2.7.egg/textblob/translate.pyc in translate(self, source, from_lang, to_lang, host, type_)
+     43             return self._get_translation_from_json5(json5)
+     44         else:
+---> 45             raise NotTranslated('Translation API returned the input string unchanged.')
+     46 
+     47     def detect(self, source, host=None, type_=None):
+
+NotTranslated: Translation API returned the input string unchanged.
+",0,0,0,0,1,0,0,0,0,0
+46,24,https://github.com/sloria/TextBlob/issues/126,126,[],closed,2016-05-12 08:49:16+00:00,0,1,Does Translation have any limit on number of words per day ?,"Is there any limit like only 2500 words can be translated per day ?
+",0,0,0,0,1,0,0,0,0,0
+47,33,https://github.com/sloria/TextBlob/issues/138,138,[],closed,2016-09-06 21:07:29+00:00,0,1,urllib2.HTTPError: HTTP Error 503: Service Unavailable while using translate() from textblob,"from textblob import TextBlob
+text=""Wi-Fi Direct""
+tb=TextBlob(text)
+translated_string=tb.translate(to='en')
+
+**Error**
+
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""C:\Python27\lib\site-packages\textblob\blob.py"", line 505, in translate
+    from_lang=from_lang, to_lang=to))
+  File ""C:\Python27\lib\site-packages\textblob\translate.py"", line 52, in transl
+ate
+    response = self._request(self.url, host=host, type_=type_, data=data)
+  File ""C:\Python27\lib\site-packages\textblob\translate.py"", line 92, in _reque
+st
+    resp = request.urlopen(req)
+  File ""C:\Python27\lib\urllib2.py"", line 154, in urlopen
+    return opener.open(url, data, timeout)
+  File ""C:\Python27\lib\urllib2.py"", line 437, in open
+    response = meth(req, response)
+  File ""C:\Python27\lib\urllib2.py"", line 550, in http_response
+    'http', request, response, code, msg, hdrs)
+  File ""C:\Python27\lib\urllib2.py"", line 469, in error
+    result = self._call_chain(_args)
+  File ""C:\Python27\lib\urllib2.py"", line 409, in _call_chain
+    result = func(_args)
+  File ""C:\Python27\lib\urllib2.py"", line 656, in http_error_302
+    return self.parent.open(new, timeout=req.timeout)
+  File ""C:\Python27\lib\urllib2.py"", line 437, in open
+    response = meth(req, response)
+  File ""C:\Python27\lib\urllib2.py"", line 550, in http_response
+    'http', request, response, code, msg, hdrs)
+  File ""C:\Python27\lib\urllib2.py"", line 475, in error
+    return self._call_chain(_args)
+  File ""C:\Python27\lib\urllib2.py"", line 409, in _call_chain
+    result = func(_args)
+  File ""C:\Python27\lib\urllib2.py"", line 558, in http_error_default
+    raise HTTPError(req.get_full_url(), code, msg, hdrs, fp)
+urllib2.HTTPError: HTTP Error 503: Service Unavailable
+",0,0,0,0,1,0,0,0,0,0
+48,43,https://github.com/sloria/TextBlob/issues/152,152,[],closed,2017-02-16 12:31:03+00:00,0,0,Translation issues,"I made a very easy script to play around with the translation module:
+
+```
+from textblob import TextBlob
+
+en_text = TextBlob('You shall find of the king a husband, madam; you, sir, a father: he that so generally is at all times good must of necessity hold his virtue to you; whose worthiness would stir it up where it wanted rather than lack it where there is such abundance.')
+nl_text = en_text.translate(from_lang='en', to='nl')
+
+print(nl_text)
+```
+
+
+But this results in a couple of errors of which I hardly can make any sense: 
+
+```
+Traceback (most recent call last):
+  File ""C:\Users\Gebruiker\Desktop\TEXTBLOW.py"", line 4, in <module>
+    nl_text = en_text.translate(from_lang='en', to='nl')
+  File ""C:\Users\Gebruiker\AppData\Local\Programs\Python\Python35\lib\site-packages\textblob\blob.py"", line 505, in translate
+    from_lang=from_lang, to_lang=to))
+  File ""C:\Users\Gebruiker\AppData\Local\Programs\Python\Python35\lib\site-packages\textblob\translate.py"", line 52, in translate
+    response = self._request(self.url, host=host, type_=type_, data=data)
+  File ""C:\Users\Gebruiker\AppData\Local\Programs\Python\Python35\lib\site-packages\textblob\translate.py"", line 92, in _request
+    resp = request.urlopen(req)
+  File ""C:\Users\Gebruiker\AppData\Local\Programs\Python\Python35\lib\urllib\request.py"", line 162, in urlopen
+    return opener.open(url, data, timeout)
+  File ""C:\Users\Gebruiker\AppData\Local\Programs\Python\Python35\lib\urllib\request.py"", line 471, in open
+    response = meth(req, response)
+  File ""C:\Users\Gebruiker\AppData\Local\Programs\Python\Python35\lib\urllib\request.py"", line 581, in http_response
+    'http', request, response, code, msg, hdrs)
+  File ""C:\Users\Gebruiker\AppData\Local\Programs\Python\Python35\lib\urllib\request.py"", line 503, in error
+    result = self._call_chain(*args)
+  File ""C:\Users\Gebruiker\AppData\Local\Programs\Python\Python35\lib\urllib\request.py"", line 443, in _call_chain
+    result = func(*args)
+  File ""C:\Users\Gebruiker\AppData\Local\Programs\Python\Python35\lib\urllib\request.py"", line 686, in http_error_302
+    return self.parent.open(new, timeout=req.timeout)
+  File ""C:\Users\Gebruiker\AppData\Local\Programs\Python\Python35\lib\urllib\request.py"", line 471, in open
+    response = meth(req, response)
+  File ""C:\Users\Gebruiker\AppData\Local\Programs\Python\Python35\lib\urllib\request.py"", line 581, in http_response
+    'http', request, response, code, msg, hdrs)
+  File ""C:\Users\Gebruiker\AppData\Local\Programs\Python\Python35\lib\urllib\request.py"", line 509, in error
+    return self._call_chain(*args)
+  File ""C:\Users\Gebruiker\AppData\Local\Programs\Python\Python35\lib\urllib\request.py"", line 443, in _call_chain
+    result = func(*args)
+  File ""C:\Users\Gebruiker\AppData\Local\Programs\Python\Python35\lib\urllib\request.py"", line 589, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 503: Service Unavailable
+```",0,0,0,0,1,0,0,0,0,0
+49,52,https://github.com/sloria/TextBlob/issues/161,161,[],closed,2017-05-07 02:23:06+00:00,0,1,test `test_translate_non_ascii` fails due to updated translation,"Running `python run_tests.py` yields
+
+```
+======================================================================
+FAIL: test_translate_non_ascii (tests.test_translate.TestTranslatorIntegration)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File ""/home/jcalbert/Documents/open_source/TextBlob/tests/test_translate.py"", line 102, in test_translate_non_ascii
+    assert_equal(translated, ""With full sovereignty"")
+AssertionError: u'Fully sovereign' != u'With full sovereignty'
+- Fully sovereign
++ With full sovereignty
+```
+probably due to change in translation:
+![translate](https://cloud.githubusercontent.com/assets/4261275/25777412/881c414a-32aa-11e7-865f-ceec78753ab6.png)
+",0,0,0,0,1,0,0,0,0,0
+50,53,https://github.com/sloria/TextBlob/issues/164,164,[],closed,2017-05-23 01:02:53+00:00,0,0,Textblob incomplete translating,"I'm trying to translate some files using Textblob but it didn't translate them completely.
+For example, a file with 465 lines of text just 164 of them were translated. 
+
+Are there any rules in Textblob that limit the number of words to be translated?",0,0,0,0,1,0,0,0,0,0
+51,74,https://github.com/sloria/TextBlob/issues/196,196,[],closed,2018-02-15 23:09:48+00:00,0,4,Translation API,"Thought to leave this here for somebody. I was using textblob on individual sentences for part of speech tagging. Worked great, and saved me an hour or two of having to dig through NLTK documentation.
+
+That said I ran individual sentences through, out of a very large database I have. It seems that I overloaded the google translate API, and actually had to comment out the translate API in the module.
+
+Thought you guys might want to disable translate by default. Just a thought.
+
+Anyways awesome module.",0,0,0,0,1,0,0,0,0,0
+52,88,https://github.com/sloria/TextBlob/issues/215,215,"[{'id': 45792774, 'node_id': 'MDU6TGFiZWw0NTc5Mjc3NA==', 'url': 'https://api.github.com/repos/sloria/TextBlob/labels/bug', 'name': 'bug', 'color': 'fc2929', 'default': True, 'description': None}, {'id': 58187449, 'node_id': 'MDU6TGFiZWw1ODE4NzQ0OQ==', 'url': 'https://api.github.com/repos/sloria/TextBlob/labels/please-help', 'name': 'please-help', 'color': '009800', 'default': False, 'description': None}]",closed,2018-06-20 03:01:09+00:00,0,21,HTTP Error 503: Service Unavailable while using detect_language() and translate() from textblob,"python:3.5
+textblob:0.15.1
+
+seems it happened before and fixed in #148 
+
+the detail logs
+`  File ""/usr/local/lib/python3.5/site-packages/textblob/blob.py"", line 562, in detect_language
+    return self.translator.detect(self.raw) `
+`  File ""/usr/local/lib/python3.5/site-packages/textblob/translate.py"", line 72, in detect
+    response = self._request(url, host=host, type_=type_, data=data)`
+`  File ""/usr/local/lib/python3.5/site-packages/textblob/translate.py"", line 92, in _request
+    resp = request.urlopen(req) `
+`  File ""/usr/local/lib/python3.5/urllib/request.py"", line 163, in urlopen
+    return opener.open(url, data, timeout) `
+`  File ""/usr/local/lib/python3.5/urllib/request.py"", line 472, in open
+    response = meth(req, response) `
+`  File ""/usr/local/lib/python3.5/urllib/request.py"", line 582, in http_response
+    'http', request, response, code, msg, hdrs) `
+`  File ""/usr/local/lib/python3.5/urllib/request.py"", line 504, in error
+    result = self._call_chain(*args) `
+`  File ""/usr/local/lib/python3.5/urllib/request.py"", line 444, in _call_chain
+    result = func(*args) `
+`  File ""/usr/local/lib/python3.5/urllib/request.py"", line 696, in http_error_302
+    return self.parent.open(new, timeout=req.timeout) `
+`  File ""/usr/local/lib/python3.5/urllib/request.py"", line 472, in open
+    response = meth(req, response) `
+`  File ""/usr/local/lib/python3.5/urllib/request.py"", line 582, in http_response
+    'http', request, response, code, msg, hdrs) `
+`  File ""/usr/local/lib/python3.5/urllib/request.py"", line 510, in error
+    return self._call_chain(*args) `
+`  File ""/usr/local/lib/python3.5/urllib/request.py"", line 444, in _call_chain
+    result = func(*args) `
+`  File ""/usr/local/lib/python3.5/urllib/request.py"", line 590, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)`",0,0,0,0,1,0,0,0,0,0
+53,98,https://github.com/sloria/TextBlob/issues/241,241,[],closed,2018-12-19 20:23:04+00:00,0,1,HTTP Error 503: Service Unavailable for blob.translate(),"Hello, 
+
+I just started with this awesome tool, I just got this error and was working fine 1 hour ago, so I wanted to report it:
+
+```python
+>>> from textblob import TextBlob
+>>> text = '''
+... The titular threat of The Blob has always struck me as the ultimate movie
+... monster: an insatiably hungry, amoeba-like mass able to penetrate
+... virtually any safeguard, capable of--as a doomed doctor chillingly
+... describes it--""assimilating flesh on contact.
+... Snide comparisons to gelatin be damned, it's a concept with the most
+... devastating of potential consequences, not unlike the grey goo scenario
+... proposed by technological theorists fearful of
+... artificial intelligence run rampant.
+... '''
+>>> blob = TextBlob(text)
+>>> blob.translate(to=""es"")
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""/usr/local/lib/python3.6/site-packages/textblob/blob.py"", line 541, in translate
+    from_lang=from_lang, to_lang=to))
+  File ""/usr/local/lib/python3.6/site-packages/textblob/translate.py"", line 54, in translate
+    response = self._request(url, host=host, type_=type_, data=data)
+  File ""/usr/local/lib/python3.6/site-packages/textblob/translate.py"", line 92, in _request
+    resp = request.urlopen(req)
+  File ""/usr/local/Cellar/python/3.6.5_1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/urllib/request.py"", line 223, in urlopen
+    return opener.open(url, data, timeout)
+  File ""/usr/local/Cellar/python/3.6.5_1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/urllib/request.py"", line 532, in open
+    response = meth(req, response)
+  File ""/usr/local/Cellar/python/3.6.5_1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/urllib/request.py"", line 642, in http_response
+    'http', request, response, code, msg, hdrs)
+  File ""/usr/local/Cellar/python/3.6.5_1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/urllib/request.py"", line 564, in error
+    result = self._call_chain(*args)
+  File ""/usr/local/Cellar/python/3.6.5_1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/urllib/request.py"", line 504, in _call_chain
+    result = func(*args)
+  File ""/usr/local/Cellar/python/3.6.5_1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/urllib/request.py"", line 756, in http_error_302
+    return self.parent.open(new, timeout=req.timeout)
+  File ""/usr/local/Cellar/python/3.6.5_1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/urllib/request.py"", line 532, in open
+    response = meth(req, response)
+  File ""/usr/local/Cellar/python/3.6.5_1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/urllib/request.py"", line 642, in http_response
+    'http', request, response, code, msg, hdrs)
+  File ""/usr/local/Cellar/python/3.6.5_1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/urllib/request.py"", line 570, in error
+    return self._call_chain(*args)
+  File ""/usr/local/Cellar/python/3.6.5_1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/urllib/request.py"", line 504, in _call_chain
+    result = func(*args)
+  File ""/usr/local/Cellar/python/3.6.5_1/Frameworks/Python.framework/Versions/3.6/lib/python3.6/urllib/request.py"", line 650, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+```
+
+",0,0,0,0,1,0,0,0,0,0
+54,110,https://github.com/sloria/TextBlob/issues/283,283,[],closed,2019-08-30 21:20:01+00:00,0,1,.detect_language and .translate(to=... do not work,"it was ok b4, but from tomorrow after 
+analysis = TextBlob(t)
+print(ana.detect_language())
+
+getting
+
+File ""/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/textblob/blob.py"", line 568, in detect_language
+    return self.translator.detect(self.raw)
+  File ""/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/textblob/translate.py"", line 72, in detect
+    response = self._request(url, host=host, type_=type_, data=data)
+  File ""/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/textblob/translate.py"", line 92, in _request
+    resp = request.urlopen(req)
+  File ""/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/urllib/request.py"", line 222, in urlopen
+    return opener.open(url, data, timeout)
+  File ""/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/urllib/request.py"", line 531, in open
+    response = meth(req, response)
+  File ""/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/urllib/request.py"", line 641, in http_response
+    'http', request, response, code, msg, hdrs)
+  File ""/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/urllib/request.py"", line 563, in error
+    result = self._call_chain(*args)
+  File ""/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/urllib/request.py"", line 503, in _call_chain
+    result = func(*args)
+  File ""/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/urllib/request.py"", line 755, in http_error_302
+    return self.parent.open(new, timeout=req.timeout)
+  File ""/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/urllib/request.py"", line 531, in open
+    response = meth(req, response)
+  File ""/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/urllib/request.py"", line 641, in http_response
+    'http', request, response, code, msg, hdrs)
+  File ""/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/urllib/request.py"", line 569, in error
+    return self._call_chain(*args)
+  File ""/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/urllib/request.py"", line 503, in _call_chain
+    result = func(*args)
+  File ""/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/urllib/request.py"", line 649, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 429: Too Many Requests
+",0,0,0,0,1,0,0,0,0,0
+55,151,https://github.com/sloria/TextBlob/issues/395,395,[],closed,2021-09-11 13:32:31+00:00,0,12,error intranslation,"url not found error sometime:
+
+
+ File ""/usr/local/lib/python3.8/dist-packages/textblob/blob.py"", line 546, in translate
+    return self.__class__(self.translator.translate(self.raw,
+  File ""/usr/local/lib/python3.8/dist-packages/textblob/translate.py"", line 54, in translate
+    response = self._request(url, host=host, type_=type_, data=data)
+  File ""/usr/local/lib/python3.8/dist-packages/textblob/translate.py"", line 92, in _request
+    resp = request.urlopen(req)
+  File ""/usr/lib/python3.8/urllib/request.py"", line 222, in urlopen
+    return opener.open(url, data, timeout)
+  File ""/usr/lib/python3.8/urllib/request.py"", line 531, in open
+    response = meth(req, response)
+  File ""/usr/lib/python3.8/urllib/request.py"", line 640, in http_response
+    response = self.parent.error(
+  File ""/usr/lib/python3.8/urllib/request.py"", line 569, in error
+    return self._call_chain(*args)
+  File ""/usr/lib/python3.8/urllib/request.py"", line 502, in _call_chain
+    result = func(*args)
+  File ""/usr/lib/python3.8/urllib/request.py"", line 649, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 404: Not Found
+",0,0,0,0,1,0,0,0,0,0
+56,152,https://github.com/sloria/TextBlob/issues/396,396,[],closed,2021-09-14 09:56:18+00:00,0,2,Error in translation and detect_language,"Hi,
+
+When calling for the functions detect_language & translate are not working. After a couple of pushes, I receive a HTTP 404 error unfortunately. I'm quite unsure what the issue might be. I don't if Google updated their criteria regarding API's but @sloria could you have a look at this? I'm happy to help.
+
+
+",0,0,0,0,1,0,0,0,0,0
+57,155,https://github.com/sloria/TextBlob/issues/400,400,[],open,2021-10-14 21:49:55+00:00,0,0,Textblob translation returns both original and translated sentence,"I am facing a problem with the translation
+
+from textblob import TextBlob
+from textblob.translate import NotTranslated
+
+text = TextBlob(""Explanation\nWhy the edits made under my username Hardcore Metallica Fan were reverted? They weren't vandalisms, just closure on some GAs after I voted at New York Dolls FAC. And please don't remove the template from the talk page since I'm retired now.89.205.38.27"")
+text = text.translate(from_lang='en', to='de')
+print(text)
+
+Result:
+TextBlob(""Explanation Why the edits made under my username Hardcore Metallica Fan were reverted? Erkl鐩瞨ung Warum wurden die unter meinem Benutzernamen Hardcore Metallica Fan vorgenommenen 鑴沶derungen r鐪塩kg鐩瞡gig gemacht? They weren't vandalisms, just closure on some GAs after I voted at New York Dolls FAC. Es waren keine Vandalismen, sondern nur die Schlie鑴絬ng einiger GAs, nachdem ich bei New York Dolls FAC abgestimmt hatte. And please don't remove the template from the talk page since I'm retired now.89.205.38.27 Und bitte entfernen Sie die Vorlage nicht von der Diskussionsseite, da ich jetzt im Ruhestand bin.89.205.38.27"")
+
+It is giving me the original as well as the translated version. Also, it's giving me results in some XML format like "",&# "" etc.",0,0,0,0,1,0,0,0,0,0
+58,156,https://github.com/sloria/TextBlob/issues/401,401,[],open,2021-10-22 14:00:08+00:00,0,0,HTTPError: HTTP Error 400: Bad Request on translate call in 0.17.1,"Translation still failing in 0.17.1:
+
+```
+from textblob import TextBlob
+b = TextBlob(""The weather is beautiful today. Tomorrow looks like bad weather."")
+
+b.translate(to='es')
+```
+yields
+
+```
+------------------------------------------------------------------------
+HTTPError                              Traceback (most recent call last)
+<ipython-input-7-90a0f454308a> in <module>
+----> 1 b.translate(to=""es"")
+
+~/anaconda3/envs/py38dsftJuly21/lib/python3.8/site-packages/textblob/blob.py in translate(self, from_lang, to)
+    566             DeprecationWarning
+    567         )
+--> 568         return self.__class__(self.translator.translate(self.raw,
+    569                               from_lang=from_lang, to_lang=to))
+    570 
+
+~/anaconda3/envs/py38dsftJuly21/lib/python3.8/site-packages/textblob/translate.py in translate(self, source, from_lang, to_lang, host, type_)
+     52             client=""te"",
+     53         )
+---> 54         response = self._request(url, host=host, type_=type_, data=data)
+     55         result = json.loads(response)
+     56         if isinstance(result, list):
+
+~/anaconda3/envs/py38dsftJuly21/lib/python3.8/site-packages/textblob/translate.py in _request(self, url, host, type_, data)
+     94         if host or type_:
+     95             req.set_proxy(host=host, type=type_)
+---> 96         resp = request.urlopen(req)
+     97         content = resp.read()
+     98         return content.decode('utf-8')
+
+~/anaconda3/envs/py38dsftJuly21/lib/python3.8/urllib/request.py in urlopen(url, data, timeout, cafile, capath, cadefault, context)
+    220     else:
+    221         opener = _opener
+--> 222     return opener.open(url, data, timeout)
+    223 
+    224 def install_opener(opener):
+
+~/anaconda3/envs/py38dsftJuly21/lib/python3.8/urllib/request.py in open(self, fullurl, data, timeout)
+    529         for processor in self.process_response.get(protocol, []):
+    530             meth = getattr(processor, meth_name)
+--> 531             response = meth(req, response)
+    532 
+    533         return response
+
+~/anaconda3/envs/py38dsftJuly21/lib/python3.8/urllib/request.py in http_response(self, request, response)
+    638         # request was successfully received, understood, and accepted.
+    639         if not (200 <= code < 300):
+--> 640             response = self.parent.error(
+    641                 'http', request, response, code, msg, hdrs)
+    642 
+
+~/anaconda3/envs/py38dsftJuly21/lib/python3.8/urllib/request.py in error(self, proto, *args)
+    567         if http_err:
+    568             args = (dict, 'default', 'http_error_default') + orig_args
+--> 569             return self._call_chain(*args)
+    570 
+    571 # XXX probably also want an abstract factory that knows when it makes
+
+~/anaconda3/envs/py38dsftJuly21/lib/python3.8/urllib/request.py in _call_chain(self, chain, kind, meth_name, *args)
+    500         for handler in handlers:
+    501             func = getattr(handler, meth_name)
+--> 502             result = func(*args)
+    503             if result is not None:
+    504                 return result
+
+~/anaconda3/envs/py38dsftJuly21/lib/python3.8/urllib/request.py in http_error_default(self, req, fp, code, msg, hdrs)
+    647 class HTTPDefaultErrorHandler(BaseHandler):
+    648     def http_error_default(self, req, fp, code, msg, hdrs):
+--> 649         raise HTTPError(req.full_url, code, msg, hdrs, fp)
+    650 
+    651 class HTTPRedirectHandler(BaseHandler):
+
+HTTPError: HTTP Error 400: Bad Request
+```",0,0,0,0,1,0,0,0,0,0
+59,29,https://github.com/sloria/TextBlob/issues/132,132,[],closed,2016-06-17 02:56:03+00:00,0,2,ImportError: No module named text.blob,"I got this error message when trying to run the script even already installed via pip.
+
+```
+Traceback (most recent call last):
+  File ""TF-IDF.py"", line 2, in <module>
+    from text.blob import TextBlob as tb
+ImportError: No module named text.blob
+```
+
+My script
+
+```
+import math
+from text.blob import TextBlob as tb
+```
+
+Please advice. Thank you.
+",0,0,0,1,0,0,0,0,0,0
+60,60,https://github.com/sloria/TextBlob/issues/173,173,[],closed,2017-08-08 15:11:09+00:00,0,16,ModuleNotFoundError: No module named '_sqlite3',"Hello,
+
+I'm migrating my script from my Mac to a AWS Linux instance. I upgraded the AWS instance to Python 3.6 before importing packages, including textbook. Now I get this error and cannot find where it's coming from. I'm not the greatest python programmer, but I did have it running perfectly on my Mac before installing it on AWS.
+
+Here's the entire Traceback:
+
+Traceback (most recent call last):
+  File ""wikiparser20170801.py"", line 8, in <module>
+    from textblob import TextBlob
+  File ""/usr/local/lib/python3.6/site-packages/textblob/__init__.py"", line 9, in <module>
+    from .blob import TextBlob, Word, Sentence, Blobber, WordList
+  File ""/usr/local/lib/python3.6/site-packages/textblob/blob.py"", line 28, in <module>
+    import nltk
+  File ""/usr/local/lib/python3.6/site-packages/nltk/__init__.py"", line 137, in <module>
+    from nltk.stem import *
+  File ""/usr/local/lib/python3.6/site-packages/nltk/stem/__init__.py"", line 29, in <module>
+    from nltk.stem.snowball import SnowballStemmer
+  File ""/usr/local/lib/python3.6/site-packages/nltk/stem/snowball.py"", line 26, in <module>
+    from nltk.corpus import stopwords
+  File ""/usr/local/lib/python3.6/site-packages/nltk/corpus/__init__.py"", line 66, in <module>
+    from nltk.corpus.reader import *
+  File ""/usr/local/lib/python3.6/site-packages/nltk/corpus/reader/__init__.py"", line 105, in <module>
+    from nltk.corpus.reader.panlex_lite import *
+  File ""/usr/local/lib/python3.6/site-packages/nltk/corpus/reader/panlex_lite.py"", line 15, in <module>
+    import sqlite3
+  File ""/usr/local/lib/python3.6/sqlite3/__init__.py"", line 23, in <module>
+    from sqlite3.dbapi2 import *
+  File ""/usr/local/lib/python3.6/sqlite3/dbapi2.py"", line 27, in <module>
+    from _sqlite3 import *
+ModuleNotFoundError: No module named '_sqlite3",0,0,0,1,0,0,0,0,0,0
+61,69,https://github.com/sloria/TextBlob/issues/188,188,[],closed,2018-01-24 16:09:00+00:00,0,2,Error while import textblob,"I am new in python. I have problem while importing textblob
+While i write from textblob import TextBlob, it appears error below:
+
+> ` 22 from wordcloud import WordCloud
+>      23 from sklearn.feature_extraction.text import CountVectorizer
+> ---> 24 from textblob import TextBlob
+>      25 from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
+>      26 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+> 
+> ~/anaconda3/lib/python3.6/site-packages/textblob/__init__.py in <module>()
+>       1 import os
+> ----> 2 from .blob import TextBlob, Word, Sentence, Blobber, WordList
+>       3 
+>       4 __version__ = '0.15.1'
+>       5 __license__ = 'MIT'
+> 
+> ~/anaconda3/lib/python3.6/site-packages/textblob/blob.py in <module>()
+>      26 from collections import defaultdict
+>      27 
+> ---> 28 import nltk
+>      29 
+>      30 from textblob.decorators import cached_property, requires_nltk_corpus
+> 
+> ~/anaconda3/lib/python3.6/site-packages/nltk/__init__.py in <module>()
+>     126 ###########################################################
+>     127 
+> --> 128 from nltk.chunk import *
+>     129 from nltk.classify import *
+>     130 from nltk.inference import *
+> 
+> ~/anaconda3/lib/python3.6/site-packages/nltk/chunk/__init__.py in <module>()
+>     155 from nltk.data import load
+>     156 
+> --> 157 from nltk.chunk.api import ChunkParserI
+>     158 from nltk.chunk.util import (ChunkScore, accuracy, tagstr2tree, conllstr2tree,
+>     159                              conlltags2tree, tree2conlltags, tree2conllstr, tree2conlltags,
+> 
+> ~/anaconda3/lib/python3.6/site-packages/nltk/chunk/api.py in <module>()
+>      13 from nltk.parse import ParserI
+>      14 
+> ---> 15 from nltk.chunk.util import ChunkScore
+>      16 
+>      17 class ChunkParserI(ParserI):
+> 
+> ~/anaconda3/lib/python3.6/site-packages/nltk/chunk/util.py in <module>()
+>      11 
+>      12 from nltk.tree import Tree
+> ---> 13 from nltk.tag.mapping import map_tag
+>      14 from nltk.tag.util import str2tuple
+>      15 from nltk.compat import python_2_unicode_compatible
+> 
+> ~/anaconda3/lib/python3.6/site-packages/nltk/tag/__init__.py in <module>()
+>      68 from nltk.tag.api           import TaggerI
+>      69 from nltk.tag.util          import str2tuple, tuple2str, untag
+> ---> 70 from nltk.tag.sequential    import (SequentialBackoffTagger, ContextTagger,
+>      71                                     DefaultTagger, NgramTagger, UnigramTagger,
+>      72                                     BigramTagger, TrigramTagger, AffixTagger,
+> 
+> ~/anaconda3/lib/python3.6/site-packages/nltk/tag/sequential.py in <module>()
+>      24 
+>      25 from nltk.probability import ConditionalFreqDist
+> ---> 26 from nltk.classify import NaiveBayesClassifier
+>      27 from nltk.compat import python_2_unicode_compatible
+>      28 
+> 
+> ~/anaconda3/lib/python3.6/site-packages/nltk/classify/__init__.py in <module>()
+>      96                                   ConditionalExponentialClassifier)
+>      97 from nltk.classify.senna import Senna
+> ---> 98 from nltk.classify.textcat import TextCat
+> 
+> ~/anaconda3/lib/python3.6/site-packages/nltk/classify/textcat.py in <module>()
+>      45 # You may have to ""pip install regx""
+>      46 try:
+> ---> 47     import regex as re
+>      48 except ImportError:
+>      49     re = None
+> 
+> ~/anaconda3/lib/python3.6/site-packages/regex.py in <module>()
+>     681 
+>     682 # We define _pattern_type here after all the support objects have been defined.
+> --> 683 _pattern_type = type(_compile("""", 0, {}))
+>     684 
+>     685 # We'll define an alias for the 'compile' function so that the repr of a
+> 
+> ~/anaconda3/lib/python3.6/site-packages/regex.py in _compile(pattern, flags, kwargs)
+>     434     if _locale_sensitive.get(locale_key, True) or (flags & LOCALE) != 0:
+>     435         # This pattern is, or might be, locale-sensitive.
+> --> 436         pattern_locale = _getlocale()[1]
+>     437     else:
+>     438         # This pattern is definitely not locale-sensitive.
+> 
+> ~/anaconda3/lib/python3.6/locale.py in getlocale(category)
+>     579     if category == LC_ALL and ';' in localename:
+>     580         raise TypeError('category LC_ALL is not supported')
+> --> 581     return _parse_localename(localename)
+>     582 
+>     583 def setlocale(category, locale=None):
+> 
+> ~/anaconda3/lib/python3.6/locale.py in _parse_localename(localename)
+>     488     elif code == 'C':
+>     489         return None, None
+> --> 490     raise ValueError('unknown locale: %s' % localename)
+>     491 
+>     492 def _build_localename(localetuple):
+> ValueError: unknown locale: UTF-8
+
+I have tried to add 
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+but still error. Please help. Thank you.",0,0,0,1,1,0,0,0,0,0
+62,79,https://github.com/sloria/TextBlob/issues/203,203,[],closed,2018-04-08 17:30:58+00:00,0,1,ModuleNotFoundError: No module named '_sqlite3',"ModuleNotFoundError: No module named '_sqlite3' problem solving 
+",0,0,0,1,0,0,0,0,0,0
+63,94,https://github.com/sloria/TextBlob/issues/237,237,[],closed,2018-11-13 16:54:56+00:00,0,5,ModuleNotFoundError: no module named 'textblob',"Here i have a proble import text blob with error message ModuleNotFoundError: No module named 'textblob'
+I'm using this code `from textblob import TextBlob`",0,0,1,1,0,1,0,0,0,0
+64,105,https://github.com/sloria/TextBlob/issues/276,276,[],open,2019-07-11 07:40:31+00:00,0,0,No module named 'xml.etree',"While importing textblob using `from textblob import TextBlob` I get the following error:
+
+```
+ModuleNotFoundError                       Traceback (most recent call last)
+~/Documents/GitHub/python-test/lib/python3.7/site-packages/nltk/internals.py in <module>
+     23 try:
+---> 24     from xml.etree import cElementTree as ElementTree
+     25 except ImportError:
+
+ModuleNotFoundError: No module named 'xml.etree'
+
+During handling of the above exception, another exception occurred:
+
+ModuleNotFoundError                       Traceback (most recent call last)
+<ipython-input-20-3fa94cbd0c01> in <module>
+      1 # Import TextBlob module
+----> 2 from textblob import TextBlob
+
+~/Documents/GitHub/python-test/lib/python3.7/site-packages/textblob/__init__.py in <module>
+      1 import os
+----> 2 from .blob import TextBlob, Word, Sentence, Blobber, WordList
+      3 
+      4 __version__ = '0.15.3'
+      5 __license__ = 'MIT'
+
+~/Documents/GitHub/python-test/lib/python3.7/site-packages/textblob/blob.py in <module>
+     26 from collections import defaultdict
+     27 
+---> 28 import nltk
+     29 
+     30 from textblob.decorators import cached_property, requires_nltk_corpus
+
+~/Documents/GitHub/python-test/lib/python3.7/site-packages/nltk/__init__.py in <module>
+     97 ]
+     98 
+---> 99 from nltk.internals import config_java
+    100 
+    101 # support numpy from pypy
+
+~/Documents/GitHub/python-test/lib/python3.7/site-packages/nltk/internals.py in <module>
+     24     from xml.etree import cElementTree as ElementTree
+     25 except ImportError:
+---> 26     from xml.etree import ElementTree
+     27 
+     28 from six import string_types
+
+ModuleNotFoundError: No module named 'xml.etree'
+```
+
+I am trying to import it in a virtualenv. Thanks",0,0,0,1,0,0,0,0,0,0
+65,117,https://github.com/sloria/TextBlob/issues/296,296,[],closed,2020-01-18 16:13:25+00:00,0,2,HTTPError: HTTP Error 429: Too Many Requests,"I'm trying to increase my data size by converting it to different languages and back to english. This is my code below:
+```
+def translate(comment, language):
+    if hasattr(comment, ""decode""):
+        comment = comment.decode(""utf-8"")
+
+    text = TextBlob(comment)
+    try:
+        text = text.translate(to=language)
+        time.sleep(0.5)
+        text = text.translate(to=""en"")
+        time.sleep(0.5)
+    except NotTranslated:
+        pass
+
+    return str(text)
+def main():
+    
+
+    
+    languages = [""es"", ""de"", ""fr""]
+    
+    comments_list = train[""comment_text""].str.lower().fillna('something').values
+
+    if not os.path.exists(""/content/drive/My Drive/""):
+        os.mkdir(""/content/drive/My Drive/"")
+
+    parallel = Parallel(backend=""threading"", verbose=5)
+    for language in languages:
+        print('Translate comments using ""{0}"" language'.format(language))
+        translated_data = parallel(delayed(translate)(comment, language) for comment in comments_list)
+        train[""comment_text""] = translated_data
+
+        result_path = os.path.join(args.result_path, ""train_"" + language + "".csv"")
+        train.to_csv(result_path, index=False)
+
+
+if __name__ == ""__main__"":
+    main()
+```
+
+But I get the following error:
+
+> HTTPError                                 Traceback (most recent call last)
+> <ipython-input-136-6c9be29ff358> in <module>()
+>      25 
+>      26 if __name__ == ""__main__"":
+> ---> 27     main()
+> 
+> 22 frames
+> /usr/lib/python3.6/urllib/request.py in http_error_default(self, req, fp, code, msg, hdrs)
+>     648 class HTTPDefaultErrorHandler(BaseHandler):
+>     649     def http_error_default(self, req, fp, code, msg, hdrs):
+> --> 650         raise HTTPError(req.full_url, code, msg, hdrs, fp)
+>     651 
+>     652 class HTTPRedirectHandler(BaseHandler):
+> 
+> HTTPError: HTTP Error 429: Too Many Requests
+> > 
+
+Does anyone know how to get around this?",0,0,0,1,0,0,0,0,0,0
+66,7,https://github.com/sloria/TextBlob/issues/105,105,[],open,2015-12-12 20:51:41+00:00,0,0,Finding index of ngram,"Im trying to put together a simple recipe for identifying common ngrams across multiple docs, reporting them using an nltk style concordance output which requires knowing the start and end index of a string that gets mapped onto a particular ngram.
+
+Is there a way of getting this index information back for an ngram?
+
+eg something that might return something like:
+
+```
+b=TextBlob(""The quick, brown fox and the quick, brown dog."")
+b.ngrams(2,offsets=True)
+
+[ (WordList(['The', 'quick']), (0,8)),
+  (WordList(['quick', 'brown']), (4,15)),
+  (WordList(['brown', 'fox']), (11,19)),
+  ...,
+  (WordList(['quick', 'brown']),(29,40)),
+  (WordList(['brown', 'dog']),(36,44))]
+
+b.ngrams(2,offsets=True, compact=True) 
+
+[ (WordList(['The', 'quick']), [(0,8)]),
+  (WordList(['quick', 'brown']), [(4,15), (29,40)]),
+  (WordList(['brown', 'fox']), [(11,19)]),
+  ...,
+  (WordList(['brown', 'dog']),(36,44))]
+```
+
+That way it would be easy enough to display the part of the original text that led to each ngram.
+
+A case insensitive switch for creating ngrams might also be useful?
+",0,0,1,0,0,0,0,0,0,0
+67,11,https://github.com/sloria/TextBlob/issues/109,109,[],open,2016-01-15 20:40:51+00:00,0,1,Tokenizing sentences in quotations,"I love TextBlob, thank you so much for making this awesome Python tool :+1: 
+
+I am wondering if there is a solution to a tokenization issue I'm seeing.  Here's some example code with an excerpt from Game of Thrones to demonstrate the issue:
+
+```
+In [1]: from textblob import TextBlob
+In [2]: text = TextBlob('閳ユ凡e should start back,閳?Gared urged as the woods began to grow dark around them. 閳ユ翻he wildlings are dead.閳?閳ユ窉o the dead frighten you?閳?Ser Waymar Royce asked with just the hint of a smile. Gared did not rise to the bait. He was an old man, past fifty, and he had seen the lordlings come and go. 閳ユ窉ead is dead,閳?he said. 閳ユ凡e have no business with the dead.閳?閳ユ穾re they dead?閳?Royce asked softly.')
+In [3]: text.sentences
+```
+
+And here's the ouput when I call the sentences attribute:
+
+```
+Out[3]: 
+[Sentence(""閳ユ凡e should start back,閳?Gared urged as the woods began to grow dark around them.""),
+ Sentence(""閳ユ翻he wildlings are dead.閳?閳ユ窉o the dead frighten you?閳?Ser Waymar Royce asked with just the hint of a smile.""),
+ Sentence(""Gared did not rise to the bait.""),
+ Sentence(""He was an old man, past fifty, and he had seen the lordlings come and go.""),
+ Sentence(""閳ユ窉ead is dead,閳?he said.""),
+ Sentence(""閳ユ凡e have no business with the dead.閳?閳ユ穾re they dead?閳?Royce asked softly."")]
+```
+
+The issue here is that TextBlob is tokenizing sentences that run together with quotations as a single sentence. The second ""sentence"" above demonstrates this:
+
+```
+Sentence(""閳ユ翻he wildlings are dead.閳?閳ユ窉o the dead frighten you?閳?Ser Waymar Royce asked with just the hint of a smile."")
+```
+
+should instead be:
+
+```
+Sentence(""閳ユ翻he wildlings are dead.閳? 
+Sentence(閳ユ窉o the dead frighten you?閳?Ser Waymar Royce asked with just the hint of a smile."")
+```
+
+The same is the case for the last example sentence I've shown:
+
+```
+Sentence(""閳ユ凡e have no business with the dead.閳?閳ユ穾re they dead?閳?Royce asked softly."")
+```
+
+It seems that TextBlob does not Tokenize a sentence if it appears in quotes.  In other words, `閳ユ凡e have no business with the dead.閳ユ紮 is its own sentence, but TextBlob tokenizes the sentence such that it also includes the phrases that follow: `閳ユ穾re they dead?閳?Royce asked softly.""`
+
+Is there a way to avoid this, that is to force TextBlob to treat an occurrence of `.""` as the end of a sentence?
+",0,0,1,0,0,0,0,0,0,0
+68,21,https://github.com/sloria/TextBlob/issues/123,123,[],closed,2016-04-15 18:54:28+00:00,0,2,Can classifier update() be faster than training from scratch?,"I am building a dataset and am training NaiveBayesClassifier as the dataset grows. Instead of retraining the classifier every time after adding few new entries, I was hoping to use the update() method just to add new entries and retrain the model with them, in order to cut training time when new data added. What I discovered that loading a pickled trained classifier and updating it just with new entries is not faster than re-training it from scratch. Re-reading the docs they do say that update() ""Update the classifier with new training data and re-trains the classifier"", which implies re-training on the entire data set...
+
+Question: is there such thing as incremental re-training, or realistically it is processing the entire dataset _from scratch_, every time I want to update the classifier with new data?
+",0,0,1,0,0,0,0,0,0,0
+69,36,https://github.com/sloria/TextBlob/issues/142,142,[],closed,2016-11-08 17:26:57+00:00,0,3,how to input from csv file for classifier,"I've tried to follow the tutorial for a Naive Bayes classifier (https://textblob.readthedocs.io/en/dev/classifiers.html).  I formatted data files as stated -- each line contains an un-punctuated sentence, then a comma, then a class.  I've tried to read these files using several different csv input packages.  I've tried converting the sentence (only) of each row into a textblog.  I've also tried skipping that step.  I can't seem to convert the rows from the file into the proper format for classifying new records.  The training step goes fine.  However, when I try to classify from a second file (formatted in exactly the same way), I always get ""basic_extractor() takes exactly 2 arguments (1 given)"" .
+
+It would be so nice if someone could post a simple example of how to read and format from a training file, and the same for a testing file, and then show how those values are given to the training and testing phases.
+
+thanks",0,0,1,0,0,0,0,0,0,0
+70,37,https://github.com/sloria/TextBlob/issues/143,143,[],closed,2016-11-12 14:22:30+00:00,0,1,NLTK Error Certificate Issue. ,"```
+MacBook-Air:~ danny$ python -m textblob.download_corpora
+[nltk_data] Error loading brown: <urlopen error [SSL:
+[nltk_data]     CERTIFICATE_VERIFY_FAILED] certificate verify failed
+[nltk_data]     (_ssl.c:581)>
+[nltk_data] Error loading punkt: <urlopen error [SSL:
+[nltk_data]     CERTIFICATE_VERIFY_FAILED] certificate verify failed
+[nltk_data]     (_ssl.c:581)>
+[nltk_data] Error loading wordnet: <urlopen error [SSL:
+[nltk_data]     CERTIFICATE_VERIFY_FAILED] certificate verify failed
+[nltk_data]     (_ssl.c:581)>
+[nltk_data] Error loading averaged_perceptron_tagger: <urlopen error
+[nltk_data]     [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify
+[nltk_data]     failed (_ssl.c:581)>
+[nltk_data] Error loading conll2000: <urlopen error [SSL:
+[nltk_data]     CERTIFICATE_VERIFY_FAILED] certificate verify failed
+[nltk_data]     (_ssl.c:581)>
+[nltk_data] Error loading movie_reviews: <urlopen error [SSL:
+[nltk_data]     CERTIFICATE_VERIFY_FAILED] certificate verify failed
+[nltk_data]     (_ssl.c:581)>
+Finished.
+
+```
+
+Cannot install the nltk dependances to run textblob at all. 
+
+Running on a Macbook Air, OS X Yosemite",0,0,1,0,0,0,0,0,0,0
+71,41,https://github.com/sloria/TextBlob/issues/150,150,[],closed,2017-02-06 08:12:53+00:00,0,0,Angular 2 Charts doesn't work on iOS with Cordova,"I'm currently developing an iOS app with Angular 2. After I wrap the project with cordova, it runs pretty well in browsers and all the charts is able to be displayed. However, once I build it on iOS, all the charts doesn't work anymore. 
+
+I was wondering was it caused by the incompatibility of angular 2 and iOS or any other reason?
+
+Thanks a lot. :) ",0,0,1,0,0,0,0,0,0,0
+72,64,https://github.com/sloria/TextBlob/issues/178,178,[],closed,2017-11-06 04:29:15+00:00,0,0,Regular string that matches RE_SYNSET throws AttributeError,"I encountered this while processing sentiment using TextBlob of some live data scraped from the internet. The string field in question was of the value ""c-17"", which the PatternAnalyzer logic is expecting to be an instance of a Synset, complete with synonyms.
+
+This is incorrect behavior, as it is attempting to access ""synonyms"" on an instance of an actual string. I have fixed this and will open a pull request.",0,0,1,0,0,0,0,0,0,0
+73,70,https://github.com/sloria/TextBlob/issues/189,189,[],open,2018-01-25 03:16:34+00:00,0,0,blob.noun_phrases fails with ConllExtractor when blob is constructed with a str in PY2,"In the [docs for advanced noun phrase chunkers](http://textblob.readthedocs.io/en/dev/advanced_usage.html?highlight=analyzer#noun-phrase-chunkers), `ConllExtractor` is called on a string, like this:
+
+```python
+from textblob.np_extractors import ConllExtractor
+extractor = ConllExtractor()
+blob = TextBlob(""Python is a high-level programming language."", np_extractor=extractor)
+```
+
+However, on Python 2.7, calling `blob.noun_phrases` on this object raises an exception.  The underlying issue is that ConllExtractor depends on the `PatternTagger.tag()` method, which throws an `AttributeError` when given a `str`, as illustrated in this minimal example:
+
+```python
+from textblob.taggers import PatternTagger
+PatternTagger().tag('hi')
+```
+```bash
+Traceback (most recent call last):
+  File ""test.py"", line 2, in <module>
+    PatternTagger().tag('hi')
+  File ""/home/jschnurr/.virtualenvs/btest/local/lib/python2.7/site-packages/textblob/en/taggers.py"", line 23, in tag
+    text = text.raw
+AttributeError: 'str' object has no attribute 'raw'   
+```
+Specifying Unicode works properly:
+```python
+from textblob.taggers import PatternTagger
+PatternTagger().tag(u'hi')
+```
+```bash
+[(u'hi', u'UH')]
+```",0,0,1,0,0,0,0,0,0,0
+74,48,https://github.com/sloria/TextBlob/issues/157,157,[],open,2017-04-01 06:14:19+00:00,0,0,Assign Prior Probabilities to NaiveBayesClassifier train_set(word),"Does anyone know how to assign prior probability to certain words in a train_set for better classification using a NaiveBayesClassifier
+
+For example:
+If i have a sentence/train_set like --> ('I have 10 apples', 'fruits') 
+I want to assign the word 'apples' more probability so that the single word should determine the label as fruits.
+
+",0,1,0,0,0,0,0,0,0,0
+75,63,https://github.com/sloria/TextBlob/issues/176,176,[],open,2017-10-11 19:33:24+00:00,0,5,Memory Error on training a NaiveBayesClassifier,"I tried to train the NaiveBayesClassifier on a set of ~39000 training examples, each is a string with its label.
+eg of a string: 
+""The room was kind   of clean but had a VERY strong smell of dogs. Generally below average but ok   for a overnight stay if you're not too fussy. Would consider staying again if   the price was right. Breakfast was free and just about better than nothing.
+--""
+It seems to have a memory error,  is there anything I can do to resolve it.
+
+Now to the error, I ran the following command which recieved the error:
+`cl = NaiveBayesClassifier(train)`
+---------------------------------------------------------------------------
+```
+MemoryError                               Traceback (most recent call last)
+<ipython-input-4-fd1d192cc4f2> in <module>()
+      1 tick = time.time()
+----> 2 cl = NaiveBayesClassifier(train)
+      3 print time.time()-tick
+
+C:\Users\Carpe\Anaconda3\envs\zam\lib\site-packages\textblob\classifiers.pyc in __init__(self, train_set, feature_extractor, format, **kwargs)
+    204                  feature_extractor=basic_extractor, format=None, **kwargs):
+    205         super(NLTKClassifier, self).__init__(train_set, feature_extractor, format, **kwargs)
+--> 206         self.train_features = [(self.extract_features(d), c) for d, c in self.train_set]
+    207 
+    208     def __repr__(self):
+
+C:\Users\Carpe\Anaconda3\envs\zam\lib\site-packages\textblob\classifiers.pyc in extract_features(self, text)
+    181         # Feature extractor may take one or two arguments
+    182         try:
+--> 183             return self.feature_extractor(text, self._word_set)
+    184         except (TypeError, AttributeError):
+    185             return self.feature_extractor(text)
+
+C:\Users\Carpe\Anaconda3\envs\zam\lib\site-packages\textblob\classifiers.pyc in basic_extractor(document, train_set)
+     95     tokens = _get_document_tokens(document)
+     96     features = dict(((u'contains({0})'.format(word), (word in tokens))
+---> 97                                             for word in word_features))
+     98     return features
+     99 
+
+MemoryError:
+```",0,1,0,0,0,0,0,0,0,0
+96,4,https://github.com/sloria/TextBlob/issues/101,101,[],closed,2015-11-06 14:54:07+00:00,0,1,issue importing text blob,"Hi everyone!
+
+I am trying to import the TextBlob module in my python script through PyCharm (OS X)but nothing I do works. My project interpreter is Anaconda.
+I have been trying to load the module through the 'Project Interpreter' in the Preferences screen, however I cannot find the module to begin with. I tried downloading the module zip file and copy it into <anaconda path>/pkgs/textblob but the module doesn't appear on any of the lists of available modules.
+This is the code I am using : from textblob import TextBlob
+I also tried loading the conda module however I was unsure of how to load the TextBlob module with it.
+Also, I install textblob via PIP into site-packages.
+Please advise.
+",0,0,0,0,0,0,0,0,0,0
+97,8,https://github.com/sloria/TextBlob/issues/106,106,[],closed,2015-12-30 00:05:46+00:00,0,2,memory error performing noun phrases on (small) text,"The following self contained examples causes a **memory error**
+
+Linux (Ubuntu) 4.2.0-22-generic
+Python 2.7.10
+textblob-0.11.0
+
+```
+from textblob import Blobber
+from textblob.en.np_extractors import ConllExtractor
+
+tb = Blobber(np_extractor=ConllExtractor())
+
+text = """"""
+ Marina Abramovic
+ Cabelo 
+ Janet Cardiff
+ Bonnie Collura
+ Minerva Cuevas
+ Tacita Dean
+ Jose Antonio Hernandez-Diez
+ Olafur Eliasson 
+ Arturo Herrera
+ Sharon Lockhart
+ Ken Lum
+ Fabian Marcaccio
+ Paul McCarthy
+ Lee Mingwei
+ Beatriz Milhazes
+ Ernesto Neto
+ Gabriel Orozco
+ Jorge Pardo
+ The Poetics Project, Mike Kelley and Tony Oursler
+ Marjetica Potrc
+ Paul Ramirez-Jonas
+ Karim Rashid
+ Meyer Vaisman
+ Adriana Varejao
+ Andrea Zittel
+""""""
+
+b = tb(text)
+print b.noun_phrases
+
+```
+",0,0,0,0,0,0,0,0,0,0
+98,12,https://github.com/sloria/TextBlob/issues/110,110,[],open,2016-01-15 23:20:28+00:00,0,1,"tb.words and really large json blobs not returning, just hanging","Something is up I have some understood ""crap"" text.  I am using TextBlob to try to make some sense of it where I can, one of the stats I collect about the text is the number of TextBlob words, (len(tb.words)) Sometimes it will just lock my program up. Ideally I'd have a timeout period, or a ""this blob is to big, go away"" Locking up and freezing operations of the program is pretty much the worse case scenario.  
+
+When it does lock, and I keyboard break it, the below traceback is always what I see.  I will try to identify some ""challenged data"" to put in. 
+
+I don't expect this to be able to handle everything, but I do think some graceful options to pull out of situations would be desired and pythonic.  I would be interested in other's thoughts on the topic. 
+
+ File ""./text_analysis.py"", line 336, in <module>
+    main()
+  File ""./text_analysis.py"", line 111, in main
+    wrdcnt = len(tb.words)
+  File ""/usr/lib/python2.7/site-packages/textblob/decorators.py"", line 24, in **get**
+    value = obj.**dict**[self.func.**name**] = self.func(obj)
+  File ""/usr/lib/python2.7/site-packages/textblob/blob.py"", line 611, in words
+    return WordList(word_tokenize(self.raw, include_punc=False))
+  File ""/usr/lib/python2.7/site-packages/textblob/tokenizers.py"", line 72, in word_tokenize
+    for sentence in sent_tokenize(text))
+  File ""/usr/lib/python2.7/site-packages/textblob/base.py"", line 64, in itokenize
+    return (t for t in self.tokenize(text, _args, *_kwargs))
+  File ""/usr/lib/python2.7/site-packages/textblob/decorators.py"", line 35, in decorated
+    return func(_args, *_kwargs)
+  File ""/usr/lib/python2.7/site-packages/textblob/tokenizers.py"", line 57, in tokenize
+    return nltk.tokenize.sent_tokenize(text)
+  File ""/usr/lib/python2.7/site-packages/nltk/tokenize/**init**.py"", line 89, in sent_tokenize
+    return tokenizer.tokenize(text)
+  File ""/usr/lib/python2.7/site-packages/nltk/tokenize/punkt.py"", line 1226, in tokenize
+    return list(self.sentences_from_text(text, realign_boundaries))
+  File ""/usr/lib/python2.7/site-packages/nltk/tokenize/punkt.py"", line 1274, in sentences_from_text
+    return [text[s:e] for s, e in self.span_tokenize(text, realign_boundaries)]
+  File ""/usr/lib/python2.7/site-packages/nltk/tokenize/punkt.py"", line 1265, in span_tokenize
+    return [(sl.start, sl.stop) for sl in slices]
+  File ""/usr/lib/python2.7/site-packages/nltk/tokenize/punkt.py"", line 1304, in _realign_boundaries
+    for sl1, sl2 in _pair_iter(slices):
+  File ""/usr/lib/python2.7/site-packages/nltk/tokenize/punkt.py"", line 310, in _pair_iter
+    prev = next(it)
+  File ""/usr/lib/python2.7/site-packages/nltk/tokenize/punkt.py"", line 1278, in _slices_from_text
+    for match in self._lang_vars.period_context_re().finditer(text):
+",0,0,0,0,0,0,0,0,0,0
+99,14,https://github.com/sloria/TextBlob/issues/112,112,[],closed,2016-02-02 01:38:45+00:00,0,2,Is there a way to include punctuation into a tagged sentence tuple?,"Right now a tagged sentence does not contain punctuation:
+`('Suddenly', u'RB'), ('she', u'PRP'), ('came', u'VBD'), ('upon', u'IN'), ('a', u'DT'), ('little', u'JJ'), ('table', u'NN')`
+
+Is there a way to include punctuation?
+",0,0,0,0,0,0,0,0,0,0
+100,17,https://github.com/sloria/TextBlob/issues/116,116,[],open,2016-02-15 17:37:24+00:00,0,0,new CoNLL corpus training,"TextBlob's website says 
+
+> ...and textblob.np_extractors.ConllExtractor, which uses the CoNLL 2000 corpus to train a tagger.`
+
+Is there currently a plan to update the ConllExtractor, e.g. train it using [conll2012](http://conll.cemantix.org/2012/data.html)?
+",0,0,0,1,0,0,0,0,0,0
+101,19,https://github.com/sloria/TextBlob/issues/119,119,[],closed,2016-02-16 13:53:26+00:00,0,0,Language Detection is consistently returning None,"I am always getting None returned.
+Here is my code:
+`blob = TextBlob(text)`
+`language_id = blob.detect_language()`
+",0,0,0,0,0,0,0,0,0,0
+102,20,https://github.com/sloria/TextBlob/issues/121,121,[],closed,2016-02-27 07:58:08+00:00,0,3,POS-tagging does not work in TextBlob,"I have read on [**textblob_aptagger**](github.com/sloria/textblob-aptagger) page that _""As of TextBlob 0.11.0, TextBlob uses NLTK's averaged perceptron tagger by default. This package is no longer necessary.""_
+
+However if we check it: 
+
+```
+In [1]: import textblob as txt
+In [2]: txt.taggers.
+txt.taggers.BaseTagger txt.taggers.NLTKTagger txt.taggers.PatternTagger txt.taggers.absolute_import
+```
+
+There is no `PerceptronTagger`, unless it is `NLTKTagger`.
+Can you please comment on this? 
+Because now, when I explicitly do not use  **textblob_aptagger** package and attempt to pos-tag my text as:
+
+```
+blob = Blobber()
+parsed_text = blob(text)
+```
+
+The application freezes and text never gets pos-tagged.
+
+_UPDATED:_
+Ah, I found it in nltk, `from nltk.tag.perceptron import PerceptronTagger`
+However when I use it with **textblob**:
+
+```
+from nltk.tag.perceptron import PerceptronTagger
+nltk_tagger = PerceptronTagger()
+blob = Blobber(pos_tagger=nltk_tagger)
+parsed_text = blob(text)
+```
+
+This code freezes the application as well.
+Here is a trace:
+
+```
+Traceback (most recent call last):
+  File ""/usr/lib/python2.7/threading.py"", line 801, in __bootstrap_inner
+    self.run()
+  File ""/usr/lib/python2.7/threading.py"", line 754, in run
+    self.__target(*self.__args, **self.__kwargs)
+  File ""/home/tastyminerals/dev/nn-search2/nn-search2/model.py"", line 143, in process_text
+    blob = Blobber(pos_tagger=nltk_tagger)
+  File ""/usr/lib/python2.7/site-packages/textblob/blob.py"", line 733, in __init__
+    parser, classifier)
+  File ""/usr/lib/python2.7/site-packages/textblob/blob.py"", line 306, in _initialize_models
+    BaseTagger, BaseBlob.pos_tagger)
+  File ""/usr/lib/python2.7/site-packages/textblob/blob.py"", line 290, in _validated_param
+    .format(name=name, cls=base_class_name))
+ValueError: pos_tagger must be an instance of BaseTagger
+```
+",0,0,0,0,0,0,0,0,0,0
+103,22,https://github.com/sloria/TextBlob/issues/124,124,[],closed,2016-04-19 13:53:28+00:00,0,5,Error when importing textblob,"Hey,
+Using windows 10
+I've install textblob using ""py -m pip install textblob"".
+I can import textblob, or from textblob import blob,word
+But i cant: from textblobl import Textblob.
+The error i get is:
+Traceback (most recent call last):
+  File ""<pyshell#5>"", line 1, in <module>
+    from textblob import Textblob
+ImportError: cannot import name 'Textblob'
+
+Thanks.
+",0,0,0,0,0,0,0,0,0,0
+104,23,https://github.com/sloria/TextBlob/issues/125,125,[],closed,2016-05-04 07:24:47+00:00,0,2,Inaccurate result,"So when I want to evaluate ""Thank you for all your hard work"", using the sentiment.polarity method returns a negative value!
+I'm assuming that ""hard"" is the reason for that.
+",0,0,0,0,0,0,0,0,0,0
+105,25,https://github.com/sloria/TextBlob/issues/127,127,[],closed,2016-05-13 04:32:11+00:00,0,1,Import failed TextBlob in hexchat,"hexchat (2.12.0, Fedora 23 x64) crashes when trying to load TextBlob:
+
+try on hexchat:
+
+`/py exec from textblob import TextBlob`
+",0,0,0,0,0,0,0,0,0,0
+106,26,https://github.com/sloria/TextBlob/issues/128,128,[],open,2016-05-16 11:36:17+00:00,0,4,Accuracy of Naive Bayes classifier,"Hi,
+    Does anyone know how to get the accuracy, precision, recall and most informative features of Naive Bayes Classifier which is already trained using movie corpus data.
+
+Thank you
+",0,0,0,0,0,0,0,0,0,0
+107,27,https://github.com/sloria/TextBlob/issues/129,129,"[{'id': 45792776, 'node_id': 'MDU6TGFiZWw0NTc5Mjc3Ng==', 'url': 'https://api.github.com/repos/sloria/TextBlob/labels/enhancement', 'name': 'enhancement', 'color': '84b6eb', 'default': True, 'description': None}]",open,2016-05-18 00:08:49+00:00,0,1,Feature Request: Incorporating syntaxnet,"Thanks all, love the tool. 
+
+Would be interested to see what it can incorporate from syntaxnet:
+
+[http://googleresearch.blogspot.com.au/2016/05/announcing-syntaxnet-worlds-most.html](http://googleresearch.blogspot.com.au/2016/05/announcing-syntaxnet-worlds-most.html)
+",0,0,0,0,0,0,0,0,0,0
+108,28,https://github.com/sloria/TextBlob/issues/130,130,[],open,2016-05-27 01:26:26+00:00,0,1,Sentence Boundary,"Am struggling with sentence boundaries in textblob.  Have put a bunch of examples below where the sentences are incorrectly classified - some of the other text systems do better than textblob, none of them are very good.
+
+What is the best way to look at fixing this (happy to help)? Should I be working on punk / NLTK and then letting the changes filter through to textblob or is this something that can be done at the textblob level? 
+
+Thanks
+
+```
+import textblob as tb
+
+sampletext = """"""Lets confuse the sentence finder in 2016.We will do this by not leaving a gap between sentences in 2016. If I leave a gap its OK in 2016.
+If I have a new line its ok as well
+     """"""
+
+sampleblob = tb.TextBlob(sampletext)
+print (sampleblob.sentences)
+print ('-'*70)
+
+sampletext = """"""Lets confuse the sentence finder with headings
+
+Even If I Capitalise Differently
+
+OR IF I USE ALL CAPS
+
+
+
+
+
+
+
+Or if I leave heaps of lines
+
+It thinks that its all one sentence
+     """"""
+
+sampleblob = tb.TextBlob(sampletext)
+print (sampleblob.sentences)
+print ('-'*70)
+
+
+
+sampletext = """"""Lets see if we can confuse the sentence finder:
+
+     *  with bullets
+
+     * Should be OK if we have a full stop.
+
+     * Or a question mark ?
+
+     * but what if we leave off punctuation
+
+     * That seems to confuse it. Having multiple sentences. In one bullet. Is not too bad.
+     """"""
+
+sampleblob = tb.TextBlob(sampletext)
+print (sampleblob.sentences)
+print ('-'*70)
+
+sampletext = """"""Lets see if we can confuse the sentence finder:
+
+     i)  with bullets
+
+     ii) Should be OK if we have a full stop.
+
+     iii) Or a question mark ?
+
+     iv) but what if we leave off punctuation
+
+     v) That seems to confuse it. Having multiple sentences. In one bullet. Is not too bad.
+     """"""
+
+sampleblob = tb.TextBlob(sampletext)
+print (sampleblob.sentences)
+print ('-'*70)
+
+sampletext = """"""Lets see if we can confuse the sentence finder:
+
+     i.  with bullets
+
+     ii. Should be OK if we have a full stop.
+
+     iii. Or a question mark ?
+
+     iv. but what if we leave off punctuation
+
+     v. That seems to confuse it. Having multiple sentences. In one bullet. Is not too bad.
+     """"""
+
+sampleblob = tb.TextBlob(sampletext)
+print (sampleblob.sentences)
+print ('-'*70)
+
+
+sampletext = """"""Lets see if we can confuse the sentence finder:
+
+     1.  with bullets
+
+     2. Should be OK if we have a full stop.
+
+     3. Or a question mark ?
+
+     4. but what if we leave off punctuation
+
+     5. That seems to confuse it. Having multiple sentences. In one bullet. Is not too bad.
+     """"""
+
+sampleblob = tb.TextBlob(sampletext)
+print (sampleblob.sentences)
+```
+",0,0,0,0,0,0,0,0,0,0
+109,32,https://github.com/sloria/TextBlob/issues/137,137,[],closed,2016-09-01 13:14:47+00:00,0,20,Language Detection Not Working (HTTP Error 503: Service Unavailable),"from textblob import TextBlob
+txt = u""Test Language Detection""
+b = TextBlob(txt)
+b.detect_language()
+
+It is giving ""HTTPError: HTTP Error 503: Service Unavailable""
+
+Python Version: 2.7.6
+TextBlob Version: 0.11.1
+OS: Ubuntu 14.04 LTS & CentOS 6.8
+",0,0,0,0,0,0,0,0,0,0
+110,34,https://github.com/sloria/TextBlob/issues/140,140,[],open,2016-09-30 03:50:26+00:00,0,2,train the classifier with words instead of sentences,"Sir, with due respect, I would like to ask you that instead of training the classifier with sentences, is it possible to do so with words. Like:
+
+train = [
+    ('rest, motion, length, mass, time, space, inertia, moment, momentum, impulse, torque','physics'),
+     ('heart, liver, kidney, germ, disease, brain, stomach, leg, palpitation, cardiac, blood','physics')
+]
+",0,0,0,0,0,0,0,0,0,0
+111,35,https://github.com/sloria/TextBlob/issues/141,141,[],closed,2016-11-08 12:58:43+00:00,0,1,HTTP Error 503: Service Unavailable,I am using this service(TextBlob version 0.11.1) an year ago. But facing 503 error code in response from last few days. Please tell either the service is down or my IP address is blocked or the free version of this service is no longer available. Thanks  ,0,0,0,0,0,0,0,0,0,0
+112,38,https://github.com/sloria/TextBlob/issues/144,144,[],closed,2016-12-07 19:07:03+00:00,0,2,Saving Naive Bayes Classifier,"Hi!
+
+Does anyone know if there is a way to save a Naive Bayes Classifier (like to a file)? I have a static training set, so it would be great if I didn't have to recreate the same classifier every time the program runs.
+
+Thanks!  ",0,0,0,0,0,0,0,0,0,0
+113,39,https://github.com/sloria/TextBlob/issues/145,145,[],closed,2016-12-16 09:00:36+00:00,0,1,Stemming within textblob,"Hello,
+
+I'm new to using this package so I'm sorry if I'm missing something obvious here.
+
+From what I can see, textblob is able to do lemmitization using NLTK's lemmatizer but it is not able to do the same with stemming.
+
+There are times when stemming is the preferred way to go over lemmitization.  Is there a reason this was not included or would this be a valid feature request?",0,0,1,1,0,0,0,0,0,0
+114,44,https://github.com/sloria/TextBlob/issues/153,153,[],closed,2017-02-19 07:28:07+00:00,0,3,How to remove stop words in TextBlobs?,"I am doing text classification using TextBlob. I am giving the training dataset through a JSON file. But I'm finding difficulty in removing stop words. Please help.
+[tb.txt](https://github.com/sloria/TextBlob/files/785642/tb.txt)
+
+",0,0,0,0,0,0,0,0,0,0
+115,45,https://github.com/sloria/TextBlob/issues/154,154,[],closed,2017-02-22 07:40:22+00:00,0,1,How to extract the named entity from the text,"I need to find the named entity or entity from the text. But i did not find anything related in the docs.
+I got a something from the textblob library
+
+`
+from polyglot.text import Text
+blob = """"""The Israeli Prime Minister Benjamin Netanyahu has warned that Iran poses a ""threat to the entire world"".""""""
+text = Text(blob)
+
+text = Text(blob, hint_language_code='en')
+
+print text.entities
+[I-ORG([u'Israeli']), I-PER([u'Benjamin', u'Netanyahu']), I-LOC([u'Iran'])]
+`
+This is using the polyglot. Is any way to find entites using the textblob library ?",0,0,0,0,0,0,0,0,0,0
+116,47,https://github.com/sloria/TextBlob/issues/156,156,"[{'id': 45792776, 'node_id': 'MDU6TGFiZWw0NTc5Mjc3Ng==', 'url': 'https://api.github.com/repos/sloria/TextBlob/labels/enhancement', 'name': 'enhancement', 'color': '84b6eb', 'default': True, 'description': None}, {'id': 58187449, 'node_id': 'MDU6TGFiZWw1ODE4NzQ0OQ==', 'url': 'https://api.github.com/repos/sloria/TextBlob/labels/please-help', 'name': 'please-help', 'color': '009800', 'default': False, 'description': None}]",closed,2017-03-08 10:00:35+00:00,0,1,Trukish Language Support,Is this library compatible with turkish or how it can be applied on a turkish text?,0,0,0,0,0,0,0,0,0,0
+117,49,https://github.com/sloria/TextBlob/issues/158,158,[],open,2017-04-20 16:04:32+00:00,0,3,Preserving contractions,"Is there any to preserve contractions when using TextBlob?
+
+For example I'd like to do something like:
+
+```
+text = 'I don't like it.""
+TextBlob.words
+```
+
+and have `['I', ""don't"", 'like', 'it']` instead of `['I', 'do', ""n't"", 'like', 'it]`
+
+I'm not aware of any tokenisers that will do this and I don't feel anything I can hack together will be good enough.",0,0,0,0,0,0,0,0,0,0
+118,50,https://github.com/sloria/TextBlob/issues/159,159,[],open,2017-04-28 10:38:43+00:00,0,0,Can TextBlob work with arbitrary NLTK corpus ?,I am using NLTK with NaiveBayes analyzer. This uses Movie corpus. Can i make it use some other NLTK corpus ?,0,0,0,0,0,0,0,1,0,0
+119,51,https://github.com/sloria/TextBlob/issues/160,160,[],closed,2017-04-28 16:17:49+00:00,0,9,MissingCorpusError while lemmatize,"I tried to run some code with lemmatization. 
+It was not expected that pos_tags are not ready to be used for lemmatization.
+Here is my code:
+```
+text = ""They told us to duck""
+
+blob = TextBlob(text)
+
+for word, pos in blob.pos_tags:
+    w = Word(word)
+    print(""{w}: {p}"".format(w=w.lemmatize(pos), p=pos))
+```
+
+So, I catch an error: 
+> File ""/usr/local/lib/python3.6/site-packages/textblob/decorators.py"", line 38, in decorated
+>     raise MissingCorpusError()
+> 
+> MissingCorpusError: 
+> Looks like you are missing some required data for this feature.
+> 
+> To download the necessary data, simply run
+> 
+>     python -m textblob.download_corpora
+> 
+> or use the NLTK downloader to download the missing data: http://nltk.org/data.html
+> If this doesn't fix the problem, file an issue at https://github.com/sloria/TextBlob/issues.
+
+I don't understand how this thing are connected.
+But solution is to convert tags (ps) to appropriate wordnet format here - ```w.lemmatize(ps)```
+Here is example on [SO](http://stackoverflow.com/a/25544239)
+",0,0,0,0,0,0,0,0,0,0
+120,54,https://github.com/sloria/TextBlob/issues/165,165,[],closed,2017-05-24 13:06:19+00:00,0,1,Bio NLP extension for textblob,Any bioNLP extension and corpus to work with TextBlob?,0,0,1,0,0,0,0,1,0,0
+121,55,https://github.com/sloria/TextBlob/issues/166,166,[],closed,2017-05-31 15:51:44+00:00,0,0,TextBlob object is not using explicitly specified tokenizer when tagging method is called,"I was trying to use TextBlob object with explicitly passed WordPunctTokenizer from nltk. Tokens property is returned as expected. Yet when calling tags or pos_tags properties, the object falls back to using a simple WordTokenizer before tagging as specified in NLTKTagger code:
+https://github.com/sloria/TextBlob/blob/dev/textblob/en/taggers.py#L33",0,0,0,0,0,0,0,0,0,0
+122,56,https://github.com/sloria/TextBlob/issues/168,168,[],open,2017-06-06 08:07:06+00:00,0,0,Performance issue in 'NLTKClassifier' constructor,"When a NLTKClassifier is initialized and `basic_extractor` used as the default extractor,the `word_features` in the same training data set will always be re-extracted in the loop of `self.train_features = [(self.extract_features(d), c) for d, c in self.train_set] ` ",0,0,0,0,0,0,0,0,0,0
+123,57,https://github.com/sloria/TextBlob/issues/169,169,[],open,2017-06-22 09:38:38+00:00,0,1,Persisting a classifier including its model,"Hi,
+
+in my scenario I'd like to use an existing model inside a textblob classifier potentially from many places.
+
+How can i persist an existing classifier?
+
+Kind regards,
+
+Daniel",0,0,0,0,0,0,0,0,0,0
+124,58,https://github.com/sloria/TextBlob/issues/171,171,[],open,2017-07-24 09:29:30+00:00,0,10,Translation API returned the input string unchanged for some languages,"Hi, 
+
+I am facing a problem in with language translation. When I give 1000 Mandarin comments it translates it to English. When I give 200 mixed content of English, German,  Spanish and Mandarin it gives me  ""raise NotTranslated('Translation API returned the input string unchanged""
+
+Can any one please help me on this.",0,0,0,0,0,0,0,0,0,0
+125,61,https://github.com/sloria/TextBlob/issues/174,174,[],closed,2017-09-26 10:34:41+00:00,0,1,How to save training data and use it again?,How do i save the training model and use it again  for NaiveByes classification ?,0,0,0,0,0,0,0,0,0,0
+126,62,https://github.com/sloria/TextBlob/issues/175,175,[],closed,2017-09-26 13:25:06+00:00,0,5,classifier size is too large ,"Hi , I am saving classifier using pickle . and loading the pickle while classifying new messages 
+Pickle loading takes a lot of time to load as the size is too large (148 mb) for only 1000 messages for training
+here is the sample code 
+
+ ```
+if os.path.isfile('textclassifier.pickle'):
+     print('in')
+     f=  open('textclassifier.pickle', 'rb')
+     cl = pickle.load(f)
+     f.close()
+else:
+     print('out')
+     with open('train.csv', 'r') as fp:
+        cl = NaiveBayesClassifier(fp, format=""csv"")
+     f = open('textclassifier.pickle', 'wb')
+     pickle.dump(cl,f)
+     f.close()
+```",0,0,0,0,0,0,0,0,0,0
+127,65,https://github.com/sloria/TextBlob/issues/180,180,[],open,2017-11-08 13:06:13+00:00,0,3,Analysing big  text reviews  is too slow ,"Someone help me on this 
+# tr = is the CSV data with 38932 lines
+# I am trying to analyze sentiment in those reviews but it's taking almost 38 hrs in I7  6Gb Ram, hp envy 
+# even I tried to spiting  the data and threading, this also didn't work
+
+`c = [ ]
+print('underthe training')
+v = 0
+
+for i in tr :
+    
+    temp = re.sub('[^\w\s'+'.'+']', '', i)     #this for cleaning unwanted char
+     
+    #I am facing the probelm here 
+    hol = TextBlob(temp, analyzer = NaiveBayesAnalyzer()) 
+    
+
+ 
+    t = [temp, hol.sentiment.classification]
+    c.append(t)
+    v=v+1
+    print(v)`
+@sloria 
+@textblob",0,0,0,0,0,0,0,0,0,0
+128,66,https://github.com/sloria/TextBlob/issues/181,181,[],open,2017-11-28 20:50:27+00:00,0,0,"""n't"" is not recognized as a negation when using unicode strings","Sentimental analysis on English text in python3 does not considered `n't` suffix as negation. The problem lies in [_text.py:273-274](https://github.com/sloria/TextBlob/blob/7763b312da1e8d8e106db0b1a73de5d2b4e71e6a/textblob/_text.py#L273) where non-unicode quotes are surrounded with spaces and split `n't` into `n ' t`, what makes further analysis discard those characters as meaningless.   
+I'm not providing a pull request for that issue because I don't know whether:
+- it is assumed that English sentences should be passes as non-unicode strings and must be converted (then whole unicode characters handling is not needed), or
+- lines 273 and 274 are not needed, or
+- there should be another characters in those lines, or
+- spaced should be added around ascii quotes but `n't` should have special handling. 
+ 
+I provide full test case below.
+
+
+Test case:
+`from textblob import TextBlob`
+`assert(all(map((lambda c: ord(c) <= 0x7F), ""It isn't great"")))`
+`w1 = TextBlob(""It is great "")`
+`w2 = TextBlob(""It isn't great "")`
+`w3 = TextBlob(""It is not great "")`
+`print(w1.sentiment)`
+`print(w2.sentiment)`
+`print(w3.sentiment)`
+
+Output:
+`Sentiment(polarity=0.8, subjectivity=0.75)`
+`Sentiment(polarity=0.8, subjectivity=0.75)`
+`Sentiment(polarity=-0.4, subjectivity=0.75)`
+
+
+Expected output:
+`Sentiment(polarity=0.8, subjectivity=0.75)`
+`Sentiment(polarity=-0.4, subjectivity=0.75)`
+`Sentiment(polarity=-0.4, subjectivity=0.75)`
+
+",0,0,0,0,0,0,0,0,0,0
+129,72,https://github.com/sloria/TextBlob/issues/191,191,[],open,2018-01-28 05:32:30+00:00,0,2,evaluating speed / memory per annotator ,"Hey there, 
+
+I need to evaluate the (max) memory usage and annotation speed, for the following annotators: 
+- Tokenization into words 
+- Tokenization into sentences 
+- Part-of-speech tagging
+- Lemmatization 
+
+(And if these exist: 
+- Named Entity Recognition 
+- Shallow Parsing )
+
+Given current examples, it seems that the code processes everything at once. Is it possible to make things lazy? (i.e. things get annotated / loaded, only if they are requested). ",0,0,0,0,0,0,0,0,0,0
+130,73,https://github.com/sloria/TextBlob/issues/193,193,[],closed,2018-02-06 14:12:44+00:00,0,1,"Word(""Address"").singularize()","The result would be `addres`?
+
+But it seems that [pattern](https://github.com/clips/pattern) and [inflect](https://github.com/pwdyson/inflect.py) get the same result.
+
+Is it the limitation of NLP? (I am not familiar with it.)
+",0,0,0,0,0,0,0,0,0,0
+131,76,https://github.com/sloria/TextBlob/issues/200,200,[],closed,2018-03-25 13:30:31+00:00,0,0,Issues with CSV files,"http://textblob.readthedocs.io/en/dev/classifiers.html#classifying-textblobs
+
+I was following this documentation and trying to do a program:
+
+```
+from textblob import TextBlob
+from textblob.classifiers import NaiveBayesClassifier
+
+with open('spam_ham.csv','r') as data:
+    cl = NaiveBayesClassifier(data)
+
+    text = input(""Enter the text to classify"")
+    res = cl.classify(text)
+    print(res)
+    res_percentage = cl.classify(text)
+    print(""\n"")
+    print(round(res_percentage(""ham""),2) )
+```
+But it throws a wierd error .Can you help?
+
+Traceback (most recent call last):
+  File ""tasker.py"", line 26, in <module>
+    cl = NaiveBayesClassifier(data)
+  File ""/home/kurianbenoy/.local/share/virtualenvs/spamfilter-FctIeh0_/lib/python3.5/site-packages/textblob/classifiers.py"", line 205, in __init__
+    super(NLTKClassifier, self).__init__(train_set, feature_extractor, format, **kwargs)
+  File ""/home/kurianbenoy/.local/share/virtualenvs/spamfilter-FctIeh0_/lib/python3.5/site-packages/textblob/classifiers.py"", line 139, in __init__
+    self._word_set = _get_words_from_dataset(self.train_set)  # Keep a hidden set of unique words.
+  File ""/home/kurianbenoy/.local/share/virtualenvs/spamfilter-FctIeh0_/lib/python3.5/site-packages/textblob/classifiers.py"", line 63, in _get_words_from_dataset
+    return set(all_words)
+  File ""/home/kurianbenoy/.local/share/virtualenvs/spamfilter-FctIeh0_/lib/python3.5/site-packages/textblob/classifiers.py"", line 62, in <genexpr>
+    all_words = chain.from_iterable(tokenize(words) for words, _ in dataset)
+ValueError: not enough values to unpack (expected 2, got 0)
+
+
+",0,0,0,0,0,0,0,0,0,0
+132,77,https://github.com/sloria/TextBlob/issues/201,201,[],open,2018-03-27 04:56:53+00:00,0,1,Lemmatize error: MissingCorpusError,"I have a list of (word, pos_tag) pairs and would like to lemmatize the word using textblob.lemmatize.
+
+  ```
+  wds=[
+         [('This', ''), ('is', 'v'), ('the', ''), ('first', 'a'), ('sentences', 'n')],
+         [('This', ''), ('is', 'v'), ('the', ''), ('second', 'a'), ('one', '')]
+        ]
+
+    lem_wds_2=[[Word(wd).lemmatize(pos) for wd, pos in item] for item in wds]
+```
+Above code raise following error:
+```
+MissingCorpusError: 
+Looks like you are missing some required data for this feature.
+
+To download the necessary data, simply run
+
+    python -m textblob.download_corpora
+
+or use the NLTK downloader to download the missing data: http://nltk.org/data.html
+If this doesn't fix the problem, file an issue at https://github.com/sloria/TextBlob/issues.
+```",0,0,0,0,0,0,0,0,0,0
+133,78,https://github.com/sloria/TextBlob/issues/202,202,[],closed,2018-04-04 17:28:23+00:00,0,1,Portuguese Language Support,"I'd like to analyze the sentiment in brazilian tweets. TextBlob has anyone method to analyze direct in Portuguese or I need to translate?
+
+In this moment, I'm doing with this code:
+
+def analize_sentiment(tweet):
+    analysis = TextBlob(tweet)
+    if analysis.detect_language() != 'en':
+        analysis = TextBlob(str(analysis.translate(to='en')))
+        return analysis.sentiment.polarity
+    else:
+        return analysis.sentiment.polarity
+
+Thanks",0,0,0,0,0,0,0,0,0,0
+134,80,https://github.com/sloria/TextBlob/issues/204,204,[],open,2018-04-13 02:42:59+00:00,0,1,Expected string or bytes-like object,"there is a strange problem occurs that when I run the below code:
+ 
+from textblob import TextBlob as tb
+from textblob_aptagger import PerceptronTagger
+
+tags = tb(content, pos_tagger=self.ap_tagger).tags
+
+the ""content""  is extracted from a text file, It will return the Expected string or bytes-like object error, and my text file has 10 lines, 8 line will return this error, I also checked the error and I have found the ""content"" transform the TextBlob.textblob.sentence Object.",0,0,0,0,0,0,0,0,0,0
+135,81,https://github.com/sloria/TextBlob/issues/205,205,[],open,2018-04-17 06:09:03+00:00,0,1,how to train large dataset in textblob,"I have a data set that contains 10,000 reviews and I put into the train data array with the proper classification. 
+When I am trying to run NaiveBayesClassifier on this data set then it took more than 12GB RAM memory to generate the classifier model. So, here my question is for this such large data-set is there any best way to train the data? Sample source code is given below:
+
+content = []
+with open('Reviews.txt') as f: 
+        lines = f.readlines()
+for line in lines: 
+    line = line[:-1]
+    content.append((line, 'neg')) 
+
+cl = NaiveBayesClassifier(content)
+blob = TextBlob(""The beer is good. But the hangover is horrible."", classifier=cl)
+print(blob.classify())
+
+Thanks in advance.
+
+Nahida
+
+",0,0,1,0,0,0,0,0,0,0
+136,85,https://github.com/sloria/TextBlob/issues/212,212,[],open,2018-06-05 17:51:57+00:00,0,1,Is it possible to extract custom entity ?,"I am working with a chatbot application. i would like to extract custom entity ( Slot / Entity )
+custom entity from user's input.
+For ex:  we can define a custom entity as Car Type. 
+If user says "" I own a Mercedes Benz car"" . The machine will get Car Type as Mercedes Benz. And If user says ""I own a car"" , machine can validate that the ""car type"" is missing.
+
+",0,0,0,0,0,0,0,0,0,0
+137,86,https://github.com/sloria/TextBlob/issues/213,213,[],closed,2018-06-13 14:44:06+00:00,0,3,MemoryError,"I have trained my model using textblob with almost 2000 of news headlines. I got this error:
+MemoryError
+Please help to solve this problem.",0,0,0,0,0,0,0,0,0,0
+138,93,https://github.com/sloria/TextBlob/issues/232,232,[],closed,2018-10-11 06:11:32+00:00,0,0,quickstart.rst doctest is failing because of updated translations,"It looks like the another failing translation test needs to be updated again. 
+
+Failing test:
+
+```
+File ""quickstart.rst"", line 218, in default
+Failed example:
+    en_blob.translate(to='es')
+Expected:
+    TextBlob(""Simple es mejor que complejo."")
+Got:
+    TextBlob(""Lo simple es mejor que lo complejo."")
+```
+Code in question:
+
+```
+>>> en_blob = TextBlob(u'Simple is better than complex.')
+>>> en_blob.translate(to='es')
+TextBlob(""Simple es mejor que complejo."")
+```
+The [current Google Translate result](https://translate.google.com/#auto/es/Simple%20is%20better%20than%20complex.) for the query is ""Lo simple es mejor que lo complejo.""
+![temp](https://user-images.githubusercontent.com/6425402/46783593-ae5e7780-ccdf-11e8-97ca-58b841a5e744.png)",0,0,0,0,0,0,0,0,0,0
+139,96,https://github.com/sloria/TextBlob/issues/239,239,[],closed,2018-12-12 09:38:18+00:00,0,1,URLError: <urlopen error [Errno 101] Network is unreachable>,URLError: <urlopen error [Errno 101] Network is unreachable>,0,0,0,0,0,0,0,0,0,0
+140,97,https://github.com/sloria/TextBlob/issues/240,240,[],closed,2018-12-13 13:54:29+00:00,0,3,No module named 'textblob',"Hi there,
+I am a starter of Python and I would like to use 'textblob'. I am a MacOS High Sierra user.
+What I tried is to install textblob on a new anaconda environment  by `conda install -c conda-forge textblob`  and `conda install -c conda-forge/label/gcc7 textblob`. It gets installed and then I check on the conda list and textblob is there. However, when I am running `from textblob import TextBlob` on Python I get an error:  **No module named 'textblob'**
+How can I resolve this? Thank you in advance",0,0,1,0,0,1,0,0,1,0
+141,101,https://github.com/sloria/TextBlob/issues/267,267,[],open,2019-05-22 17:08:34+00:00,0,0,Center word with negative polarity,"Hello,
+
+Why does the word have negative polarity. ? ",0,0,0,0,0,0,0,0,0,0
+142,103,https://github.com/sloria/TextBlob/issues/271,271,[],open,2019-06-17 06:47:42+00:00,0,1,Implement progress bar when training classifier,I am training both a Naive Bayes Classifier as well as a Decision Tree classifier using TextBlob and they take a few minutes to train. I think it would be quite informative to implement a progress bar (e.g. using tqdm) so that the developer can keep track of the model being trained.,0,0,0,0,0,0,0,0,0,0
+143,106,https://github.com/sloria/TextBlob/issues/277,277,[],open,2019-07-17 05:36:36+00:00,0,1,repr() and str() still fails on WordList slices in Python 3,"Same issue as linked here: https://github.com/sloria/TextBlob/issues/52 
+
+When trying to convert a Wordlist back into string format, I got this error:
+```
+RecursionError                            Traceback (most recent call last)
+/srv/app/venv/lib/python3.6/site-packages/IPython/core/formatters.py in __call__(self, obj)
+    700                 type_pprinters=self.type_printers,
+    701                 deferred_pprinters=self.deferred_printers)
+--> 702             printer.pretty(obj)
+    703             printer.flush()
+    704             return stream.getvalue()
+
+/srv/app/venv/lib/python3.6/site-packages/IPython/lib/pretty.py in pretty(self, obj)
+    383                 if cls in self.type_pprinters:
+    384                     # printer registered in self.type_pprinters
+--> 385                     return self.type_pprinters[cls](obj, self, cycle)
+    386                 else:
+    387                     # deferred printer
+
+/srv/app/venv/lib/python3.6/site-packages/IPython/lib/pretty.py in inner(obj, p, cycle)
+    561                 p.text(',')
+    562                 p.breakable()
+--> 563             p.pretty(x)
+    564         if len(obj) == 1 and type(obj) is tuple:
+    565             # Special case for 1-item tuples.
+
+/srv/app/venv/lib/python3.6/site-packages/IPython/lib/pretty.py in pretty(self, obj)
+    400                         if cls is not object \
+    401                                 and callable(cls.__dict__.get('__repr__')):
+--> 402                             return _repr_pprint(obj, self, cycle)
+    403 
+    404             return _default_pprint(obj, self, cycle)
+
+/srv/app/venv/lib/python3.6/site-packages/IPython/lib/pretty.py in _repr_pprint(obj, p, cycle)
+    695     """"""A pprint that just redirects to the normal repr function.""""""
+    696     # Find newlines and replace them with p.break_()
+--> 697     output = repr(obj)
+    698     for idx,output_line in enumerate(output.splitlines()):
+    699         if idx:
+
+/srv/app/venv/lib/python3.6/site-packages/textblob/blob.py in __repr__(self)
+    225         """"""Returns a string representation for debugging.""""""
+    226         class_name = self.__class__.__name__
+--> 227         return '{cls}({lst})'.format(cls=class_name, lst=super(WordList, self).__repr__())
+    228 
+    229     def __getitem__(self, key):
+
+/srv/app/venv/lib/python3.6/site-packages/textblob/blob.py in __repr__(self)
+     79 
+     80     def __repr__(self):
+---> 81         return repr(self.string)
+     82 
+     83     def __str__(self):
+
+/srv/app/venv/lib/python3.6/site-packages/textblob/blob.py in __repr__(self)
+     79 
+     80     def __repr__(self):
+---> 81         return repr(self.string)
+     82 
+     83     def __str__(self):
+...
+RecursionError: maximum recursion depth exceeded while getting the repr of an object
+```",0,0,0,0,0,0,0,0,0,0
+144,107,https://github.com/sloria/TextBlob/issues/278,278,[],open,2019-07-25 14:51:25+00:00,0,0,TextBlob not recognizing simple noun via noun_phrases attribute,"I have a strange issue for the following code, which I am running in 
+
+```python
+from textblob import TextBlob
+text = 'Today was a beautiful day. Tomorrow looks like bad weather.'
+blob = TextBlob(text)
+blob.noun_phrases
+```
+
+Output: 
+`WordList(['beautiful day', 'tomorrow', 'bad weather'])`
+
+`noun_phrases` did not include ""today"" in the `WordList`. If I change ""today"" to ""yesterday"" then ""yesterday"" is included in the result. It appears `TextBlob` can't recognize ""today"" as a noun. 
+",0,0,0,0,0,0,0,0,0,0
+145,108,https://github.com/sloria/TextBlob/issues/279,279,[],open,2019-07-25 15:03:40+00:00,0,0,TextBlob word counting parses curly single quote as a word,"I am doing an example for a live training seminar in which I use the plain text version of the play Romeo and Juliet from Project Gutenberg to display the top 20 words in the text.
+
+There are many curly apostrophes (`閳ユ獋)--867 of them to be exact. TextBlob splits words containing them, such as `Romeo閳ユ獨` and counts the apostrophes (`閳ユ獋) as a word.
+
+I am assuming this is a bug, but just wondering if I am doing something wrong. TextBlob does not do this for straight single-quote characters",0,0,0,0,0,0,0,0,0,0
+146,109,https://github.com/sloria/TextBlob/issues/281,281,[],open,2019-08-16 13:22:08+00:00,0,0,Sigularize and Lemmatize could use some error handling,"I have a some text `text = 'This is some of my long text that goes on ....'`. I want to get all the words `lemmatized` and in their singular form.
+
+As seen in other errors like #274 , this can happen when a word is already in its base or singular form, e.g. `your ---> ymy` and `this ---> thi`, etc. 
+
+Ideally:
+
+```python
+TextBlob(text.lower()).words.lemmatize().singularize()
+```
+would achieve this without issue. 
+Looking at [word list](https://textblob.readthedocs.io/en/dev/api_reference.html#textblob.blob.WordList) and more importantly [`Word`](https://textblob.readthedocs.io/en/dev/api_reference.html#textblob.blob.Word) there are no methods like `is_lemma` or `is_singular` which would be helpful for your library to call prior to trying to apply these operations.",0,0,0,0,0,0,0,0,0,0
+147,111,https://github.com/sloria/TextBlob/issues/284,284,[],closed,2019-09-25 09:08:18+00:00,0,1,Impossible to train large data sets (Memory Error),"I was trying to implement twitter sentiment analysis using TextBlob NaiveBayesClassifier. My training data set consists of around 30k datas. While training the data set, I encounter Memory Error. Is there any way to overcome that?",0,0,0,0,0,0,0,0,0,0
+148,112,https://github.com/sloria/TextBlob/issues/285,285,[],open,2019-10-12 06:55:25+00:00,0,2,TweetTokenizer in constructor raises ValueError,"Despite the documentation [here](https://textblob.readthedocs.io/en/dev/advanced_usage.html#tokenizers) stating:
+> You can use other tokenizers, such as those provided by NLTK, by passing them into the TextBlob constructor then accessing the tokens property.
+
+This fails:
+```
+from textblob import TextBlob
+from nltk.tokenize import TweetTokenizer
+
+blob = TextBlob(""I don't work!"", tokenizer=TweetTokenizer())  # Raises ValueError
+```
+
+However this works fine:
+```
+blob = TextBlob(""I do work!"")
+blob.tokenize(TweetTokenizer())
+# ==> [""I"", ""do"", ""work"", ""!""]
+``` 
+
+Demo of issue: https://repl.it/repls/SplendidVirtualModel",0,0,0,0,0,0,0,0,0,0
+149,113,https://github.com/sloria/TextBlob/issues/286,286,[],open,2019-10-13 18:52:20+00:00,0,0,"Feature: Could it be a much better way to analyze the text, with better Performance?","Could it be a much better way to analyze the text, with better Performance?
+
+A few days ago I suggested to a library called 'spaCy' to implement this functionality, however, they didn't even stop for a moment.
+
+Their Performace is bad, however, they are not using the ""re"" module that  includes many useful searching/parsing methods
+
+the idea is to create a function that yields a dictionary python object.
+
+The object includes all the attributes of the specific token and can be found using specific index.
+
+For Example:
+```
+text = 'Hello World'
+
+blob = load(text)
+for tok in blob
+    print(blob)
+
+>>> {(0, 5): {'name': 'Hello', 'head': '', 'pos': ''}}
+>>> {(6, 11): {'name': 'World', 'head': '', 'pos': ''}}
+```
+and it gets more interesting... any time the user requests to get the 'pos' attribute or 'head', the program would do the calculation, only for the specific token then add it to the dictionary, so it will save lots of time.
+```
+tok[(0,5)]['pos']
+--> adds the 'pos' attribute of the specific token in key indexes (0,5) 
+to the 'pos' filed value.
+```
+
+By Tamir Globus",0,0,0,0,0,0,0,0,0,0
+150,116,https://github.com/sloria/TextBlob/issues/295,295,[],open,2020-01-08 12:12:37+00:00,0,0,Emojis support?,"Hello!
+
+Does this library support or has any plan to support [UNICODE emojis](https://en.wikipedia.org/wiki/Emoticons_(Unicode_block)) in text?",0,0,0,0,0,0,0,0,0,0
+151,118,https://github.com/sloria/TextBlob/issues/298,298,[],open,2020-02-06 03:55:10+00:00,0,0,"incorrect correction for capitalized ""Four"" and ""We""","`'0.15.3'`
+```python
+from textblob import TextBlob
+
+text = 'Four years ago, we started four projects. We like them.'
+
+blob = TextBlob(text)
+blob.correct()
+```
+```
+TextBlob(""Your years ago, we started four projects. He like them."")
+```
+For some reasons, ""Four"" was changed to ""Your"" and ""We"" was changed to ""He"".",0,0,0,0,0,0,0,0,0,0
+152,123,https://github.com/sloria/TextBlob/issues/316,316,[],open,2020-04-19 15:24:42+00:00,0,0,TextBlob doesn't use specified tokenizer for words property,"[The documentation specifies](https://textblob.readthedocs.io/en/dev/advanced_usage.html#tokenizers):
+
+> The words and sentences properties are helpers that use the textblob.tokenizers.WordTokenizer and textblob.tokenizers.SentenceTokenizer classes, respectively.
+>
+> You can use other tokenizers, such as those provided by NLTK, by passing them into the TextBlob constructor then accessing the tokens property.
+
+While that is true for the `tokens` property, currently it is not for the `words` property, since that always uses the default `textblob.tokenizers.word_tokenize`:
+
+https://github.com/sloria/TextBlob/blob/e6cd9791ae42e37b5a2132676f9ca69340e8d8c0/textblob/blob.py#L381-L389
+
+I don't know if this is a bug or a documentation issue; I can make a PR in either case.",0,0,0,0,0,0,0,0,0,0
+153,125,https://github.com/sloria/TextBlob/issues/328,328,[],closed,2020-06-06 14:19:42+00:00,0,0,Broken link,"The link to `pattern` is broken in the README, maybe send people [here](https://github.com/clips/pattern)?",0,0,0,0,0,0,0,0,0,0
+154,127,https://github.com/sloria/TextBlob/issues/334,334,[],open,2020-06-27 19:47:53+00:00,0,1,TextBlob ngrams removes some symbols,"```python
+TextBlob('c# c++ r').ngrams(2)
+# [WordList(['c', 'c']), WordList(['c', 'r'])]
+```",0,0,0,0,0,0,0,0,0,0
+198,131,https://github.com/sloria/TextBlob/issues/342,342,[],open,2020-08-11 13:53:51+00:00,0,1,Is there a simple way to list all latin language codes ?,"I am writing a script that needs to use one font or another depending on the language detected.
+
+What I want to do is simple : If not Latin, use the NOTO font. Can I do this quick via some method ? 
+
+Alternatively, can I list all latin languages defined in TextBlob so I can say if not in list of lang codes, use NOTO ? 
+
+Thanks",0,0,0,0,0,0,0,0,0,0
+199,133,https://github.com/sloria/TextBlob/issues/345,345,[],open,2020-09-14 17:21:24+00:00,0,0,Tokenize Multiple Emojis,"The current tokenizer fails to tokenize multiple emojis if they aren't space-separated. For example:
+```
+sentence = TextBlob(""Emoji 棣冩 is a new way of expressing emotions 棣冦亯棣冩! #Emoji. "") 
+sentence.words
+```
+returns
+
+`WordList(['Emoji', '棣冩', 'is', 'a', 'new', 'way', 'of', 'expressing', 'emotions', '棣冦亯棣冩', 'Emoji'])`
+
+However, Spacy is able to tokenize 棣冦亯棣冩  as two separate tokens. I'm just wondering if it's possible in Textblob. If not then I would be happy to contribute. ",0,0,0,0,0,0,0,0,0,0
+200,135,https://github.com/sloria/TextBlob/issues/347,347,[],open,2020-09-28 22:18:54+00:00,0,0,DOC: typos,"https://textblob.readthedocs.io/en/dev/api_reference.html#textblob.classifiers.PositiveNaiveBayesClassifier
+
+![image](https://user-images.githubusercontent.com/33796896/94491775-dee29900-01b6-11eb-84a3-a75cbffd2037.png)
+
+I believe this should be `from textblob.classifiers import PositiveNaiveBayesClassifier`
+
+",0,0,0,0,0,0,0,0,0,0
+201,138,https://github.com/sloria/TextBlob/issues/361,361,[],open,2021-01-23 11:42:28+00:00,0,1,PyPI 0.16.0 missing,"https://github.com/sloria/TextBlob/releases/tag/0.16.0 exists, but it isnt appearing in PyPI which has 0.15.3  as the latest release.",0,0,0,0,0,0,0,0,0,0
+202,139,https://github.com/sloria/TextBlob/issues/362,362,[],open,2021-01-28 23:23:11+00:00,0,0,Naive Bayes classifier is slow in classifying for the first time.,"I am creating a text classification model but for some reason it is taking a very long time for my code to run. I have looked at it in detail and found that the model loads relatively quickly, but the first classification itself takes much longer. The model loads in only 3 seconds, and when I classify for the first time, it takes 13 seconds to classify the text, but then it takes only 0.01. I was wondering if anyone know a way to reduce the time it takes to classify. My code is listed below.
+
+```py
+iimport pickle
+import time
+from textblob import TextBlob
+t1 = time.time()
+cl = pickle.load( open( ""classifier.pickle"", ""rb"" ) )
+print(""Loading took: "",time.time()-t1)
+t1 = time.time()
+blob = TextBlob(""while x is 1:"", classifier=cl)
+print(blob.classify())
+print(""Classifying took: "",time.time()-t1)
+t1 = time.time()
+blob = TextBlob(""x=4"", classifier=cl)
+print(blob.classify())
+print(""Classifying took: "",time.time()-t1)
+t1 = time.time()
+blob = TextBlob(""name = 'hello'"", classifier=cl)
+print(blob.classify())
+print(""Classifying took: "",time.time()-t1)
+```
+This outputs:
+![image](https://user-images.githubusercontent.com/48738128/106210789-60096700-617c-11eb-8987-b18f33963e8b.png)
+
+my model code:
+```py
+with open('model.json', 'r') as fp:
+        cl = NaiveBayesClassifier(fp, format=""json"")
+    task = tasks.pop(0)
+    console.log(f""{task} complete"")
+    object = cl
+    file = open('classifier.pickle','wb') 
+    pickle.dump(object,file)
+```
+As you can see, the first classifying attempt takes too long, so is there a way to not have it take that long?
+
+Thanks!",0,0,0,0,0,0,0,0,0,0
+203,141,https://github.com/sloria/TextBlob/issues/366,366,[],open,2021-02-18 09:18:10+00:00,0,0,Make WordList hashable,"Hello there,
+
+I would like to be able to quickly find the most popular n-grams from a Blob. Sadly WordList is not hashable so one cannot create a set of WordList or use the Counter from collections. 
+
+It would be great if the WordList class was hashable :)
+
+",0,0,0,0,0,0,0,0,0,0
+204,142,https://github.com/sloria/TextBlob/issues/367,367,[],open,2021-02-19 10:14:26+00:00,0,0,Word instances do not have offset information,"While `Sentence` does have start and end attributes, `Word` does not and thus it is hard or clumsy to map information about the word back to the original text. 
+Given how long this package has been around I wonder if this is a deliberate design decision or something that could get added?",0,0,0,0,0,0,0,0,0,0
+205,143,https://github.com/sloria/TextBlob/issues/368,368,[],open,2021-03-04 14:23:23+00:00,0,0,Trying to neutralize some words!,"Hello there!
+
+I was wondering, some words such as ""Criminal Justice Education"" give off a negative sentiment score despite being used as a noun  like, ""My major is Criminal Justice Education."".  How can we make sure that the algorithm doesn't treat such nouns negative? Thanks",0,0,0,0,0,0,0,0,0,0
+208,147,https://github.com/sloria/TextBlob/issues/385,385,[],open,2021-06-15 18:43:50+00:00,0,0,New classifier most_informative_features,"Hello Team,
+
+I trained a new classifier with some example as shown in link: https://textblob.readthedocs.io/en/dev/classifiers.html#classifiers
+But I am getting the most_informative_features as:
+fidelity = True as pu : pos = 51.1 : 1.0 
+% = True calls : pos = 46.0 : 1.0 
+123 = True spark : pos = 46.0 : 1.0 
+200 = True outla : pos = 46.0 : 1.0 
+41 = True calls : pos = 46.0 : 1.0 
+45 = True calls : pos = 46.0 : 1.0 
+51 = True unkno : pos = 46.0 : 1.0 
+75m = True launc : pos = 46.0 : 1.0 
+93 = True falli : pos = 46.0 : 1.0 
+about = True says : pos = 46.0 : 1.0 
+accelerator = True a rev : pos = 46.0 : 1.0 
+access = True lists : pos = 46.0 : 1.0 
+acquires = True sees : pos = 46.0 : 1.0
+
+Question: I am not able to interpret the result, can you help me because every word is TRUE and POS and have a number but there is no explanation of it.
+![tx](https://user-images.githubusercontent.com/60963998/122106573-4a06f500-ce44-11eb-85e2-5730abfbc781.png)
+",0,0,0,0,0,0,0,0,0,0
+209,149,https://github.com/sloria/TextBlob/issues/389,389,[],open,2021-07-12 14:03:55+00:00,0,0,Tutorial: Quickstart needs: from textblob.blob import WordList,"Hello! I was trying out the examples from the https://textblob.readthedocs.io/en/dev/quickstart.html
+and I discovered that it required: 
+```textblob.blob import WordList``` before the WordList usage, else: ```NameError: name 'WordList' is not defined```
+
+https://github.com/Twenkid/GPT2-Bulgarian-Training-Tips-and-Tools/blob/main/tools/textblob/tb.py
+
+Kind regards
+",0,0,0,0,0,0,0,0,0,0
+210,153,https://github.com/sloria/TextBlob/issues/397,397,[],closed,2021-09-15 18:16:23+00:00,0,10,Requests error (HTTP Error 404: Not Found),"Hello,
+I have this issue, it seems to be something with requests package and I don't know how to fix that, please help!
+(Image down bellow)
+Thanks!
+![issue](https://user-images.githubusercontent.com/71566966/133487233-e90fd61e-285f-479b-88b3-3ee7b2a87fa8.png)
+",0,0,0,0,0,0,0,0,0,0
+211,154,https://github.com/sloria/TextBlob/issues/399,399,[],open,2021-09-26 04:09:26+00:00,0,0,"""My comuter is shity"" returns ""By computer is shiny""","Hey,
+
+![text-blob-my-computer-bug](https://user-images.githubusercontent.com/12490160/134793282-e6155bb0-e601-4f26-b4a3-4ffdffd6507d.png)
+
+Found this just testing you lib.
+
+Regards,
+Nick
+
+",0,0,0,0,0,0,0,0,0,0
+212,157,https://github.com/sloria/TextBlob/issues/402,402,[],open,2021-10-26 13:53:55+00:00,0,1,HTTP Error 400: Bad Request,"
+    for tweet in ts.search_tweets_iterable(tso): #tso metadata
+        print('created_at: ',tweet['created_at'], 'user_id: ',tweet['id_str'], 'Tweet: ',tweet['text'],' Like:',tweet['favorite_count'], 'RTs:', tweet['retweet_count'],
+        'geo:', tweet['geo'],'Source:',tweet['source'] )
+        
+        created_at = tweet ['created_at']
+        user_id = tweet['id_str']
+        texto = tweet['text']
+        Like = tweet['favorite_count']
+        RTs = tweet['retweet_count']
+        geo = tweet['geo']
+        Source = tweet['source']
+       
+        
+        with open(""tweet.json"", ""a+"") as output:
+
+            data = { ""created_at"": created_at,
+                      ""user_id"": user_id,
+                      ""tweet"":texto,
+                      ""favorite_count"":Like,
+                     ""retweet_count"":RTs,
+                        ""geo"":geo,
+                      ""Source"":Source}
+
+            output.write(""{}\n"".format(json.dumps(data)))
+
+except TwitterSearchException as e:
+    print(e)
+
+pd = pd.read_json(""tweet.json"", lines = True)
+
+contador=0
+
+def clean_tweet(tweet):
+    return ' '.join(re.sub(""(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)"", "" "", tweet).split())
+def analize_sentimentEN(tweet):
+    print(""Executando fun鑾借尗o: analize_sentimentEN"")
+    global contador
+    contador+=1
+    print(contador)
+    analysis = TextBlob(tweet)
+    time.sleep(1.6)
+    
+    if analysis.detect_language() != 'en':
+        analysis = TextBlob(str(analysis.translate(from_lang= 'pt', to_lang='en')))
+        time.sleep(1.8)    
+        
+    if analysis.sentiment.polarity > 0:
+        return 1 
+    elif analysis.sentiment.polarity == 0:
+        return 0
+    else:
+        return -1
+
+listaTweets = pd['tweet'].tolist()
+
+listaResultadoSentimentos = []
+
+for elemento in listaTweets:
+  listaResultadoSentimentos.append(analize_sentimentEN(elemento))
+
+pd['Sentimento'] = listaResultadoSentimentos
+
+listaResultado = pd[""Sentimento""].tolist()
+listaClassificada = []
+
+
+for elemento in listaResultado:
+    print(elemento)
+    if elemento == 1:
+        listaClassificada.append(""Positivo"")
+    elif elemento == 0:
+        listaClassificada.append(""Neutro"")
+    elif elemento == -1:
+        listaClassificada.append(""Negativo"")
+    
+pd[""Classificacao""] = listaClassificada
+
+
+
+---------------------------------------------------------------------------
+HTTPError                                 Traceback (most recent call last)
+<ipython-input-40-685376b95010> in <module>()
+     75 
+     76 for elemento in listaTweets:
+---> 77   listaResultadoSentimentos.append(analize_sentimentEN(elemento))
+     78 
+     79 pd['Sentimento'] = listaResultadoSentimentos
+
+9 frames
+/usr/lib/python3.7/urllib/request.py in http_error_default(self, req, fp, code, msg, hdrs)
+    647 class HTTPDefaultErrorHandler(BaseHandler):
+    648     def http_error_default(self, req, fp, code, msg, hdrs):
+--> 649         raise HTTPError(req.full_url, code, msg, hdrs, fp)
+    650 
+    651 class HTTPRedirectHandler(BaseHandler):
+
+HTTPError: HTTP Error 400: Bad Request",0,0,0,0,0,0,0,0,0,0

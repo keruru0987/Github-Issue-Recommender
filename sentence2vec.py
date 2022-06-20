@@ -105,7 +105,7 @@ class Sentence2Vec(object):
             raise Exception('title body num not match')
         # 计算最终得分
         for i in range(len(scores1)):
-            k = 1.5  # 标题系数
+            k = 3  # 标题系数
             t = 1    # tag系数
             score = (1 + t*tag_counts[i]/max_tag_count)/(1+t) * (scores2[i]*k + scores1[i])/(k+1)
             scores_final.append(score)

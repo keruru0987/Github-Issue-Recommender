@@ -29,6 +29,11 @@ tagged_github_filepath = {'gensim': 'data/tagged_data/gensim.csv', 'allennlp': '
                           'stanford-nlp': 'data/tagged_data/stanford-nlp.csv', 'TextBlob': 'data/tagged_data/TextBlob.csv',
                           'Transformers': 'data/tagged_data/Transformers.csv'}
 
+new_tagged_github_filepath = {'gensim': 'data/new_tagged_data/new_gensim.csv', 'allennlp': 'data/new_tagged_data/new_allennlp.csv',
+                          'nltk': 'data/new_tagged_data/new_nltk.csv', 'spaCy': 'data/new_tagged_data/new_spacy.csv',
+                          'stanford-nlp': 'data/new_tagged_data/new_stanfordnlp.csv', 'TextBlob': 'data/new_tagged_data/new_textblob.csv',
+                          'Transformers': 'data/new_tagged_data/new_transformers.csv'}
+
 stackoverflow_filepath = {'gensim':'D:/data/stack/gensim.csv', 'allennlp':'D:/data/stack/allennlp.csv',
                           'nltk':'D:/data/stack/nltk.csv', 'spaCy':'D:/data/stack/spacy.csv',
                           'stanford-nlp':'D:/data/stack/stanford-nlp.csv', 'TextBlob':'D:/data/stack/textblob.csv',
@@ -37,6 +42,8 @@ stackoverflow_filepath = {'gensim':'D:/data/stack/gensim.csv', 'allennlp':'D:/da
 word2vec_modelpath = 'D:/model/GoogleNews-vectors-negative300.bin'
 
 select_num = 20  # 选取的分数最高的issue数目
+
+new_select_num = 10  # 选取的分数最高的issue数目
 
 allen_text = '''
 <p>I am new to the AllenNLP library. I am using the Pretrained Bidaf-elmo model for a reading comprehension task. My code looks like -</p>

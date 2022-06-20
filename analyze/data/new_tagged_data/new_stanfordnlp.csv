@@ -1,0 +1,2253 @@
+﻿,Unnamed: 0,html_url,number,labels,state,created_at,pull_request,comments,title,body,rel1,rel2,rel3,rel4,rel5,rel6,rel7,rel8,rel9,rel10
+0,393,https://github.com/stanfordnlp/CoreNLP/issues/497,497,[],closed,2017-08-03 04:14:52+00:00,0,3,Very slow processing time for sentiment annotation,"I am seeing very slow processing times (~3 to 10 seconds or more per string) when using StanfordCoreNLP for sentiment annotation, as was discussed [here](https://mailman.stanford.edu/pipermail/java-nlp-user/2013-January/003024.html) in 2013.
+
+I am using Maven to retrieve stanford-corenlp version 3.8.0 (with models), and the code I'm using is:
+
+`Properties props = new Properties();`
+`props.setProperty(""annotators"", ""tokenize,ssplit,parse,sentiment"");`
+`StanfordCoreNLP pipeline = new StanfordCoreNLP(props);`
+`String text = ""... very long UTF-8 encoded string containing 1000-2000 chars....."";`
+`Annotation annotation = pipeline.process(text);`
+`List<String> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class).stream().map(sentence -> sentence.toString() + "" ["" + Sentiment.parse(sentence.get(SentimentCoreAnnotations.SentimentClass.class)).getRepresentation() + ""]"").collect(Collectors.toList());`
+
+Re-using `pipeline.process(text)` to process similarly long strings produces similar results. JVisualVM reports that the most time is spent inside these methods:
+                 
+`edu.stanford.nlp.parser.lexparser.ExhaustivePCFGParser.doInsideScores()`
+`edu.stanford.nlp.parser.lexparser.ExhaustivePCFGParser.doInsideChartCell()`
+
+Am I using the code properly to perform sentiment annotation?",0,0,0,0,0,0,0,1,0,1
+1,94,https://github.com/stanfordnlp/CoreNLP/issues/127,127,[],closed,2016-01-16 07:14:13+00:00,0,6,Parse sentence to tree structure like Stanford Sentiment Treebank,"As shown in the Stanford Sentiment Treebank demo on [Sentiment Analysis](http://nlp.stanford.edu/sentiment/treebank.html), it shows that the structure of the tree is definitely the binary tree,i learned that The Stanford Parser was used to parse all data sentences, and i tried it.
+
+However, for English,The Stanford Parser has the following 4 model to parse english
+- englishFactored.ser.gz 
+- englishPCFG.caseless.ser.gz
+- englishPCFG.ser.gz 
+- englishRNN.ser.gz 
+
+none of  them generates the same tree structure when i use the same dataset, i got three or four children on one node. I wonder which model should i choose to generate the binary structure tree like Stanford Sentiment Treebank or how can i generate such structure?
+",1,0,1,0,0,0,1,0,0,1
+2,437,https://github.com/stanfordnlp/CoreNLP/issues/553,553,[],closed,2017-10-26 02:29:02+00:00,0,9,Is sentiment treebank the training data? How to prepare my own train data?,"Hi, 
+For the sentiment analysis model,  I want to train by myself, I saw this page for instruction, https://nlp.stanford.edu/sentiment/code.html
+**Models can be retrained using the following command using the PTB format dataset:
+java -mx8g edu.stanford.nlp.sentiment.SentimentTraining -numHid 25 -trainPath train.txt -devPath dev.txt -train -model model.ser.gz**
+
+My question is,  what's the relationship between train data here and the sentiment treebank data mentioned in that paper for sentiment analysis model?
+And If I make annotated data by myself, how to make that in the PTB format, is there any tools?
+
+thanks.",0,0,0,0,0,1,1,0,0,1
+3,546,https://github.com/stanfordnlp/CoreNLP/issues/684,684,[],closed,2018-04-24 10:12:04+00:00,0,3,Sentiment Tree as JSON Object,"Recently in the **Sentiment** module output a _SentimentTree_ output has been added:
+
+```javascript
+{
+                ""index"": 4,
+                ""sentimentValue"": ""2"",
+                ""sentiment"": ""Neutral"",
+                ""sentimentDistribution"": [
+                  0.02319716964425,
+                  0.24382036048496,
+                  0.67127763735208,
+                  0.05488071716532,
+                  0.0068241153534
+                ],
+                ""sentimentTree"": ""(ROOT|sentiment=2|prob=0.671 (NP|sentiment=2|prob=0.998 this)\n  (@S|sentiment=2|prob=0.743 (ADVP|sentiment=2|prob=0.997 here)\n    (VP|sentiment=2|prob=0.749 (VBZ|sentiment=2|prob=0.994 's)\n      (SBAR|sentiment=2|prob=0.583 (WHNP|sentiment=2|prob=0.994 what)\n        (S|sentiment=2|prob=0.569 (NP|sentiment=2|prob=0.995 you)\n          (VP|sentiment=2|prob=0.648 (VBP|sentiment=2|prob=0.992 call)\n            (NP|sentiment=2|prob=0.432 (DT|sentiment=2|prob=0.990 a) (JJ|sentiment=1|prob=0.336 flip))))))))"",
+                ""tokens"":[]
+```
+
+This output has been widely discussed here https://github.com/stanfordnlp/CoreNLP/issues/465 by @J38 and others. The output is it ok to be used _within_ Java CoreNLP through a `TreeFactory` module impl like the `LabeledScoredTreeFactory`, by the way it cannot be used by a visual representation like the D3 dataviz in the demo:
+
+<img width=""963"" alt=""schermata 2018-04-24 alle 12 05 57"" src=""https://user-images.githubusercontent.com/163333/39180701-e15f4c0c-47b7-11e8-8e24-3a1edce7e7b2.png"">
+
+This data visualization is build using the good D3.js and a JSON structure of the tree:
+
+```javascript
+drawTrees( d3.select( ""div.trees"" ), data.trees, params );
+```
+
+where the `data.trees` have a struct like
+
+```javascript
+{
+	""version"": 2,
+	""build"": ""2018-04-24 02:35:39.775761"",
+	""trees"": [{
+		""child0"": {
+			""child0"": {
+				""index"": 3,
+				""leaf"": true,
+				""rating"": 13.0,
+				""text"": ""This"",
+				""scoreDistr"": [0.0001, 0.0007, 0.9985, 0.0006, 0.0001],
+				""tokens"": 1,
+				""depth"": 1,
+				""numChildren"": 0,
+				""pixels"": 26
+			},
+			""index"": 2,
+			""leaf"": false,
+			""rating"": 13.0,
+			""text"": ""This movie"",
+			""scoreDistr"": [0.0002, 0.0032, 0.9908, 0.0056, 0.0002],
+			""tokens"": 3,
+			""depth"": 2,
+			""numChildren"": 2,
+			""pixels"": 63
+		},
+		""index"": 1,
+		""leaf"": false,
+		""rating"": 8.0,
+		""text"": ""This movie does n't care about cleverness , wit or any other kind of intelligent humor ."",
+		""scoreDistr"": [0.1685, 0.7187, 0.0903, 0.0157, 0.0068],
+		""tokens"": 33,
+		""depth"": 10,
+		""numChildren"": 2,
+		""pixels"": 493
+	}]
+}
+```
+
+(this is a simplified version with just one root node and one child - see the whole version [here](https://pastebin.com/yvvmikLZ)
+
+How to translate the current string tree representation in the `sentimentTree` to JSON struct represented in the Sentiment live demo?",0,0,0,0,0,0,1,0,0,1
+4,547,https://github.com/stanfordnlp/CoreNLP/issues/685,685,[],closed,2018-04-24 10:28:56+00:00,0,5,Sentiment Treebank Annotation Tool,"The live demo has a annotation tool of the Sentiment Tree. I have tried to annotate from this nifty UI that let to annotate the sentiment classes by each tree node:
+
+<img width=""982"" alt=""schermata 2018-04-24 alle 12 26 50"" src=""https://user-images.githubusercontent.com/163333/39181721-d2f0a352-47ba-11e8-85f8-0eb6eb27817a.png"">
+
+Is this tool still working i.e. the submitted annotation are used to re-train the model?
+Also, currently in the CoreNLP pipeline demo there is a live demo, but the RNTN demo plus annotator it is missing. Why not provide this demo as well in the CoreNLP demo web app? This would help to improve the annotator as well as the annotated dataset for the Treebank Sentiment.
+",0,0,0,0,0,0,1,0,0,1
+5,21,https://github.com/stanfordnlp/CoreNLP/issues/32,32,"[{'id': 77134078, 'node_id': 'MDU6TGFiZWw3NzEzNDA3OA==', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/documentation', 'name': 'documentation', 'color': '5319e7', 'default': True, 'description': None}]",closed,2014-09-20 12:22:40+00:00,0,19,Train sentiment analyzer for a specific domain,"Hello, 
+
+I am not sure if this is relevant to this forum but I want to train the sentiment analyzer model for specific domains, right now it is pretty generic. e.g. following sentences
+
+The room was spacious  or The restaurants were short walk from the hotel
+
+get a sentiment of 1/5 whereas they talk positively. 
+
+Any instructions how I can achieve this extension will be appreciated.
+",0,0,1,0,0,1,0,0,0,1
+6,317,https://github.com/stanfordnlp/CoreNLP/issues/406,406,[],closed,2017-04-09 16:58:16+00:00,0,2,Sentiment train binaryModel fails,"I am trying to train the Stanford NLP sentiment analysis tool with the default test and train set from https://nlp.stanford.edu/sentiment/trainDevTestTrees_PTB.zip in binary mode. I am using stanford-corenlp-full-2016-10-31.
+
+To do so I use this command:
+
+        java -cp ""*"" -Xmx10g edu.stanford.nlp.sentiment.SentimentTraining         
+        -trainPath train.txt 
+        -devPath dev.txt 
+        -train 
+        -model ORIG_BIN.ser.gz 
+        -binaryModel
+
+Which leads to the following error:
+
+
+        [main] INFO edu.stanford.nlp.sentiment.SentimentTraining - Read in 8544 training trees
+        [main] INFO edu.stanford.nlp.sentiment.SentimentTraining - Read in 1101 dev trees
+        [main] INFO edu.stanford.nlp.sentiment.SentimentTraining - Sentiment model options:
+        GENERAL OPTIONS
+        randomSeed=-1081864962
+        wordVectors=null
+        unkWord=UNK
+        randomWordVectors=true
+        numHid=25
+        numClasses=2
+        lowercaseWordVectors=false
+        useTensors=true
+        simplifiedModel=true
+        combineClassification=true
+        classNames=Negative,Positive
+        equivalenceClasses=0;1
+        equivalenceClassNames=Negative,Positive
+        TRAIN OPTIONS
+        batchSize=27
+        epochs=400
+        debugOutputEpochs=8
+        maxTrainTimeSeconds=86400
+        learningRate=0.01
+        scalingForInit=1.0
+        classWeights=null
+        regTransformMatrix=0.001
+        regTransformTensor=0.001
+        regClassification=1.0E-4
+        regWordVector=1.0E-4
+        initialAdagradWeight=0.0
+        adagradResetFrequency=1
+        shuffleMatrices=true
+        initialMatrixLogPath=null
+        nThreads=1
+        TEST OPTIONS
+        ngramRecordSize=0
+        ngramRecordMaximumLength=0
+        printLengthAccuracies=false
+        [main] INFO edu.stanford.nlp.sentiment.SentimentTraining - Training on 8544 trees in 317 batches
+        [main] INFO edu.stanford.nlp.sentiment.SentimentTraining - Times through each training batch: 400
+        [main] INFO edu.stanford.nlp.sentiment.SentimentTraining - ======================================
+        [main] INFO edu.stanford.nlp.sentiment.SentimentTraining - Starting epoch 0
+        [main] INFO edu.stanford.nlp.sentiment.SentimentTraining - ======================================
+        [main] INFO edu.stanford.nlp.sentiment.SentimentTraining - Epoch 0 batch 0
+        Exception in thread ""main"" java.lang.ArrayIndexOutOfBoundsException: 3
+                at org.ejml.data.D1Matrix64F.set(Unknown Source)
+                at org.ejml.simple.SimpleBase.set(Unknown Source)
+                at edu.stanford.nlp.sentiment.SentimentCostAndGradient.backpropDerivativesAndError(SentimentCostAndGradient.java:374)
+                at edu.stanford.nlp.sentiment.SentimentCostAndGradient.backpropDerivativesAndError(SentimentCostAndGradient.java:352)
+                at edu.stanford.nlp.sentiment.SentimentCostAndGradient.scoreDerivatives(SentimentCostAndGradient.java:221)
+                at edu.stanford.nlp.sentiment.SentimentCostAndGradient.calculate(SentimentCostAndGradient.java:247)
+                at edu.stanford.nlp.optimization.AbstractCachingDiffFunction.ensure(AbstractCachingDiffFunction.java:140)
+                at edu.stanford.nlp.optimization.AbstractCachingDiffFunction.derivativeAt(AbstractCachingDiffFunction.java:151)
+                at edu.stanford.nlp.sentiment.SentimentTraining.executeOneTrainingBatch(SentimentTraining.java:33)
+                at edu.stanford.nlp.sentiment.SentimentTraining.train(SentimentTraining.java:83)
+                at edu.stanford.nlp.sentiment.SentimentTraining.main(SentimentTraining.java:230)
+
+I also tried several other options like `-equivalenceClasses, -equivalenceClassNames -numClasses, -classNames` with more or less the same results.
+
+What options do I need to make this work ?
+
+----------
+
+I am also interested into training my own corpus with three classes (Positive, Negative, Neutral) but with this task I had the same problems.
+
+----------
+
+I also (like suggested in https://nlp.stanford.edu/software/) made a stackoverflow question: http://stackoverflow.com/questions/43250625/stanford-nlp-sentiment-train-binarymodel-fails
+",0,0,0,0,0,1,0,0,0,1
+7,395,https://github.com/stanfordnlp/CoreNLP/issues/499,499,[],closed,2017-08-07 07:18:32+00:00,0,1,Getting Exception in thread 閳ユ笗ain閳?java.lang.ArrayIndexOutOfBoundsException while retraining the stanford sentiment RNN,"
+I am trying to retrain the Stanford sentiment RNN with my own dataset which I have converted into PTB format using BuildBinarizedDataset from the Stanford-core-nlp jar (3.8) 
+
+Here are the first few lines of my training data:
+
+
+(9 (9 (5 very) (7 well)) (5 handled))
+
+(7 (6 engineers) (4 (4 to) (5 (6 answer) (6 (5 very) (3 carefully)))))
+
+(9 (9 (9 (8 fast) (5 and)) (9 reliable)) (9 (4 response) (9 great)))
+
+(8 (7 prompt) (7 (5 responses) (8 (5 fixed) (1 (4 the) (0 issue)))))
+
+This is the command I used :
+
+java -cp ""*"" 
+
+-mx8g edu.stanford.nlp.sentiment.SentimentTraining 
+
+-gradientcheck 
+
+-trainPath train_s.txt -equivalenceClasses 0,1,2,3,4,5;6,7,8,9,10 
+
+-equivalenceClassNames Negative,Neutral,Positive
+
+-numHid 25 
+
+-batchSize 78 
+
+-numClasses 2 
+
+-classNames Negative,Positive 
+
+-train 
+
+-model modeltrial.ser.gz
+
+And this is my exception:
+
+
+Exception in thread ""main"" java.lang.ArrayIndexOutOfBoundsException: 9
+   at org.ejml.data.D1Matrix64F.set(Unknown Source)
+
+   at org.ejml.simple.SimpleBase.set(Unknown Source)
+
+   at edu.stanford.nlp.sentiment.SentimentCostAndGradient.backpropDerivativesAndError(SentimentCostAndGradient.java:376)
+
+   at edu.stanford.nlp.sentiment.SentimentCostAndGradient.backpropDerivativesAndError(SentimentCostAndGradient.java:354)
+
+   at edu.stanford.nlp.sentiment.SentimentCostAndGradient.scoreDerivatives(SentimentCostAndGradient.java:223)
+
+   at edu.stanford.nlp.sentiment.SentimentCostAndGradient.calculate(SentimentCostAndGradient.java:249)
+
+   at edu.stanford.nlp.optimization.AbstractCachingDiffFunction.ensure(AbstractCachingDiffFunction.java:140)
+
+   at edu.stanford.nlp.optimization.AbstractCachingDiffFunction.derivativeAt(AbstractCachingDiffFunction.java:151)
+
+   at edu.stanford.nlp.optimization.AbstractCachingDiffFunction.gradientCheck(AbstractCachingDiffFunction.java:39)
+
+   at edu.stanford.nlp.sentiment.SentimentTraining.runGradientCheck(SentimentTraining.java:129)
+
+   at edu.stanford.nlp.sentiment.SentimentTraining.main(SentimentTraining.java:226)
+
+
+These are the options I am working with
+
+GENERAL OPTIONS
+
+
+randomSeed=1659449035
+
+wordVectors=null
+
+unkWord=UNK
+
+randomWordVectors=true
+
+numHid=25
+
+numClasses=2
+
+lowercaseWordVectors=false
+
+useTensors=true
+
+simplifiedModel=true
+
+combineClassification=true
+
+classNames=Negative,Positive
+
+equivalenceClasses=0,1,2,3,4,5;6,7,8,9,10
+
+equivalenceClassNames=Negative,Neutral,Positive
+
+TRAIN OPTIONS
+
+batchSize=78
+
+epochs=400
+
+debugOutputEpochs=8
+
+maxTrainTimeSeconds=86400
+
+learningRate=0.01
+
+scalingForInit=1.0
+
+classWeights=null
+
+regTransformMatrix=0.001
+
+regTransformTensor=0.001
+
+regClassification=1.0E-4
+
+regWordVector=1.0E-4
+
+initialAdagradWeight=0.0
+
+adagradResetFrequency=1
+
+shuffleMatrices=true
+
+initialMatrixLogPath=null
+
+nThreads=1
+
+TEST OPTIONS
+
+ngramRecordSize=0
+
+ngramRecordMaximumLength=0
+
+printLengthAccuracies=false
+
+My training data has around 4800 sentences. This is the first time I am working with Stanford core NLP and so far no other links have helped me.
+ 
+stack overflow link : https://stackoverflow.com/questions/45322871/getting-exception-in-thread-main-java-lang-arrayindexoutofboundsexception-whil",0,0,0,0,0,1,0,0,0,1
+8,888,https://github.com/stanfordnlp/CoreNLP/issues/1076,1076,[],closed,2020-07-26 03:18:25+00:00,0,4,Sentiment results are different between stanford nlp python package and the live demo,"I try sentiment analysis of tweet text by both stanford nlp python package and the live demo, but the results are different. The result of the python package is positive while the result of the live demo is negative.
+
+- For python package, I download **stanford-corenlp-4.0.0** and install **py-corenlp**, basically follow the instruction in this answer: [Stanford nlp for python](https://stackoverflow.com/questions/32879532/stanford-nlp-for-python), the code is shown below:
+
+```
+import pycorenlp
+from pycorenlp import StanfordCoreNLP
+
+nlp = StanfordCoreNLP(""http://localhost:9000"")
+text=""noted former cocaine user carrie fisher says donald trump was absolutely on coke makes sense""
+res = nlp.annotate(text,properties={'annotators': 'sentiment','outputFormat': 'json','timeout': 1000})
+for s in res[""sentences""]:
+    print(s[""sentimentValue""], s[""sentiment""])
+```
+and the result is:
+```
+3 Positive
+```
+
+- For the live demo:
+![Capture](https://user-images.githubusercontent.com/68687826/88470640-95c74d80-cec4-11ea-900d-176fb1a7a410.PNG)",0,1,1,1,0,0,0,0,0,1
+9,5,https://github.com/stanfordnlp/CoreNLP/issues/7,7,"[{'id': 45387504, 'node_id': 'MDU6TGFiZWw0NTM4NzUwNA==', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/bug', 'name': 'bug', 'color': 'fc2929', 'default': True, 'description': None}]",closed,2013-11-26 10:29:11+00:00,0,2,Inconsistencies with sentiment analysis output,"I did a quick test code to try out the new sentiment model and noticed that there is something weird going on when using RNNCoreAnnotations.getPredictedClass().
+
+I don't know if the sentiment analysis model included to 3.3.0 is different than on the live demo site (http://nlp.stanford.edu:8080/sentiment/rntnDemo.html), but in any case the short test code is:
+
+```
+import edu.stanford.nlp.ling.CoreAnnotations;
+import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.stanford.nlp.rnn.RNNCoreAnnotations;
+import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
+import edu.stanford.nlp.trees.Tree;
+import edu.stanford.nlp.util.CoreMap;
+import java.util.Properties;
+
+public class SentimentTestAppStanfordNLP {
+
+    private StanfordCoreNLP pipeline;
+
+    public SentimentTestAppStanfordNLP() {
+        Properties props = new Properties();
+        props.setProperty(""annotators"", ""tokenize, ssplit, parse, sentiment"");
+        pipeline = new StanfordCoreNLP(props);    
+    }
+
+    private void checkSentiment(String text) {        
+        Annotation annotation = pipeline.process(text);
+        for (CoreMap sentence : annotation.get(CoreAnnotations.SentencesAnnotation.class)) {
+            Tree tree = sentence.get(SentimentCoreAnnotations.AnnotatedTree.class);
+            int sentiment = RNNCoreAnnotations.getPredictedClass(tree);
+            System.out.println(""Sentiment: "" + sentiment + "" String: "" + sentence.toString());
+        }        
+    }
+
+    private void doMain() throws Exception {
+        checkSentiment(""Radek is a really good football player"");
+        checkSentiment(""Radek is a good football player"");
+        checkSentiment(""Radek is an OK football player"");
+        checkSentiment(""Radek is a bad football player"");
+        checkSentiment(""Radek is a really bad football player"");        
+        System.out.println(""-----------------------------"");
+        checkSentiment(""Mark is a really good football player"");
+        checkSentiment(""Mark is a good football player"");
+        checkSentiment(""Mark is an OK football player"");
+        checkSentiment(""Mark is a bad football player"");
+        checkSentiment(""Mark is a really bad football player"");        
+    }
+
+    public static void main(String[] args) {
+        try {
+            SentimentTestAppStanfordNLP main = new SentimentTestAppStanfordNLP();
+            main.doMain();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+}
+```
+
+The output baffled me; in the cases of ""Radek"", the RNNCoreAnnotations seemed to give almost random output, whereas on ""Mark"" cases the outputs were pretty much as expected (see below). When I test these same sentences on the live demo site, the ""Radek"" cases are correct, not like what the CoreNLP outputs here.
+
+```
+Sentiment: 0 String: Radek is a really good football player
+Sentiment: 1 String: Radek is a good football player
+Sentiment: 2 String: Radek is an OK football player
+Sentiment: 2 String: Radek is a bad football player
+Sentiment: 2 String: Radek is a really bad football player
+-----------------------------
+Sentiment: 3 String: Mark is a really good football player
+Sentiment: 3 String: Mark is a good football player
+Sentiment: 2 String: Mark is an OK football player
+Sentiment: 1 String: Mark is a bad football player
+Sentiment: 1 String: Mark is a really bad football player
+```
+",0,0,1,0,0,0,0,0,0,1
+10,6,https://github.com/stanfordnlp/CoreNLP/issues/8,8,"[{'id': 45387507, 'node_id': 'MDU6TGFiZWw0NTM4NzUwNw==', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/cantreproduce', 'name': 'cantreproduce', 'color': 'dddddd', 'default': False, 'description': None}]",closed,2013-12-29 17:34:06+00:00,0,2,Writing sentiment analysis results to XML,"I'm having trouble figuring out how to get the sentiment analysis tool to output as an XML file when run from the command line.  When I run the command provided on http://www-nlp.stanford.edu/sentiment/code.html it works fine but only outputs plain text:
+
+```
+Adding annotator tokenize
+
+Adding annotator ssplit
+
+Adding annotator parse
+
+Loading parser from serialized file edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz ... done [1.3 sec].
+
+Adding annotator sentiment
+
+This is so great.
+
+  Very positive
+
+It was okay I guess.
+
+  Neutral
+```
+
+However if I try to run the full CoreNLP tool with the sentiment annotator, like such:
+
+```
+java -cp stanford-corenlp-full-2013-11-12/stanford-corenlp-3.3.0.jar:stanford-corenlp-full-2013-11-12/stanford-corenlp-3.3.0-models.jar:stanford-corenlp-full-2013-11-12/xom.jar:stanford-corenlp-full-2013-11-12/joda-time.jar:stanford-corenlp-full-2013-11-12/jollyday.jar -Xmx3g edu.stanford.nlp.pipeline.StanfordCoreNLP -annotators tokenize,ssplit,parse,sentiment -file  ./tweets/tweet1.txt
+```
+
+I get the following error:
+
+```
+Exception in thread ""main"" java.lang.NoClassDefFoundError: org/ejml/simple/SimpleBase
+
+    at edu.stanford.nlp.pipeline.SentimentAnnotator.<init>(SentimentAnnotator.java:45)
+
+    at edu.stanford.nlp.pipeline.StanfordCoreNLP$14.create(StanfordCoreNLP.java:845)
+
+    at edu.stanford.nlp.pipeline.AnnotatorPool.get(AnnotatorPool.java:81)
+
+    at edu.stanford.nlp.pipeline.StanfordCoreNLP.construct(StanfordCoreNLP.java:260)
+
+    at edu.stanford.nlp.pipeline.StanfordCoreNLP.<init>(StanfordCoreNLP.java:127)
+
+    at edu.stanford.nlp.pipeline.StanfordCoreNLP.<init>(StanfordCoreNLP.java:123)
+
+    at edu.stanford.nlp.pipeline.StanfordCoreNLP.main(StanfordCoreNLP.java:1430)
+
+Caused by: java.lang.ClassNotFoundException: org.ejml.simple.SimpleBase
+
+    at java.net.URLClassLoader$1.run(URLClassLoader.java:202)
+
+    at java.security.AccessController.doPrivileged(Native Method)
+
+    at java.net.URLClassLoader.findClass(URLClassLoader.java:190)
+
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+
+    at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:301)
+
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+
+    ... 7 more
+```
+
+If I run the command without the sentiment annotator, it works fine but of course I can't get any sentiment results.
+
+I should also mention that I am running everything wrapped inside a Python subprocess.Popen() call, since the rest of our project is written in Python.
+",0,0,1,0,0,0,0,0,0,1
+11,33,https://github.com/stanfordnlp/CoreNLP/issues/46,46,"[{'id': 45387504, 'node_id': 'MDU6TGFiZWw0NTM4NzUwNA==', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/bug', 'name': 'bug', 'color': 'fc2929', 'default': True, 'description': None}]",closed,2015-01-19 03:42:14+00:00,0,2,in in /StanfordCoreNLP/src/edu/stanford/nlp/sentiment filelist option is not processed correctly ,"the fout and pout are created and closed per sentence instead of per file.
+Resolution:
+Change it to the following:
+      for (Annotation annotation : annotations) {
+          pipeline.annotate(annotation);
+
+```
+      //AR: bug move it to before the second for
+      //FileOutputStream fout = new FileOutputStream(file + "".out"");
+      //PrintStream pout = new PrintStream(fout);
+```
+",0,0,1,0,0,0,0,0,0,1
+12,43,https://github.com/stanfordnlp/CoreNLP/issues/58,58,[],closed,2015-02-03 19:05:16+00:00,0,2,"In  /StanfordCoreNLP/src/edu/stanford/nlp/sentiment/SentimentPipeline.java Remove ""-file"" option the ""-fileList"" option can handle a list of 1.","In  /StanfordCoreNLP/src/edu/stanford/nlp/sentiment/SentimentPipeline.java
+Remove ""-file"" option the ""-fileList"" option can handle a list of 1.
+
+both -file and fileList options are provided which is redundant and error prone. 
+Right now file handling in the code for file and filelist are not in sync. 
+
+  } else if (args[argIndex].equalsIgnoreCase(""-file"")) {
+        filename = args[argIndex + 1];
+        argIndex += 2;
+      } else if (args[argIndex].equalsIgnoreCase(""-fileList"")) {
+",0,0,1,0,0,0,0,0,0,1
+13,78,https://github.com/stanfordnlp/CoreNLP/issues/105,105,"[{'id': 45387505, 'node_id': 'MDU6TGFiZWw0NTM4NzUwNQ==', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/duplicate', 'name': 'duplicate', 'color': 'bbbbbb', 'default': True, 'description': None}]",closed,2015-11-19 20:49:53+00:00,0,1,The sentiment output result from -stdin differs from the when input is read from a file,"I am not sure whether this issue is related to how the sentiment tool works or it is just a weird thing that stdin does. Regardless, I thought I should bring this up as a point of awareness for researchers analyzing the output results. 
+
+Here is a toy snapshot of a comment from reddit analyzed via -stdin vs. being read from a .txt file. Please find the differences: 
+
+<img width=""1338"" alt=""screen shot 2015-11-19 at 12 49 22 pm"" src=""https://cloud.githubusercontent.com/assets/7051103/11283941/02125028-8ebc-11e5-9cc7-ac3bd9fa8fa5.png"">
+",0,0,0,0,0,0,0,0,0,1
+14,578,https://github.com/stanfordnlp/CoreNLP/issues/718,718,[],open,2018-06-08 03:53:04+00:00,0,5,Incorrectly tagged label as part of money,"I used core NLP to process ""I want to buy a $1000 television"".
+
+In the labels in `CoreAnnotations.TokensAnnotation.class`, the label representing ""television"" was identified as ""NUMBER"" with `CoreAnnotations.NormalizedNamedEntityTagAnnotation.class` value of ""$1000"" and the `CoreAnnotations.EntityMentionIndexAnnotation.class` value was set to 0 (which is the value of the label for ""$1000"").
+
+I am using version 3.9.1 and created the `StanfordCoreNLP` instance as follows:
+```
+Properties props = new Properties();
+props.put(""annotators"", ""tokenize, ssplit, pos, lemma, ner"");
+props.put(""sutime.language"", ""british"");
+StanfordCoreNLP nlp = new StanfordCoreNLP(props);
+```
+
+I believe it is a bug.
+
+I tried ""I want to buy a $1000 TV"" and it correctly labelled ""TV"" not being part of ""$1000"".
+
+I also found similar misbehaviour in ""I want to buy a $50 green jacket"" which core NLP claims ""green"" is ""MONEY"" with `CoreAnnotations.NormalizedNamedEntityTagAnnotation.class` value of ""$50"" and entity mention index also set to the entity mention index of ""$50"".
+
+If it is not a bug but my mistake, please let me know.  Thanks.",0,0,0,0,0,0,0,1,1,0
+15,242,https://github.com/stanfordnlp/CoreNLP/issues/312,312,"[{'id': 45387506, 'node_id': 'MDU6TGFiZWw0NTM4NzUwNg==', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/enhancement', 'name': 'enhancement', 'color': '84b6eb', 'default': True, 'description': None}, {'id': 547907037, 'node_id': 'MDU6TGFiZWw1NDc5MDcwMzc=', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/multilingual', 'name': 'multilingual', 'color': 'fef2c0', 'default': False, 'description': None}]",closed,2016-11-27 09:37:11+00:00,0,11,French POS tagger outputs French Treebank POS tags and dependency parsing expects Universal Dependencies tags,"The French POS tagger provided by CoreNLP outputs French Treebank POS tags and the French dependency parser have been trained with UniversalDependencies POS tags.
+So, it is not possible to use CoreNLP POS tagger to run the CoreNLP dependency parsing.
+
+I have written a hack to CoreNLP in order to make the French POS tagger output UD POS tags: https://github.com/askplatypus/CoreNLP/commit/e6215bdc5d4903bc3e2d2fb533da7e3938fa825f
+
+See also: http://stackoverflow.com/questions/36634101/dependency-parsing-for-french-with-corenlp
+and https://mailman.stanford.edu/pipermail/java-nlp-user/2016-April/007560.html",0,0,0,0,0,0,1,0,1,0
+16,147,https://github.com/stanfordnlp/CoreNLP/issues/189,189,[],closed,2016-05-15 12:09:53+00:00,0,4,percentageOfTrain parameter in edu.stanford.nlp.ie.machinereading.MachineReading is never used,"Hi ,
+
+   We wanted to fed the training set incrementally , to see the learning graph . But the parameter for that percentageOfTrain  is hashed .
+
+// partitionTrain = keepPercentage(partitionTrain, percentageOfTrain);  
+
+Is there any reason to hash it out ? 
+",0,0,0,0,0,1,0,0,1,0
+17,278,https://github.com/stanfordnlp/CoreNLP/issues/355,355,[],closed,2017-02-11 18:28:52+00:00,0,5,Error in training a model for stanford Pos tagger ,"hi every body, 
+i am trying to train the stanford pos tagger for arabic language, to do so i followed this tutorial [tutorial](http://www.florianboudin.org/wiki/doku.php?id=nlp_tools_related&DokuWiki=9d6b70b2ee818e600edc0359e3d7d1e8), but when i do so i am getting this error : 
+`Exception in thread ""main"" edu.stanford.nlp.util.ReflectionLoading$ReflectionLoa
+dingException: Error creating edu.stanford.nlp.optimization.OWLQNMinimizer
+        at edu.stanford.nlp.util.ReflectionLoading.loadByReflection(ReflectionLo
+ading.java:40)
+        at edu.stanford.nlp.maxent.CGRunner.solveL1(CGRunner.java:184)
+        at edu.stanford.nlp.tagger.maxent.MaxentTagger.trainAndSaveModel(MaxentT
+agger.java:1199)
+        at edu.stanford.nlp.tagger.maxent.MaxentTagger.runTraining(MaxentTagger.
+java:1254)
+        at edu.stanford.nlp.tagger.maxent.MaxentTagger.main(MaxentTagger.java:18
+87)
+Caused by: edu.stanford.nlp.util.MetaClass$ClassCreationException: java.lang.Cla
+ssNotFoundException: edu.stanford.nlp.optimization.OWLQNMinimizer
+        at edu.stanford.nlp.util.MetaClass.createFactory(MetaClass.java:364)
+        at edu.stanford.nlp.util.MetaClass.createInstance(MetaClass.java:381)
+        at edu.stanford.nlp.util.ReflectionLoading.loadByReflection(ReflectionLo
+ading.java:38)
+        ... 4 more
+Caused by: java.lang.ClassNotFoundException: edu.stanford.nlp.optimization.OWLQN
+Minimizer
+        at java.net.URLClassLoader.findClass(Unknown Source)
+        at java.lang.ClassLoader.loadClass(Unknown Source)
+        at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+        at java.lang.ClassLoader.loadClass(Unknown Source)
+        at java.lang.Class.forName0(Native Method)
+        at java.lang.Class.forName(Unknown Source)
+        at edu.stanford.nlp.util.MetaClass$ClassFactory.construct(MetaClass.java
+:135)
+        at edu.stanford.nlp.util.MetaClass$ClassFactory.<init>(MetaClass.java:20
+2)
+        at edu.stanford.nlp.util.MetaClass$ClassFactory.<init>(MetaClass.java:69
+)
+        at edu.stanford.nlp.util.MetaClass.createFactory(MetaClass.java:360)
+        ... 6 more`",0,0,0,0,0,1,0,0,1,0
+18,388,https://github.com/stanfordnlp/CoreNLP/issues/492,492,[],closed,2017-07-28 01:59:06+00:00,0,1,How can I get train file of english tagger model?,"I am using CoreNLP to tag word's part of speech in sentence. It's pretty awesome. But some word was tagged inappropriately.
+I know how to train tagger model for CoreNLP. But my problem is that I couldn't find 3 files ""train-wsj-0-18"", ""train-extra-english"", ""train-tech-english"". 
+How could I get 3 files to train CoreNLP tagger model to add some miss train rule and rebuild tagger model ? Also arch files ""egw4-reut.512.clusters,-1,1""
+Thank you very much",0,0,0,0,0,1,0,0,1,0
+19,141,https://github.com/stanfordnlp/CoreNLP/issues/181,181,"[{'id': 45387504, 'node_id': 'MDU6TGFiZWw0NTM4NzUwNA==', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/bug', 'name': 'bug', 'color': 'fc2929', 'default': True, 'description': None}, {'id': 738203548, 'node_id': 'MDU6TGFiZWw3MzgyMDM1NDg=', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/coref', 'name': 'coref', 'color': 'c5def5', 'default': False, 'description': None}]",open,2016-05-04 19:00:26+00:00,0,1,"NER Tag Disambiguation Between ""PERSON""/""PERCENT""","In Mention.java, within the `edu.stanford.nlp.hcoref.data` package, I'm noticing some inconsistencies with how the `ner` types of ""PERSON"" and ""PERCENT"" are handled. As far as I could tell, [this page](http://nlp.stanford.edu/software/CRF-NER.shtml) details the various types possible for NER. 
+
+See below for examples of the mentioned inconsistencies within said Mention.java file:
+- Line 290: not sure where `getGender` is called from but ""PERCENT"" would be lumped into this case
+- Line 525: I don't believe ""PER"" by itself is a type (as attempted by the second condition)
+- Line 621/629: the case for ""PERCENT"" is never reached since it starts with ""PER""
+- Line 798: ""PERCENT"" lumped in with ""PERSON"" in this case
+- Line 1294/1295: ""PERCENT"" lumped in with ""PERSON"" in this case
+",0,0,0,0,1,0,0,0,1,0
+20,167,https://github.com/stanfordnlp/CoreNLP/issues/215,215,[],closed,2016-07-06 00:52:10+00:00,0,2,"NER consistently tags the word ""score"" as 20.0","To reproduce, run Stanford CoreNLP from the command line on the following input:
+
+```
+The student got a pretty good score.
+The current score is 2 to 1.
+an IQ score of 161
+```
+
+When the following command is run:
+
+```
+java -cp ""*"" -Xmx2g edu.stanford.nlp.pipeline.StanfordCoreNLP -annotators tokenize,ssplit,pos,lemma,ner -file input.txt
+```
+
+All occurrences of ""score"" are tagged as NUMBER with value 20.0.
+",0,0,0,0,1,0,0,0,1,0
+21,664,https://github.com/stanfordnlp/CoreNLP/issues/815,815,[],closed,2019-01-02 12:11:45+00:00,0,2,Difference between Stanford POS tagger and POS tagger from Stanford Parser,"What is the difference between Stanford POS tagger and POS tagger in Stanford Parser? I am getting different results from these two services for the same sentence. 
+
+**Example:** 
+
+**Fires** are the high-temperature phenomenon of relatively local extent.
+
+Result from Pos tagger: 
+
+The term **Fires** has captured as **VBZ**
+![image](https://user-images.githubusercontent.com/39255595/50591258-a9f7c400-0eb4-11e9-80d6-3de0ae4233aa.png)
+
+Result from Stanford parser POS tagger:
+
+The term **Fires** has captured as **NNP**
+![image](https://user-images.githubusercontent.com/39255595/50591365-44f09e00-0eb5-11e9-96d1-a8b133d933c2.png)
+
+
+
+
+
+
+
+
+",0,1,0,0,0,0,0,0,1,0
+22,28,https://github.com/stanfordnlp/CoreNLP/issues/41,41,[],closed,2014-12-03 23:03:05+00:00,0,11,Access to tagset in ShiftReduceParser,"it would be nice if the `ShiftReduceParser` exposed a `tagSet()` method which would basically do a 
+
+```
+return model.knownStates
+```
+
+Currently, I need to use reflection to access `ShiftReduceParser.model` and `BaseModel.knownStates` to extract the tag set.
+",0,0,0,0,0,0,0,0,1,0
+23,58,https://github.com/stanfordnlp/CoreNLP/issues/74,74,[],closed,2015-05-25 21:21:09+00:00,0,2,Tagger loading issue.,"Hi, I use the .NET version of CoreNLP and while trying to instantiate StanfordCoreNLP, I ran into this exception: Unrecoverable error while loading a tagger model.
+I heard that it is specific to the version 3.5.2. Did anyone face the same problem and did you have to downgrade the version you used to make it work?
+
+The code I tried is taken straight from the getting started example:
+
+```
+ // Path to the folder with models extracted from ""stanford-parser-3.5.2-models""
+            var jarRoot = @""C:\Users\Masuzu\Downloads\Compressed\stanford-parser-full-2015-04-20\stanford-parser-3.5.2-models"";
+
+            // Text for processing
+            var text = ""Kosgi Santosh sent an email to Stanford University. He didn't get a reply."";
+
+            // Annotation pipeline configuration
+            var props = new Properties();
+            props.setProperty(""annotators"", ""tokenize, ssplit, pos, lemma, ner, parse, dcoref"");
+            props.setProperty(""sutime.binders"", ""0"");
+
+            // We should change current directory, so StanfordCoreNLP could find all the model files automatically
+            var curDir = Environment.CurrentDirectory;
+            Directory.SetCurrentDirectory(jarRoot);
+            var pipeline = new StanfordCoreNLP(props);
+            Directory.SetCurrentDirectory(curDir);
+
+            // Annotation
+            var annotation = new Annotation(text);
+            pipeline.annotate(annotation);
+
+            // Result - Pretty Print
+            using (var stream = new ByteArrayOutputStream())
+            {
+                pipeline.prettyPrint(annotation, new PrintWriter(stream));
+                System.Console.WriteLine(stream.toString());
+                stream.close();
+            }
+```
+",0,0,0,0,0,0,0,0,1,0
+24,325,https://github.com/stanfordnlp/CoreNLP/issues/414,414,[],closed,2017-04-21 21:59:37+00:00,0,1,NER classifier results depend on previous requests,"I've noticed I've got the same token in the same sentence classified sometimes as PERSON and sometimes as ORGANIZATION. I've narrowed down the ""sometimes"" case to a very simple example.
+
+Reproducing
+--
+**Step 1.**
+Try NER with sentence
+> Now I want off the Trump train before it crashes into the red button at 1,488 miles per hour.
+
+You'll get Trump=PERSON
+
+**Step 2.**
+Try NER with two sentences in series:
+> i bet he is a trump supporter
+
+> Now I want off the Trump train before it crashes into the red button at 1,488 miles per hour.
+
+You'll get Trump=ORGANIZATION (for the second sentence).
+
+Sample code in bash
+--
+```bash
+#!/bin/bash
+
+corenlp_dir=/usr/local/share/corenlp/stanford-corenlp-full-2016-10-31
+
+export CLASSPATH=""${corenlp_dir}/*:${CLASSPATH}""
+
+function corenlp(){
+	/usr/bin/java \
+		edu.stanford.nlp.pipeline.StanfordCoreNLP \
+		-annotators tokenize,ssplit,pos,lemma,ner \
+		-outputFormat json
+}
+
+sample=""i bet he is a trump supporter
+Now I want off the Trump train before it crashes into the red button at 1,488 miles per hour.""
+
+# NER for both sentences in series
+result2=$(echo ""$sample"" | corenlp)
+# NER for the second sentence only
+result1=$(echo ""$sample"" | sed 1d | corenlp)
+
+diff -U 5 <(echo ""$result1"") <(echo ""$result2"")
+```
+
+Diff output (**scroll down to the very bottom**)
+--
+```diff
+--- /dev/fd/63	2017-04-22 00:55:48.002305659 +0300
++++ /dev/fd/62	2017-04-22 00:55:48.002305659 +0300
+@@ -3,10 +3,103 @@
+     {
+       ""index"": 0,
+       ""tokens"": [
+         {
+           ""index"": 1,
++          ""word"": ""i"",
++          ""originalText"": ""i"",
++          ""lemma"": ""i"",
++          ""characterOffsetBegin"": 0,
++          ""characterOffsetEnd"": 1,
++          ""pos"": ""LS"",
++          ""ner"": ""O"",
++          ""before"": """",
++          ""after"": "" ""
++        },
++        {
++          ""index"": 2,
++          ""word"": ""bet"",
++          ""originalText"": ""bet"",
++          ""lemma"": ""bet"",
++          ""characterOffsetBegin"": 2,
++          ""characterOffsetEnd"": 5,
++          ""pos"": ""NN"",
++          ""ner"": ""O"",
++          ""before"": "" "",
++          ""after"": "" ""
++        },
++        {
++          ""index"": 3,
++          ""word"": ""he"",
++          ""originalText"": ""he"",
++          ""lemma"": ""he"",
++          ""characterOffsetBegin"": 6,
++          ""characterOffsetEnd"": 8,
++          ""pos"": ""PRP"",
++          ""ner"": ""O"",
++          ""before"": "" "",
++          ""after"": "" ""
++        },
++        {
++          ""index"": 4,
++          ""word"": ""is"",
++          ""originalText"": ""is"",
++          ""lemma"": ""be"",
++          ""characterOffsetBegin"": 9,
++          ""characterOffsetEnd"": 11,
++          ""pos"": ""VBZ"",
++          ""ner"": ""O"",
++          ""before"": "" "",
++          ""after"": "" ""
++        },
++        {
++          ""index"": 5,
++          ""word"": ""a"",
++          ""originalText"": ""a"",
++          ""lemma"": ""a"",
++          ""characterOffsetBegin"": 12,
++          ""characterOffsetEnd"": 13,
++          ""pos"": ""DT"",
++          ""ner"": ""O"",
++          ""before"": "" "",
++          ""after"": "" ""
++        },
++        {
++          ""index"": 6,
++          ""word"": ""trump"",
++          ""originalText"": ""trump"",
++          ""lemma"": ""trump"",
++          ""characterOffsetBegin"": 14,
++          ""characterOffsetEnd"": 19,
++          ""pos"": ""NN"",
++          ""ner"": ""O"",
++          ""before"": "" "",
++          ""after"": "" ""
++        },
++        {
++          ""index"": 7,
++          ""word"": ""supporter"",
++          ""originalText"": ""supporter"",
++          ""lemma"": ""supporter"",
++          ""characterOffsetBegin"": 20,
++          ""characterOffsetEnd"": 29,
++          ""pos"": ""NN"",
++          ""ner"": ""O"",
++          ""before"": "" "",
++          ""after"": """"
++        }
++      ]
++    }
++  ]
++}
++{
++  ""sentences"": [
++    {
++      ""index"": 0,
++      ""tokens"": [
++        {
++          ""index"": 1,
+           ""word"": ""Now"",
+           ""originalText"": ""Now"",
+           ""lemma"": ""now"",
+           ""characterOffsetBegin"": 0,
+           ""characterOffsetEnd"": 3,
+@@ -75,11 +168,11 @@
+           ""originalText"": ""Trump"",
+           ""lemma"": ""Trump"",
+           ""characterOffsetBegin"": 19,
+           ""characterOffsetEnd"": 24,
+           ""pos"": ""NNP"",
+-          ""ner"": ""PERSON"",
++          ""ner"": ""ORGANIZATION"",
+           ""before"": "" "",
+           ""after"": "" ""
+         },
+         {
+           ""index"": 7,
+```",0,0,0,0,1,0,0,1,0,0
+25,448,https://github.com/stanfordnlp/CoreNLP/issues/566,566,[],closed,2017-11-07 09:39:05+00:00,0,3,How to map questions to questions in Stanford NLP,"
+I am new to NLP. I am working on a virtual avatar that communicates with the user. I want the system to answer the questions of the users. The Avatar and the entire system has been created with .NET. Therefore I had to choose Stanford NLP for .NET. The problem I have here is a question can be asked in many ways. I want to identify the questions that has similar meaning and map it to one question, therefore I can return the predefined answer. I know this can be done using NLTK or other NLP tools. Can this be done in Stanford NLP. If yes how can I achieve this?
+
+
+",0,0,0,1,0,0,0,1,0,0
+26,669,https://github.com/stanfordnlp/CoreNLP/issues/821,821,[],open,2019-01-15 21:24:41+00:00,0,0,Poor performance with Spanish parser?,"Not sure where to post this but I've found that the Spanish sentence parsers are struggling with basic sentences, usually involving recursion. I provide an example below. I'm using the default parser available [here](http://nlp.stanford.edu/software/stanford-spanish-corenlp-2018-10-05-models.jar).
+
+```
+# in java
+java -Xmx4g -cp ""*"" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -serverProperties StanfordCoreNLP-spanish.properties -preload tokenize,ssplit,pos,ner -status_port 9003  -port 9003 -timeout 45000
+
+# in python
+from nltk.parse.corenlp import CoreNLPParser
+parser = CoreNLPParser(url='http://localhost:9003', tagtype='ner')
+test_sent = 'El n鐓ero telef璐竛ico de Centro de Ayuda es el 123-456-7890.'
+test_parse = next(parser.parse(parser.tokenize(test_sent)))
+test_parse.pprint()
+```
+
+Output:
+```
+(ROOT
+  (sentence
+    (sn
+      (grup.nom
+        (DET El)
+        (NOUN n鐓ero)
+        (ADJ telef璐竛ico)
+        (ADP de)
+        (PROPN Centro)
+        (ADP de)
+        (PROPN Ayuda)
+        (VERB es)
+        (DET el)
+        (NOUN 123-456-7890)))
+    (PUNCT .)))
+```
+
+In the provided tree I'm not sure why the entire sentence is being tagged as `grup.nom`. A similar problem happens with other sentences that are parsed as `interjeccio`.",0,0,0,1,0,0,0,1,0,0
+27,886,https://github.com/stanfordnlp/CoreNLP/issues/1074,1074,[],open,2020-07-24 15:19:45+00:00,0,2,Any way to get Linearised Dependencies as the output (Stanford Parser)?,"Hi,
+
+I'm currently working on a NMT model that takes in linearised constituency trees from the parser and uses them. I was wondering if there was anything similar in the Stanford Parser for dependencies where one sentence (in its 'tree' form) is linearised to just one line.
+
+Justin",0,1,0,0,0,0,0,1,1,0
+28,211,https://github.com/stanfordnlp/CoreNLP/issues/272,272,"[{'id': 103162424, 'node_id': 'MDU6TGFiZWwxMDMxNjI0MjQ=', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/request', 'name': 'request', 'color': '94c5e9', 'default': False, 'description': None}]",closed,2016-10-05 14:51:58+00:00,0,2,DEFAULT_SENTENCE_DELIMS,"Hi Group,
+
+Thank you first for this open source contribution. It makes make my life much better.
+
+The problem I have right now is that it seems not possible to split sentences with no punctuation in between, like two sentences glued together with the first having no period. Can the DocumentParser smartly spot where to break the sentences? 
+
+I saw[ this line](https://github.com/stanfordnlp/CoreNLP/blob/master/src/edu/stanford/nlp/process/DocumentPreprocessor.java#L63) so I doubt if it is possible.
+
+Thank you.
+",0,0,0,0,0,0,0,1,0,0
+29,344,https://github.com/stanfordnlp/CoreNLP/issues/437,437,[],closed,2017-05-22 21:47:10+00:00,0,2,CRFClassifier classifySentence and classify difference,"I noticed something similar as was [posted](https://mailman.stanford.edu/pipermail/java-nlp-user/2017-May/008098.html) recently on the `java-nlp-user` CoreNLP mailinglist.
+
+Following the [Stanford NER CRF FAQ](https://nlp.stanford.edu/software/crf-faq.html) with the same sample properties, I annotated my corpus and created my own classifier.
+
+Using only the CLI, I noticed that the output of the named entities differs, depending on if I use the textFile or testFile arguments:
+
+1. `java -cp stanford-ner.jar:lib/* edu.stanford.nlp.ie.crf.CRFClassifier -loadClassifier my-crf-ser.gz -textFile myFile.txt`
+or
+2. `java -cp stanford-ner.jar:lib/* edu.stanford.nlp.ie.crf.CRFClassifier -loadClassifier my-crf-ser.gz -testFile myFile-tokenized.tsv`
+
+Using the `ner-gui.sh` or using the API and `List<IN> classify(List<IN> document)` also gives the entities as in 1. (using -textFile). I noticed that the quality of recognized named entities is worse here.
+
+However, as @manning mentioned [on the mailing list](https://mailman.stanford.edu/pipermail/java-nlp-user/2017-May/008098.html), there is the method `List<IN> classifySentence(List<? extends HasWord> tokenSequence)`. I created some code that just reads my text file, tokenizes it and passes it to the classifier to `classifySentence` (even though it is a full document and not only sentence):
+
+```
+        AbstractSequenceClassifier<CoreLabel> classifier = CRFClassifier.getClassifier(""my-crf-ser.gz"");
+        final String inputFile = ""myFile.txt""
+        Properties props = new Properties();
+        props.put(""annotators"", ""tokenize"");
+        StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+        Annotation document = new Annotation(IOUtils.slurpFile(inputFile));
+        pipeline.annotate(document);        
+        List<CoreLabel> tokens = document.get(TokensAnnotation.class);
+        List<CoreLabel> classifiedTokens = classifier.classifySentence(tokens);
+        for (CoreLabel token : classifiedTokens) {
+            System.out.println(token.word() + '/' + token.get(CoreAnnotations.AnswerAnnotation.class) + ' ');
+        }
+```
+
+Here the named entities match the ones found with `-testFile myFile-tokenized.tsv`, and are, from the look of it, of better quality than when using `classify`.
+
+Is my code above a proper way to use a trained classifier through the API to obtain named entities from a document?",0,0,0,0,0,0,0,1,0,0
+30,643,https://github.com/stanfordnlp/CoreNLP/issues/791,791,[],closed,2018-11-08 07:27:27+00:00,0,1,Coreference resolution: does not extract chains on some sentences,"Using the latest CoreNLP server and the neural models in the coreference resolution module, the following two sentences do not return any chain, besides I think they the coref resolution should ideally find one chain with two mentions:
+```
+Taxes on bill not revised after new financial year. Taxes applicable for last month to be recalculated.
+```",0,0,0,0,0,0,0,1,0,0
+31,684,https://github.com/stanfordnlp/CoreNLP/issues/836,836,[],closed,2019-02-16 15:26:45+00:00,0,5,"POS verb error for the sequence NN,PRP,IN","This affected two sentences out of a body of 473.
+
+
+Sentence: You must find pertinent objects, factor them into classes at the right granularity, define class interfaces and inheritance hierarchies, and establish key relationships among them.
+
+You	PRP
+must	MD
+find	VB
+pertinent	JJ
+objects	NNS
+,	,
+**factor	NN (perhaps VB instead)
+them	PRP
+into	IN**
+classes	NNS
+at	IN
+the	DT
+right	JJ
+granularity	NN
+,	,
+define	VB
+class	NN
+interfaces	NNS
+and	CC
+inheritance	NN
+hierarchies	NNS
+,	,
+and	CC
+establish	VB
+key	JJ
+relationships	NNS
+among	IN
+them	PRP
+.	.
+
+Sentence: Chain-of-Responsibility handles requests by forwarding them from one object to another along a chain of objects.
+
+Chain-of-Responsibility	NN
+handles	VBZ
+requests	NNS
+by	IN
+**forwarding	NN (perhaps VB? instead)
+them	PRP
+from	IN**
+one	CD
+object	NN
+to	TO
+another	DT
+along	IN
+a	DT
+chain	NN
+of	IN
+objects	NNS
+.	.
+",0,0,0,0,0,0,0,1,0,0
+32,31,https://github.com/stanfordnlp/CoreNLP/issues/44,44,[],closed,2015-01-06 16:46:53+00:00,0,3,Can we construct Trees from input String?,"I know StanfordNLP produces parentheses based output through print() method, but does it provide any function to read back outputted string and construct a tree?
+",0,0,0,0,0,0,1,0,0,0
+33,50,https://github.com/stanfordnlp/CoreNLP/issues/66,66,[],closed,2015-04-14 13:21:12+00:00,0,3,How to know Tree library's end of sentence,"I'm using the Tree class, and doing DFS traversal to collect different parts of the sentence. Since it is a collection process, I need to be able to add the last part and one of the common condition would be ""If you are at the end of a sentence, add the collected parts to the collection"". And normally, `treeNode == null` would suffice, but Stanford tree does not return null value. So how do I know if I have already reached the end of sentence, in a DFS??
+",0,0,0,0,0,0,1,0,0,0
+34,56,https://github.com/stanfordnlp/CoreNLP/issues/72,72,[],closed,2015-05-11 13:18:11+00:00,0,5,TreeGraph missing in version 3.5 ?,"Hi , I have used TreeGraph in version 3.4 
+But it seems it disappear in the new version . 
+so how can I implement below code ? 
+
+TreeGraph treegraph =  new TreeGraph(tree) ;
+TreeGraphNode  root = treegraph.root();
+",0,0,0,0,0,0,1,0,0,0
+35,69,https://github.com/stanfordnlp/CoreNLP/issues/87,87,"[{'id': 45387508, 'node_id': 'MDU6TGFiZWw0NTM4NzUwOA==', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/question', 'name': 'question', 'color': 'cc317c', 'default': True, 'description': None}]",closed,2015-07-31 12:01:34+00:00,0,1,edu.stanford.nlp.trees.Tree Calculating character edges of child node does not count spaces,"The methods [`leftCharEdge(Tree node)`](https://github.com/stanfordnlp/CoreNLP/blob/master/src/edu/stanford/nlp/trees/Tree.java#L2655) and [`rightCharEdge(Tree node)`](https://github.com/stanfordnlp/CoreNLP/blob/master/src/edu/stanford/nlp/trees/Tree.java#L2694) do not count spaces while calculating the edge.
+
+Is this by design?
+
+What methods should I be using to calculate the position of a substring represented by a child node within the original sentece? You can see an example [here](http://stackoverflow.com/questions/31743689/how-to-find-the-index-of-named-node-in-a-tregex-pattern-using-stanford-corenlp).
+",0,0,0,0,0,0,1,0,0,0
+36,114,https://github.com/stanfordnlp/CoreNLP/issues/148,148,"[{'id': 45387504, 'node_id': 'MDU6TGFiZWw0NTM4NzUwNA==', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/bug', 'name': 'bug', 'color': 'fc2929', 'default': True, 'description': None}]",closed,2016-02-18 09:08:00+00:00,0,3,edu.stanford.nlp.naturalli.Util.cleanTree(...) function cuts off large chunk of sentence due to self-edge issue,"I encounter this abnormal behavior when trying to perform OpenIE relation extraction on the following sentence:
+
+> Julian served on the Carson City Council and in the California State Assembly before running for Congress in December 1995 in a special election to replace Walter Tucker III (D).
+
+After the Util.cleanTree() method is applied onto the collapsed parse tree, only the following proportion of the sentence is retained:
+
+> Julian served on the Carson City Council and
+
+I realized that this error comes from the fact that the collapsed parse tree introduced a self-edge
+
+> served -[conj:and]-> served'
+
+After this edge is deleted, the copy node ""served'"" and the rest of the dependency structure attached to it got deleted. 
+
+I printed out the sequence of nodes and edges deleted and found out that:
+Since ""served"" is the root of the sentence, once the self-edge is removed, the copy node ""served'"" becomes a dangling node. Once ""served'"" is deleted, its dependencies become dangling node, so on and so forth, which causes a large chunk of words got deleted. 
+
+I'm not sure if this is a known bug and you have decided to sacrifice some of these (I didn't check how often this happens) cases to get clean trees. A hacky solution is given below: when the self-edge deletion happens, add the copy node to the set of roots as well, but I'm not sure if that damages other things..
+
+```
+    // Clean edges
+    Iterator<SemanticGraphEdge> iter = tree.edgeIterable().iterator();
+    while (iter.hasNext()) {
+      SemanticGraphEdge edge = iter.next();
+      if (edge.getDependent().index() == edge.getGovernor().index()) {
+        if (tree.getRoots().contains(edge.getGovernor())) {
+            tree.addRoot(edge.getDependent());
+        }
+        // Clean self-edges
+        iter.remove();
+```
+",0,0,0,0,0,0,1,0,0,0
+37,216,https://github.com/stanfordnlp/CoreNLP/issues/278,278,[],closed,2016-10-17 08:19:45+00:00,0,7,"annotator ""coref"" requires annotation ""TreeAnnotation"".","I am trying to run the latest all-models-jar and code on my windows machine. Some annotators like ner, pos, parse,relation work fine. But when i put coref, i get an error. This work with stanford-corenlp-full-2015-12-09 but not with latest code. Am I doing anything wrong?
+[/0:0:0:0:0:0:0:1:49275] API call w/annotators tokenize,ssplit,pos,depparse,lemm
+a,natlog,ner,mention,coref,openie
+The quick brown fox jumped over the lazy dog.
+Adding annotator tokenize
+Adding annotator ssplit
+Adding annotator pos
+Adding annotator depparse
+Adding annotator lemma
+Adding annotator natlog
+Adding annotator ner
+Adding annotator mention
+Using mention detector type: dependency
+Adding annotator coref
+Loading coref model edu/stanford/nlp/models/coref/statistical/clustering_model.s
+er.gz ... done [0.0 sec].
+Loading coref model edu/stanford/nlp/models/coref/statistical/classification_mod
+el.ser.gz ... done [1.0 sec].
+Loading coref model edu/stanford/nlp/models/coref/statistical/ranking_model.ser.
+gz ... done [1.3 sec].
+Loading coref model edu/stanford/nlp/models/coref/statistical/anaphoricity_model
+.ser.gz ... done [0.2 sec].
+java.lang.IllegalArgumentException: annotator ""coref"" requires annotation ""TreeA
+nnotation"". The usual requirements for this annotator are: tokenize,ssplit,pos,l
+emma,ner,mention
+        at edu.stanford.nlp.pipeline.StanfordCoreNLP.construct(StanfordCoreNLP.j
+ava:460)
+        at edu.stanford.nlp.pipeline.StanfordCoreNLP.<init>(StanfordCoreNLP.java
+:154)
+        at edu.stanford.nlp.pipeline.StanfordCoreNLP.<init>(StanfordCoreNLP.java
+:145)
+        at edu.stanford.nlp.pipeline.StanfordCoreNLPServer.mkStanfordCoreNLP(Sta
+nfordCoreNLPServer.java:244)
+        at edu.stanford.nlp.pipeline.StanfordCoreNLPServer.access$500(StanfordCo
+reNLPServer.java:47)
+        at edu.stanford.nlp.pipeline.StanfordCoreNLPServer$CoreNLPHandler.handle
+(StanfordCoreNLPServer.java:551)
+        at com.sun.net.httpserver.Filter$Chain.doFilter(Unknown Source)
+        at sun.net.httpserver.AuthFilter.doFilter(Unknown Source)
+        at com.sun.net.httpserver.Filter$Chain.doFilter(Unknown Source)
+        at sun.net.httpserver.ServerImpl$Exchange$LinkHandler.handle(Unknown Sou
+rce)
+        at com.sun.net.httpserver.Filter$Chain.doFilter(Unknown Source)
+        at sun.net.httpserver.ServerImpl$Exchange.run(Unknown Source)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+        at java.lang.Thread.run(Unknown Source)
+",0,0,0,0,0,0,1,0,0,0
+38,357,https://github.com/stanfordnlp/CoreNLP/issues/455,455,"[{'id': 623871829, 'node_id': 'MDU6TGFiZWw2MjM4NzE4Mjk=', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/packaging-bug', 'name': 'packaging-bug', 'color': 'e96695', 'default': False, 'description': None}]",closed,2017-06-06 09:31:36+00:00,0,3,ptb trees to UD conversion,"Hello,
+
+Could you please help me with converting ptb trees into CONLL-U format.
+I am trying to use the following command:
+java -mx1g edu.stanford.nlp.trees.ud.UniversalDependenciesConverter -treeFile treebank > treebank.conllu
+from https://nlp.stanford.edu/software/stanford-dependencies.shtml
+Unfortunately I get the following error:
+
+""Could not find or load main class edu.stanford.nlp.trees.ud.UniversalDependenciesConverter""
+
+Indeed, UniversalDependenciesConverter.java is not in stanford-parser-3.7.0-sources.jar, the corresponding .class file is missing either.
+I downloaded the parser from https://nlp.stanford.edu/software/lex-parser.shtml
+The parser (even the new one, nndep) works fine. 
+Thank you for your helo,
+Maria",0,0,0,0,0,0,1,0,0,0
+39,421,https://github.com/stanfordnlp/CoreNLP/issues/528,528,"[{'id': 706089022, 'node_id': 'MDU6TGFiZWw3MDYwODkwMjI=', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/windows', 'name': 'windows', 'color': '1d76db', 'default': False, 'description': None}]",closed,2017-09-21 23:29:38+00:00,0,1,Errors parsing Web Treebank to Universal Dependency,"Hi there,
+
+I was using my Windows system to use both stanford-parser and coreNLP to parse Web Treebank (in bracket form to UD Conllx form)
+
+The following code fails with stanford-parser with the following error:
+C:\Users\hp\Documents\Georgetown\GUM\SD-UD_converter_test\stanford-parser-full-2017-06-09\stanford-parser-full-2017-06-09>(java -cp ""*;"" -mx1g edu.stanford.nlp.trees.ud.UniversalDependenciesConverter -treeFile  20070404104007AAY1Chs_ans.xml.tree  1>20070404104007AAY1Chs_ans.xml_UD.conllu )
+Exception in thread ""main"" java.lang.RuntimeException: Error loading flags.readerAndWriter: 'edu.stanford.nlp.sequences.ColumnDocumentReaderAndWriter'
+        at edu.stanford.nlp.ie.AbstractSequenceClassifier.makeReaderAndWriter(AbstractSequenceClassifier.java:227)
+        at edu.stanford.nlp.ie.AbstractSequenceClassifier.reinit(AbstractSequenceClassifier.java:194)
+        at edu.stanford.nlp.ie.AbstractSequenceClassifier.<init>(AbstractSequenceClassifier.java:171)
+        at edu.stanford.nlp.ie.AbstractSequenceClassifier.<init>(AbstractSequenceClassifier.java:139)
+        at edu.stanford.nlp.ie.ClassifierCombiner.<init>(ClassifierCombiner.java:139)
+        at edu.stanford.nlp.ie.NERClassifierCombiner.<init>(NERClassifierCombiner.java:128)
+        at edu.stanford.nlp.ie.NERClassifierCombiner.createNERClassifierCombiner(NERClassifierCombiner.java:273)
+        at edu.stanford.nlp.ie.NERClassifierCombiner.createNERClassifierCombiner(NERClassifierCombiner.java:212)
+        at edu.stanford.nlp.trees.ud.UniversalDependenciesConverter.addNERTags(UniversalDependenciesConverter.java:144)
+        at edu.stanford.nlp.trees.ud.UniversalDependenciesConverter.convertTreeToBasic(UniversalDependenciesConverter.java:68)
+        at edu.stanford.nlp.trees.ud.UniversalDependenciesConverter.access$000(UniversalDependenciesConverter.java:27)
+        at edu.stanford.nlp.trees.ud.UniversalDependenciesConverter$TreeToSemanticGraphIterator.next(UniversalDependenciesConverter.java:99)
+        at edu.stanford.nlp.trees.ud.UniversalDependenciesConverter$TreeToSemanticGraphIterator.next(UniversalDependenciesConverter.java:81)
+        at edu.stanford.nlp.trees.ud.UniversalDependenciesConverter.main(UniversalDependenciesConverter.java:196)
+Caused by: edu.stanford.nlp.util.ReflectionLoading$ReflectionLoadingException: Error creating edu.stanford.nlp.sequences.ColumnDocumentReaderAndWriter
+        at edu.stanford.nlp.util.ReflectionLoading.loadByReflection(ReflectionLoading.java:40)
+        at edu.stanford.nlp.ie.AbstractSequenceClassifier.makeReaderAndWriter(AbstractSequenceClassifier.java:225)
+        ... 13 more
+Caused by: edu.stanford.nlp.util.MetaClass$ClassCreationException: java.lang.ClassNotFoundException: edu.stanford.nlp.sequences.ColumnDocumentReaderAndWriter
+        at edu.stanford.nlp.util.MetaClass.createFactory(MetaClass.java:364)
+        at edu.stanford.nlp.util.MetaClass.createInstance(MetaClass.java:381)
+        at edu.stanford.nlp.util.ReflectionLoading.loadByReflection(ReflectionLoading.java:38)
+        ... 14 more
+Caused by: java.lang.ClassNotFoundException: edu.stanford.nlp.sequences.ColumnDocumentReaderAndWriter
+        at java.net.URLClassLoader.findClass(Unknown Source)
+        at java.lang.ClassLoader.loadClass(Unknown Source)
+        at sun.misc.Launcher$AppClassLoader.loadClass(Unknown Source)
+        at java.lang.ClassLoader.loadClass(Unknown Source)
+        at java.lang.Class.forName0(Native Method)
+        at java.lang.Class.forName(Unknown Source)
+        at edu.stanford.nlp.util.MetaClass$ClassFactory.construct(MetaClass.java:135)
+        at edu.stanford.nlp.util.MetaClass$ClassFactory.<init>(MetaClass.java:202)
+        at edu.stanford.nlp.util.MetaClass$ClassFactory.<init>(MetaClass.java:69)
+        at edu.stanford.nlp.util.MetaClass.createFactory(MetaClass.java:360)
+        ... 16 more
+
+
+It somehow runs with coreNLP but takes 10 seconds per file due to loadings:
+>java -mx1024m -cp ""*;"" edu.stanford.nlp.trees.ud.UniversalDependenciesConverter -treeFile 20070404104007AAY1Chs_ans.xml.tree
+[main] INFO edu.stanford.nlp.ie.AbstractSequenceClassifier - Loading classifier from edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz ... done [7.2 sec].
+[main] INFO edu.stanford.nlp.ie.AbstractSequenceClassifier - Loading classifier from edu/stanford/nlp/models/ner/english.muc.7class.distsim.crf.ser.gz ... done [2.1 sec].
+[main] INFO edu.stanford.nlp.ie.AbstractSequenceClassifier - Loading classifier from edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz ... done [5.1 sec].
+[main] INFO edu.stanford.nlp.time.JollyDayHolidays - Initializing JollyDayHoliday for SUTime from classpath edu/stanford/nlp/models/sutime/jollyday/Holidays_sutime.xml as sutime.binder.1.
+1       where   where   ADV     WRB     _       4       advmod  _       _
+2       can     can     AUX     MD      _       4       aux     _       _
+3       I       I       PRON    PRP     _       4       nsubj   _       _
+
+
+
+
+I would like to get some help with this issue (hopefully it could run on both stanford-parser and coreNLP).
+
+Thank you all.
+Best,
+Logan Peng",0,0,0,0,0,0,1,0,0,0
+40,549,https://github.com/stanfordnlp/CoreNLP/issues/687,687,[],closed,2018-04-27 19:48:03+00:00,0,3,How to correlate between parser input string and output tree/tokens,"Sometimes an input string can have for example multiple spaces, or multiple sentences, or other characters that are being removed by the parser, and sometimes the parser returns a forest (list of trees, each representing a sentence).
+
+I want to be able to correlate exactly from an input segment (start/end character), to the corresponding token in the output forest. How can I easily do it? I mean, the parser knows what characters were removed/trimmed, so it would be useful to add an API parameter (for the CoreNLP server), that instead of just returning the tokens, and their POS, also the start/end character in the corresponding input sentence.",0,0,0,0,0,0,1,1,0,0
+41,70,https://github.com/stanfordnlp/CoreNLP/issues/92,92,"[{'id': 45387508, 'node_id': 'MDU6TGFiZWw0NTM4NzUwOA==', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/question', 'name': 'question', 'color': 'cc317c', 'default': True, 'description': None}]",closed,2015-09-10 14:16:55+00:00,0,2,Train classifier to label sentences.,"Hi all,
+
+I don't know if this is the right spot to post this question. I am new to StanfordNLP. This is more of a technical question.
+
+I have a large number of sentences with each one tagged with 5 different classes. I wanted to ask how I could use StanfordNLP to train a classifier (e.g. Bayesian, NN, etc.) to label new incoming sentences into these 5 classes. 
+
+Any help to point me to the right direction would be much appreciated. Thanks!
+",0,0,0,1,0,1,0,1,0,0
+42,260,https://github.com/stanfordnlp/CoreNLP/issues/336,336,[],open,2017-01-10 08:03:48+00:00,0,7,Training own true case  models,"Hi,
+There seems to be many inconsistencies in the truce casing model , hence I need to retrain it on my data , how can I train the same using my own training data?
+I need examples for the following training settings, i.e what is the format of noUN.input:
+https://github.com/jnorthrup/stanford-corenlp/blob/master/src/main/resources/edu/stanford/nlp/models/truecase/truecasing.fast.prop
+```
+serializeTo=truecasing.fast.qn.ser.gz
+trainFileList=/scr/nlp/data/gale/NIST09/truecaser/crf/noUN.input
+testFile=/scr/nlp/data/gale/AE-MT-eval-data/mt06/cased/ref0
+
+```",0,0,0,0,0,1,0,0,0,0
+43,385,https://github.com/stanfordnlp/CoreNLP/issues/489,489,[],closed,2017-07-26 13:20:08+00:00,0,1,Training relation extractor with custom data,"Hello All,
+As a test I want to train my own model for extracting relations between entities in the financial domain. So far I have been able to trail a NER-model in order to recognize custom entities. The next step in my project is to recognize the relations. Theoretically, I know how the training process works, but I need some help with the relation data for training and how to integrate all this in stanfordCoreNLP.
+
+**What I know until now:**
+1. I need to train a ner-model for recognizing new entities (this step is already implemented and is working fine).
+2. I need to create training data in the format IO similar to conll04.corp, e.g.:
+1	O	0	O	IN	By	O	O	O
+1	Peop	1	O	NNP/NNP	RONI/RABIN	O	O	O
+2	Org	0	O	NNP/NNP	Associated/Press	O	O	O
+2	O	1	O	NNP	Writer	O	O	O
+3	O	0	O	DT	The	O	O	O
+3	O	1	O	JJ	long	O	O	O
+3	Other	2	O	JJ	Palestinian	O	O	O
+3	O	3	O	NN	uprising	O	O	O
+3	O	4	O	VBZ	has	O	O	O
+3	O	5	O	VBN	brought	O	O	O
+3	O	6	O	NN	bitterness	O	O	O
+3	O	7	O	TO	to	O	O	O
+
+3. Change use new ""possibleEntities"" attribute in the properties file
+4. Re-compile library (?)
+5. Train and test your model
+
+**Where do I need help:**
+a. Is there a script which could help me to generate the training data layout for the relation extractor. I hope I don't have to create this file manually. And do I run the script in order to get the desired output.
+
+b.  Where do I have to do changes in the original code/classes?
+
+c. After changes are done, do I have to recompile the library indeed?
+
+Please advise.
+
+Thanks ",0,0,0,0,1,1,0,0,0,0
+44,408,https://github.com/stanfordnlp/CoreNLP/issues/512,512,[],closed,2017-08-28 09:31:51+00:00,0,1,Can you please provide some examples of training a dependency parser?,"We need to parse e-mail messages in our project to extract information to generate orders (involving a code, description, quantity). We are using Named Entity Recognition to identify the key domain entities, and have been quite successful. Now we need to build dependency graphs, to establish relations and associations, for eg.
+common information, say 1% rate of interest
+first order information
+second order information
+third order information
+In this example, the 1% rate of interest is applicable to all the orders. In case any order has a specific rate of interest, it overrides the value 1% (as is in this context)
+
+I have not found any examples anywhere across the web, with searches done so far. Could you please advise?
+
+Thanks!",0,0,0,0,0,1,0,0,0,0
+45,413,https://github.com/stanfordnlp/CoreNLP/issues/518,518,[],closed,2017-09-08 13:46:48+00:00,0,9,NER training get stuck since more than 10 days,"Hello,
+
+I ran the following command line 10 days ago:
+
+```
+java -Xmx30g -cp stanford-corenlp-full-2017-06-09/stanford-corenlp-3.8.0.jar edu.stanford.nlp.ie.crf.CRFClassifier -prop stanford.prop -trainFile wikipedia.conll -serializeTo wikipedia_fr.ser.gz
+```
+
+In order to train a model for French. Nevertheless, I have the feeling that the training has never started because my output looks like this:
+
+```
+java -Xmx30g -cp stanford-corenlp-full-2017-06-09/stanford-corenlp-3.8.0.jar edu.stanford.nlp.ie.crf.CRFClassifier -prop stanford.prop -trainFile wikipedia.conll -serializeTo wikipedia_fr.ser.gz
+Invoked on Mon Aug 28 10:26:51 CEST 2017 with arguments: -prop stanford.prop -trainFile wikipedia.conll -serializeTo wikipedia_fr.ser.gz
+usePrevSequences=true
+useQN=true
+useObservedSequencesOnly=true
+useTitle=true
+useLastRealWord=true
+useClassFeature=true
+type=crf
+useTypeSeqs2=true
+featureDiffThresh=0.05
+useSequences=true
+useNextRealWord=true
+disjunctionWidth=4
+wordShape=dan2useLC
+saveFeatureIndexToDisk=true
+useTypeySequences=true
+QNsize=25
+useDisjunctive=true
+noMidNGrams=true
+sigma=20
+serializeTo=wikipedia_fr.ser.gz
+useNGrams=true
+normalize=true
+usePrev=true
+readerAndWriter=edu.stanford.nlp.sequences.ColumnDocumentReaderAndWriter
+maxLeft=1
+useNext=true
+trainFile=wikipedia.conll
+useLongSequences=true
+useOccurrencePatterns=true
+map=word=0,answer=1
+useWord=true
+useTypeSeqs=true
+```
+
+My training file is pretty big, it has around 7 Million rows. This might be the reason?
+
+Thanks in advance for any help.",0,0,0,0,0,1,0,0,0,0
+46,417,https://github.com/stanfordnlp/CoreNLP/issues/523,523,[],closed,2017-09-14 02:13:58+00:00,0,1,"When I train my own NER model, got the java.lang.OutofMemoryError: GC overhead limit exceeded","Exception in thread ""main"" java.lang.OutOfMemoryError: GC overhead limit exceede
+d
+        at java.util.Arrays.copyOfRange(Unknown Source)
+        at java.lang.String.<init>(Unknown Source)
+        at java.lang.StringBuilder.toString(Unknown Source)
+        at edu.stanford.nlp.process.WordShapeClassifier.wordShapeChris2Short(Wor
+dShapeClassifier.java:408)
+        at edu.stanford.nlp.process.WordShapeClassifier.wordShapeChris2(WordShap
+eClassifier.java:364)
+        at edu.stanford.nlp.process.WordShapeClassifier.wordShape(WordShapeClass
+ifier.java:180)
+        at edu.stanford.nlp.sequences.ObjectBankWrapper.doBasicStuff(ObjectBankW
+rapper.java:141)
+        at edu.stanford.nlp.sequences.ObjectBankWrapper.processDocument(ObjectBa
+nkWrapper.java:92)
+        at edu.stanford.nlp.sequences.ObjectBankWrapper$WrappedIterator.next(Obj
+ectBankWrapper.java:85)
+        at edu.stanford.nlp.sequences.ObjectBankWrapper$WrappedIterator.next(Obj
+ectBankWrapper.java:49)
+        at edu.stanford.nlp.ie.crf.CRFClassifier.train(CRFClassifier.java:1585)
+        at edu.stanford.nlp.ie.AbstractSequenceClassifier.train(AbstractSequence
+Classifier.java:765)
+        at edu.stanford.nlp.ie.AbstractSequenceClassifier.train(AbstractSequence
+Classifier.java:753)
+        at edu.stanford.nlp.ie.crf.CRFClassifier.main(CRFClassifier.java:3012)",0,0,0,0,0,1,0,0,0,0
+47,813,https://github.com/stanfordnlp/CoreNLP/issues/980,980,[],open,2020-01-08 07:18:36+00:00,0,6,Python StanfordcorenlpServer client identify ::: NER ignorecase is not working,"**Started server with command:**
+java -mx4g -cp ""*"" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -annotators ""tokenize,ssplit,pos,lemma,parse,sentiment"" -port 9000 -timeout 30000
+
+**Python Client:**
+`
+from collections import defaultdict
+from stanfordcorenlp import StanfordCoreNLP
+import json
+
+class StanfordNLP:
+    def __init__(self, host='http://localhost', port=9000):
+        self.nlp = StanfordCoreNLP(host, port=port,
+                                   timeout=30000)  # , quiet=False, logging_level=logging.DEBUG)
+        self.props = {
+            'annotators': 'tokenize, ssplit, pos, lemma, ner, parse, depparse, dcoref, relation, truecase',
+            'pipelineLanguage': 'en',
+            'truecase.overwriteText': 'true',
+            'outputFormat': 'json'
+        }If I provide the input text :
+text = 'rajesh lives in hyderbad'
+
+    def ner(self, sentence):
+        return self.nlp.ner(sentence)
+
+    def annotate(self, sentence):
+        return json.loads(self.nlp.annotate(sentence, properties=self.props))
+
+    @staticmethod
+    def tokens_to_dict(_tokens):
+        tokens = defaultdict(dict)
+        for token in _tokens:
+            tokens[int(token['index'])] = {
+                'ner': token['ner']
+            }
+        return tokens
+
+if __name__ == '__main__':
+    sNLP = StanfordNLP()
+    **text = 'Rajesh lives in Hyderabad'**
+    print (""NER:"", `sNLP.ner(text))`
+
+**_Expected Output:
+NER: [('Rajesh', 'PERSON'), ('lives', 'O'), ('in', 'O'), ('Hyderabad', 'LOCATION')]_**
+
+**_Actual Output:
+NER: [('Rajesh', 'PERSON'), ('lives', 'O'), ('in', 'O'), ('Hyderabad', 'LOCATION')]_**
+
+**If I provide the input text :
+text = 'rajesh lives in hyderbad'**
+**_Expected Output:
+NER: [('rajesh', 'PERSON'), ('lives', 'O'), ('in', 'O'), ('hyderabad', 'LOCATION')]_**
+
+**_Actual Output:
+NER: [('rajesh', 'O'), ('lives', 'O'), ('in', 'O'), ('hyderabad', 'O')]_**
+
+**I wish to solve this by using true-case annotation however my attempt didn't worked out**
+",0,1,1,0,1,0,0,0,0,0
+48,4,https://github.com/stanfordnlp/CoreNLP/issues/6,6,"[{'id': 45387506, 'node_id': 'MDU6TGFiZWw0NTM4NzUwNg==', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/enhancement', 'name': 'enhancement', 'color': '84b6eb', 'default': True, 'description': None}]",open,2013-11-17 21:20:59+00:00,0,1,Custom features in NER package should use dependency injection,"To add a custom feature extractor to the NER package, the path of least resistance is to modify NERFeatureFactory.java, AnnotationLookup.java, CoreAnnotations.java and SeqClassifierFlags.java. A more generic approach would use dependency injection, so third-party developers wouldn't have to touch code inside CoreNLP. If it's not already on your development roadmap, I'm happy to take on that change.
+
+Dave
+",0,0,0,0,1,0,0,0,0,0
+49,14,https://github.com/stanfordnlp/CoreNLP/issues/24,24,[],closed,2014-04-14 11:39:25+00:00,0,2,NER annotation doesn't allow for setting SUTime rule path,"When the NER annotator is used in a pipeline it doesn't seem to support passing the _`sutime.rules`_ property on to the time extractors created by `NumberSequenceClassifier`, which leads to the `Options` object always being filled out with the default SUTime rules' paths. 
+
+In Java this isn't really a problem due to the class pathing, however, I'm using the .Net bindings via IKVM and have run into a few issues with this (as such I also don't have Java installed and thus cannot create a patch).
+",0,0,0,0,1,0,0,0,0,0
+50,87,https://github.com/stanfordnlp/CoreNLP/issues/120,120,"[{'id': 45387506, 'node_id': 'MDU6TGFiZWw0NTM4NzUwNg==', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/enhancement', 'name': 'enhancement', 'color': '84b6eb', 'default': True, 'description': None}]",closed,2016-01-03 13:45:42+00:00,0,1,NERClassifierCombiner cannot load models from URL,"Unlike many other annotators, the NERClassifierCombiner cannot load models from URLs. To fix this, `AbstractSequenceClassifier.loadStreamFromClasspath(String)` (and probably some other methods calling it) should use `IOUtils.getInputStreamFromURLOrClasspathOrFileSystem()`. There is even a related comment in `AbstractSequenceClassifier`:
+
+```
+todo [cdm 2015]: Replace this method with use of the method in IOUtils.
+```
+",0,0,0,0,1,0,0,0,0,0
+51,126,https://github.com/stanfordnlp/CoreNLP/issues/161,161,"[{'id': 45387504, 'node_id': 'MDU6TGFiZWw0NTM4NzUwNA==', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/bug', 'name': 'bug', 'color': 'fc2929', 'default': True, 'description': None}]",closed,2016-03-19 07:38:32+00:00,0,2,regexner annotator does not work properly with ner annotator,"I'm trying to use `regexner` annotator so that it overwrites some of the entities recognised as `O` or `MISC` from the `ner` annotator. I'm trying to query the corenlp server like the following:
+
+```
+/?properties={""annotators"": ""tokenize, ssplit, pos, lemma, ner, regexner"", ""outputFormat"": ""json""}
+```
+
+But it does not work as expected. If I only use the `regexner` then it works, but when I wanted to use it along with the `ner` annotator, so that the `regexner` overwrites the recognised entities, it only shows the entities recognised from `ner` as if the `regexner` did nothing. Looking at the corenlp server logs, I found that the annotators are actually reordered while executing like the following: 
+
+```
+API call w/annotators tokenize,ssplit,regexner,pos,lemma,ner
+```
+
+So I guess the `regexner` is being called before the `ner` violating the order of annotators mentioned by me. Could you guys have a look into this?
+",0,0,0,0,1,0,0,0,0,0
+52,159,https://github.com/stanfordnlp/CoreNLP/issues/205,205,[],closed,2016-06-10 23:49:40+00:00,0,1,Strange behavior of NER options,"I'm running CoreNLP 3.6.0, and getting some strange behavior when I try to configure NER. These CoreNLP options:
+
+Properties props = new Properties();
+props.setProperty(""annotators"", ""tokenize, ssplit, pos, lemma, ner, entitymentions"");
+props.setProperty(""ner.applyNumericClassifiers"", ""false"")
+props.setProperty(""ner.useSUTime"", ""false"")
+props.setProperty(""ner.markTimeRanges"", ""false"")
+props.setProperty(""ner.includeRange"", ""false"")
+StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+
+run on this sentence:
+
+""I will be in San Francisco from 6 PM to 9 PM.""
+
+tag ""San Francisco"" as a LOCATION, and that's the only tag, as expected. However, when these options are run on this sentence:
+
+""I will be in San Francisco from January 22nd to January 27th.""
+
+they tag ""San Francisco"" as a LOCATION and January 22nd/January 27th as DATE, even though SUTime is supposed to be switched off. With this set of options:
+
+Properties props = new Properties();
+props.setProperty(""annotators"", ""tokenize, ssplit, pos, lemma, ner, entitymentions"");
+props.setProperty(""ner.applyNumericClassifiers"", ""true"")
+props.setProperty(""ner.useSUTime"", ""true"")
+props.setProperty(""ner.markTimeRanges"", ""true"")
+props.setProperty(""ner.includeRange"", ""true"")
+StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+
+the sentence ""I will be in San Francisco from 6 PM to 9 PM."" now includes the times, but it and the sentence ""I will be in San Francisco from January 22nd to January 27th."" have two DATE tags instead of one DURATION tag, even though ""markTimeRanges"" is set to true. ""markTimeRanges"" is supposed to be an SUTime option, but when I tried this set of options:
+
+Properties props = new Properties();
+props.setProperty(""annotators"", ""tokenize, ssplit, pos, lemma, ner, entitymentions"");
+props.setProperty(""ner.applyNumericClassifiers"", ""true"")
+props.setProperty(""ner.useSUTime"", ""true"")
+props.setProperty(""sutime.markTimeRanges"", ""true"")
+StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+
+I got this error:
+
+sutime.markTimeRanges=true
+Unknown property: |sutime.markTimeRanges|
+
+while the pipeline was being loaded (before any text had been parsed). 
+",0,0,0,0,1,0,0,0,0,0
+53,202,https://github.com/stanfordnlp/CoreNLP/issues/261,261,[],closed,2016-09-08 19:41:15+00:00,0,2,Augment Spanish NER data with CoNLL,"Rebuild NER models with [CoNLL data](http://www.cnts.ua.ac.be/conll2003/ner/).
+(would assign this to myself if I could!)
+",0,0,0,0,1,0,0,0,0,0
+54,214,https://github.com/stanfordnlp/CoreNLP/issues/275,275,[],closed,2016-10-13 10:00:27+00:00,0,2,How to pick a specific in memory loaded NER model?,"Hello,
+
+I wanted to know if it was possible to select which NER model we would like to use even when the pipeline is already loaded in memory. For example, let's assume I create a pipeline by using the NERCombiner and loading the 3 provided models:
+
+```
+edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz
+edu/stanford/nlp/models/ner/english.muc.7class.distsim.crf.ser.gz
+edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz
+```
+
+With the following piece of code:
+
+```
+Properties props = new Properties();
+props.put(""annotators"", ""tokenize, ssplit, pos, lemma, ner, parse, mention, coref"");
+props.put(""coref.md.type"", ""rule"");
+props.put(""coref.mode"", ""statistical"");
+props.put(""coref.doClustering"", ""true"");
+props.put(""ner.model"", ""edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz,edu/stanford/nlp/models/ner/english.muc.7class.distsim.crf.ser.gz,edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz"");
+StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+```
+
+Now every time I want to annotate a text, the 3 models will be applied. Now what I would like to do is to use only the `3class` model but without recreating the pipeline and reloading everything in memory. As in my case I use the statistical coref, it takes a moment all the time to load all its stuff in memory, and I would like to avoid this all the time. Is there any way to do that?
+
+Thanks in advance for any help!
+",0,0,0,0,1,0,0,0,0,0
+55,256,https://github.com/stanfordnlp/CoreNLP/issues/332,332,[],closed,2017-01-04 16:14:05+00:00,0,1,NER cannot work correctly with Cyprus and cyprus ,"Step:
+1. search Cyprus: ""ner"":""POSITION""
+2. search cyprus: ""ner"":""O""
+3. search Cyprus: ""ner"":""O""
+
+After those three steps, we cannot get correct ner with 'Cyprus'.
+
+In 3.6.0",0,0,0,0,1,0,0,0,0,0
+56,281,https://github.com/stanfordnlp/CoreNLP/issues/360,360,[],closed,2017-02-22 15:12:53+00:00,0,4,Issue with NER and adjacent names and same type.,"Supposed to have in my input text a NER output like the following
+
+
+<img width=""1174"" alt=""schermata 2017-02-22 alle 15 53 29"" src=""https://cloud.githubusercontent.com/assets/163333/23216676/176d9c36-f917-11e6-9c01-d73a79bbf834.png"">
+
+We can see how it is wrong with the consecutive keywords `Quavo Ratatouille Run` that are recognized as `TYPE=PERSON`, while that classification is for `Quavo Ratatouille` of course.
+
+What happens is the two or more words, that are consecutive and having the same type will be grouped by that type.
+
+ In this specific case we have a line break separator in the text, so the NER module should consider `Run` as not consecutive. 
+
+Is there a way to achieve that?
+",0,0,0,0,1,0,0,0,0,0
+57,318,https://github.com/stanfordnlp/CoreNLP/issues/407,407,"[{'id': 626016953, 'node_id': 'MDU6TGFiZWw2MjYwMTY5NTM=', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/analysis-bug', 'name': 'analysis-bug', 'color': 'f98685', 'default': False, 'description': None}]",closed,2017-04-09 21:16:17+00:00,0,2,Stanford online NER tool vs stanford-ner-2016-10-31 cli tool,"I wonder why results at http://nlp.stanford.edu:8080/ner/ differ from those by the stanford-ner-2016-10-31 cli tool?
+
+For example test string=HAHAHAHAHA
+
+The online tool detects nothing with the 3-class classifier while the cli tool detects something
+```
+stanford-ner-2016-10-31$ ./ner.sh <(echo HAHAHAHAHA)
+Invoked on Mon Apr 10 00:02:59 EEST 2017 with arguments: -loadClassifier ./classifiers/english.all.3class.distsim.crf.ser.gz -textFile /dev/fd/63
+loadClassifier=./classifiers/english.all.3class.distsim.crf.ser.gz
+textFile=/dev/fd/63
+Loading classifier from ./classifiers/english.all.3class.distsim.crf.ser.gz ... done [1.5 sec].
+HAHAHAHAHA/PERSON 
+CRFClassifier tagged 1 words in 1 documents at 13.70 words per second.
+```
+
+Trying different samples I see the online tool performs **better** than the cli one.
+
+Is it because the online tool's english.all.3class.distsim.crf.ser.gz model differs from the one bundled with stanford-ner-2016-10-31?",0,0,0,0,1,0,0,0,0,0
+58,362,https://github.com/stanfordnlp/CoreNLP/issues/462,462,[],open,2017-06-13 03:26:45+00:00,0,0,Using own NER model and modify UI Brat,"Hello!
+I'm very new with NLP, and have a little java knowledge. I've test this software with english article, and its has incredible accuracy. But I have a problem while implementing coreNLP with other language (Bahasa Indonesia). I have train about 300 article and its create a model, let say indonesia-1.ser.gz . In the forum I read, I have to add server.properties file that consist ner model configuration path, then I have to execute with -serverProperties flag when running coreNLP server like this :
+
+`java -mx4g -cp ""*"" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -serverProperties server.properties -port 9000 -timeout 15000`
+
+It run very smooth on my localhost:9000 and can detect NER on my bahasa article that I input first. my question are :
+1. if I want segmented my model (indonesia-1.ser.gz, indonesia-2.ser.gz, ...) can I just add model path in server.properties file? Then how can I choose model during the testing?
+2. In stanford CoreNLP UI, I see there are language option (English, Chinese, Spanish, etc). Can I modify that in corenlp-brat.html with my own model? and how to connect the UI and my model? So I can choose my model from the UI.
+
+Thank you for your attention, I'm wait for any answers. And sorry for my bad english :(",0,0,0,0,1,0,0,0,0,0
+59,109,https://github.com/stanfordnlp/CoreNLP/issues/142,142,[],closed,2016-02-11 14:01:18+00:00,0,0,Is there any way to lemmatize superlatives with corenlp ?,"Using the MorphaAnnotator or directly Morphology class, ""highest"" doesn't get lemmatized to ""high"" as is done by other lemmatizers (for example treetagger).
+Any reason for this behavior ? Any class that can provide the behavior I want in corenlp ?
+
+(nltk can lemmatize it correctly too for example http://textanalysisonline.com/nltk-wordnet-lemmatizer )
+",0,0,0,1,0,0,0,0,0,0
+60,301,https://github.com/stanfordnlp/CoreNLP/issues/383,383,[],closed,2017-03-12 09:02:46+00:00,0,6,Stanford segmenter nltk Could not find SLF4J in your classpath,"I set up a nltk and stanford environment, nltk and stanford jars has downloaded, the program with nltk was ok, but I had a trouble with stanford segmenter. just make a simple program via stanford segmenter, I got a error is Could not find SLF4J in your classpath, although I had export all jars include slf4j-api.jar. Detail as follows
+
+Python3.5 NLTK, 3.2.2, Standford jars 3.7
+
+OS: Centos
+
+Environment variable:
+
+   ```
+ export JAVA_HOME=/usr/java/jdk1.8.0_60
+    export NLTK_DATA=/opt/nltk_data
+    export STANFORD_SEGMENTER_PATH=/opt/stanford/stanford-segmenter-3.7
+    export CLASSPATH=$CLASSPATH:$STANFORD_SEGMENTER_PATH/stanford-segmenter.jar
+    export STANFORD_POSTAGGER_PATH=/opt/stanford/stanford-postagger-full-2016-10-31
+    export CLASSPATH=$CLASSPATH:$STANFORD_POSTAGGER_PATH/stanford-postagger.jar
+    export STANFORD_NER_PATH=/opt/stanford/stanford-ner-2016-10-31
+    export CLASSPATH=$CLASSPATH:$STANFORD_NER_PATH/stanford-ner.jar
+    export STANFORD_MODELS=$STANFORD_NER_PATH/classifiers:$STANFORD_POSTAGGER_PATH/models
+    export STANFORD_PARSER_PATH=/opt/stanford/stanford-parser-full-2016-10-31
+    export CLASSPATH=$CLASSPATH:$STANFORD_PARSER_PATH/stanford-parser.jar:$STANFORD_PARSER_PATH/stanford-parser-3.6.0-models.jar:$STANFORD_PARSER_PATH/slf4j-api.jar:$STANFORD_PARSER_PATH/ejml-0.23.jar
+    export STANFORD_CORENLP_PATH=/opt/stanford/stanford-corenlp-full-2016-10-31
+    export CLASSPATH=$CLASSPATH:$STANFORD_CORENLP_PATH/stanford-corenlp-3.7.0.jar:$STANFORD_CORENLP_PATH/stanford-corenlp-3.7.0-models.jar:$STANFORD_CORENLP_PATH/javax.json.jar:$STANFORD_CORENLP_PATH/joda-time.jar:$STANFORD_CORENLP_PATH/jollyday.jar:$STANFORD_CORENLP_PATH/protobuf.jar:$STANFORD_CORENLP_PATH/slf4j-simple.jar:$STANFORD_CORENLP_PATH/xom.jar
+    export STANFORD_CORENLP=$STANFORD_CORENLP_PATH
+
+```
+The program as follows:
+
+```
+from nltk.tokenize import StanfordSegmenter
+>>> segmenter = StanfordSegmenter(
+    path_to_sihan_corpora_dict=""/opt/stanford/stanford-segmenter-3.7/data/"",
+    path_to_model=""/opt/stanford/stanford-segmenter-3.7/data/pku.gz"",
+    path_to_dict=""/opt/stanford/stanford-segmenter-3.7/data/dict-chris6.ser.gz""
+)
+>>> res = segmenter.segment(u""鏉╂瑦妲搁弬顖氭蕉缁傚繋鑵戦弬鍥у瀻鐠囧秴娅掑ù瀣槸"")
+```
+The error as follows:
+
+```
+Exception in thread ""main"" java.lang.ExceptionInInitializerError
+    at edu.stanford.nlp.ie.AbstractSequenceClassifier.<clinit>(AbstractSequenceClassifier.java:88)
+Caused by: java.lang.IllegalStateException: Could not find SLF4J in your classpath
+    at edu.stanford.nlp.util.logging.RedwoodConfiguration$Handlers.lambda$static$530(RedwoodConfiguration.java:190)
+    at edu.stanford.nlp.util.logging.RedwoodConfiguration$Handlers$7.buildChain(RedwoodConfiguration.java:309)
+    at edu.stanford.nlp.util.logging.RedwoodConfiguration$Handlers$7.apply(RedwoodConfiguration.java:318)
+    at edu.stanford.nlp.util.logging.RedwoodConfiguration.lambda$handlers$535(RedwoodConfiguration.java:363)
+    at edu.stanford.nlp.util.logging.RedwoodConfiguration.apply(RedwoodConfiguration.java:41)
+    at edu.stanford.nlp.util.logging.Redwood.<clinit>(Redwood.java:609)
+    ... 1 more
+Caused by: edu.stanford.nlp.util.MetaClass$ClassCreationException: java.lang.ClassNotFoundException: edu.stanford.nlp.util.logging.SLF4JHandler
+    at edu.stanford.nlp.util.MetaClass.createFactory(MetaClass.java:364)
+    at edu.stanford.nlp.util.MetaClass.createInstance(MetaClass.java:381)
+    at edu.stanford.nlp.util.logging.RedwoodConfiguration$Handlers.lambda$static$530(RedwoodConfiguration.java:186)
+    ... 6 more
+Caused by: java.lang.ClassNotFoundException: edu.stanford.nlp.util.logging.SLF4JHandler
+    at java.net.URLClassLoader.findClass(URLClassLoader.java:381)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+    at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:331)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+    at java.lang.Class.forName0(Native Method)
+    at java.lang.Class.forName(Class.java:264)
+    at edu.stanford.nlp.util.MetaClass$ClassFactory.construct(MetaClass.java:135)
+    at edu.stanford.nlp.util.MetaClass$ClassFactory.<init>(MetaClass.java:202)
+    at edu.stanford.nlp.util.MetaClass$ClassFactory.<init>(MetaClass.java:69)
+    at edu.stanford.nlp.util.MetaClass.createFactory(MetaClass.java:360)
+    ... 8 more
+
+Traceback (most recent call last):
+  File ""<stdin>"", line 1, in <module>
+  File ""/usr/local/python3/lib/python3.5/site-packages/nltk/tokenize/stanford_segmenter.py"", line 96, in segment
+    return self.segment_sents([tokens])
+  File ""/usr/local/python3/lib/python3.5/site-packages/nltk/tokenize/stanford_segmenter.py"", line 123, in segment_sents
+    stdout = self._execute(cmd)
+  File ""/usr/local/python3/lib/python3.5/site-packages/nltk/tokenize/stanford_segmenter.py"", line 143, in _execute
+    cmd,classpath=self._stanford_jar, stdout=PIPE, stderr=PIPE)
+  File ""/usr/local/python3/lib/python3.5/site-packages/nltk/internals.py"", line 134, in java
+    raise OSError('Java command failed : ' + str(cmd))
+OSError: Java command failed : ['/usr/java/jdk1.8.0_60/bin/java', '-mx2g', '-cp', '/opt/stanford/stanford-segmenter-3.7/stanford-segmenter.jar:/opt/stanford/stanford-parser-full-2016-10-31/slf4j-api.jar', 'edu.stanford.nlp.ie.crf.CRFClassifier', '-sighanCorporaDict', '/opt/stanford/stanford-segmenter-3.7/data/', '-textFile', '/tmp/tmpkttpldl6', '-sighanPostProcessing', 'true', '-keepAllWhitespaces', 'false', '-loadClassifier', '/opt/stanford/stanford-segmenter-3.7/data/pku.gz', '-serDictionary', '/opt/stanford/stanford-segmenter-3.7/data/dict-chris6.ser.gz', '-inputEncoding', 'UTF-8']
+```
+",0,1,0,1,0,0,0,0,0,0
+61,380,https://github.com/stanfordnlp/CoreNLP/issues/484,484,[],closed,2017-07-18 04:38:39+00:00,0,9,chinese segment error,"This is my code:
+#coding:utf-8
+from nltk.tokenize.stanford_segmenter import StanfordSegmenter
+from nltk.tag import StanfordNERTagger
+import nltk
+
+segmenter = StanfordSegmenter(
+    path_to_jar='/home/kenwood/stanford/segmenter/stanford-segmenter.jar',
+    path_to_slf4j='/home/kenwood/stanford/segmenter/slf4j-api.jar',
+    path_to_sihan_corpora_dict='/home/kenwood/stanford/segmenter/data',
+    path_to_model='/home/kenwood/stanford/segmenter/data/pku.gz',
+    path_to_dict='/home/kenwood/stanford/segmenter/data/dict-chris6.ser.gz'
+)
+
+chi_tagger = StanfordNERTagger(path_to_jar='/home/kenwood/stanford/ner/stanford-ner.jar',model_filename='/home/kenwood/stanford/ner/classifiers/chinese.misc.distsim.crf.ser.gz')
+
+sentence = ""鏉╂瑦妲搁弬顖氭蕉缁傚繋鑵戦弬鍥у瀻鐠囧秴娅掑ù瀣槸""
+result = segmenter.segment(sentence)
+print (result)
+ 
+The error message :
+Traceback (most recent call last):
+  File ""/home/kenwood/PycharmProjects/wordcut/toolpackage/ntlk_module.py"", line 17, in <module>
+    result = segmenter.segment(sentence)
+  File ""/usr/lib/python3.6/site-packages/nltk/tokenize/stanford_segmenter.py"", line 164, in segment
+    return self.segment_sents([tokens])
+  File ""/usr/lib/python3.6/site-packages/nltk/tokenize/stanford_segmenter.py"", line 192, in segment_sents
+    stdout = self._execute(cmd)
+  File ""/usr/lib/python3.6/site-packages/nltk/tokenize/stanford_segmenter.py"", line 211, in _execute
+    stdout, _stderr = java(cmd, classpath=self._stanford_jar, stdout=PIPE, stderr=PIPE)
+  File ""/usr/lib/python3.6/site-packages/nltk/internals.py"", line 129, in java
+    p = subprocess.Popen(cmd, stdin=stdin, stdout=stdout, stderr=stderr)
+  File ""/usr/lib/python3.6/subprocess.py"", line 707, in __init__
+    restore_signals, start_new_session)
+  File ""/usr/lib/python3.6/subprocess.py"", line 1260, in _execute_child
+    restore_signals, start_new_session, preexec_fn)
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+
+Someone can help me? thank you!
+",0,0,0,1,0,0,0,0,0,0
+62,778,https://github.com/stanfordnlp/CoreNLP/issues/941,941,[],closed,2019-08-26 15:47:36+00:00,0,3,Cannot disable pos annotator while running lexical parse,"## TLDR
+CoreNLP server runs the `pos` option in the pipeline even when it is instructed not to (both while launching the server and while sending the POST request)
+
+## Description
+Originally submitted as a different issue on the parser-user mailing, list [here ](https://mailman.stanford.edu/pipermail/parser-user/2019-August/003545.html), Chris Manning suggest that CoreNLP be run without `pos` as an option.
+
+The CoreNLP server was run with the following command
+```
+java -mx500m -Xms2048m  -Xmx2048m -cp ""./*"" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -annotators tokenize,ssplit,parse
+```
+
+With the server running, requests were made to the server via different frontends(NLTK, Web, StanfordCoreNLPCLient). All these just end up sending a POST request to ```http://localhost:9000/```. For example, StanfordCoreNLPClient was run as follows
+```
+java -mx500m -Xms2048m  -Xmx2048m -cp ""./*"" edu.stanford.nlp.pipeline.StanfordCoreNLPClient -host localhost -port 9000 -annotators tokenize,ssplit,parse
+```
+An input string was then given. 
+
+The line in the server log on getting the POST request says
+```
+[pool-1-thread-1] INFO CoreNLP - [/127.0.0.1:51882] API call w/annotators tokenize,ssplit,pos,parse
+```
+How can the lexical parser option be used without the pos stage being run?
+
+",0,0,0,1,0,0,0,0,0,0
+63,817,https://github.com/stanfordnlp/CoreNLP/issues/984,984,[],closed,2020-01-14 08:18:43+00:00,0,2,example.serialized.ncc.ncc.ser.gz not working  ::: JDK13 is Java version,"```
+from nltk.tag import StanfordNERTagger
+
+stanford_classifier  =  '/home/test/stanford-ner-2018-10-16/classifiers/example.serialized.ncc.ncc.ser.gz'
+stanford_ner = '/home/test/stanford-ner-2018-10-16/stanford-ner.jar'
+# Build NER tagger object
+st = StanfordNERTagger(stanford_classifier, stanford_ner)
+
+# A sample text for NER tagging
+text = 'Ram works at Google' 
+# Tag the sentence and print output
+tagged = st.tag(str(text).split())
+print(tagged)
+```
+
+Error reported:
+/home/test/Desktop/myenv/bin/python3 /home/test/NlpSource-master/sss.py
+Traceback (most recent call last):
+  File ""/home/test/NlpSource-master/sss.py"", line 32, in <module>
+    tagged = st.tag(str(text).split())
+  File ""/home/test/Desktop/myenv/lib/python3.7/site-packages/nltk/tag/stanford.py"", line 93, in tag
+    return sum(self.tag_sents([tokens]), [])
+  File ""/home/test/Desktop/myenv/lib/python3.7/site-packages/nltk/tag/stanford.py"", line 116, in tag_sents
+    cmd, classpath=self._stanford_jar, stdout=PIPE, stderr=PIPE
+  File ""/home/test/Desktop/myenv/lib/python3.7/site-packages/nltk/internals.py"", line 146, in java
+    raise OSError('Java command failed : ' + str(cmd))
+OSError: Java command failed : ['/usr/bin/java', '-mx1000m', '-cp', '/home/test/stanford-ner-2018-10-16/stanford-ner.jar', 'edu.stanford.nlp.ie.crf.CRFClassifier', '-loadClassifier', '/home/test/stanford-ner-2018-10-16/classifiers/example.serialized.ncc.ncc.ser.gz', '-textFile', '/tmp/tmph8k3mnol', '-outputFormat', 'slashTags', '-tokenizerFactory', 'edu.stanford.nlp.process.WhitespaceTokenizer', '-tokenizerOptions', '""tokenizeNLs=false""', '-encoding', 'utf8']
+Invoked on Tue Jan 14 13:52:00 IST 2020 with arguments: -loadClassifier /home/test/stanford-ner-2018-10-16/classifiers/example.serialized.ncc.ncc.ser.gz -textFile /tmp/tmph8k3mnol -outputFormat slashTags -tokenizerFactory edu.stanford.nlp.process.WhitespaceTokenizer -tokenizerOptions ""tokenizeNLs=false"" -encoding utf8
+tokenizerOptions=""tokenizeNLs=false""
+loadClassifier=/home/test/stanford-ner-2018-10-16/classifiers/example.serialized.ncc.ncc.ser.gz
+encoding=utf8
+outputFormat=slashTags
+textFile=/tmp/tmph8k3mnol
+tokenizerFactory=edu.stanford.nlp.process.WhitespaceTokenizer
+Exception in thread ""main"" java.lang.RuntimeException: java.lang.ClassCastException: class java.util.Properties cannot be cast to class [Ledu.stanford.nlp.util.Index; (java.util.Properties is in module java.base of loader 'bootstrap'; [Ledu.stanford.nlp.util.Index; is in unnamed module of loader 'app')
+	at edu.stanford.nlp.ie.AbstractSequenceClassifier.loadClassifierNoExceptions(AbstractSequenceClassifier.java:1520)
+	at edu.stanford.nlp.ie.crf.CRFClassifier.main(CRFClassifier.java:2993)
+Caused by: java.lang.ClassCastException: class java.util.Properties cannot be cast to class [Ledu.stanford.nlp.util.Index; (java.util.Properties is in module java.base of loader 'bootstrap'; [Ledu.stanford.nlp.util.Index; is in unnamed module of loader 'app')
+	at edu.stanford.nlp.ie.crf.CRFClassifier.loadClassifier(CRFClassifier.java:2600)
+	at edu.stanford.nlp.ie.AbstractSequenceClassifier.loadClassifier(AbstractSequenceClassifier.java:1473)
+	at edu.stanford.nlp.ie.AbstractSequenceClassifier.loadClassifier(AbstractSequenceClassifier.java:1505)
+	at edu.stanford.nlp.ie.AbstractSequenceClassifier.loadClassifierNoExceptions(AbstractSequenceClassifier.java:1516)
+	... 1 more
+
+
+Process finished with exit code 1",0,0,0,1,0,0,0,0,0,0
+64,915,https://github.com/stanfordnlp/CoreNLP/issues/1117,1117,[],open,2020-12-10 11:27:34+00:00,0,1,'Title' Named Entity Recognition not working ,"I downloaded the Stanford NER model using instructions from https://nlp.stanford.edu/software/CRF-NER.html and http://www.nltk.org/api/nltk.tag.html#module-nltk.tag.stanford. It recognises organizations, locations, persons but no job titles. However, the demo online http://corenlp.run/ does work with titles. How do I resolve this issue?
+
+",0,0,0,1,0,0,0,0,0,0
+65,424,https://github.com/stanfordnlp/CoreNLP/issues/532,532,[],closed,2017-09-25 19:02:59+00:00,0,1,How to use WordToSentenceProcessor in Python?,"I want to split a list of words into a list of sentences, with each sentence being a list of words.
+This can be done by your WordToSentenceProcessor, but how can I use it in Python?
+Can you give me an example?",0,1,1,0,0,0,0,0,0,0
+66,822,https://github.com/stanfordnlp/CoreNLP/issues/989,989,[],open,2020-01-30 19:42:50+00:00,0,1,CleanXML in Python,"Hello!
+
+When using the CoreNLP Client, I am able to annotate text data using cleanxml. I can't seem to figure out, however,  how to use the cleanxml options (clean.xmltags, clean.docAnnotations, etc) in Python. I've scoured for any documentation on the matter but have not been fortunate in my search. Any help would be much appreciated.
+
+Cheers,
+Adrian",0,1,1,0,0,0,0,0,0,0
+67,887,https://github.com/stanfordnlp/CoreNLP/issues/1075,1075,[],open,2020-07-25 19:24:35+00:00,0,7,Discrepancy tokensregex webserver and CoreNLP in Python?,"Let's take the following setence: `organic wastes under variable temperature conditions` and pattern: `[{tag:/JJ/}]*[{tag:/NN.*/}]+`
+When we pass this to http://corenlp.run/:
+![image](https://user-images.githubusercontent.com/19516376/88464610-86440680-cebc-11ea-98dd-493fa6087b49.png)
+
+Then when we do this in Python:
+```
+with CoreNLPClient(memory='16G', threads=1, annotators=['tokenize','ssplit','pos','lemma','ner','depparse']) as client:
+    text = 'organic wastes under variable temperature conditions'
+    print(client.tokensregex(text, '[{tag:/JJ/}]*[{tag:/NN.*/}]+'))
+```
+It will print: `{'sentences': [{'0': {'text': 'organic wastes', 'begin': 0, 'end': 2}, '1': {'text': 'variable temperature', 'begin': 3, 'end': 5}, '2': {'text': 'conditions', 'begin': 5, 'end': 6}, 'length': 3}]}` Note that the webserver finds ""variable temperature conditions"" whereas in Python we only find ""variable temperature"" and ""conditions"" as seperate matches. I need the same output as the webserver",0,1,1,0,0,0,0,0,0,0
+68,921,https://github.com/stanfordnlp/CoreNLP/issues/1131,1131,[],closed,2021-02-01 04:12:40+00:00,0,9,can't download stanza for python3,"When I type in pip install stanza into the command line of python (im on Mac)  I keep getting a SyntaxError: invalid syntax error message. I am using python 3.8.2, so not sure why this is happening. I also have no experience with coding and just recently downloaded python 3 from pythons website. I was encouraged by your team (via email correspondence) to use java for my project, but that download failed several times, so here I am. I want to use stanza so I can first separate words (dealing with chinese) and then assign pos. 
+",0,1,1,0,0,0,0,0,0,0
+69,960,https://github.com/stanfordnlp/CoreNLP/issues/1193,1193,[],closed,2021-09-19 08:42:41+00:00,0,0,I got an error while using it in python: it con't work when the sentence has '%'. ,"What I input: print(nlp.parse('Shares of MONY were gaining 2.57%'))
+The error is: 
+                  raise JSONDecodeError(""Expecting value"", s, err.value) from None
+       json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)",0,1,1,0,0,0,0,0,0,0
+70,30,https://github.com/stanfordnlp/CoreNLP/issues/43,43,[],closed,2014-12-24 07:03:18+00:00,0,3,Stanford CoreNLP v.s. Stanford Parser,"In my project, I use Stanford CoreNLP to perform some basic operations. Meanwhile I need use a caseless model for parsing, so I chose ""englichPCFG.caseless.ser.gz"" in the model of Stanford Parser. However, CoreNLP cannot read this model, so I added Stanford Parser into my project, along with CoreNLP.
+
+But here comes the question: there are java files with the same path (same package and same name) in both Stanford CoreNLP and Stanford Parser, once there are slight differences between these two java files, things got complicated, because I don't know which function am I going to call in my project. Actually after I added Stanford Parser in my project, the original lemmatize module couldn't work, error was occurred when loading the model.
+
+Is there anyone who tried to add both Stanford Parser and Stanford CoreNLP in one project, and could you give me some advice to avoid conflicts? Thanks. :-)
+",0,1,1,1,1,0,0,0,1,0
+71,311,https://github.com/stanfordnlp/CoreNLP/issues/400,400,[],closed,2017-03-30 23:24:35+00:00,0,1,Stanford Parser for Processing French Text in GATE Developer.,"Hi, 
+I need to process French text in Gate Developer 8.2. I am giving frenchFactored.ser.gzas URL to parameter parseFile for the StanfordParser processing resource . Kindly suggest what shall be given for tlppClass String?
+The pipeline has Stanford PTB Tokenizer , ANNIE Sentence Splitter and Stanford POS Tagger such the the tagger parameter modelFile URL is file:/home/stanford-french-corenlp-2016-10-31-models/edu/stanford/nlp/models/pos-tagger/french/french.tagger.
+",0,1,0,0,0,0,0,0,0,0
+72,604,https://github.com/stanfordnlp/CoreNLP/issues/747,747,[],closed,2018-07-19 21:02:59+00:00,0,1,Identical class name warning when using stanford-corenlp and stanford parser,"We are using both stanford-corenlp and stanford-parser in the same program.  Does one contain the other?  If not, they both contain identical classes in the util directory sow we see tons of these types warnings 
+
+2018-07-19 17:51:49.396:WARN:oeja.AnnotationParser:qtp1161082381-27: edu.stanford.nlp.fsm.FastExactAutomatonMinimizer$Block scanned from multiple locations: jar:file:///tmp/jetty-0.0.0.0-9999-root.war-_-any-8948454423037923483.dir/webapp/WEB-INF/lib/stanford-parser-3.8.0.jar!/edu/stanford/nlp/fsm/FastExactAutomatonMinimizer$Block.class, jar:file:///tmp/jetty-0.0.0.0-9999-root.war-_-any-8948454423037923483.dir/webapp/WEB-INF/lib/stanford-corenlp-3.8.0.jar!/edu/stanford/nlp/fsm/FastExactAutomatonMinimizer$Block.class
+
+Notice that one is called from stanford-corenlp-3.8.0.jar and the other from stanford-parser-3.8.0.jar, but otherwise from the same package edu/stanford/nlp/fsm .  Should the stanford util package be a separate maven package?",0,1,0,0,1,0,0,0,0,0
+73,896,https://github.com/stanfordnlp/CoreNLP/issues/1085,1085,[],closed,2020-09-21 12:00:59+00:00,0,6,Stanford Parser failure when parsing this string: b.com/e(s),"Stanford Parser crashes when parsing this string: b.com/e(s)
+
+You can easily reconstruct the problem by pasting it on the web console at: http://localhost:9001/
+
+The reason for the failure is because the parser result is:
+
+(ROOT
+  (PRN
+    (NP (NNS b.com/e(s))
+    (-RRB- -RRB-)))
+
+As you can see, there are 6 opening parentheses and only 5 closing parentheses.
+
+I would appreciate a quick response on how to fix this.
+
+
+
+",1,1,0,0,0,0,0,0,0,0
+74,77,https://github.com/stanfordnlp/CoreNLP/issues/104,104,[],closed,2015-11-16 15:53:37+00:00,0,9,Annotator openie: Unable to load clause splitter model,"When using the openie annotator I get three exceptions: 
+
+```
+Loading clause searcher from edu/stanford/nlp/models/naturalli/clauseSearcherModel.ser.gz...java.io.IOException: unexpected exception type
+    at java.io.ObjectStreamClass.throwMiscException(ObjectStreamClass.java:1538)
+    at java.io.ObjectStreamClass.invokeReadResolve(ObjectStreamClass.java:1110)
+    at java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:1810)
+    at java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1351)
+    at java.io.ObjectInputStream.defaultReadFields(ObjectInputStream.java:1993)
+    at java.io.ObjectInputStream.readSerialData(ObjectInputStream.java:1918)
+    at java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:1801)
+    at java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1351)
+    at java.io.ObjectInputStream.readObject(ObjectInputStream.java:371)
+    at edu.stanford.nlp.io.IOUtils.readObjectFromURLOrClasspathOrFileSystem(IOUtils.java:318)
+    at edu.stanford.nlp.naturalli.ClauseSplitter.load(ClauseSplitter.java:283)
+    at edu.stanford.nlp.naturalli.OpenIE.<init>(OpenIE.java:191)
+    at edu.stanford.nlp.pipeline.AnnotatorImplementations.openie(AnnotatorImplementations.java:268)
+    at edu.stanford.nlp.pipeline.AnnotatorFactories$20.create(AnnotatorFactories.java:644)
+    at edu.stanford.nlp.pipeline.AnnotatorPool.get(AnnotatorPool.java:85)
+    at edu.stanford.nlp.pipeline.StanfordCoreNLP.construct(StanfordCoreNLP.java:357)
+    at edu.stanford.nlp.pipeline.StanfordCoreNLP.<init>(StanfordCoreNLP.java:130)
+    at edu.stanford.nlp.pipeline.StanfordCoreNLP.<init>(StanfordCoreNLP.java:126)
+    at pipeline.TestClass.main(TestClass.java:22)
+    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke(Method.java:483)
+    at com.intellij.rt.execution.application.AppMain.main(AppMain.java:144)
+Caused by: java.lang.NoSuchMethodException: edu.stanford.nlp.naturalli.ClauseSplitterSearchProblem.$deserializeLambda$(java.lang.invoke.SerializedLambda)
+    at java.lang.Class.getDeclaredMethod(Class.java:2117)
+    at java.lang.invoke.SerializedLambda$1.run(SerializedLambda.java:224)
+    at java.lang.invoke.SerializedLambda$1.run(SerializedLambda.java:221)
+    at java.security.AccessController.doPrivileged(Native Method)
+    at java.lang.invoke.SerializedLambda.readResolve(SerializedLambda.java:221)
+    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke(Method.java:483)
+    at java.io.ObjectStreamClass.invokeReadResolve(ObjectStreamClass.java:1104)
+    ... 22 more
+Exception in thread ""main"" edu.stanford.nlp.io.RuntimeIOException: Could not load clause splitter model at edu/stanford/nlp/models/naturalli/clauseSearcherModel.ser.gz: class java.io.IOException: unexpected exception type
+    at edu.stanford.nlp.naturalli.OpenIE.<init>(OpenIE.java:196)
+    at edu.stanford.nlp.pipeline.AnnotatorImplementations.openie(AnnotatorImplementations.java:268)
+    at edu.stanford.nlp.pipeline.AnnotatorFactories$20.create(AnnotatorFactories.java:644)
+    at edu.stanford.nlp.pipeline.AnnotatorPool.get(AnnotatorPool.java:85)
+    at edu.stanford.nlp.pipeline.StanfordCoreNLP.construct(StanfordCoreNLP.java:357)
+    at edu.stanford.nlp.pipeline.StanfordCoreNLP.<init>(StanfordCoreNLP.java:130)
+    at edu.stanford.nlp.pipeline.StanfordCoreNLP.<init>(StanfordCoreNLP.java:126)
+    at pipeline.TestClass.main(TestClass.java:22)
+    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke(Method.java:483)
+    at com.intellij.rt.execution.application.AppMain.main(AppMain.java:144)
+```
+
+it seems that somehow when loading the clauseSearchModel.ser.gz java cannot find the method to deserialize.
+
+Unfortunately I am not familiar with Lambdas and days of painful googling didn't get me anywhere. Any help is appreciated.
+",1,0,0,0,0,0,0,0,0,0
+75,244,https://github.com/stanfordnlp/CoreNLP/issues/314,314,[],closed,2016-11-28 16:05:02+00:00,0,3,"Stanford Core NLP gets tokens lost with: '-annotators tokenize,ssplit'","When running version 3.6.0 for Chinese, I see that when doing tokenization and sentence splitting some characters get disappeared! 
+
+Server:
+`$java -mx4g -cp ""*"" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9010`
+
+Client:
+`$java -cp ""*"" -Xmx2g edu.stanford.nlp.pipeline.StanfordCoreNLPClient -props StanfordCoreNLP-chinese.properties -annotators tokenize,ssplit -file ~/Tmp/input_chinese.txt -outputDirectory ~/Tmp/ -outputFormat text -port 9010`
+
+Content of the Chinese inptut text file:
+`$cat ~/Tmp/input_chinese.txt`
+`瀹稿瓨濯洪悧?鐠?閿?閵?閹存垳婊?閺?閸?閼惧嘲绶?娴犺缍?缂佹挻鐏?閵?閵嗗硺
+`閵嗗﹪鍣鹃摶宥嗘閹躲儯鈧鎳嗘稉濉?
+`$`
+
+The result is:
+ `$cat ~/Tmp/input_chinese.txt`
+`Sentence #1 (10 tokens):`
+`瀹稿瓨濯洪悧?鐠?閿?閵?閹存垳婊?閺?閸?閼惧嘲绶?娴犺缍?缂佹挻鐏?閵嗕繖
+`[Text=瀹稿瓨濯洪悧?CharacterOffsetBegin=0 CharacterOffsetEnd=3]`
+`[Text=鐠?CharacterOffsetBegin=4 CharacterOffsetEnd=5]`
+`[Text=閿?CharacterOffsetBegin=6 CharacterOffsetEnd=7]`
+`[Text=閹存垳婊?CharacterOffsetBegin=10 CharacterOffsetEnd=12]`
+`[Text=閺?CharacterOffsetBegin=13 CharacterOffsetEnd=14]`
+`[Text=閸?CharacterOffsetBegin=15 CharacterOffsetEnd=16]`
+`[Text=閼惧嘲绶?CharacterOffsetBegin=17 CharacterOffsetEnd=19]`
+`[Text=娴犺缍?CharacterOffsetBegin=20 CharacterOffsetEnd=22]`
+`[Text=缂佹挻鐏?CharacterOffsetBegin=23 CharacterOffsetEnd=25]`
+`[Text=閵?CharacterOffsetBegin=26 CharacterOffsetEnd=27]`
+`Sentence #2 (2 tokens):`
+`闁叉垼鐎洪弮鑸靛Г閵嗗鎳嗘稉濉?
+`[Text=闁叉垼鐎洪弮鑸靛Г CharacterOffsetBegin=31 CharacterOffsetEnd=35]`
+`[Text=閸涖劋绗?CharacterOffsetBegin=36 CharacterOffsetEnd=38]`
+
+Here there are two issues:
+
+1. Characters 閵嗗硽nd  are閵?skipped completely, even from the complete sentences
+2. The characters  閵? 閵? 閵?and 閵嗗硽re not present as tokens.
+",1,0,0,0,0,0,0,0,0,0
+76,255,https://github.com/stanfordnlp/CoreNLP/issues/329,329,"[{'id': 45387504, 'node_id': 'MDU6TGFiZWw0NTM4NzUwNA==', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/bug', 'name': 'bug', 'color': 'fc2929', 'default': True, 'description': None}]",closed,2017-01-01 00:18:38+00:00,0,1,Token offset misalignment when ssplit.newlineIsSentenceBreak is set to always,"Hello,
+
+I'm running into some issue with the token offsets when `ssplit.newlineIsSentenceBreak` is set to `always` (or `two`). It seems that new newline tokens are introduced but the token offsets are not adjusted (for both `SentencesAnnotation` and `CorefMention` in `CorefChain` as far as I can tell). I tested both 3.6.0 and 3.7.0 versions and the issue appears in both cases. Please see the example code and the output below.
+
+Code:
+```java
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.stanford.nlp.pipeline.Annotation;
+
+import edu.stanford.nlp.util.CoreMap;
+import edu.stanford.nlp.ling.CoreAnnotations.TokenBeginAnnotation;
+import edu.stanford.nlp.ling.CoreAnnotations.TokensAnnotation;
+import edu.stanford.nlp.ling.CoreAnnotations.TextAnnotation;
+import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
+import edu.stanford.nlp.ling.CoreAnnotations.CorefChainAnnotation;
+
+public class Demo {
+
+  public static void main(String[] args) {
+      Properties props = new Properties();
+      props.setProperty(""annotators"", ""tokenize, ssplit, pos, lemma, ner, parse, dcoref"");
+      props.setProperty(""ssplit.newlineIsSentenceBreak"", ""always"");
+      StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+      String text = ""Stanford University is located in California.\nIt is a great university, founded in 1891."";
+      Annotation document = new Annotation(text);
+      pipeline.annotate(document);
+      List<CoreMap> sentences = document.get(SentencesAnnotation.class);
+      List<CoreLabel> tokens = document.get(TokensAnnotation.class);
+      for (CoreMap sentence: sentences) {
+          System.out.println(""Sentence: "" + sentence.get(TextAnnotation.class));
+          System.out.println(""The first token is "" + tokens.get(sentence.get(TokenBeginAnnotation.class)));
+      }
+  }
+
+}
+```
+
+Output:
+```
+Sentence: Stanford University is located in California.
+The first token is Stanford-1
+Sentence: It is a great university, founded in 1891.
+The first token is *NL*
+```
+The first token of the second sentence should be `It`.
+
+Thanks!",1,0,0,0,0,0,0,0,0,0
+77,299,https://github.com/stanfordnlp/CoreNLP/issues/380,380,"[{'id': 45387504, 'node_id': 'MDU6TGFiZWw0NTM4NzUwNA==', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/bug', 'name': 'bug', 'color': 'fc2929', 'default': True, 'description': None}, {'id': 706055902, 'node_id': 'MDU6TGFiZWw3MDYwNTU5MDI=', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/tokenize', 'name': 'tokenize', 'color': 'c5def5', 'default': False, 'description': None}, {'id': 706056248, 'node_id': 'MDU6TGFiZWw3MDYwNTYyNDg=', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/ssplit', 'name': 'ssplit', 'color': 'c5def5', 'default': False, 'description': None}]",open,2017-03-10 13:03:13+00:00,0,7,Incorrect sentence splitting in German (and some other European languages) at dots after numbers (e.g. German: `1. Bundesliga`),"German (and some [other European languages](https://en.wikipedia.org/wiki/Date_and_time_notation_in_Europe)) use a dot to denote ordinals.
+
+I.e. instead of ""1st place"", German uses ""1. Platz"".
+Instead of ""July 28th"", German uses ""28. Juli"".
+
+Examples can be found en masse, for example:
+[dewiki:Fu鑴絙all-Bundesliga](https://de.wikipedia.org/wiki/Fu鑴絙all-Bundesliga) (`28. Juli`, `2. Bundesliga`, `1. Liga`)
+[dewiki:9/11](https://de.wikipedia.org/wiki/Terroranschl鐩瞘e_am_11._September_2001) (`11. September`)
+[dewiki:Stanford University](https://de.wikipedia.org/wiki/Stanford_University) (`Der Grund und Boden wurde am 11. November 1885 von Leland Stanford zur Gr鐪塶dung der Universit鐩瞭 gestiftet`)
+
+And the Duden, the ""prescriptive source for German language spelling"" (Wikipedia) uses:
+[`Duden - Die deutsche Rechtschreibung, 26. Auflage`](http://www.duden.de/Shop/Duden-Die-deutsche-Rechtschreibung-26-Auflage-f鐪塺-Windows-Mac-OSX-und-Linux-0)
+
+Unfortunately, CoreNLP will split all these sentences at the dot.
+
+So **CoreNLP currently cannot reliably split German sentences** if they contain ordinal numbers or dates.
+
+I am currently using the following workaround hack:
+```
+  private static class FilteredTokenizer implements Annotator {
+    private TokenizerAnnotator inner;
+
+    public FilteredTokenizer(TokenizerAnnotator inner) {
+      this.inner = inner;
+    }
+
+    @Override
+    public void annotate(Annotation annotation) {
+      inner.annotate(annotation);
+      List<CoreLabel> tokens = annotation.get(CoreAnnotations.TokensAnnotation.class);
+      ArrayList<CoreLabel> filtered = new ArrayList<>(tokens.size());
+      CoreLabel previous = null;
+      for(CoreLabel t : tokens)
+        if(previous == null || !updateAnnotation(previous, t))
+          filtered.add(previous = t);
+      annotation.set(CoreAnnotations.TokensAnnotation.class, filtered);
+    }
+
+    private boolean updateAnnotation(CoreLabel prev, CoreLabel curr) {
+      int begin = curr.beginPosition(), end = curr.endPosition();
+      if(begin + 1 != end || begin != prev.endPosition() || prev.beginPosition() == prev.endPosition())
+        return false;
+      String ct = curr.getString(CoreAnnotations.OriginalTextAnnotation.class);
+      if(!""."".equals(ct))
+        return false;
+      String pt = prev.getString(CoreAnnotations.OriginalTextAnnotation.class);
+      for(int i = 0; i < pt.length(); i++)
+        if(!Character.isDigit(pt.charAt(i)))
+          return false;
+      // We keep TextAnnotation unmodified, to 1. gets labeled CARDINAL.
+      prev.set(CoreAnnotations.OriginalTextAnnotation.class, pt + ct);
+      prev.setEndPosition(end);
+      return true;
+    }
+
+    @SuppressWarnings(""rawtypes"")
+    @Override
+    public Set<Class<? extends CoreAnnotation>> requirementsSatisfied() {
+      return inner.requirementsSatisfied();
+    }
+
+    @SuppressWarnings(""rawtypes"")
+    @Override
+    public Set<Class<? extends CoreAnnotation>> requires() {
+      return inner.requires();
+    }
+  }
+```",1,0,0,0,0,0,0,0,0,0
+78,358,https://github.com/stanfordnlp/CoreNLP/issues/456,456,[],closed,2017-06-06 12:56:22+00:00,0,1,Splitting sentence: Difference in Results from online corenlp.run server from local server ,"I have a difference while splitting a a text in online version vs my local version of corenlp server. Is it a configuration issue, or model issue? Let me know
+
+## corenlp.run server
+
+**Text**
+Added Rs. 5000 to your Paytm wallet. Transaction ID: 7214651302. Current Balance: 5703.05. Upto Rs 150 Cashback on Movie tickets! Use code MOVIE150. http://m.p-y.tm/oo. Book Now
+
+**Result**
+![image](https://cloud.githubusercontent.com/assets/74857/26830069/3d413696-4ae5-11e7-8bce-34c5f5ae8c3c.png)
+
+## local server (ver 3.7.0)
+
+**Text**
+Added Rs. 5000 to your Paytm wallet. Transaction ID: 7214651302. Current Balance: 5703.05. Upto Rs 150 Cashback on Movie tickets! Use code MOVIE150. http://m.p-y.tm/oo. Book Now
+
+**Result**
+![image](https://cloud.githubusercontent.com/assets/74857/26830010/0f9c1b3e-4ae5-11e7-9140-eae4d62ac315.png)
+",1,0,0,0,0,0,0,0,0,0
+79,450,https://github.com/stanfordnlp/CoreNLP/issues/568,568,"[{'id': 45387504, 'node_id': 'MDU6TGFiZWw0NTM4NzUwNA==', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/bug', 'name': 'bug', 'color': 'fc2929', 'default': True, 'description': None}, {'id': 706088581, 'node_id': 'MDU6TGFiZWw3MDYwODg1ODE=', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/kbp', 'name': 'kbp', 'color': 'c5def5', 'default': False, 'description': None}]",closed,2017-11-08 05:20:59+00:00,0,1,KBP relation extraction breaking with -ssplit.eolonly (ProtobufAnnotationSerializer issue),"Command:
+
+`java -Xmx8g edu.stanford.nlp.pipeline.StanfordCoreNLP -annotators tokenize,ssplit,pos,lemma,ner,regexner,entitymentions,parse,mention,coref,kbp -ssplit.eolonly -file missing-relations.txt -outputFormat text`
+
+Error:
+
+```
+Exception in thread ""main"" java.lang.NullPointerException
+	at edu.stanford.nlp.pipeline.ProtobufAnnotationSerializer.fromProto(ProtobufAnnotationSerializer.java:1556)
+	at edu.stanford.nlp.simple.Document.asAnnotation(Document.java:1064)
+	at edu.stanford.nlp.simple.Sentence.asCoreMap(Sentence.java:1089)
+	at edu.stanford.nlp.ie.KBPTokensregexExtractor.classify(KBPTokensregexExtractor.java:88)
+	at edu.stanford.nlp.ie.KBPEnsembleExtractor.classify(KBPEnsembleExtractor.java:61)
+	at edu.stanford.nlp.pipeline.KBPAnnotator.annotate(KBPAnnotator.java:430)
+	at edu.stanford.nlp.pipeline.AnnotationPipeline.annotate(AnnotationPipeline.java:76)
+	at edu.stanford.nlp.pipeline.StanfordCoreNLP.annotate(StanfordCoreNLP.java:652)
+	at edu.stanford.nlp.pipeline.StanfordCoreNLP.annotate(StanfordCoreNLP.java:662)
+	at edu.stanford.nlp.pipeline.StanfordCoreNLP$$Lambda$73/102227435.accept(Unknown Source)
+	at edu.stanford.nlp.pipeline.StanfordCoreNLP.processFiles(StanfordCoreNLP.java:1231)
+	at edu.stanford.nlp.pipeline.StanfordCoreNLP.processFiles(StanfordCoreNLP.java:1002)
+	at edu.stanford.nlp.pipeline.StanfordCoreNLP.run(StanfordCoreNLP.java:1336)
+	at edu.stanford.nlp.pipeline.StanfordCoreNLP.main(StanfordCoreNLP.java:1407)
+```",1,0,0,0,0,0,0,0,0,0
+80,528,https://github.com/stanfordnlp/CoreNLP/issues/666,666,[],closed,2018-04-06 01:50:41+00:00,0,1,Compound-splitter ,"Hi,
+
+I wonder if the CoreNLP has a model to split the compounds words like ""HappyNewYear"" to ""Happy New Year"".",1,0,0,0,0,0,0,0,0,0
+81,533,https://github.com/stanfordnlp/CoreNLP/issues/671,671,[],closed,2018-04-10 14:56:56+00:00,0,3,Sentence Splitting Issues,"Sentence splitting is failing on enumerated lists. 
+
+Test cases: 
+""Bob ate three things: 1. a pizza, 2. a pie and 3. a cookie.""
+""Bob ate three things: (1). a pizza, (2). a pie and (3). a cookie.""",1,0,0,0,0,0,0,0,0,0
+82,701,https://github.com/stanfordnlp/CoreNLP/issues/854,854,"[{'id': 103162424, 'node_id': 'MDU6TGFiZWwxMDMxNjI0MjQ=', 'url': 'https://api.github.com/repos/stanfordnlp/CoreNLP/labels/request', 'name': 'request', 'color': '94c5e9', 'default': False, 'description': None}]",closed,2019-03-26 11:52:03+00:00,0,2,"Sentence spliting doesn't work, if there is no whitespace after dot","I have text like this
+
+> Dog loves cat.Cat loves mouse. Mouse hates everybody.
+
+When I'm trying to split it into sentences, I got 2 sentences instead of 3.
+
+> Dog loves cat.Cat loves mouse.
+> 
+> Mouse hates everybody.
+
+My code is
+```
+        Properties props = new Properties();
+        props.setProperty(""annotators"", ""tokenize,ssplit,pos,lemma,ner,parse,coref"");
+        props.setProperty(""ssplit.boundaryTokenRegex"", ""\\.|[!?]+"");
+        StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+       pipeline.annotate(doc);
+        List<CoreMap> sentences = doc.get(CoreAnnotations.SentencesAnnotation.class);
+```
+
+Also I tried to use PTBTokenizer, to split text to tokens, but again, it thinks that **cat.Cat** is a single word.
+
+```
+        PTBTokenizer ptbTokenizer = new PTBTokenizer(
+                new FileReader(classLoader.getResource(""simplifiedParagraphs.txt"").getFile())
+                ,new WordTokenFactory()
+                ,""untokenizable=allKeep,tokenizeNLs=true,ptb3Escaping=true,strictTreebank3=true,unicodeEllipsis=true"");
+        List<String> strings = ptbTokenizer.tokenize();
+```
+
+Which type of annotator should I use, to get 3 sentences as the output?
+",1,0,0,0,0,0,0,0,0,0
+83,716,https://github.com/stanfordnlp/CoreNLP/issues/870,870,[],closed,2019-04-26 09:39:00+00:00,0,1,Sentence split,"Sentence spliting fails on named entity. The following sentence is parsed as one with `Apple Inc.` correctly recognized as named entity.
+
+> Shares of Apple Inc. fell 1.2% to lead Dow decliners after the company unveiled a suite of new products, including its long-awaited video streaming service.
+
+However, the sentence is splited after `Meanwhile, Apple Inc.`
+> Meanwhile, Apple Inc. Chief Executive Tim Cook got a 22% raise to $15.7 million in 2018 while the stock fell 6.8%, after getting a 47% raise in 2017 as the stock climbed 46%.
+
+Reproducible on https://corenlp.run/ and with the following code snippet:
+```
+  val props = new Properties()
+  props.setProperty(""annotators"", ""tokenize, ssplit, pos, lemma, ner, parse, dcoref"")
+
+  val document1 = new Annotation(""Meanwhile, Apple Inc. Chief Executive Tim Cook got a 22% raise to $15.7 million in 2018 while the stock fell 6.8%, after getting a 47% raise in 2017 as the stock climbed 46%."")
+  val document2 = new Annotation(""Shares of Apple Inc. fell 1.2% to lead Dow decliners after the company unveiled a suite of new products, including its long-awaited video streaming service."")
+  val pipeline = new StanfordCoreNLP(props)
+  pipeline.annotate(document1)
+  pipeline.annotate(document2)
+  println(document1.get(classOf[SentencesAnnotation]).asScala.length)
+  println(document2.get(classOf[SentencesAnnotation]).asScala.length)
+```",1,0,0,0,0,0,0,0,0,0
+84,802,https://github.com/stanfordnlp/CoreNLP/issues/968,968,[],closed,2019-11-19 13:44:22+00:00,0,3,Sentence Splitter Fails with Arabic Input,"I'm trying to run the Sentence splitter and tokenizer on unstructured Arabic text. It seems to be failing to detect quite a few sentence boundaries, resulting in larger-than-a-sentence splits that ruin further parser operations.
+
+The regex string in the properties file seems to be ignored, or not totally relied on; I'm not sure what I'm doing wrong. The only thing different in my properties file from the default one is the removal of `pos.models` and `parse.models` declarations, and their associated annotators.
+
+All of the input is UTF-8.
+
+My system:
+
+```bash
+$ java -version
+openjdk version ""14-ea"" 2020-03-17
+OpenJDK Runtime Environment (build 14-ea+18-Ubuntu-1)
+OpenJDK 64-Bit Server VM (build 14-ea+18-Ubuntu-1, mixed mode, sharing)
+```
+
+I have the following jars in this directory:
+
+```
+protobuf.jar
+stanford-arabic-corenlp-2018-10-05-models.jar
+stanford-corenlp-3.9.2.jar
+stanford-corenlp-3.9.2-javadoc.jar
+stanford-corenlp-3.9.2-models.jar
+stanford-corenlp-3.9.2-sources.jar
+StanfordCoreNLP-arabic-noparse.properties
+StanfordCoreNLP-arabic.properties
+stanford-english-corenlp-2018-10-05-models.jar
+stanford-english-kbp-corenlp-2018-10-05-models.jar
+```
+
+My command:
+
+```bash
+$ java -mx8g -cp ""*"" edu.stanford.nlp.pipeline.StanfordCoreNLP \
+  -props StanfordCoreNLP-arabic-noparse.properties \
+  -file test.txt \
+  -outputFormat json \
+  -outputExtension .json
+```
+
+My properties file:
+```
+# Pipeline options
+annotators = tokenize, ssplit
+
+# segment
+#customAnnotatorClass.segment = edu.stanford.nlp.pipeline.ArabicSegmenterAnnotator
+tokenize.language = ar
+segment.model = edu/stanford/nlp/models/segmenter/arabic/arabic-segmenter-atb+bn+arztrain.ser.gz
+
+# sentence split
+ssplit.boundaryTokenRegex = [.]|[!?]+|[!\u061F]+
+```
+
+My test input and output:
+
+[test.txt](https://github.com/stanfordnlp/CoreNLP/files/3863977/test.txt)
+[test.txt.json.txt](https://github.com/stanfordnlp/CoreNLP/files/3863980/test_parsed.txt)
+",1,0,0,0,0,0,0,0,0,0
+85,805,https://github.com/stanfordnlp/CoreNLP/issues/971,971,[],closed,2019-11-27 17:27:26+00:00,0,2,Chinese sentence splitter fails on eolonly,"From a directory with the corenlp jars and the chinese models jar:
+
+```java -cp ""*"" edu.stanford.nlp.pipeline.StanfordCoreNLP -props StanfordCoreNLP-chinese.properties -annotators tokenize,ssplit,pos,parse -ssplit.eolonly -outputFormat text -file chinese.txt ```
+
+where chinese.txt looks like
+
+```
+婢舵粎鈹栨稉顓熸付娴滎喚娈戦弰?閼宠棄鎯侀懕鑺ョ
+闁絼璇濋張娑氭畱娴?韫囧啫绨抽惃鍕劃閻涖劌鎷板搴紖
+```
+
+Fails with the error
+
+```Exception in thread ""main"" java.lang.IndexOutOfBoundsException: Index 25 out of bounds for length 25
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
+	at java.base/java.util.Objects.checkIndex(Objects.java:372)
+	at java.base/java.util.ArrayList.get(ArrayList.java:458)
+	at edu.stanford.nlp.pipeline.ChineseSegmenterAnnotator.advancePos(ChineseSegmenterAnnotator.java:285)
+	at edu.stanford.nlp.pipeline.ChineseSegmenterAnnotator.runSegmentation(ChineseSegmenterAnnotator.java:395)
+	at edu.stanford.nlp.pipeline.ChineseSegmenterAnnotator.doOneSentence(ChineseSegmenterAnnotator.java:133)
+	at edu.stanford.nlp.pipeline.ChineseSegmenterAnnotator.annotate(ChineseSegmenterAnnotator.java:127)
+	at edu.stanford.nlp.pipeline.TokenizerAnnotator.annotate(TokenizerAnnotator.java:336)
+	at edu.stanford.nlp.pipeline.AnnotationPipeline.annotate(AnnotationPipeline.java:76)
+	at edu.stanford.nlp.pipeline.StanfordCoreNLP.annotate(StanfordCoreNLP.java:637)
+	at edu.stanford.nlp.pipeline.StanfordCoreNLP.annotate(StanfordCoreNLP.java:647)
+	at edu.stanford.nlp.pipeline.StanfordCoreNLP.processFiles(StanfordCoreNLP.java:1226)
+	at edu.stanford.nlp.pipeline.StanfordCoreNLP.processFiles(StanfordCoreNLP.java:1060)
+	at edu.stanford.nlp.pipeline.StanfordCoreNLP.run(StanfordCoreNLP.java:1326)
+	at edu.stanford.nlp.pipeline.StanfordCoreNLP.main(StanfordCoreNLP.java:1389)
+```",1,0,0,0,0,0,0,0,0,0
+86,823,https://github.com/stanfordnlp/CoreNLP/issues/990,990,[],closed,2020-02-04 16:27:52+00:00,0,5,About sentence and paragraph split,"Hello, I'm using the annotator `""tokenize, ssplit, pos, lemma, ner""`.
+In my simplest pipeline configuration I have
+
+```javascript
+{
+""tokenize.whitespace"": false,
+""tokenize.keepeol"": false,
+""ner.applyFineGrained"": false,
+""ner.buildEntityMentions"": false,
+ssplit.isOneSentence"": false,
+""ssplit.newlineIsSentenceBreak"": ""always""
+}
+```
+
+for a text that has bot `\n` and `\n\n` (multiple) new lines character as sentence separator. Using `ssplit.newlineIsSentenceBreak` works ok with both, but when I get the output structure of sentences list, I do not find the `\n\n` line break like in
+
+```
+We doin' this once (You yellin' at the mic, your beard's weird)
+Why you yell at the mic? (Illa)
+
+Rihanna just hit me on a text
+``` 
+
+the output will give me back the three sentences, without considering a empty sentence (matching the `\n\n`):
+
+```javascript
+...
+{
+    ""index"": 9,
+    ""text"": ""Why you yell at the mic? (Illa)"",
+    ""tokens"": [ ... ]
+  },
+  {
+    ""index"": 10,
+    ""text"": ""Rihanna just hit me on a text"",
+    ""tokens"": [ ... ]
+}
+```
+
+so when reconstructing the input text from the output I'm missing a blank line and I will get
+
+```
+We doin' this once (You yellin' at the mic, your beard's weird)
+Why you yell at the mic? (Illa)
+Rihanna just hit me on a text
+``` 
+
+Any way to handle this internally (without using the input as reference)?",1,0,0,0,0,0,0,1,0,0

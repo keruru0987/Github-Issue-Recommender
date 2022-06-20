@@ -96,4 +96,8 @@ Transformers 解决的数据个数：3872
 
 if __name__ == '__main__':
     # so_accept()
-    gi_close()
+    # gi_close()
+    # filepath = 'data/new_issue/allissue.csv'
+    filepath = 'data/stackoverflow/allso.csv'
+    df = pandas.read_csv(filepath)
+    print(' 数据个数：' + str(df.shape[0]))

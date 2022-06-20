@@ -99,11 +99,12 @@ class SOFinder(object):
 
 
 if __name__ == '__main__':
-    searcher = SOSearcher('TextBlob', 'install error')
-    so = searcher.search()
-    for ele in so:
-        print(ele)
+    # searcher = SOSearcher('TextBlob', 'install error')
+    # so = searcher.search()
+    # for ele in so:
+    #     print(ele)
 
     finder = SOFinder('allennlp', '68862752')
-    print(finder.find())
+    a = finder.find()
+    print('1')
 

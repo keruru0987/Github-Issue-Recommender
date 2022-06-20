@@ -1,4 +1,4 @@
-﻿,html_url,number,labels,state,created_at,comments,title,body,rel
+﻿,html_url,number,labels,state,created_at,comments,title,body,rel1,rel2,rel3,rel4,rel5,rel6,rel7,rel8,rel9,rel10
 1274,https://github.com/allenai/allennlp/issues/3232,3232,[],closed,2019-09-10 00:18:55+00:00,4, Could not find a version that satisfies the requirement torch,"**Describe the bug**
 I have followed the installation instructions mentioned on the Github Readme and from the Allenai Website, but I always received the following prompt on the command line. 
 
@@ -26,9 +26,9 @@ I expected a clean download and install of the allennlp.
  - PyTorch version: (if you installed it yourself)
 
 **Additional context**
-Add any other context about the problem here.",2
-2256,https://github.com/allenai/allennlp/issues/5425,5425,"[{'id': 2395308352, 'node_id': 'MDU6TGFiZWwyMzk1MzA4MzUy', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/question', 'name': 'question', 'color': '1d76db', 'default': True, 'description': ''}, {'id': 2763124639, 'node_id': 'MDU6TGFiZWwyNzYzMTI0NjM5', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/stale', 'name': 'stale', 'color': 'ededed', 'default': False, 'description': None}]",closed,2021-09-29 05:37:46+00:00,2,allennlp version with torch version ,"I would like to know the comparison table between the allennlp version and the torch version, can anyone help? thx so much ",2
-60,https://github.com/allenai/allennlp/issues/704,704,[],closed,2018-01-22 18:49:13+00:00,1,Pytorch 0.4 numpy indexing,"It seems like numpy indexing isn't supported in pytorch 0.4, so changing `sequence_lengths = mask.sum(dim=1).data.cpu().numpy()` to `sequence_lengths = mask.sum(dim=1).data.cpu().tolist()` in nn/util.py helps the elmo tests pass.",2
+Add any other context about the problem here.",2,0,0,0,0,0,0,0,0,0
+2256,https://github.com/allenai/allennlp/issues/5425,5425,"[{'id': 2395308352, 'node_id': 'MDU6TGFiZWwyMzk1MzA4MzUy', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/question', 'name': 'question', 'color': '1d76db', 'default': True, 'description': ''}, {'id': 2763124639, 'node_id': 'MDU6TGFiZWwyNzYzMTI0NjM5', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/stale', 'name': 'stale', 'color': 'ededed', 'default': False, 'description': None}]",closed,2021-09-29 05:37:46+00:00,2,allennlp version with torch version ,"I would like to know the comparison table between the allennlp version and the torch version, can anyone help? thx so much ",2,0,0,0,0,0,0,0,0,0
+60,https://github.com/allenai/allennlp/issues/704,704,[],closed,2018-01-22 18:49:13+00:00,1,Pytorch 0.4 numpy indexing,"It seems like numpy indexing isn't supported in pytorch 0.4, so changing `sequence_lengths = mask.sum(dim=1).data.cpu().numpy()` to `sequence_lengths = mask.sum(dim=1).data.cpu().tolist()` in nn/util.py helps the elmo tests pass.",2,0,0,0,0,0,0,0,0,0
 16,https://github.com/allenai/allennlp/issues/550,550,[],closed,2017-11-29 18:21:37+00:00,20,Import errors for Token class after installing AllenNLP via pip.,"Hello,
 I've installed Allennlp using pip, and I'm trying to run some demos and follow tutorials.
 Tried to import Token class in several different ways, seems something is broken.
@@ -37,14 +37,14 @@ Thanks for your support!
 **ERROR**: ModuleNotFoundError: No module named 'allennlp.data. ...
 from allennlp.data.tokenizers.token import Token
 from allennlp.data.tokenizers import Token
-",1
+",1,1,1,0,0,0,0,0,0,0
 97,https://github.com/allenai/allennlp/issues/856,856,[],closed,2018-02-15 19:46:31+00:00,3,create an easy way for people to test that their pip install is working correctly and that they've got all the right dependencies and downloads,"possibly something as simple as adding a
 
 ```
 python -m allennlp.run test-install
 ```
 
-command or something",1
+command or something",1,1,0,0,0,0,0,0,0,0
 226,https://github.com/allenai/allennlp/issues/1178,1178,[],closed,2018-05-06 14:05:43+00:00,2,Unable to install allennlp via pip in Windows,"When I tried installing allennlp in my machine with following configuration,
 ```
 Windows 10 x64
@@ -72,7 +72,7 @@ Collecting torch==0.3.1 (from allennlp)
 No matching distribution found for torch==0.3.1 (from allennlp)
 ```
 
-How can I fix this ?",1
+How can I fix this ?",1,1,0,0,0,0,0,0,0,0
 245,https://github.com/allenai/allennlp/issues/1228,1228,[],closed,2018-05-16 22:53:36+00:00,2,running allennlp test-install after installing with pip leads to many errors,"After installing AllenNLP with: `pip install git+git://github.com/allenai/allennlp.git` and running `allennlp test-install`, a bunch of errors come up. Raising an issue just to enumerate them all. A full gist of the test traceback is here: https://gist.github.com/nelson-liu/78d08ad0090ad8f95c34675942f5bb4d
 
 - The biggest issue is that we lose the directory structure in the repo. For example, `allennlp` with pip would get installed in `/home/nfliu/miniconda3/envs/test/lib/python3.6/site-packages/allennlp`. this contains _only_ the module (so it's [this folder](https://github.com/allenai/allennlp/tree/master/allennlp)).  The `tutorials`, `scripts`, `READMEs`, etc. aren't actually installed anywhere, so all of the paths in the tests break (e.g., script tests that shell out to run `perl ./scripts/some_eval_script.pl`).
@@ -85,7 +85,7 @@ How can I fix this ?",1
 - `evalb_bracketing_scorer`, since `scripts/EVALB` does not exist. fixed by #1233 
 - any tests that rely on files in `./tutorials` and `./scripts`. wip solution in #1232 
 
-The other test errors are just errors with the tests themselves, not with the allennlp package. Which is unfortunate, but it doesn't affect _core_ library functionality.",1
+The other test errors are just errors with the tests themselves, not with the allennlp package. Which is unfortunate, but it doesn't affect _core_ library functionality.",1,1,0,0,0,0,0,0,0,0
 288,https://github.com/allenai/allennlp/issues/1332,1332,[],closed,2018-06-03 12:30:35+00:00,5,Unable to install allennlp via pip,"When I tried to install allennlp via pip3, I ran into this issue:
 ```
 sanic-plugins-framework 0.5.2.dev20180201 has requirement sanic>=0.7.0, but you'll have sanic 0.6.0 which is incompatible.
@@ -98,8 +98,8 @@ sanic-cors
 ```
 And the latest version of sanic-cors is incompatible with sanic==0.6.0.
 
-Does anybody know how to deal with this problem? Thanks  alot!",1
-348,https://github.com/allenai/allennlp/issues/1471,1471,[],closed,2018-07-10 06:12:57+00:00,4,pip install and no 'elmo.py' in modules,"I downloaded allennlp via pip to use Elmo, however, the pip-version does not support elmo yet",1
+Does anybody know how to deal with this problem? Thanks  alot!",1,1,0,0,0,0,0,0,0,0
+348,https://github.com/allenai/allennlp/issues/1471,1471,[],closed,2018-07-10 06:12:57+00:00,4,pip install and no 'elmo.py' in modules,"I downloaded allennlp via pip to use Elmo, however, the pip-version does not support elmo yet",1,1,0,0,0,0,0,0,0,0
 429,https://github.com/allenai/allennlp/issues/1662,1662,[],closed,2018-08-24 17:43:03+00:00,9,When running pip-installed AllenNLP in AllenNLP source directory uses source files.,"**Describe the bug**
 
 If i run the pip-installed AllenNLP in the allennlp source directory (e.g., if i want to train with the pip-version on one of the training configs in the source directory).
@@ -153,10 +153,10 @@ ModuleNotFoundError: No module named 'boto3'
  - AllenNLP version: 0.6
  - PyTorch version: 0.4.1
 
-cc: @schmmd / @joelgrus , any clue of what's going on here? Maybe something odd with PYTHONPATH?",1
+cc: @schmmd / @joelgrus , any clue of what's going on here? Maybe something odd with PYTHONPATH?",1,1,0,0,0,0,0,0,0,0
 478,https://github.com/allenai/allennlp/issues/1788,1788,[],closed,2018-09-19 02:56:40+00:00,1,Is it possible to pip install allennlp on python 3.5.1 ?,"The latest allennlp requires python version to be 3.6. 
 Is it possible to pip install allennlp on python 3.5.1 ? Because updating python is not an option right now for me.
-",1
+",1,1,0,0,0,0,0,0,0,0
 572,https://github.com/allenai/allennlp/issues/1969,1969,[],closed,2018-10-25 19:35:19+00:00,11,Pip3 install failing on jsonnet,"**Describe the bug**
 
 I am getting the following stacktrace error when attempting to install with the command `pip install allennlp`.  It is failing on jsonnet package but I don't know why.
@@ -213,7 +213,7 @@ Command ""/usr/local/bin/python3.6 -u -c ""import setuptools, tokenize;__file__=
 
 **Additional context**
 If there are any workarounds, I am very willing to try them.  I am blocked by something until I can resolve this issue.  Thanks so much.
-",1
+",1,1,0,0,0,0,0,0,0,0
 590,https://github.com/allenai/allennlp/issues/2009,2009,[],closed,2018-11-04 04:16:28+00:00,8,pip install allennlp in conda error fatal error: ffi.h: No such file or directory,"**Describe the bug**
 I have a clean install of anaconda and I tried to install allennlp by
 `pip install allennlp`
@@ -488,7 +488,7 @@ You should consider upgrading via the 'pip install --upgrade pip' command.
 
 **Additional context**
 It's a cluster and I don't have permission to run ""sudo apt-get xxx""
-",1
+",1,1,0,0,0,0,0,0,0,0
 596,https://github.com/allenai/allennlp/issues/2017,2017,[],closed,2018-11-05 23:39:16+00:00,2,EVALB errors when using pip install,"@nelson-liu recently made [a PR to build EVALB if it doesn't exist](https://github.com/allenai/allennlp/pull/1964) so he could train the SRL model via Docker.  He succeeded in doing this from the main Dockerfile, but it still doesn't work when installing AllenNLP via pip.
 
 EVALB is included at `/usr/local/lib/python3.6/site-packages/allennlp/tools/EVALB/` and it seems to be compiled, but the process errors out.
@@ -595,8 +595,8 @@ EVALB is included at `/usr/local/lib/python3.6/site-packages/allennlp/tools/EVAL
 2018-11-05T23:12:23.122317998Z	allennlp.common.checks.ConfigurationError: ""You must compile the EVALB scorer before using it. Run 'make' in the 'scripts/EVALB/evalb' directory or run: python -c 'from allennlp.training.metrics import EvalbBracketingScorer; EvalbBracketingScorer.compile_evalb()'""
 ```
 
-I'm putting together a repro.",1
-772,https://github.com/allenai/allennlp/issues/2338,2338,"[{'id': 887719346, 'node_id': 'MDU6TGFiZWw4ODc3MTkzNDY=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/Contributions%20welcome', 'name': 'Contributions welcome', 'color': '02b8d1', 'default': False, 'description': ''}]",closed,2019-01-11 05:27:03+00:00,11,Make AllenNLP work with pip3 / python3,"It seems like, if your system has `python` linked to python 2.x and `python3` linked to python 3.x, the `allennlp` command fails because it implicitly calls `python` (and thus tries to run allennlp with python 2.x). It should be possible to fall back to `python3` if `python` is detected to be python 2.x?",1
+I'm putting together a repro.",1,1,0,0,0,0,0,0,0,0
+772,https://github.com/allenai/allennlp/issues/2338,2338,"[{'id': 887719346, 'node_id': 'MDU6TGFiZWw4ODc3MTkzNDY=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/Contributions%20welcome', 'name': 'Contributions welcome', 'color': '02b8d1', 'default': False, 'description': ''}]",closed,2019-01-11 05:27:03+00:00,11,Make AllenNLP work with pip3 / python3,"It seems like, if your system has `python` linked to python 2.x and `python3` linked to python 3.x, the `allennlp` command fails because it implicitly calls `python` (and thus tries to run allennlp with python 2.x). It should be possible to fall back to `python3` if `python` is detected to be python 2.x?",1,1,0,0,0,0,0,0,0,0
 839,https://github.com/allenai/allennlp/issues/2473,2473,[],closed,2019-02-01 14:57:21+00:00,32,Installing allennlp through pip using conda virtual environment fails,"**Describe the bug**
 
 I am trying to install allennlp through pip under conda virtual environment, however it fails and leave error message like this:
@@ -879,7 +879,7 @@ allennlp successfully installed
  - AllenNLP version: I installed from master
  - PyTorch version: 1.0.0
 
-",1
+",1,1,0,0,0,0,0,0,0,0
 861,https://github.com/allenai/allennlp/issues/2514,2514,[],closed,2019-02-14 06:06:38+00:00,2,BrokenPipeError while training bidirectional language models,"**Describe the bug**
 We often observe a `BrokePipeError` while training transformer bidirectional models using the standard AllenNLP settings for the bidirectional LM transformer. This occurs at the end of an epoch. Here is a copy of the log. The program continues running.
 ```
@@ -917,7 +917,7 @@ loss: 6.5672 ||: : 96it [02:19, 1.45s/it]
  - Python version: 3.6.6
  - AllenNLP version: Installed from master on 14th January, 2019
  - PyTorch version: 1.0.0
-",1
+",1,0,0,0,0,0,0,0,0,0
 1115,https://github.com/allenai/allennlp/issues/2937,2937,[],closed,2019-06-10 17:40:47+00:00,4,Allennlp in production - Exporting the pipeline to torch script,"@joelgrus  You replied on a thread I was following in hacker news about exploring production features of pytorch 1.0.
 
 > AllenNLP dev here. We're going to do a ""PyTorch 1.0"" release of AllenNLP next week, and then after that we're planning to investigate how to incorporate the new ""production"" aspects.
@@ -925,7 +925,7 @@ https://news.ycombinator.com/item?id=18683758
 
 Could we change most of the modules in the pipeline to be written in subset of python that torch jit script supports? 
 
-Or do you have anything on your mind on how to do this ?",1
+Or do you have anything on your mind on how to do this ?",1,0,0,1,0,0,0,0,0,0
 1308,https://github.com/allenai/allennlp/issues/3291,3291,[],closed,2019-09-27 07:21:14+00:00,3,`allennlp: command not found` After installing via pip.,"**Describe the bug**
 After installing allennlp via pip, I try to use it and I get `allennlp: command not found` .
 
@@ -938,7 +938,7 @@ Steps to reproduce the behavior
 ```
 $ allennlp -V
 allennlp: command not found
-```",1
+```",1,1,0,0,0,0,0,0,0,0
 1354,https://github.com/allenai/allennlp/issues/3373,3373,[],closed,2019-10-17 22:26:25+00:00,12,commit #3308 breaks pip install --editable,"**Describe the bug**
 After PR #3308 `pip install --editable` does not work, while it works before that commit. The following error is returned:
 ```
@@ -978,7 +978,7 @@ installation should work
 
 **Additional context**
 Running in a virtualenv in a docker container, built from `nvidia/cuda:10.0-cudnn7-devel-ubuntu16.04`
-",1
+",1,1,0,0,0,0,0,0,0,0
 1428,https://github.com/allenai/allennlp/issues/3492,3492,[],closed,2019-11-28 17:13:23+00:00,2,Install via pip misses files from data.tokenizers,"**Describe the bug**
 I installed the 0.9.0 and 0.8.5 via pip install and I could not find the tokenizers
 I managed it by installing from git manual.
@@ -997,12 +997,12 @@ At least spacy tokenizer in `allennlp/data/tokenizers`, shouln't it be there?
 
 **Additional context**
 Add any other context about the problem here.
-",1
+",1,0,0,0,0,0,0,0,0,0
 1448,https://github.com/allenai/allennlp/issues/3520,3520,[],closed,2019-12-13 21:43:30+00:00,4,pip allennlp,"Hello, 
 
 The pip version is causing conflicts, any pip updated version soon?  it causes conflicts with spacy v2.2.  I have been installing allennlp from source. 
-",1
-1541,https://github.com/allenai/allennlp/issues/3758,3758,[],closed,2020-02-10 19:13:00+00:00,2,Release nightly to pip,"We'll need a slick way to release for 1.0 given that we'll have multiple repositories.  Ideally we'd have a fully automated solution that released nightly, so releasing wouldn't be a huge deal.  This would also address some community problems as well, see https://github.com/allenai/allennlp/issues/3712.",1
+",1,1,0,0,0,0,0,0,0,0
+1541,https://github.com/allenai/allennlp/issues/3758,3758,[],closed,2020-02-10 19:13:00+00:00,2,Release nightly to pip,"We'll need a slick way to release for 1.0 given that we'll have multiple repositories.  Ideally we'd have a fully automated solution that released nightly, so releasing wouldn't be a huge deal.  This would also address some community problems as well, see https://github.com/allenai/allennlp/issues/3712.",1,0,0,0,0,0,0,0,0,0
 1780,https://github.com/allenai/allennlp/issues/4324,4324,"[{'id': 605609792, 'node_id': 'MDU6TGFiZWw2MDU2MDk3OTI=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/bug', 'name': 'bug', 'color': 'ee0701', 'default': True, 'description': None}]",closed,2020-06-05 08:33:10+00:00,1,Upper limit on dependencies versions,"Similar issues:
 
 - #2650
@@ -1018,7 +1018,7 @@ Are you just afraid that the future versions of these packages are going to brea
 
 In my case, I am encountering a lot of issues because of this strategy. I want to use an older version `allennlp==0.9.0` however there you assert `'spacy>=2.1.0,<2.2'`. My other dependencies, however, require more recent `spacy>2.2`.
 
-Thanks for your response!",1
+Thanks for your response!",1,0,0,0,0,0,0,0,0,0
 129,https://github.com/allenai/allennlp/issues/946,946,[],closed,2018-03-02 19:23:01+00:00,0,pip should install an `allennlp` script,"lots of python packages do that, so that people can then
 
 ```bash
@@ -1035,7 +1035,7 @@ should be relatively easy:
 
 http://python-packaging.readthedocs.io/en/latest/command-line-scripts.html
 
-",0
+",0,1,0,0,0,0,0,0,0,0
 283,https://github.com/allenai/allennlp/issues/1324,1324,[],closed,2018-05-31 22:16:11+00:00,1,Create a Dockerfile that includes a basic pip installation of AllenNLP,"To make using AllenNLP easy for downstream users, we should create a simple Dockerfile that has a pip installation of AllenNLP.  This would make it easy for users to use AllenNLP as a library or a command in a Docker environment, and would provide a base image from which people could run AllenNLP jobs on Beaker.
 
 ```
@@ -1046,12 +1046,12 @@ FROM python:3.6.3-jessie
 RUN pip install allennlp
 
 ENTRYPOINT [""allennlp""]
-```",0
+```",0,0,0,0,0,0,0,0,0,0
 692,https://github.com/allenai/allennlp/issues/2175,2175,[],closed,2018-12-12 23:44:08+00:00,14,investigate pip-tools,"https://pypi.org/project/pip-tools/
 
 has several features, most relevant is *automatically generating requirements.txt from setup.py*
 
-not sure how to incorporate it into our workflow, but worth thinking about",0
+not sure how to incorporate it into our workflow, but worth thinking about",0,1,0,0,0,0,0,0,0,0
 1637,https://github.com/allenai/allennlp/issues/4005,4005,[],closed,2020-03-30 22:44:11+00:00,4,RuntimeError: index out of range: Tried to access index 32730 out of table with 28995 rows. at /tmp/pip-req-build-ufslq_a9/aten/src/TH/generic/THTensorEvenMoreMath.cpp:418 ,"**System (please complete the following information):**
  OS: Linux
 Python version: 3.7.6
@@ -1115,23 +1115,23 @@ Traceback (most recent call last): File ""/home/mrim/affim/anaconda3/envs/allenn
 ```
 
 **Question**
-is there any idea How to overcome this issue?",0
+is there any idea How to overcome this issue?",0,0,0,0,0,0,0,0,0,0
 1744,https://github.com/allenai/allennlp/issues/4242,4242,[],closed,2020-05-15 02:16:07+00:00,4,Why does allennlp require old version of spaCy?,"I just installed allennlp that replaced my spaCy 2.2.4 with 2.1.9. But spaCy 2.1.9 would need transformers<2.1.0,>=2.0.0 which conflicts with my latest transformers 2.9. 
 
-Can we update the requirements.txt to latest packages? Thanks! ",0
+Can we update the requirements.txt to latest packages? Thanks! ",0,0,0,0,0,0,0,0,0,0
 14,https://github.com/allenai/allennlp/issues/544,544,[],closed,2017-11-27 21:40:27+00:00,5,install spacy model via pip / requirements.txt instead of `spacy download`,"isn't that simpler?
 
-https://spacy.io/usage/models#models-download",0
-0,https://github.com/allenai/allennlp/issues/498,498,[],closed,2017-11-15 19:38:50+00:00,6,Add a tutorial for random non-standard things a person might want to try,"There are simple ways to do a lot of small tweaks in AllenNLP models, if you've set them up correctly.  Some of these ways are probably not obvious to someone not familiar with the code.  It'd be nice to have a tutorial that collected a bunch of these things and showed how to do them easily.  Tutorial title could be something like ""What if I want to do..."".  Some examples of things to go in here: ""What if my text is in a language other than English?""  ""What if I want to use two separate embeddings for the same words?""  ""What if I want to use part-of-speech tag embeddings as my word representation?""",0
-1,https://github.com/allenai/allennlp/issues/499,499,"[{'id': 723800272, 'node_id': 'MDU6TGFiZWw3MjM4MDAyNzI=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/Help%20Wanted', 'name': 'Help Wanted', 'color': '7ee577', 'default': False, 'description': None}, {'id': 723800354, 'node_id': 'MDU6TGFiZWw3MjM4MDAzNTQ=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/Good%20First%20Issue', 'name': 'Good First Issue', 'color': 'e99695', 'default': False, 'description': 'A great place to start for first time contributors'}]",closed,2017-11-15 21:26:00+00:00,0,"Add a simple ""check dimensions match"" method","We currently have [lots of places](https://github.com/allenai/allennlp/blob/master/allennlp/models/reading_comprehension/bidaf.py#L100-L118) in our model init methods that take 5 lines to do a simple dimension check, and it's onerous to add those checks, so they don't get added a lot of the time.  We should have a simple function to call that checks that two dimensions match, and throws a `ConfigurationError` if they don't.",0
+https://spacy.io/usage/models#models-download",0,1,1,0,0,0,0,0,0,0
+0,https://github.com/allenai/allennlp/issues/498,498,[],closed,2017-11-15 19:38:50+00:00,6,Add a tutorial for random non-standard things a person might want to try,"There are simple ways to do a lot of small tweaks in AllenNLP models, if you've set them up correctly.  Some of these ways are probably not obvious to someone not familiar with the code.  It'd be nice to have a tutorial that collected a bunch of these things and showed how to do them easily.  Tutorial title could be something like ""What if I want to do..."".  Some examples of things to go in here: ""What if my text is in a language other than English?""  ""What if I want to use two separate embeddings for the same words?""  ""What if I want to use part-of-speech tag embeddings as my word representation?""",0,0,0,0,0,0,0,0,0,0
+1,https://github.com/allenai/allennlp/issues/499,499,"[{'id': 723800272, 'node_id': 'MDU6TGFiZWw3MjM4MDAyNzI=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/Help%20Wanted', 'name': 'Help Wanted', 'color': '7ee577', 'default': False, 'description': None}, {'id': 723800354, 'node_id': 'MDU6TGFiZWw3MjM4MDAzNTQ=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/Good%20First%20Issue', 'name': 'Good First Issue', 'color': 'e99695', 'default': False, 'description': 'A great place to start for first time contributors'}]",closed,2017-11-15 21:26:00+00:00,0,"Add a simple ""check dimensions match"" method","We currently have [lots of places](https://github.com/allenai/allennlp/blob/master/allennlp/models/reading_comprehension/bidaf.py#L100-L118) in our model init methods that take 5 lines to do a simple dimension check, and it's onerous to add those checks, so they don't get added a lot of the time.  We should have a simple function to call that checks that two dimensions match, and throws a `ConfigurationError` if they don't.",0,0,0,0,0,0,0,0,0,0
 2,https://github.com/allenai/allennlp/issues/504,504,[],closed,2017-11-16 14:39:40+00:00,1,"split out ""demo"" requirements","Almost no one using AllenNLP needs to run the demo with permalinks enabled, which means that almost no one using AllenNLP needs to install (for example) `psycopg2`. 
 
-We should split out demo requirements the same way we split out test requirements.",0
-3,https://github.com/allenai/allennlp/issues/506,506,[],closed,2017-11-16 20:24:21+00:00,1,fix `Predictor` API so that it's easier to add things to the output,"in both the SRL and sentence-tagger predictors, we need to tokenize the input sentence and add it to the output. right now this is awkward to do and we have to override predict_json. figure out a way to make it simpler/cleaner",0
-4,https://github.com/allenai/allennlp/issues/511,511,[],closed,2017-11-17 14:31:56+00:00,2,Inconsistent case in `predict` command,"Hi, this is a really minor issue. The `predict` command accepts `--output-file` optional argument, written in kebab-case. This is inconsistent with the other optional arguments which use snake_case (e.g. `--batch_size` or `--cuda_device`). Also, the metavar for `input-file` argument is also in kebab-case while others are in snake_case.",0
-5,https://github.com/allenai/allennlp/issues/513,513,[],closed,2017-11-17 19:18:54+00:00,1,Move to PyTorch 0.3,We expect PyTorch 0.3 to release on Monday 11/20.,0
-6,https://github.com/allenai/allennlp/issues/514,514,[],closed,2017-11-17 19:30:09+00:00,0,Add a tutorial for using AllenNLP as a library dependency,"Some code is already written for this, in an [example repository](https://github.com/allenai/allennlp-as-a-library-example).  We just need to write it up as a tutorial.",0
-7,https://github.com/allenai/allennlp/issues/516,516,[],closed,2017-11-18 07:20:53+00:00,6,Add a flag which avoids using the validation data for creating a vocabulary.,"Hi, I was looking at the code for `train` command and noticed that the vocabulary is built from all datasets (train, dev, test). Is this intentional? I am asking because I thought the common thing to do is to build vocabulary from train set only so that words in dev/test set that does not occur in train set are converted into `<unk>` and given a single embedding. Building vocabulary from all three sets means that there will be no unknown words in dev/test set (assuming `min_count=1`).",0
+We should split out demo requirements the same way we split out test requirements.",0,0,0,0,0,0,0,0,0,0
+3,https://github.com/allenai/allennlp/issues/506,506,[],closed,2017-11-16 20:24:21+00:00,1,fix `Predictor` API so that it's easier to add things to the output,"in both the SRL and sentence-tagger predictors, we need to tokenize the input sentence and add it to the output. right now this is awkward to do and we have to override predict_json. figure out a way to make it simpler/cleaner",0,0,1,0,0,0,0,0,0,0
+4,https://github.com/allenai/allennlp/issues/511,511,[],closed,2017-11-17 14:31:56+00:00,2,Inconsistent case in `predict` command,"Hi, this is a really minor issue. The `predict` command accepts `--output-file` optional argument, written in kebab-case. This is inconsistent with the other optional arguments which use snake_case (e.g. `--batch_size` or `--cuda_device`). Also, the metavar for `input-file` argument is also in kebab-case while others are in snake_case.",0,0,0,0,0,0,0,0,0,0
+5,https://github.com/allenai/allennlp/issues/513,513,[],closed,2017-11-17 19:18:54+00:00,1,Move to PyTorch 0.3,We expect PyTorch 0.3 to release on Monday 11/20.,0,0,1,0,0,0,0,0,0,0
+6,https://github.com/allenai/allennlp/issues/514,514,[],closed,2017-11-17 19:30:09+00:00,0,Add a tutorial for using AllenNLP as a library dependency,"Some code is already written for this, in an [example repository](https://github.com/allenai/allennlp-as-a-library-example).  We just need to write it up as a tutorial.",0,0,0,1,0,0,0,0,0,0
+7,https://github.com/allenai/allennlp/issues/516,516,[],closed,2017-11-18 07:20:53+00:00,6,Add a flag which avoids using the validation data for creating a vocabulary.,"Hi, I was looking at the code for `train` command and noticed that the vocabulary is built from all datasets (train, dev, test). Is this intentional? I am asking because I thought the common thing to do is to build vocabulary from train set only so that words in dev/test set that does not occur in train set are converted into `<unk>` and given a single embedding. Building vocabulary from all three sets means that there will be no unknown words in dev/test set (assuming `min_count=1`).",0,0,0,0,0,0,0,0,0,0
 8,https://github.com/allenai/allennlp/issues/520,520,[],closed,2017-11-21 16:47:56+00:00,5,Add versioning to the running demo.,"Presently, there is no way to tell what version of code a running copy of the demo is using.  Other software at AI2 has a `/info` route which gives an overview of the service.  For example, see https://www.semanticscholar.org/api/1/info (only available on our network).
 
 Ideally our demo would have a `/info` route as well, with information such as the following:
@@ -1146,26 +1146,26 @@ Ideally our demo would have a `/info` route as well, with information such as th
 }
 ```
 
-We could store the `gitVersion` and `gitCommitDate` when building a Docker image.",0
+We could store the `gitVersion` and `gitCommitDate` when building a Docker image.",0,0,0,0,0,0,0,0,0,0
 9,https://github.com/allenai/allennlp/issues/532,532,[],closed,2017-11-22 22:34:39+00:00,5,The demo menu wraps poorly at the most dominant resolution.,"Per Google Analytics, the most common smallest resolution is 1280px wide.
 
 At that resolution, after the addition of Named Entity Recognition, the menu looks like so:
 
 ![image](https://user-images.githubusercontent.com/801451/33152591-3ec882f8-cf92-11e7-9912-ae5948d97817.png)
 
-We should probably fix this :).",0
+We should probably fix this :).",0,0,0,0,0,0,0,0,0,0
 10,https://github.com/allenai/allennlp/issues/535,535,[],closed,2017-11-22 23:43:01+00:00,3,Interactive Coref Resolution highlighting in the demo creates odd text wrapping,"This highlight style works well as a static highlight (e.g. as used in `Machine Comprehension`), but not as well for interactive `Coreference Resolution` highlighting.
 
 We probably need to tweak the CSS or add a special highlight style for Coref that doesn't affect text wrapping.
 
-![coref](https://user-images.githubusercontent.com/8367927/33154207-a9f15506-cf9b-11e7-95a0-8b236ec0a3c9.gif)",0
-11,https://github.com/allenai/allennlp/issues/537,537,[],closed,2017-11-23 02:15:15+00:00,7,Implement learning rate finder,This looks like a pretty good idea that would be relatively simple to implement: https://medium.com/@surmenok/estimating-optimal-learning-rate-for-a-deep-neural-network-ce32f2556ce0.,0
+![coref](https://user-images.githubusercontent.com/8367927/33154207-a9f15506-cf9b-11e7-95a0-8b236ec0a3c9.gif)",0,0,0,0,0,0,0,0,0,0
+11,https://github.com/allenai/allennlp/issues/537,537,[],closed,2017-11-23 02:15:15+00:00,7,Implement learning rate finder,This looks like a pretty good idea that would be relatively simple to implement: https://medium.com/@surmenok/estimating-optimal-learning-rate-for-a-deep-neural-network-ce32f2556ce0.,0,0,0,0,0,0,0,0,0,0
 12,https://github.com/allenai/allennlp/issues/538,538,[],closed,2017-11-24 11:16:35+00:00,8,error of from allennlp.data import Token,"File ""/home/work/venv/py35/lib/python3.5/site-packages/allennlp-0.2.1-py3.5.egg/allennlp/data/__init__.py"", line 1, in <module>
     from allennlp.data.dataset import Dataset
   File ""/home/work/venv/py35/lib/python3.5/site-packages/allennlp-0.2.1-py3.5.egg/allennlp/data/dataset.py"", line 34
     all_instance_fields_and_types: List[Dict[str, str]] = [{k: v.__class__.__name__
 
-what is wrong of it?",0
+what is wrong of it?",0,0,0,0,0,0,0,0,0,0
 13,https://github.com/allenai/allennlp/issues/540,540,[],closed,2017-11-25 15:10:36+00:00,5,ImportError: cannot import name 'Token',"Hell, 
 Please help me with this problem
 
@@ -1179,24 +1179,24 @@ Traceback (most recent call last):
 ImportError: cannot import name 'Token'
 ```
 
-Many thanks",0
+Many thanks",0,0,0,0,0,0,0,0,0,0
 15,https://github.com/allenai/allennlp/issues/546,546,[],closed,2017-11-28 14:32:43+00:00,5,we need better documentation about what to put in a config file,"this has several components
 
 * for sure all of our `from_params` methods need much clearer documentation about what their params should look like
 * we should consider avoiding using implicit default ""type"" parameters in our example code, I think it's potentially confusing
-* we probably need a tutorial on this (or possibly just to expand the `configuring a model` tutorial)",0
+* we probably need a tutorial on this (or possibly just to expand the `configuring a model` tutorial)",0,0,0,0,0,0,0,0,0,0
 17,https://github.com/allenai/allennlp/issues/554,554,[],closed,2017-11-30 17:07:39+00:00,2,Add a way to add dependent files into the model archive,"We are definitely going to need this eventually.  The vocabulary already does this, but in a particular, hard-coded way.  ELMo embeddings would probably be easier if there were a standard way to do this.  And if we ever want to do byte pair encoding, e.g., you'd want to do it as a `Tokenizer` that takes a pre-computed byte-pair vocabulary (and this is separate from the way that our `Vocabulary` works).
 
 So, we'd want something on `Trainer` that saves all dependent files to the model archive.  That would then call a method on `Vocabulary`, the `DatasetReader`, the `Model`, and anything else, which in turn call the method on `Tokenizers`, `Modules`, and whatever else.  And when loading a model from an archive, these classes all need to know how to modify the paths that they require as input, so they point to the archive somehow instead of pointing to the originally-specified location.  Maybe `update_params_from_archive(params: Params, archive_path: str)`, or something?  That method would update the params for anything that matters - e.g., `Embedding` would remove the path to the pre-trained file, because it's not necessary anymore*, `Vocabulary` would add a path to the saved files, etc.
 
 This is a lot of boilerplate, adding methods on `Model` to pass on calls to `Modules`, etc., but I'm not sure of another way to do this.
 
-\* Actually, maybe `Embedding` would get an option to copy the embedding file over, so that you can still use it at test time, and add words to the embedding as needed...",0
-18,https://github.com/allenai/allennlp/issues/560,560,[],closed,2017-12-01 00:41:43+00:00,0,Canonicalise how we read Ontonotes data,Currently the SRL reader and Coref reader read exactly the same data in two completely different ways. ,0
+\* Actually, maybe `Embedding` would get an option to copy the embedding file over, so that you can still use it at test time, and add words to the embedding as needed...",0,0,1,0,0,0,0,0,0,0
+18,https://github.com/allenai/allennlp/issues/560,560,[],closed,2017-12-01 00:41:43+00:00,0,Canonicalise how we read Ontonotes data,Currently the SRL reader and Coref reader read exactly the same data in two completely different ways. ,0,0,0,0,0,0,0,0,0,0
 19,https://github.com/allenai/allennlp/issues/562,562,[],closed,2017-12-01 22:55:52+00:00,2,Hierplane example fails for some inputs,"http://demo.allennlp.org/semantic-role-labeling/MzQwOA==
 
 ![image](https://user-images.githubusercontent.com/954798/33507088-b127dbca-d6a7-11e7-90c9-f226daade424.png)
-",0
+",0,0,0,0,0,0,0,0,0,0
 20,https://github.com/allenai/allennlp/issues/565,565,[],closed,2017-12-02 01:06:02+00:00,1,Unstable tests in TravisCI,"I am continuing to frequently get unstable tests in Travis CI despite `@flaky(max_runs=5)`.  Any other suggestions for avoiding these spurious failures?  I'm inclined to increase the tolerances significantly (0.0001 to 0.001).
 
 ```
@@ -1244,7 +1244,7 @@ E                    -1.454758e-02,  -1.829709e-02,  -2.281654e-02,  -2.857263e-
 allennlp/common/testing/model_test_case.py:104: AssertionError
 ```
 
-",0
+",0,0,0,0,0,0,0,0,0,0
 21,https://github.com/allenai/allennlp/issues/567,567,[],closed,2017-12-04 18:11:40+00:00,1,Hierplane shows only one verb when two verbs exist,"Reported by @nikett 
 
 > Plants give off oxygen for animals to breathe in.
@@ -1252,7 +1252,7 @@ allennlp/common/testing/model_test_case.py:104: AssertionError
 ![image](https://user-images.githubusercontent.com/954798/33568502-7cc1e5de-d8db-11e7-8a52-74ac57912791.png)
 
 ![image](https://user-images.githubusercontent.com/954798/33568507-8221664e-d8db-11e7-953b-26b25c0150ec.png)
-",0
+",0,0,0,0,0,0,0,0,0,0
 23,https://github.com/allenai/allennlp/issues/574,574,[],closed,2017-12-05 08:11:24+00:00,1,Tutorial: RuntimeError ConcatBackward CRFTagger,"Running through the tutorial I ran across this error with the CrfTagger:
 ```
 2017-12-05 00:00:52,542 - INFO - allennlp.common.params - random_seed = 13370
@@ -1428,7 +1428,7 @@ Traceback (most recent call last):
   File ""/usr/local/lib/python3.6/dist-packages/torch/autograd/__init__.py"", line 98, in backward
     variables, grad_variables, retain_graph)
 RuntimeError: function ConcatBackward returned a gradient different than None at position 3, but the corresponding forward input was not a Variable
-```",0
+```",0,0,0,0,0,0,0,0,0,0
 24,https://github.com/allenai/allennlp/issues/581,581,[],closed,2017-12-06 15:14:30+00:00,11,error on importing Token,"As I try to use jupyter notebook in a Python3.6 virtual environment  these lines issued an error:
 *********************************************************************************
 from allennlp.data import Token
@@ -1444,7 +1444,7 @@ ImportError                               Traceback (most recent call last)
       3 from allennlp.data.token_indexers import SingleIdTokenIndexer
 
 ImportError: cannot import name 'Token'
-I am running a Linux distro Fedora 25, on an AMD Phenon 6 processor, with no GPU.",0
+I am running a Linux distro Fedora 25, on an AMD Phenon 6 processor, with no GPU.",0,0,0,0,0,0,0,0,0,0
 25,https://github.com/allenai/allennlp/issues/583,583,[],closed,2017-12-06 21:31:57+00:00,1,simple_seq2seq GPU error,"At the line below, _encoder_outputs_mask_ Tensor is explicitly cast to be a **CPU** Tensor, which results in error if the model runs on GPU:
 https://github.com/allenai/allennlp/blob/7f5d9f7587e1a799e161c37e3383686323e34956/allennlp/models/encoder_decoders/simple_seq2seq.py#L217-L219
 
@@ -1456,7 +1456,7 @@ mask_type = torch.cuda.FloatTensor if encoder_outputs_mask.is_cuda else torch.Fl
 encoder_outputs_mask = encoder_outputs_mask.type(mask_type)
 ```
 
-If appropriate, I can make a PR. ",0
+If appropriate, I can make a PR. ",0,0,1,0,0,0,0,0,0,0
 26,https://github.com/allenai/allennlp/issues/591,591,[],closed,2017-12-07 15:26:59+00:00,3,Implement batch prediction for SRL,"I'm currently trying to compile a dataset of ~50M SRL-parsed sentences and was hoping to speed things up with batch processing. Unfortunately, I discovered that it's not yet implemented for SRL.
 
 https://github.com/allenai/allennlp/blob/f700584ed1b72ab45215e405ed0d22564938d1cb/allennlp/service/predictors/semantic_role_labeler.py#L52
@@ -1465,8 +1465,8 @@ In the meantime, do you have any suggestions for speeding up SRL parsing ?
 
 I've also tried running the `predict` command with `--cuda_device 0` on a Tesla K80, but checking `nvidia-smi ` it seems that there's some bottleneck preventing it from going above 25% GPU usage. Could the lack of batch processing create some overhead that's responsible for that, or am I missing something else?
 
-Thanks!",0
-27,https://github.com/allenai/allennlp/issues/592,592,[],closed,2017-12-07 17:44:23+00:00,1,Lots of scripts relied on arrays_to_variables,"We have many scripts which needed to be updated with #580, sorry I should have caught that in the review.",0
+Thanks!",0,0,0,0,0,0,0,0,0,0
+27,https://github.com/allenai/allennlp/issues/592,592,[],closed,2017-12-07 17:44:23+00:00,1,Lots of scripts relied on arrays_to_variables,"We have many scripts which needed to be updated with #580, sorry I should have caught that in the review.",0,0,0,0,0,0,0,0,0,0
 28,https://github.com/allenai/allennlp/issues/593,593,[],closed,2017-12-07 22:24:22+00:00,2,Announce new features,"Hi everyone, we're excited to announce the 0.3 release of AllenNLP.  We updated our key dependencies to Spacy 2.0 and PyTorch 0.3, and we have a few additional models and many new features since our 0.2 release.
 
 **Additional models**.  More details for our models are available at http://allennlp.org/models and you can use them interactively online at http://demo.allennlp.org/.
@@ -1481,19 +1481,19 @@ Thanks!",0
 **New features**.
 
 * Improved SRL visualization on the demo.
-* `ListField` padding fixes.",0
+* `ListField` padding fixes.",0,0,0,0,0,0,0,0,0,0
 29,https://github.com/allenai/allennlp/issues/594,594,[],closed,2017-12-07 22:26:10+00:00,1,Define how we integrate external contributions.,"We decided we want to have a page where we can list contributions.  To close this out, we should choose the location and put a blurb with a ""call for models"" which invites people to add their link to our repository.
 
-One proposal here is to use the existing models page for the AllenNLP website.  We could invite contributions by PR.",0
+One proposal here is to use the existing models page for the AllenNLP website.  We could invite contributions by PR.",0,0,0,0,0,0,0,0,0,0
 30,https://github.com/allenai/allennlp/issues/599,599,[],closed,2017-12-08 20:58:24+00:00,15,Experiments run with `no_tqdm: true` still have TQDM output in logs,"Found while investigating some issues with Beaker's log handling. It appears that when I run experiments with `no_tqdm: true` in my `trainer`'s config JSON, I will still see TQDM output for the steps ""Indexing dataset"" and ""Iterating over dataset""
 
-See the log output for this Beaker task: http://beaker.dev.allenai.org/tk/tk_jt3ahr2hxmch",0
-31,https://github.com/allenai/allennlp/issues/601,601,[],closed,2017-12-08 23:28:53+00:00,13,Weird comma swapping in demo,"Noticed in the demo @codeviking gave today: http://demo.allennlp.org/semantic-role-labeling/NTc1OA==.  The comma gets moved to after ""which"" in the heirplane visualization.  This doesn't happen in the text visualization.",0
+See the log output for this Beaker task: http://beaker.dev.allenai.org/tk/tk_jt3ahr2hxmch",0,0,0,0,0,0,0,0,0,0
+31,https://github.com/allenai/allennlp/issues/601,601,[],closed,2017-12-08 23:28:53+00:00,13,Weird comma swapping in demo,"Noticed in the demo @codeviking gave today: http://demo.allennlp.org/semantic-role-labeling/NTc1OA==.  The comma gets moved to after ""which"" in the heirplane visualization.  This doesn't happen in the text visualization.",0,0,0,0,0,0,0,0,0,0
 32,https://github.com/allenai/allennlp/issues/602,602,[],closed,2017-12-09 12:28:52+00:00,7,simple_seq2seq.py teacher forcing affects training time,"If scheduled_sampling_ratio is set to 1 (no teacher forcing), it takes ~3 hours per epoch on my GPU.
 But if scheduled_sampling_ratio is set to 0 (teacher forcing), all things being equal, it takes ~8 hours per epoch.
 
 Any thoughts on that?
-",0
+",0,0,0,0,0,0,0,0,0,0
 33,https://github.com/allenai/allennlp/issues/608,608,"[{'id': 605609792, 'node_id': 'MDU6TGFiZWw2MDU2MDk3OTI=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/bug', 'name': 'bug', 'color': 'ee0701', 'default': True, 'description': None}]",closed,2017-12-13 14:08:30+00:00,4,Data pipeline tutorial incorrectly describes vocab namespace issues,"Issue:
 The keys of the ""token_indexers"" dict passed to TextField aren't used to create the vocabulary namespace (I'm not entirely sure that this is the intended behavior but the tutorial on http://allennlp.org/tutorials/data-pipeline suggests so). Instead the TokenIndexers internal namespace is used, which leads to the behavior as shown in the example code. The specified namespace is ""some_namespace"" but the index is stored under the namespace ""tokens"", which is the default namespace for SingleIdTokenIndexer.
 
@@ -1522,7 +1522,7 @@ Output:
 ```
 Namespaces: defaultdict(None, {'tokens': {0: '@@PADDING@@', 1: '@@UNKNOWN@@', 2: 'Here', 3: 'are', 4: 'some', 5: 'longer', 6: 'words', 7: '.'}})
 Namespace content: {0: '@@PADDING@@', 1: '@@UNKNOWN@@'}
-```",0
+```",0,0,0,0,0,0,0,0,0,0
 34,https://github.com/allenai/allennlp/issues/610,610,"[{'id': 605609792, 'node_id': 'MDU6TGFiZWw2MDU2MDk3OTI=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/bug', 'name': 'bug', 'color': 'ee0701', 'default': True, 'description': None}]",closed,2017-12-14 00:16:28+00:00,6,Data pipeline tutorial issues,"While working through the data pipeline tutorial (http://allennlp.org/tutorials/data-pipeline), I noticed a couple of things:
 
 1. when installing allennlp v0.2.3 via pip (python 3.6.1), the tutorial fails, because at this point Dataset has no as_tensor_dict(..) method.
@@ -1538,12 +1538,12 @@ print(vocab.get_index_to_token_vocabulary(""chars""), ""\n"")
 3. there is a missing comma between ""good"" and ""."" in line
 ```
 review2 = TextField(list(map(Token, [""This"", ""movie"", ""was"", ""quite"", ""slow"", ""but"", ""good"" "".""])), token_indexers={""tokens"": SingleIdTokenIndexer()})
-```",0
+```",0,0,0,0,0,0,0,0,0,0
 35,https://github.com/allenai/allennlp/issues/611,611,[],closed,2017-12-14 13:50:35+00:00,4,Add start and end tokens to source sentence in seq2seq DatasetReader,"Two points here:
 1) Is it intentional that you do not append the `@@END@@` token to the source sequence?
 2) These `@@START@@` and `@@END@@` tokens are currently added inside the seq2seq dataset reader directly. However, there is also a way to add them via WordTokenizer params. Next, one could fetch them from the WordTokenizer instance inside the dataset reader for a future use in the decoder. 
 
-",0
+",0,0,0,0,0,0,0,0,0,0
 36,https://github.com/allenai/allennlp/issues/612,612,"[{'id': 887719346, 'node_id': 'MDU6TGFiZWw4ODc3MTkzNDY=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/Contributions%20welcome', 'name': 'Contributions welcome', 'color': '02b8d1', 'default': False, 'description': ''}]",open,2017-12-14 18:15:17+00:00,53,Add instructions for getting AllenNLP to run on Windows,"It's currently a pain, apparently, and I'm not sure how much work we should do to support it (if you're reading this and want Windows support, add a comment please).  But @OyvindTafjord was able to get it actually working by modifying some things:
 
 1. Got pytorch from 'conda install -c peterjc123 pytorch cuda80' (https://github.com/pytorch/pytorch/issues/494)
@@ -1554,31 +1554,31 @@ review2 = TextField(list(map(Token, [""This"", ""movie"", ""was"", ""quite"", ""
 6. Download also threw exception because it couldn't remove the temporary file, seems like Windows hangs onto the file for a bit, a 1 second pause didn't help [ got around by catching that exception, deleting the files manually later ] 
 7. Had issues getting appropriate tensorflow/tensorboard installed where SummaryWriter was found [ got around it by instead using TensorboardX which somebody made for this purpose ]
 
-I'm going to mark this issue as very low priority, until we hear people actually asking for us to support this.  For now, the instructions will just live in this issue.",0
+I'm going to mark this issue as very low priority, until we hear people actually asking for us to support this.  For now, the instructions will just live in this issue.",0,1,0,0,0,0,0,0,0,0
 38,https://github.com/allenai/allennlp/issues/622,622,[],closed,2017-12-15 13:48:32+00:00,3,error in demo app,"result = torch.nn.functional.softmax(vector * mask, dim=-1)
-TypeError: softmax() got an unexpected keyword argument 'dim'",0
+TypeError: softmax() got an unexpected keyword argument 'dim'",0,0,0,0,0,0,0,0,0,0
 39,https://github.com/allenai/allennlp/issues/624,624,[],closed,2017-12-15 19:45:06+00:00,1,Non-spacy Tokenizers don't show text of passage tokens in SQuAD debug,"Hi,
 
 I'm trying to use allennlp as a squad dataloader in my code, but I noticed that some passages were incorrectly tokenized by spacy due to wikipedia `[notes]` and `[citations]` (same issue as https://github.com/allenai/allennlp/issues/236).
 
 Upon switching to the `LettersDigitsWordSplitter` that solves this problem, the squad debug output for the actual tokens generated is just a list of token objects and their addresses (as opposed to readable strings), since `__repr__` / `__str__` isn't implemented. Would you mind a PR to add these (will probably just [copy from SpaCy](https://github.com/explosion/spacy/blob/master/spacy/tokens/token.pyx#L65-L77)), or do you think that there's a better way to go about solving this?
 
-Thanks!",0
+Thanks!",0,0,0,0,0,0,0,0,0,0
 40,https://github.com/allenai/allennlp/issues/632,632,[],closed,2017-12-18 03:33:21+00:00,2,Question about SRL performance in the host page.,"
 > The AllenNLP SRL model closely matches the published model, achieving a F1 of 78.9 on English Ontonotes 5.0 dataset using the CONLL 2011/12 shared task format.
 
 My Question is that whether F1 of 78.9 was achieved  by using __single model__ on CoNLL 2012 test dataset?
-",0
+",0,0,0,0,0,0,0,0,0,0
 41,https://github.com/allenai/allennlp/issues/635,635,"[{'id': 887719346, 'node_id': 'MDU6TGFiZWw4ODc3MTkzNDY=', 'url': 'https://api.github.com/repos/allenai/allennlp/labels/Contributions%20welcome', 'name': 'Contributions welcome', 'color': '02b8d1', 'default': False, 'description': ''}]",open,2017-12-18 19:46:09+00:00,1,Stop gradient calculation for numeric stability trick in logsumexp,"Tensorflow has code to stop gradients from propagating when you take a max for numeric stability reasons when computing logsumexp.  It'd be nice to have a similar behavior in our code.  I'm not sure if or how pytorch allows this kind of thing, though.
 
 Relevant line: https://github.com/allenai/allennlp/blob/d47ac92f1f7fcd905618f4c928f5b95556a2997c/allennlp/nn/util.py#L554
 
-Relevant line in tensorflow: https://github.com/tensorflow/tensorflow/blob/438604fc885208ee05f9eef2d0f2c630e1360a83/tensorflow/python/ops/math_ops.py#L1670-L1674",0
-42,https://github.com/allenai/allennlp/issues/643,643,[],closed,2017-12-21 02:33:41+00:00,6,Support for alternating_highway_lstm_cuda stacked encoder in SRL,Is the default version now built on the cuda kernel which was recently added?,0
+Relevant line in tensorflow: https://github.com/tensorflow/tensorflow/blob/438604fc885208ee05f9eef2d0f2c630e1360a83/tensorflow/python/ops/math_ops.py#L1670-L1674",0,0,0,0,0,0,0,0,0,0
+42,https://github.com/allenai/allennlp/issues/643,643,[],closed,2017-12-21 02:33:41+00:00,6,Support for alternating_highway_lstm_cuda stacked encoder in SRL,Is the default version now built on the cuda kernel which was recently added?,0,0,0,0,0,0,0,0,0,0
 43,https://github.com/allenai/allennlp/issues/650,650,[],closed,2017-12-25 21:50:17+00:00,2,Is it ok to have all zero grads sometimes?,"Consider a case, where you have some RNN that embeds a sentence that consists of only one word. <br>
 In the simplest case, it has two sets of parameters: input2hidden, and hidded2hidden. In our case we have only one timestep, so no grads are computed for hidden2hidden parameters, and thus the test below will fail, despite the behavior is intended.
 
-https://github.com/allenai/allennlp/blob/4cda858012261c5fa5f668236abaeb4333d587ec/allennlp/common/testing/model_test_case.py#L119-L121",0
+https://github.com/allenai/allennlp/blob/4cda858012261c5fa5f668236abaeb4333d587ec/allennlp/common/testing/model_test_case.py#L119-L121",0,0,0,0,0,0,0,0,0,0
 44,https://github.com/allenai/allennlp/issues/651,651,[],closed,2017-12-25 22:54:01+00:00,3, Sparse Embedding Error,"Hi,
 
 I use SGD optimizer without momentum and sparse embedding (parameters are set via config file).
@@ -1615,7 +1615,7 @@ However, I get following error when sparse is True: `AttributeError: ‘torch.sp
 Can it be the case that using nn.Embedding instead of functional API will solve the problem?
 
 Thanks,
-Maksym",0
+Maksym",0,0,0,0,0,0,0,0,0,0
 45,https://github.com/allenai/allennlp/issues/652,652,[],closed,2017-12-26 09:00:59+00:00,6,Reading Instances from lines in file: out of memory error,"Hi,
 
 I am implementing skip-gram model using allennlp so I have a huge amount of training examples (word pairs). Say 150,000,000 or even more in the future. 
@@ -1627,7 +1627,7 @@ Are there any ways around it?
 Thanks,
 Maksym
 
-  ",0
+  ",0,0,0,0,0,0,0,0,0,0
 46,https://github.com/allenai/allennlp/issues/653,653,[],closed,2017-12-29 20:30:09+00:00,3,JSONL requirement in `Predict` is too restrictive,"for context, I am playing around with using AllenNLP for 
 
 https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge
@@ -1673,20 +1673,20 @@ def json_output_to_line(line: str) -> JsonDict:
 ```
 
 and I'd override that too
-",0
+",0,0,0,0,0,0,0,0,0,0
 47,https://github.com/allenai/allennlp/issues/654,654,[],closed,2017-12-30 02:49:40+00:00,3,unlabeled test set cannot be included in training vocabulary ,"In the ""Kaggle competition"" use case, the test dataset has no labels. This means that if you try to specify `test_data_path` (e.g. in order to get the embeddings for that vocabulary), the trainer will crash with
 
 ```
 allennlp.common.checks.ConfigurationError: 'You cannot construct a Dataset with non-homogeneous Instances.'
 ```
 
-I was able to workaround this by having the `DatasetReader` generate fake labels, but that's not a good solution.",0
-48,https://github.com/allenai/allennlp/issues/659,659,[],closed,2018-01-03 07:26:22+00:00,8,Which functions are to apply AllenNLP to answer questions?,"I'm a green hand in NLP. I want to build a machine reading system that once I give it a text and a question, it can generate the answer based on this text. Do AllenNLP provide such functions? Or I need to explore by myself? Thank you!",0
+I was able to workaround this by having the `DatasetReader` generate fake labels, but that's not a good solution.",0,0,0,0,0,0,0,0,0,0
+48,https://github.com/allenai/allennlp/issues/659,659,[],closed,2018-01-03 07:26:22+00:00,8,Which functions are to apply AllenNLP to answer questions?,"I'm a green hand in NLP. I want to build a machine reading system that once I give it a text and a question, it can generate the answer based on this text. Do AllenNLP provide such functions? Or I need to explore by myself? Thank you!",0,0,0,0,0,0,0,0,0,0
 49,https://github.com/allenai/allennlp/issues/661,661,[],closed,2018-01-04 20:08:02+00:00,0,Read the Docs link is broken,"In the README.md file, our badge / link to readthedocs leads to a 404.
 
 The offending line is:
 
-    [![docs](https://readthedocs.org/projects/allennlp/badge/?version=latest)](https://readthedocs.org/projects/allennlp/)",0
+    [![docs](https://readthedocs.org/projects/allennlp/badge/?version=latest)](https://readthedocs.org/projects/allennlp/)",0,0,0,0,0,0,0,0,0,0
 50,https://github.com/allenai/allennlp/issues/664,664,[],closed,2018-01-05 18:27:04+00:00,1,`scripts/compile_coref_data.sh` is missing,"From Roy: 
 
 > Hi, the allennlp documentation page for the coref model refers to the `scripts/compile_coref_data.sh` script, but I couldn’t find it anywhere. Am I missing something? Thanks!
@@ -1695,29 +1695,29 @@ The text he is referring to is under evaluation on http://allennlp.org/models.
 
 > The Coreference model was evaluated on the CoNLL 2012 dataset. Unfortunately we cannot release this data due to licensing restrictions by the LDC. To compile the data in the right format for evaluating the Coreference model, please see scripts/compile_coref_data.sh. This script requires the Ontonotes 5.0 dataset, available on the LDC website.
 
-I suspect the file was never checked in.",0
-51,https://github.com/allenai/allennlp/issues/667,667,[],closed,2018-01-08 17:08:51+00:00,7,Make Span F1 match perl script exactly for SRL model,"The Span based F1 metric doesn't exactly match the perl script for evaluating the SRL model. I think this is because the perl script treats continuation and reference spans (C-B-TAG, R-B-TAG) as part of the same span as what they are continuing or referencing, whereas the allennlp metric treats these as separate spans. ",0
+I suspect the file was never checked in.",0,0,0,0,0,0,0,0,0,0
+51,https://github.com/allenai/allennlp/issues/667,667,[],closed,2018-01-08 17:08:51+00:00,7,Make Span F1 match perl script exactly for SRL model,"The Span based F1 metric doesn't exactly match the perl script for evaluating the SRL model. I think this is because the perl script treats continuation and reference spans (C-B-TAG, R-B-TAG) as part of the same span as what they are continuing or referencing, whereas the allennlp metric treats these as separate spans. ",0,0,0,0,0,0,0,0,0,0
 52,https://github.com/allenai/allennlp/issues/671,671,[],closed,2018-01-09 21:40:02+00:00,1,Add a health route to the demo,"The health route would disable detailed logging and:
 
 * Curl port 80
 * Post to one of the models
 * ???
 
-We would then update Pingdom to read the health route rather than /.",0
-53,https://github.com/allenai/allennlp/issues/684,684,[],closed,2018-01-16 16:47:18+00:00,5,Demo header is missing AI2 brand badge,"After updating http://allennlp.org/ with the new AI2-branded header/nav, Oren pointed out that a similar treatment is missing from the Demo header.",0
+We would then update Pingdom to read the health route rather than /.",0,0,0,0,0,0,0,0,0,0
+53,https://github.com/allenai/allennlp/issues/684,684,[],closed,2018-01-16 16:47:18+00:00,5,Demo header is missing AI2 brand badge,"After updating http://allennlp.org/ with the new AI2-branded header/nav, Oren pointed out that a similar treatment is missing from the Demo header.",0,0,0,0,0,0,0,0,0,0
 54,https://github.com/allenai/allennlp/issues/685,685,[],closed,2018-01-16 18:52:13+00:00,0,elmo use of `Registrable` is useless because it's not a subclass of a class with a from_params method,"https://github.com/allenai/allennlp/blame/master/allennlp/modules/elmo.py#L25
 
-not sure if there's a use case for it, maybe it should just be gotten rid of",0
+not sure if there's a use case for it, maybe it should just be gotten rid of",0,0,0,0,0,0,0,0,0,0
 56,https://github.com/allenai/allennlp/issues/693,693,[],closed,2018-01-17 14:58:29+00:00,4,`AdaptiveIterator` cannot be instantiated from JSON config file because it requires a `Callable` param,"https://github.com/allenai/allennlp/blob/master/allennlp/data/iterators/adaptive_iterator.py#L54
 
-I guess if you wanted to use it you'd have to write your own custom `train` command? That seems not optimal. (I don't know what a good solution is.)",0
+I guess if you wanted to use it you'd have to write your own custom `train` command? That seems not optimal. (I don't know what a good solution is.)",0,0,0,0,0,0,0,0,0,0
 57,https://github.com/allenai/allennlp/issues/694,694,[],closed,2018-01-17 15:01:07+00:00,1,investigate whether `allennlp.run` could take auxiliary modules as command line args and use importlib,"i.e. it's possible that if I make my own models etc in `allennlp_joel.models`, `allennlp_joel.dataset_readers`, and so on, that I could do something like
 
 ```
 python -m allennlp.run --extra-modules allennlp_joel train ...
 ```
 
-and use `importlib` to programmatically import everything and not have to write my own executable",0
+and use `importlib` to programmatically import everything and not have to write my own executable",0,0,1,0,0,0,0,0,0,0
 58,https://github.com/allenai/allennlp/issues/697,697,[],closed,2018-01-18 12:07:31+00:00,12,GPU doesn't get recognised with docker image,"I can successfully run all tests on CPU but for some reason I can't get the GPU to work on a DGX-1. pytorch's official image works but allennlp one doesn't:
 
 ```
@@ -1730,27 +1730,27 @@ root@5fc4428edb93:/stage# python -c ""import torch;print(torch.cuda.is_available
 False
 ```
 
-Has anyone an idea about what might be going on?",0
+Has anyone an idea about what might be going on?",0,0,1,0,0,0,0,0,0,0
 59,https://github.com/allenai/allennlp/issues/703,703,[],closed,2018-01-20 01:42:27+00:00,1,Vocabulary.from_instance ?,"says the `tutorials/notebooks/data_pipeline.ipynb`.
-I guess it should be `Vocabulary.from_dataset`",0
+I guess it should be `Vocabulary.from_dataset`",0,0,0,0,0,0,0,0,0,0
 61,https://github.com/allenai/allennlp/issues/723,723,[],closed,2018-01-25 23:23:12+00:00,1,Add a mininterval to tqdm,"Presently tqdm spews multiple logging lines per second (mininterval = 0.1) when running in Beaker.  While these updates are somewhat helpful when running locally, if the output is redirected to a file it all just adds up to a waste of space.
 
-We could have a global (configurable?) setting for the mininterval (1s?) that TQDM invocations use.",0
+We could have a global (configurable?) setting for the mininterval (1s?) that TQDM invocations use.",0,0,0,0,0,0,0,0,0,0
 62,https://github.com/allenai/allennlp/issues/728,728,[],closed,2018-01-29 01:19:49+00:00,2,bilm-tf is gone,"Hi:
 
 It is a great work. When could you release the tf version ? the link is gone 
 
-regards",0
-63,https://github.com/allenai/allennlp/issues/732,732,[],closed,2018-01-29 21:53:58+00:00,0,Add the ELMo HowTo to the website,https://github.com/allenai/allennlp/blob/master/tutorials/how_to/elmo.md,0
+regards",0,0,0,0,0,0,0,0,0,0
+63,https://github.com/allenai/allennlp/issues/732,732,[],closed,2018-01-29 21:53:58+00:00,0,Add the ELMo HowTo to the website,https://github.com/allenai/allennlp/blob/master/tutorials/how_to/elmo.md,0,0,0,0,0,0,0,0,0,0
 64,https://github.com/allenai/allennlp/issues/736,736,[],closed,2018-01-30 18:14:19+00:00,3,Make it easy to use ELMo,"I/O for sentences -> word vectors
 * How to use ELMo in my existing ALlenNLP model
-* How to use ELMo if I want to use TensorFlow",0
-65,https://github.com/allenai/allennlp/issues/737,737,[],closed,2018-01-30 18:33:09+00:00,3,enable lazy datasets,"there's currently a `LazyDataset` abstraction, and then #725 will get rid of Datasets all together and basically just replace them with `Iterable[Instance]`. This results in a cleaner API, but is a breaking change.",0
+* How to use ELMo if I want to use TensorFlow",0,0,0,0,0,0,0,0,0,0
+65,https://github.com/allenai/allennlp/issues/737,737,[],closed,2018-01-30 18:33:09+00:00,3,enable lazy datasets,"there's currently a `LazyDataset` abstraction, and then #725 will get rid of Datasets all together and basically just replace them with `Iterable[Instance]`. This results in a cleaner API, but is a breaking change.",0,0,0,0,0,0,0,0,0,0
 66,https://github.com/allenai/allennlp/issues/738,738,[],closed,2018-01-30 18:36:05+00:00,3,simple server that serves up a single model,"this already exists as `service/server_simple.py`, but we also need
 
 * a tutorial about how to use it (#589) which is in progress but waiting on #727 
-* an easy way to get visualizations into it",0
-67,https://github.com/allenai/allennlp/issues/740,740,[],closed,2018-01-30 20:39:52+00:00,2,How-to for visualizing model internals in your demo,"This is still a little rough, but it's to the point that we could include a how-to, particularly if we merge the `HeatMap` components into the demo code from #692.",0
+* an easy way to get visualizations into it",0,0,0,0,0,0,0,0,0,0
+67,https://github.com/allenai/allennlp/issues/740,740,[],closed,2018-01-30 20:39:52+00:00,2,How-to for visualizing model internals in your demo,"This is still a little rough, but it's to the point that we could include a how-to, particularly if we merge the `HeatMap` components into the demo code from #692.",0,0,0,0,0,0,0,0,0,0
 68,https://github.com/allenai/allennlp/issues/756,756,[],closed,2018-02-02 03:27:08+00:00,12,Why allennlp seq2seq model takes up so much memory?,"Hi, I have tried to use the allennlp framework to build up a baseline for my model. I simply use the model provided in allennlp.
 This is my config file:
 
@@ -1833,4 +1833,4 @@ Line #    Mem usage    Increment   Line Contents
     20    148.7 MiB     99.4 MiB       cProfile.run('from allennlp.commands.train import train_model_from_file')
     21    377.7 MiB    228.9 MiB       cProfile.run('train_model_from_file(""./model/baseline.json"", ""./result"")')
 ```
-I was shocked, the memory usage increase 150 thousands times.....",0
+I was shocked, the memory usage increase 150 thousands times.....",0,0,1,1,0,0,0,0,0,0

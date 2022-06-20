@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 from markdown import markdown
 from word2vec import Word2Vec
 from sentence2vec import Sentence2Vec
+import time
 
 
 class GIRecommend(object):
@@ -26,6 +27,7 @@ class GIRecommend(object):
         s2v = Sentence2Vec(docs, titles, tag_list)
         scores = s2v.score_all(data_process.process_query(self.so_body), self.so_title, self.so_tags)
         # print(scores)
+        time_start = time.time()
 
         select_num = settings.select_num
         # sort_re = list(map(scores.index, heapq.nlargest(select_num, scores)))
@@ -64,6 +66,10 @@ class GIRecommend(object):
             information = [link, gi_df.loc[index]['title'], gi_df.loc[index]['body'], gi_df.loc[index]['number'],
                            state, clean_body, str(gi_df.loc[index]['comments']), tag_str]
             result_gi.append(information)
+
+        time_end = time.time()
+        time_sum = time_end - time_start
+        print("run time:" + str(time_sum))
 
         return result_gi
 
