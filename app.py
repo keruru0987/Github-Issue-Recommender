@@ -14,6 +14,7 @@ app = Flask(__name__)
 @app.route('/mainpage', methods=["GET", "POST"])
 def mainpage():
     if request.method == 'GET':
+        print('begin')
         return render_template("github issue recommender.html")
     else:
         selected_api = request.form.get("selected_api")
